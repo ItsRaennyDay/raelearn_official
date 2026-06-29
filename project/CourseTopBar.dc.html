@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet"></helmet>
+<header style="position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:18px;padding:11px 22px;background:rgba(255,255,255,.9);backdrop-filter:saturate(140%) blur(10px);-webkit-backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid #E7E9F2;font-family:'Plus Jakarta Sans',system-ui,sans-serif">
+
+  <a href="{{ backHref }}" style="display:flex;align-items:center;gap:11px;min-width:0;flex-shrink:1">
+    <span style="width:36px;height:36px;border-radius:10px;border:1px solid #E1E5F0;background:#fff;display:flex;align-items:center;justify-content:center;color:#4B5563;flex-shrink:0" style-hover="border-color:#C7CCDC;color:#0F1023"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></span>
+    <span style="min-width:0">
+      <span style="display:block;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#8A90A6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ eyebrow }}</span>
+      <span style="display:block;font-family:'Poppins',sans-serif;font-weight:600;font-size:16px;color:#0F1023;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ title }}</span>
+    </span>
+  </a>
+
+  <div style="flex:1;min-width:60px;display:flex;align-items:center;gap:12px;max-width:420px;margin:0 auto">
+    <div style="flex:1;height:7px;background:#E7E9F2;border-radius:99px;overflow:hidden"><div style="height:100%;width:{{ progress }}%;background:linear-gradient(90deg,#5A3DF5,#2D8BFF);border-radius:99px"></div></div>
+    <span style="font-size:12.5px;font-weight:700;color:#2D8BFF;white-space:nowrap">{{ progressLabel }}</span>
+  </div>
+
+  <a href="{{ exitHref }}" title="{{ exitLabel }}" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#4B5563;border:1px solid #E1E5F0;background:#fff;padding:9px 14px;border-radius:10px;white-space:nowrap;flex-shrink:0" style-hover="border-color:#C7CCDC;color:#0F1023">{{ exitLabel }}<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg></a>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:960,&quot;height&quot;:60},&quot;eyebrow&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Course&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Donor Records Cleanup&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;progress&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:46,&quot;min&quot;:0,&quot;max&quot;:100,&quot;tsType&quot;:&quot;number&quot;},&quot;backHref&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Course Curriculum.dc.html&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;exitHref&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Learner Dashboard.dc.html&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;exitLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Exit&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props.progress;
+    const progress = (p === undefined || p === null) ? 0 : p;
+    return {
+      eyebrow: this.props.eyebrow || 'Course',
+      title: this.props.title || 'Donor Records Cleanup',
+      progress,
+      progressLabel: progress + '%',
+      backHref: this.props.backHref || 'Course Curriculum.dc.html',
+      exitHref: this.props.exitHref || 'Learner Dashboard.dc.html',
+      exitLabel: this.props.exitLabel || 'Exit',
+    };
+  }
+}
+</script>
+</body>
+</html>

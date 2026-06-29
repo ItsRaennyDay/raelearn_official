@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3F6;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+    input{font-family:inherit}
+    #ct-table{min-width:1040px}
+  </style>
+</helmet>
+
+<div style="display:flex;align-items:stretch;min-height:100vh">
+  <dc-import name="AppSidebar" mode="admin" current="certificates" hint-size="248px,100%" style="flex:0 0 248px"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;background:#F1F3F6">
+    <dc-import name="AppTopBar" mode="admin" eyebrow="Raeform Foundation" title="Team Certificates" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+    <main style="flex:1;width:100%;max-width:1200px;margin:0 auto;padding:24px 30px 64px">
+
+      <div style="font-size:12.5px;font-weight:600;color:#8A8F99;margin-bottom:14px"><a href="Group Admin Dashboard.dc.html" style="color:#8A8F99" style-hover="color:#0F1023">Overview</a> <span style="margin:0 6px">/</span> Team Certificates</div>
+
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px">
+        <div>
+          <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:26px;margin:0;color:#0F1023">Team certificates</h1>
+          <p style="font-size:13.5px;color:#7C828C;margin:5px 0 0">31 earned all-time · 6 in progress</p>
+        </div>
+        <button onClick="{{ noop }}" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;font-family:inherit;color:#fff;background:#0F1023;padding:10px 16px;border-radius:10px;cursor:pointer" style-hover="background:#080814"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>Export list</button>
+      </div>
+
+      <!-- STAT STRIP -->
+      <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;overflow:hidden;margin-bottom:18px">
+        <div style="display:flex;flex-wrap:wrap;gap:1px;background:#EAECEF">
+          <div style="flex:1 1 150px;background:#fff;padding:15px 18px"><div style="font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2">Earned all-time</div><div style="font-family:'Poppins',serif;font-weight:800;font-size:23px;color:#0F1023;margin-top:4px">31</div></div>
+          <div style="flex:1 1 150px;background:#fff;padding:15px 18px"><div style="font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2">This month</div><div style="font-family:'Poppins',serif;font-weight:800;font-size:23px;color:#5A3DF5;margin-top:4px">8</div></div>
+          <div style="flex:1 1 150px;background:#fff;padding:15px 18px"><div style="font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2">In progress</div><div style="font-family:'Poppins',serif;font-weight:800;font-size:23px;color:#7B61FF;margin-top:4px">6</div></div>
+          <div style="flex:1 1 150px;background:#fff;padding:15px 18px"><div style="font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2">Programs</div><div style="font-family:'Poppins',serif;font-weight:800;font-size:23px;color:#0F1023;margin-top:4px">7</div></div>
+        </div>
+      </section>
+
+      <!-- TOOLBAR -->
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:9px;background:#fff;border:1px solid #E0E3E9;border-radius:11px;padding:9px 13px;flex:1;min-width:220px">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#9097A2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4-4"></path></svg>
+          <input value="{{ q }}" onInput="{{ onSearch }}" placeholder="Search learner or certificate…" style="border:none;outline:none;background:none;font-size:13.5px;color:#3A3F49;width:100%">
+        </div>
+        <div role="tablist" style="display:inline-flex;background:#E7E9F2;border-radius:11px;padding:3px;gap:2px">
+          <sc-for list="{{ statusTabs }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ t.choose }}" style="{{ t.style }}">{{ t.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;overflow:hidden">
+        <div style="overflow-x:auto">
+          <div id="ct-table">
+            <div style="display:grid;grid-template-columns:1.4fr 1.4fr 1.2fr 0.95fr 1fr 0.85fr 150px;gap:12px;align-items:center;padding:11px 22px;background:#F7F8FA;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#9097A2">
+              <span>Learner</span><span>Certificate</span><span>Program</span><span>Completed</span><span>Certificate ID</span><span>Status</span><span></span>
+            </div>
+            <sc-for list="{{ rows }}" as="r" hint-placeholder-count="7">
+              <div style="display:grid;grid-template-columns:1.4fr 1.4fr 1.2fr 0.95fr 1fr 0.85fr 150px;gap:12px;align-items:center;padding:14px 22px;border-bottom:1px solid #F0F2F5">
+                <div style="display:flex;align-items:center;gap:10px;min-width:0"><span style="{{ r.avStyle }}">{{ r.initials }}</span><span style="font-size:13.5px;font-weight:700;color:#0F1023;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</span></div>
+                <div style="display:flex;align-items:center;gap:9px;min-width:0"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="{{ r.sealColor }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg><span style="font-size:12.5px;font-weight:600;color:#3A3F49;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cert }}</span></div>
+                <span style="font-size:12px;color:#6A6F79;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.program }}</span>
+                <span style="font-size:12.5px;color:#6A6F79">{{ r.date }}</span>
+                <span style="font-size:12px;color:#8A8F99;font-variant-numeric:tabular-nums">{{ r.id }}</span>
+                <span style="{{ r.statusStyle }}">{{ r.status }}</span>
+                <div style="display:flex;gap:6px;justify-self:end">
+                  <sc-if value="{{ r.earned }}" hint-placeholder-val="{{ true }}"><a href="Course Certificate.dc.html" style="font-size:12px;font-weight:700;color:#0F1023;border:1px solid #D7DBE2;background:#fff;padding:6px 11px;border-radius:8px;white-space:nowrap" style-hover="background:#F1F3F6">Download</a><a href="Course Certificate.dc.html" style="font-size:12px;font-weight:700;color:#3A4254;border:1px solid #D7DBE2;background:#fff;padding:6px 10px;border-radius:8px;white-space:nowrap" style-hover="background:#F1F3F6">Verify</a></sc-if>
+                  <sc-if value="{{ r.pending }}" hint-placeholder-val="{{ false }}"><a href="Admin Course Progress.dc.html" style="font-size:12px;font-weight:700;color:#0F1023;border:1px solid #D7DBE2;background:#fff;padding:6px 11px;border-radius:8px;white-space:nowrap" style-hover="background:#F1F3F6">View progress</a></sc-if>
+                </div>
+              </div>
+            </sc-for>
+            <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:40px;text-align:center;font-size:13.5px;color:#9097A2">No certificates match your filters.</div>
+            </sc-if>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { q:'', status:'all' };
+  CERTS=[
+    {name:'Maria Sandoval', cert:'Nonprofit Operations VA', program:'Nonprofit Ops VA Cert', date:'Apr 12, 2026', id:'RL-2026-0481', status:'Earned', tone:'teal'},
+    {name:'James Tran', cert:'SOP Builder', program:'SOP Builder Course', date:'May 02, 2026', id:'RL-2026-0512', status:'Earned', tone:'red'},
+    {name:'Devin Reyes', cert:'Website Maintenance VA', program:'Website Maintenance', date:'Mar 28, 2026', id:'RL-2026-0403', status:'Earned', tone:'gold'},
+    {name:'Aisha Bello', cert:'Comms VA', program:'Comms VA Cert', date:'May 20, 2026', id:'RL-2026-0540', status:'Earned', tone:'gold'},
+    {name:'Ravi Menon', cert:'Data Cleanup Specialist', program:'Data Cleanup', date:'May 30, 2026', id:'RL-2026-0566', status:'Earned', tone:'blue'},
+    {name:'Priya Kapoor', cert:'Donor Operations', program:'Donor Operations', date:'—', id:'—', status:'In progress', tone:'purple'},
+    {name:'Grace Okoro', cert:'Nonprofit VA', program:'Nonprofit VA Path', date:'—', id:'—', status:'In progress', tone:'purple'},
+    {name:'Tomás Vega', cert:'Operations VA', program:'Operations VA', date:'—', id:'—', status:'In progress', tone:'red'},
+  ];
+  initials(n){ return n.split(' ').map(w=>w[0]).join('').slice(0,2); }
+  av(tone){ const M={teal:['#ECE9FE','#5A3DF5'],purple:['#EDE7F9','#7B61FF'],gold:['#ECE9FE','#7B61FF'],red:['#DAF5FB','#7B61FF'],blue:['#E2EEF2','#1F6F8B']}[tone]; return 'width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;background:'+M[0]+';color:'+M[1]; }
+  renderVals(){
+    const q=this.state.q.trim().toLowerCase(); const st=this.state.status;
+    const list=this.CERTS.filter(c=>{
+      if(st==='earned'&&c.status!=='Earned') return false;
+      if(st==='progress'&&c.status!=='In progress') return false;
+      if(q && !(c.name.toLowerCase().includes(q)||c.cert.toLowerCase().includes(q)||c.program.toLowerCase().includes(q))) return false;
+      return true;
+    });
+    const rows=list.map(c=>{ const earned=c.status==='Earned'; return {
+      name:c.name, cert:c.cert, program:c.program, date:c.date, id:c.id, status:c.status,
+      initials:this.initials(c.name), avStyle:this.av(c.tone),
+      sealColor:earned?'#7B61FF':'#C9CDD4', earned, pending:!earned,
+      statusStyle:'justify-self:start;font-size:10.5px;font-weight:800;padding:4px 9px;border-radius:6px;white-space:nowrap;'+(earned?'color:#2D8BFF;background:#E4F0FF':'color:#9c6c12;background:#ECE9FE'),
+    };});
+    const STAT=[['all','All'],['earned','Earned'],['progress','In progress']];
+    const tabBtn=(on)=>'font-size:12.5px;font-weight:700;font-family:inherit;padding:7px 14px;border-radius:9px;border:none;cursor:pointer;'+(on?'background:#fff;color:#0F1023;box-shadow:0 1px 2px rgba(15,16,35,.12)':'background:transparent;color:#857E70');
+    const statusTabs=STAT.map(([k,label])=>({label,style:tabBtn(st===k),choose:()=>this.setState({status:k})}));
+    return { q:this.state.q, rows, statusTabs, empty:list.length===0, noop:()=>{}, onSearch:(e)=>this.setState({q:e.target.value}) };
+  }
+}
+</script>
+</body>
+</html>

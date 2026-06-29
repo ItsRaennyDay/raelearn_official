@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    ::selection{background:rgba(197,138,30,.25)}
+    a{color:inherit;text-decoration:none}
+  </style>
+</helmet>
+
+<dc-import name="SiteNav" current="" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+<!-- HEADER -->
+<section style="position:relative;background:#FAF2DF;border-bottom:1px solid #EBDCB6;overflow:hidden">
+  <dc-import name="DoodleBackdrop" variant="badge" accent="#7B61FF" hint-size="100%,100%" style="position:absolute;inset:0"></dc-import>
+  <div style="position:relative;max-width:1240px;margin:0 auto;padding:48px 28px 50px;display:flex;gap:48px;align-items:center;flex-wrap:wrap">
+    <div style="flex:1 1 440px;min-width:300px">
+      <div style="font-size:12.5px;font-weight:700;color:#BFA265;margin-bottom:14px"><a href="RaeLearn Homepage.dc.html" style="color:#BFA265" style-hover="color:#7B61FF">Home</a> <span style="margin:0 7px">/</span> Certificates</div>
+      <div style="display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #EBDCB6;border-radius:999px;padding:6px 13px;margin-bottom:18px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#7B61FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg><span style="font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#9c6c12">Certificate programs</span></div>
+      <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(32px,4.6vw,54px);line-height:1.04;letter-spacing:-.02em;margin:0 0 16px;color:#3A2A08">Prove you can run the whole system.</h1>
+      <p style="font-size:17px;line-height:1.6;color:#6A5526;max-width:540px;margin:0 0 28px">Certificates bundle the courses for a role, add a final assessment, and give you a verifiable credential to show clients or your organization.</p>
+      <div style="display:flex;gap:13px;flex-wrap:wrap">
+        <a href="#programs" style="font-size:16px;font-weight:700;color:#fff;background:#7B61FF;padding:15px 24px;border-radius:12px;white-space:nowrap" style-hover="background:#a97414">View Certificate Programs &rarr;</a>
+        <a href="Individual Signup.dc.html" style="font-size:16px;font-weight:700;color:#9c6c12;background:#fff;border:1.6px solid #7B61FF;padding:15px 22px;border-radius:12px;white-space:nowrap" style-hover="background:#7B61FF;color:#fff">Start a Certificate</a>
+      </div>
+    </div>
+    <div style="flex:0 1 360px;min-width:260px">
+      <div style="background:#fff;border:1px solid #EBDCB6;border-radius:16px;padding:24px;box-shadow:0 24px 50px -26px rgba(197,138,30,.5);transform:rotate(1.2deg);text-align:center">
+        <div style="display:flex;justify-content:center;margin-bottom:14px"><div style="width:54px;height:54px;border-radius:50%;background:#ECE9FE;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg></div></div>
+        <div style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#BFA265;margin-bottom:6px">RaeLearn Certificate</div>
+        <div style="font-family:'Poppins',serif;font-weight:700;font-size:20px;color:#0F1023;margin-bottom:6px">Nonprofit Operations VA</div>
+        <div style="font-size:13px;color:#8A90A6;margin-bottom:16px">Awarded to · Maria Sandoval</div>
+        <div style="border-top:1px dashed #E2DACA;padding-top:14px;display:flex;justify-content:space-between;font-size:11.5px;color:#8A90A6"><span>Issued Jun 2026</span><span style="font-weight:700;color:#2D8BFF">Verified ✓</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section style="max-width:1240px;margin:0 auto;padding:52px 28px 20px">
+  <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(24px,3vw,34px);margin:0 0 22px;color:#0F1023">How certificates work</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px">
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:22px"><div style="font-family:'Caveat',cursive;font-size:20px;font-weight:700;color:#7B61FF;margin-bottom:4px">step 1</div><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 6px;color:#0F1023">Complete the courses</h3><p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0">Finish every course in the certificate's track, in any order.</p></div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:22px"><div style="font-family:'Caveat',cursive;font-size:20px;font-weight:700;color:#7B61FF;margin-bottom:4px">step 2</div><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 6px;color:#0F1023">Pass the final assessment</h3><p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0">A short quiz or applied assignment confirms you can do the work.</p></div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:22px"><div style="font-family:'Caveat',cursive;font-size:20px;font-weight:700;color:#7B61FF;margin-bottom:4px">step 3</div><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 6px;color:#0F1023">Download your certificate</h3><p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0">Get a dated, verifiable PDF you can share with clients or your org.</p></div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:22px"><div style="font-family:'Caveat',cursive;font-size:20px;font-weight:700;color:#7B61FF;margin-bottom:4px">for teams</div><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 6px;color:#0F1023">Tracked in your dashboard</h3><p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0">Group admins see who's earned which certificate at a glance.</p></div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section id="programs" style="max-width:1240px;margin:0 auto;padding:36px 28px 20px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(22px,2.7vw,30px);margin:0;color:#0F1023">Certificates for VAs &amp; individuals</h2></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:16px;margin-bottom:36px">
+    <a href="Course Detail.dc.html" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 12px 28px -24px rgba(15,16,35,.55)" style-hover="transform:translateY(-3px);transition:transform .15s ease"><div style="height:5px;background:#7B61FF"></div><div style="padding:20px;display:flex;flex-direction:column;flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:11px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#9c6c12" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg><span style="font-size:10.5px;font-weight:800;color:#9c6c12;letter-spacing:.04em">CERTIFICATE</span></div><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;line-height:1.25;margin:0 0 10px;flex:1;color:#0F1023">Nonprofit Operations VA Certificate</h3><div style="font-size:12.5px;color:#8A90A6;margin-bottom:14px">~9 hrs · intermediate</div><span style="text-align:center;font-size:13.5px;font-weight:700;color:#fff;background:#0F1023;padding:10px;border-radius:9px">Start Certificate</span></div></a>
+    <a href="Course Detail.dc.html" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 12px 28px -24px rgba(15,16,35,.55)" style-hover="transform:translateY(-3px);transition:transform .15s ease"><div style="height:5px;background:#7B61FF"></div><div style="padding:20px;display:flex;flex-direction:column;flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:11px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#9c6c12" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg><span style="font-size:10.5px;font-weight:800;color:#9c6c12;letter-spacing:.04em">CERTIFICATE</span></div><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;line-height:1.25;margin:0 0 10px;flex:1;color:#0F1023">Founder Support VA Certificate</h3><div style="font-size:12.5px;color:#8A90A6;margin-bottom:14px">~8 hrs · intermediate</div><span style="text-align:center;font-size:13.5px;font-weight:700;color:#fff;background:#0F1023;padding:10px;border-radius:9px">Start Certificate</span></div></a>
+    <a href="Course Detail.dc.html" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 12px 28px -24px rgba(15,16,35,.55)" style-hover="transform:translateY(-3px);transition:transform .15s ease"><div style="height:5px;background:#7B61FF"></div><div style="padding:20px;display:flex;flex-direction:column;flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:11px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#9c6c12" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg><span style="font-size:10.5px;font-weight:800;color:#9c6c12;letter-spacing:.04em">CERTIFICATE</span></div><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;line-height:1.25;margin:0 0 10px;flex:1;color:#0F1023">Website Maintenance for VAs Certificate</h3><div style="font-size:12.5px;color:#8A90A6;margin-bottom:14px">~6 hrs · beginner</div><span style="text-align:center;font-size:13.5px;font-weight:700;color:#fff;background:#0F1023;padding:10px;border-radius:9px">Start Certificate</span></div></a>
+    <a href="Course Detail.dc.html" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 12px 28px -24px rgba(15,16,35,.55)" style-hover="transform:translateY(-3px);transition:transform .15s ease"><div style="height:5px;background:#7B61FF"></div><div style="padding:20px;display:flex;flex-direction:column;flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:11px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#9c6c12" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg><span style="font-size:10.5px;font-weight:800;color:#9c6c12;letter-spacing:.04em">CERTIFICATE</span></div><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;line-height:1.25;margin:0 0 10px;flex:1;color:#0F1023">Business Operations Assistant Certificate</h3><div style="font-size:12.5px;color:#8A90A6;margin-bottom:14px">~8 hrs · intermediate</div><span style="text-align:center;font-size:13.5px;font-weight:700;color:#fff;background:#0F1023;padding:10px;border-radius:9px">Start Certificate</span></div></a>
+    <a href="Course Detail.dc.html" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 12px 28px -24px rgba(15,16,35,.55)" style-hover="transform:translateY(-3px);transition:transform .15s ease"><div style="height:5px;background:#7B61FF"></div><div style="padding:20px;display:flex;flex-direction:column;flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:11px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#9c6c12" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg><span style="font-size:10.5px;font-weight:800;color:#9c6c12;letter-spacing:.04em">CERTIFICATE</span></div><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;line-height:1.25;margin:0 0 10px;flex:1;color:#0F1023">SOP Builder Certificate</h3><div style="font-size:12.5px;color:#8A90A6;margin-bottom:14px">~6 hrs · beginner</div><span style="text-align:center;font-size:13.5px;font-weight:700;color:#fff;background:#0F1023;padding:10px;border-radius:9px">Start Certificate</span></div></a>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(22px,2.7vw,30px);margin:0;color:#0F1023">Certificates for teams</h2><span style="font-size:12px;font-weight:700;color:#9c6c12;background:#ECE9FE;padding:3px 9px;border-radius:6px">Assign in group accounts</span></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:16px">
+    <a href="Group Signup.dc.html" style="background:#0F1023;border-radius:14px;padding:20px;display:flex;flex-direction:column;color:#fff" style-hover="transform:translateY(-3px);transition:transform .15s ease"><div style="display:flex;align-items:center;gap:6px;margin-bottom:11px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#00C6E8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg><span style="font-size:10.5px;font-weight:800;color:#00C6E8;letter-spacing:.04em">TEAM CERTIFICATE</span></div><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;line-height:1.25;margin:0 0 12px;flex:1">Nonprofit Team Operations Certificate</h3><span style="text-align:center;font-size:13px;font-weight:700;color:#0F1023;background:#00C6E8;padding:10px;border-radius:9px">Assign to team</span></a>
+    <a href="Group Signup.dc.html" style="background:#0F1023;border-radius:14px;padding:20px;display:flex;flex-direction:column;color:#fff" style-hover="transform:translateY(-3px);transition:transform .15s ease"><div style="display:flex;align-items:center;gap:6px;margin-bottom:11px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#00C6E8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg><span style="font-size:10.5px;font-weight:800;color:#00C6E8;letter-spacing:.04em">TEAM CERTIFICATE</span></div><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;line-height:1.25;margin:0 0 12px;flex:1">Website Maintenance Team Certificate</h3><span style="text-align:center;font-size:13px;font-weight:700;color:#0F1023;background:#00C6E8;padding:10px;border-radius:9px">Assign to team</span></a>
+    <a href="Group Signup.dc.html" style="background:#0F1023;border-radius:14px;padding:20px;display:flex;flex-direction:column;color:#fff" style-hover="transform:translateY(-3px);transition:transform .15s ease"><div style="display:flex;align-items:center;gap:6px;margin-bottom:11px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#00C6E8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg><span style="font-size:10.5px;font-weight:800;color:#00C6E8;letter-spacing:.04em">TEAM CERTIFICATE</span></div><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;line-height:1.25;margin:0 0 12px;flex:1">SOP &amp; Workflow Certificate</h3><span style="text-align:center;font-size:13px;font-weight:700;color:#0F1023;background:#00C6E8;padding:10px;border-radius:9px">Assign to team</span></a>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="max-width:1240px;margin:0 auto;padding:40px 28px 72px">
+  <div style="background:#3A2A08;border-radius:22px;padding:48px 32px;text-align:center;color:#fff">
+    <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);margin:0 0 12px">Earn a credential worth showing.</h2>
+    <p style="font-size:16px;line-height:1.6;color:#E2CE9E;margin:0 auto 26px;max-width:520px">Start a certificate track today, or assign one to your whole team.</p>
+    <div style="display:flex;gap:13px;justify-content:center;flex-wrap:wrap">
+      <a href="Individual Signup.dc.html" style="font-size:16px;font-weight:700;color:#3A2A08;background:#00C6E8;padding:15px 26px;border-radius:12px;white-space:nowrap" style-hover="background:#f0b94a">Start a Certificate</a>
+      <a href="Group Signup.dc.html" style="font-size:16px;font-weight:700;color:#fff;border:1.6px solid rgba(255,255,255,.4);padding:15px 24px;border-radius:12px;white-space:nowrap" style-hover="border-color:#fff;background:rgba(255,255,255,.08)">Assign to a Team</a>
+    </div>
+  </div>
+</section>
+
+<dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+</x-dc>
+</body>
+</html>

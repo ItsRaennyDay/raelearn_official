@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+    textarea{font-family:inherit}
+    :focus-visible{outline:2px solid #5A3DF5;outline-offset:2px}
+    @keyframes lp-pop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+    @keyframes lp-draw{to{stroke-dashoffset:0}}
+    @keyframes lp-rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    @media (prefers-reduced-motion:reduce){.lp-anim{animation:none !important}.lp-draw{stroke-dashoffset:0 !important}.lp-rise{animation:none !important}}
+    @media (max-width:1240px){#lp-grid{grid-template-columns:1fr !important}#lp-left{display:none !important}#lp-right{position:static !important;border-left:none !important;border-top:1px solid #E7E9F2;max-height:none !important}}
+    @media (max-width:680px){#lp-main{padding:18px 18px 120px !important}}
+  </style>
+</helmet>
+
+<dc-import name="CourseTopBar" eyebrow="Module 2 · Lesson 2" title="Donor Records Cleanup" progress="46" back-href="Course Curriculum.dc.html" exit-href="Learner Dashboard.dc.html" exit-label="Exit" hint-size="100%,60px" style="display:block;width:100%"></dc-import>
+
+<sc-if value="{{ leftCollapsed }}" hint-placeholder-val="{{ false }}">
+  <button onClick="{{ toggleLeft }}" aria-label="Show course outline" title="Show course outline" style="position:fixed;left:0;top:78px;z-index:34;display:flex;align-items:center;gap:7px;background:#fff;border:1px solid #E7E9F2;border-left:none;border-radius:0 12px 12px 0;padding:11px 14px 11px 11px;cursor:pointer;box-shadow:0 10px 26px -16px rgba(15,16,35,.5);color:#4B5563;font-family:inherit;font-weight:700;font-size:12.5px" style-hover="color:#5A3DF5">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path><path d="M3 6l6 6-6 6"></path></svg>Outline
+  </button>
+</sc-if>
+
+<div id="lp-grid" style="display:grid;grid-template-columns:{{ gridCols }};align-items:start;max-width:1600px;margin:0 auto">
+
+  <!-- ===== LEFT: COURSE OUTLINE ===== -->
+  <sc-if value="{{ leftOpen }}" hint-placeholder-val="{{ true }}">
+  <aside id="lp-left" style="position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;border-right:1px solid #E7E9F2;background:#FCFAF5;padding:20px 16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:16px">
+      <a href="Course Curriculum.dc.html" style="display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:#857E70" style-hover="color:#0F1023"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>Back to course</a>
+      <button onClick="{{ toggleLeft }}" aria-label="Hide course outline" title="Hide outline" style="width:28px;height:28px;flex-shrink:0;border-radius:8px;border:1px solid #E6DECD;background:#fff;display:flex;align-items:center;justify-content:center;color:#857E70;cursor:pointer" style-hover="background:#F2EBDD;color:#0F1023"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path><path d="M21 18l-6-6 6-6"></path></svg></button>
+    </div>
+    <div style="font-family:'Poppins',serif;font-weight:800;font-size:16px;color:#0F1023;line-height:1.25;margin-bottom:12px">Donor Records Cleanup</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px"><div style="flex:1;height:7px;background:#E7E9F2;border-radius:99px;overflow:hidden"><div style="height:100%;width:46%;background:#5A3DF5;border-radius:99px"></div></div><span style="font-size:11.5px;font-weight:800;color:#5A3DF5">46%</span></div>
+
+    <sc-for list="{{ nav }}" as="m" hint-placeholder-count="3">
+      <div style="margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:9px;padding:7px 6px 6px"><span style="{{ m.dot }}">{{ m.mark }}</span><span style="font-size:12.5px;font-weight:800;color:#3D4A66;flex:1;min-width:0">{{ m.title }}</span><span style="font-size:10.5px;font-weight:700;color:#A6ACC0">{{ m.count }}</span></div>
+        <div style="margin:0 6px 9px 33px;height:4px;background:#EEE6D6;border-radius:99px;overflow:hidden"><div style="height:100%;width:{{ m.barPct }}%;background:{{ m.barColor }};border-radius:99px;transition:width .4s"></div></div>
+        <div style="border-left:2px solid #EEE6D6;margin-left:16px;padding-left:8px;display:flex;flex-direction:column;gap:2px">
+          <sc-for list="{{ m.lessons }}" as="ls" hint-placeholder-count="3">
+            <a href="{{ ls.href }}" aria-current="{{ ls.aria }}" style="{{ ls.row }}" style-hover="background:#F2EBDD">
+              <span style="{{ ls.icon }}"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ ls.iconPath }}"></path></svg></span>
+              <span style="flex:1;min-width:0;font-size:12.5px;font-weight:{{ ls.weight }};color:{{ ls.color }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ ls.title }}</span>
+              <span style="font-size:10px;color:#A6ACC0;flex-shrink:0">{{ ls.time }}</span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </aside>
+  </sc-if>
+
+  <!-- ===== CENTER: LESSON ===== -->
+  <main id="lp-main" style="padding:24px 36px 120px;min-width:0">
+
+    <!-- HEADER BAND -->
+    <div style="position:relative;overflow:hidden;background:linear-gradient(120deg,#EAF4F1 0%,#F3F0E6 56%,#FBF4E4 100%);border:1px solid #DCEAE4;border-radius:22px;padding:30px 32px;margin-bottom:22px;box-shadow:0 24px 54px -40px rgba(15,16,35,.55)">
+      <dc-import name="DoodleBackdrop" variant="paths" accent="#5A3DF5" hint-size="100%,100%" style="position:absolute;inset:0"></dc-import>
+      <div style="position:relative;display:flex;gap:32px;align-items:stretch;flex-wrap:wrap">
+        <div style="flex:1 1 440px;min-width:0">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:13px">
+            <span style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#5A3DF5">Module 2 · Cleaning &amp; segmentation</span>
+            <span style="font-size:11px;font-weight:800;color:#9c6c12;background:#ECE9FE;padding:3px 9px;border-radius:6px;white-space:nowrap">In progress</span>
+          </div>
+          <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(28px,3.2vw,36px);line-height:1.08;margin:0 0 12px;color:#0F1023;max-width:560px">Tagging &amp; segmentation</h1>
+          <p style="font-size:15.5px;line-height:1.55;color:#4A453D;max-width:540px;margin:0 0 17px">Turn a clean donor list into useful, segmented data your team can actually report on.</p>
+          <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;font-size:13px;font-weight:700;color:#4B5563;margin-bottom:18px">
+            <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#5A3DF5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>Video · 14 min</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg>Lesson 2 of 4</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"></path></svg>Intermediate</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.7);border:1px solid #D7E7E0;border-radius:13px;padding:13px 16px;max-width:560px">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#5A3DF5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"></circle><path d="M12 17v-5M12 8h.01"></path></svg>
+            <p style="font-size:13px;line-height:1.5;color:#3A4A45;margin:0"><strong style="color:#1A6F62">Objective:</strong> Apply a consistent tag taxonomy so reports, segments, and acknowledgements stay accurate.</p>
+          </div>
+        </div>
+
+        <div style="flex:1 1 240px;max-width:300px;display:flex;flex-direction:column;gap:12px">
+          <div style="background:rgba(255,255,255,.82);border:1px solid #D7E7E0;border-radius:16px;padding:17px 18px;box-shadow:0 12px 28px -22px rgba(15,16,35,.45)">
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:15px">
+              <div style="position:relative;width:56px;height:56px;flex-shrink:0">
+                <svg viewBox="0 0 100 100" width="56" height="56" style="transform:rotate(-90deg)"><circle cx="50" cy="50" r="42" fill="none" stroke="#E1EEEA" stroke-width="11"></circle><circle cx="50" cy="50" r="42" fill="none" stroke="#5A3DF5" stroke-width="11" stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="132"></circle></svg>
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#0F1023">2/4</div>
+              </div>
+              <div><div style="font-size:13px;font-weight:800;color:#0F1023">Module progress</div><div style="font-size:12px;color:#7C8B86">Lesson 2 of 4 complete</div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:0">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px;padding:5px 0"><span style="color:#7C8B86;font-weight:600">Format</span><span style="color:#0F1023;font-weight:700;white-space:nowrap">Video lesson</span></div>
+              <div style="height:1px;background:#EAF1EE"></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px;padding:5px 0"><span style="color:#7C8B86;font-weight:600">Length</span><span style="color:#0F1023;font-weight:700;white-space:nowrap">14 min</span></div>
+              <div style="height:1px;background:#EAF1EE"></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px;padding:5px 0"><span style="color:#7C8B86;font-weight:600">Includes</span><span style="color:#0F1023;font-weight:700;white-space:nowrap">Practice + quiz</span></div>
+            </div>
+          </div>
+          <a href="Lesson Player.dc.html" style="display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.66);border:1px solid #D7E7E0;border-radius:14px;padding:12px 14px" style-hover="background:#fff;border-color:#BBD8D0">
+            <span style="width:34px;height:34px;border-radius:9px;background:#ECE9FE;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#5A3DF5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+            <div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#1A6F62">Next milestone</div><div style="font-size:13px;font-weight:700;color:#0F1023;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Merging duplicates</div></div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- OUTCOMES STRIP -->
+    <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:#FCFAF5;border:1px solid #EEE7D8;border-radius:14px;padding:14px 20px;margin-bottom:22px">
+      <span style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#857E70;white-space:nowrap">By the end you'll</span>
+      <div style="display:flex;gap:22px;flex-wrap:wrap;flex:1;min-width:0">
+        <span style="display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#3D4A66"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#2D8BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M5 13l4 4L19 7"></path></svg>Build a tag taxonomy</span>
+        <span style="display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#3D4A66"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#2D8BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M5 13l4 4L19 7"></path></svg>Apply tags in bulk</span>
+        <span style="display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#3D4A66"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#2D8BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M5 13l4 4L19 7"></path></svg>Spot-check your segments</span>
+      </div>
+    </div>
+
+    <!-- VIDEO -->
+    <div style="position:relative;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:radial-gradient(120% 120% at 30% 20%,#2A3344 0%,#161C27 70%);border:1px solid #11151E;margin-bottom:22px">
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+        <button aria-label="Play lesson video" style="width:76px;height:76px;border-radius:50%;border:none;background:rgba(255,255,255,.95);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 10px 30px -8px rgba(0,0,0,.5)" style-hover="background:#fff"><svg viewBox="0 0 24 24" width="30" height="30" fill="#0F1023"><polygon points="8 5 20 12 8 19 8 5"></polygon></svg></button>
+      </div>
+      <div style="position:absolute;left:18px;right:18px;bottom:15px"><div style="height:5px;background:rgba(255,255,255,.25);border-radius:99px;overflow:hidden"><div style="height:100%;width:32%;background:#00C6E8;border-radius:99px"></div></div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.8);margin-top:7px;font-weight:600"><span>4:28</span><span>14:02</span></div></div>
+    </div>
+
+    <!-- TRANSCRIPT ACCORDION (under video) -->
+    <div style="border:1px solid #E7E9F2;border-radius:14px;background:#fff;margin-bottom:24px;overflow:hidden">
+      <button onClick="{{ toggleTranscript }}" aria-expanded="{{ transcriptAria }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:15px 18px;cursor:pointer;background:none;border:none;font-family:inherit;text-align:left">
+        <span style="display:inline-flex;align-items:center;gap:9px"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#5A3DF5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 10h16M4 14h10M4 18h13"></path></svg><span style="font-family:'Poppins',serif;font-weight:700;font-size:15.5px;color:#0F1023">Transcript</span><span style="font-size:11.5px;font-weight:600;color:#9AA1B4">14:02</span></span>
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#A6ACC0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate({{ transcriptCaret }}deg);transition:transform .2s"><path d="M6 9l6 6 6-6"></path></svg>
+      </button>
+      <sc-if value="{{ transcriptOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:0 18px 18px;font-size:13.5px;line-height:1.7;color:#4B5563;border-top:1px solid #F2EBDD"><p style="margin:14px 0 0">[00:00] Welcome back. In the last lesson we audited the list — now we make it work for us…</p><p style="margin:12px 0 0">[02:10] Start with three tag families: giving level, donor type, and engagement status…</p><p style="margin:12px 0 0">[04:28] Here's how to apply a tag in bulk without overwriting existing values…</p></div>
+      </sc-if>
+    </div>
+
+    <!-- IN THIS LESSON -->
+    <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;margin:0 0 12px;color:#0F1023">In this lesson</h2>
+    <div style="display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px">
+      <p style="flex:1 1 420px;min-width:0;font-size:15px;line-height:1.7;color:#3D4A66;margin:0">Segmentation is how a clean donor list turns into <em>useful</em> data. You'll learn the <span style="background:linear-gradient(transparent 62%,#FBE6B8 62%);padding:0 1px;font-weight:600">three tag families</span> every nonprofit CRM needs — <strong>giving level</strong>, <strong>donor type</strong>, and <strong>engagement</strong> — and how to apply them consistently so reports and acknowledgements stay accurate. We'll finish by spot-checking your work to catch bulk-tagging mistakes early.</p>
+      <aside style="flex:0 1 224px;min-width:196px;align-self:flex-start;padding:15px 17px;background:#FBF4E4;border:1px solid #F0E2BE;border-radius:14px">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:7px"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg><span style="font-family:'Caveat',cursive;font-size:20px;font-weight:700;color:#9c6c12;line-height:1">Side note</span></div>
+        <p style="font-size:12.5px;line-height:1.5;color:#7A5A12;margin:0">Tags live on the <strong>donor record</strong>, not the gift — so they travel with the donor across every donation.</p>
+      </aside>
+    </div>
+
+    <!-- CALLOUT STRIP -->
+    <div style="display:flex;gap:13px;background:#FBF4E4;border-left:4px solid #00C6E8;border-radius:12px;padding:15px 18px;margin-bottom:28px">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"></path></svg>
+      <div><div style="font-size:13.5px;font-weight:700;color:#7A5A12;margin-bottom:2px">Tip from the field</div><p style="font-size:13.5px;line-height:1.55;color:#7A5A12;margin:0">Decide your tag list <strong>before</strong> you start tagging. Inventing tags as you go is the #1 cause of messy segments.</p></div>
+    </div>
+
+    <!-- KEY TAKEAWAY STRIP -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span style="font-family:'Poppins',serif;font-weight:700;font-size:19px;color:#0F1023">Key takeaways</span><span style="flex:1;height:1px;background:#E1E5F0"></span></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px">
+      <div style="flex:1 1 200px;background:#F3F8F0;border:1px solid #DCEBD6;border-radius:14px;padding:16px 18px"><div style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9px;background:#E4F0FF;color:#2D8BFF;font-weight:800;margin-bottom:10px">1</div><p style="font-size:13.5px;line-height:1.5;color:#3F5740;margin:0;font-weight:600">Define a fixed tag list <em>before</em> tagging anyone.</p></div>
+      <div style="flex:1 1 200px;background:#F3F8F0;border:1px solid #DCEBD6;border-radius:14px;padding:16px 18px"><div style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9px;background:#E4F0FF;color:#2D8BFF;font-weight:800;margin-bottom:10px">2</div><p style="font-size:13.5px;line-height:1.5;color:#3F5740;margin:0;font-weight:600">Use three families: giving level, donor type, engagement.</p></div>
+      <div style="flex:1 1 200px;background:#F3F8F0;border:1px solid #DCEBD6;border-radius:14px;padding:16px 18px"><div style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9px;background:#E4F0FF;color:#2D8BFF;font-weight:800;margin-bottom:10px">3</div><p style="font-size:13.5px;line-height:1.5;color:#3F5740;margin:0;font-weight:600">Apply tags in bulk, then spot-check 10 records.</p></div>
+    </div>
+
+    <!-- EXAMPLE SECTION -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span style="font-family:'Poppins',serif;font-weight:700;font-size:19px;color:#0F1023">See it in practice</span><span style="flex:1;height:1px;background:#E1E5F0"></span></div>
+    <div style="border:1px solid #E7E9F2;border-radius:16px;overflow:hidden;background:#fff;margin-bottom:30px">
+      <div style="padding:14px 20px;background:#F6F8FD;border-bottom:1px solid #F0F2F8;font-size:12.5px;font-weight:700;color:#857E70">Example · a starter tag taxonomy</div>
+      <div style="padding:6px 20px 14px">
+        <sc-for list="{{ taxonomy }}" as="t" hint-placeholder-count="3">
+          <div style="display:flex;align-items:flex-start;gap:16px;padding:14px 0;border-bottom:1px solid #F4EEE2">
+            <div style="width:140px;flex-shrink:0"><div style="font-size:13.5px;font-weight:800;color:#0F1023">{{ t.family }}</div><div style="font-size:11.5px;color:#9AA1B4">{{ t.note }}</div></div>
+            <div style="flex:1;display:flex;gap:7px;flex-wrap:wrap">
+              <sc-for list="{{ t.tags }}" as="tag" hint-placeholder-count="3"><span style="{{ tag.style }}">{{ tag.label }}</span></sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- MINI PRACTICE (post-lesson) -->
+    <div style="border-top:1px dashed #E1E5F0;margin:4px 0 20px"></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span style="display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#7B61FF"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#7B61FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5 19 19M19 5l-2.5 2.5M7.5 16.5 5 19"></path></svg>Now you try · after the lesson</span><span style="flex:1;height:1px;background:#E1E5F0"></span></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span style="font-family:'Poppins',serif;font-weight:700;font-size:19px;color:#0F1023">Quick practice</span><span style="font-size:11px;font-weight:700;color:#7B61FF;background:#EDE7F9;padding:3px 9px;border-radius:6px">Not graded</span></div>
+    <div style="background:#F6F2FB;border:1px solid #E3D9F2;border-radius:16px;padding:22px;margin-bottom:30px">
+      <p style="font-size:14.5px;font-weight:700;color:#3A2E5C;margin:0 0 12px">A donor just gave $5,000 for the first time. Which tags would you apply?</p>
+      <textarea aria-label="Your practice answer" placeholder="e.g. Major gift, Individual, New donor…" style="width:100%;min-height:74px;resize:vertical;border:1px solid #DCD0EC;border-radius:11px;padding:13px;font-size:14px;color:#3D4A66;background:#fff;outline:none" style-focus="border-color:#7B61FF"></textarea>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap">
+        <button onClick="{{ toggleSample }}" aria-expanded="{{ sampleAria }}" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;font-family:inherit;color:#fff;background:#7B61FF;border:none;padding:10px 16px;border-radius:9px;cursor:pointer" style-hover="background:#553a9e"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"></path><circle cx="12" cy="12" r="3"></circle></svg>{{ sampleLabel }}</button>
+        <span style="font-size:12px;color:#9A8FB8">Practice privately — nothing is submitted.</span>
+      </div>
+      <sc-if value="{{ showSample }}" hint-placeholder-val="{{ false }}">
+        <div class="lp-rise" style="margin-top:14px;background:#fff;border:1px solid #E3D9F2;border-radius:12px;padding:15px 17px;animation:lp-rise .3s ease">
+          <div style="font-size:11.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#7B61FF;margin-bottom:8px">Sample answer</div>
+          <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px"><span style="font-size:12px;font-weight:700;color:#9c6c12;background:#ECE9FE;padding:4px 10px;border-radius:7px">Major gift</span><span style="font-size:12px;font-weight:700;color:#1F6F8B;background:#E2EEF2;padding:4px 10px;border-radius:7px">Individual</span><span style="font-size:12px;font-weight:700;color:#2D8BFF;background:#E4F0FF;padding:4px 10px;border-radius:7px">New donor</span></div>
+          <p style="font-size:13px;line-height:1.55;color:#4B5563;margin:0">One tag from each family keeps the record reportable: a <strong>giving level</strong> (Major gift), a <strong>donor type</strong> (Individual), and an <strong>engagement</strong> status (New donor).</p>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- SUMMARY BLOCK -->
+    <div style="background:linear-gradient(120deg,#0F1023 0%,#243049 100%);border-radius:18px;padding:26px 28px;color:#fff">
+      <div style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#8FB7C9;margin-bottom:10px">Lesson summary</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:20px">
+        <div style="display:flex;gap:9px"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#6FD2BE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M5 13l4 4L19 7"></path></svg><span style="font-size:13.5px;line-height:1.5;color:#D6DEEA">Fix your tag list before tagging</span></div>
+        <div style="display:flex;gap:9px"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#6FD2BE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M5 13l4 4L19 7"></path></svg><span style="font-size:13.5px;line-height:1.5;color:#D6DEEA">Three families cover most needs</span></div>
+        <div style="display:flex;gap:9px"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#6FD2BE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M5 13l4 4L19 7"></path></svg><span style="font-size:13.5px;line-height:1.5;color:#D6DEEA">Always spot-check after bulk edits</span></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.12);padding-top:18px">
+        <div style="display:flex;align-items:center;gap:11px"><span style="width:38px;height:38px;border-radius:10px;background:rgba(123,97,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#00C6E8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg></span><div><div style="font-size:11px;color:#8FB7C9;font-weight:700">Related download</div><div style="font-size:13.5px;font-weight:700">Tag list template (XLSX)</div></div></div>
+        <a href="Quiz.dc.html" style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#0F1023;background:#00C6E8;padding:11px 18px;border-radius:10px;white-space:nowrap" style-hover="background:#EEB652">Next: Knowledge check<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ===== RIGHT: TOOLS PANEL ===== -->
+  <aside id="lp-right" style="position:sticky;top:60px;max-height:calc(100vh - 60px);overflow-y:auto;border-left:1px solid #E7E9F2;background:#FCFAF5;padding:22px 18px 30px">
+
+    <!-- progress mini widget -->
+    <div style="background:#fff;border:1px solid #EEF1F8;border-radius:14px;padding:16px;margin-bottom:18px">
+      <div style="display:flex;align-items:center;gap:13px">
+        <div style="position:relative;width:52px;height:52px;flex-shrink:0">
+          <svg viewBox="0 0 100 100" width="52" height="52" style="transform:rotate(-90deg)"><circle cx="50" cy="50" r="42" fill="none" stroke="#EDE6D8" stroke-width="11"></circle><circle cx="50" cy="50" r="42" fill="none" stroke="#5A3DF5" stroke-width="11" stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="142.5"></circle></svg>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#0F1023">46%</div>
+        </div>
+        <div><div style="font-size:13.5px;font-weight:700;color:#0F1023">Course progress</div><div style="font-size:12px;color:#8A90A6">7 of 14 lessons complete</div></div>
+      </div>
+    </div>
+
+    <!-- tabs -->
+    <div role="tablist" style="display:flex;gap:4px;background:#EEF1F8;border-radius:11px;padding:3px;margin-bottom:16px">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+        <button role="tab" aria-selected="{{ t.selected }}" onClick="{{ t.choose }}" style="{{ t.style }}">{{ t.label }}</button>
+      </sc-for>
+    </div>
+
+    <!-- RESOURCES TAB -->
+    <sc-if value="{{ tabResources }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+        <sc-for list="{{ resources }}" as="r" hint-placeholder-count="3">
+          <a href="Downloads.dc.html" style="display:flex;align-items:center;gap:10px;padding:11px 12px;background:#fff;border:1px solid #EEF1F8;border-radius:11px" style-hover="border-color:#C7CCDC">
+            <span style="{{ r.badge }}">{{ r.ext }}</span>
+            <div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:700;color:#0F1023;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.title }}</div><div style="font-size:10.5px;color:#9AA1B4">{{ r.meta }}</div></div>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#9AA1B4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg>
+          </a>
+        </sc-for>
+      </div>
+      <div style="background:#FBF4E4;border:1px dashed #E6CF9C;border-radius:12px;padding:14px 15px">
+        <div style="font-size:11.5px;font-weight:800;color:#9c6c12;margin-bottom:3px">Related template</div>
+        <div style="font-size:12.5px;color:#7A5A12;margin-bottom:10px">Donor segmentation workbook</div>
+        <a href="Downloads.dc.html" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#fff;background:#7B61FF;padding:8px 13px;border-radius:8px" style-hover="background:#a97414"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg>Download</a>
+      </div>
+    </sc-if>
+
+    <!-- NOTES TAB -->
+    <sc-if value="{{ tabNotes }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px"><span style="font-size:12.5px;font-weight:700;color:#3D4A66">My notes</span><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#2D8BFF"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg>Auto-saved</span></div>
+        <textarea aria-label="Lesson notes" placeholder="Jot down anything you want to remember…" style="width:100%;min-height:200px;resize:vertical;border:1px solid #E6DECD;border-radius:12px;padding:13px;font-size:13.5px;line-height:1.6;color:#3D4A66;background:#fff;outline:none" style-focus="border-color:#5A3DF5"></textarea>
+        <p style="font-size:11px;color:#9AA1B4;margin:9px 0 0">Notes are private to you and saved with this lesson.</p>
+      </div>
+    </sc-if>
+
+    <!-- CHECKLIST TAB -->
+    <sc-if value="{{ tabChecklist }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><span style="font-size:12.5px;font-weight:700;color:#3D4A66">Lesson checklist</span><span style="font-size:11.5px;font-weight:800;color:#5A3DF5">{{ checkProgress }}</span></div>
+        <div style="height:6px;background:#E7E9F2;border-radius:99px;overflow:hidden;margin-bottom:14px"><div style="height:100%;width:{{ checkPct }}%;background:#5A3DF5;border-radius:99px;transition:width .3s"></div></div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <sc-for list="{{ checklist }}" as="c" hint-placeholder-count="3">
+            <button onClick="{{ c.toggle }}" aria-pressed="{{ c.aria }}" style="display:flex;align-items:center;gap:11px;padding:11px 10px;cursor:pointer;border-radius:10px;background:none;border:none;font-family:inherit;text-align:left;width:100%" style-hover="background:#F2EBDD">
+              <span style="{{ c.box }}"><sc-if value="{{ c.done }}" hint-placeholder-val="{{ false }}"><svg class="lp-anim" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="animation:lp-pop .3s ease"><path d="M5 13l4 4L19 7"></path></svg></sc-if></span>
+              <span style="flex:1;font-size:13px;color:{{ c.color }}">{{ c.label }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- key terms (always) -->
+    <div style="margin-top:22px;border-top:1px solid #EEF1F8;padding-top:18px">
+      <div style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#A6ACC0;margin-bottom:11px">Key terms</div>
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <div><div style="font-size:13px;font-weight:700;color:#0F1023">Segment</div><div style="font-size:12px;color:#8A90A6;line-height:1.45">A saved group of donors who share a tag or trait.</div></div>
+        <div><div style="font-size:13px;font-weight:700;color:#0F1023">Giving level</div><div style="font-size:12px;color:#8A90A6;line-height:1.45">A band based on total or typical gift size.</div></div>
+        <div><div style="font-size:13px;font-weight:700;color:#0F1023">Engagement status</div><div style="font-size:12px;color:#8A90A6;line-height:1.45">How recently and often a donor interacts.</div></div>
+      </div>
+    </div>
+
+    <!-- next lesson preview (always) -->
+    <a href="Lesson Player.dc.html" style="display:block;margin-top:20px;background:#fff;border:1px solid #EEF1F8;border-radius:13px;padding:15px" style-hover="border-color:#C7CCDC">
+      <div style="font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#A6ACC0;margin-bottom:8px">Up next</div>
+      <div style="display:flex;align-items:center;gap:11px"><span style="width:34px;height:34px;border-radius:9px;background:#EDE7F9;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"></path></svg></span><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;color:#0F1023">Merging duplicates</div><div style="font-size:11px;color:#9AA1B4">Reading · 10 min</div></div><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#C7CCDC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M9 6l6 6-6 6"></path></svg></div>
+    </a>
+
+    <!-- help / support -->
+    <div style="margin-top:14px;display:flex;align-items:center;gap:11px;padding:13px 14px;background:#F3F8F7;border:1px solid #DCEBE6;border-radius:13px">
+      <span style="width:34px;height:34px;border-radius:9px;background:#ECE9FE;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#5A3DF5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.1 9a3 3 0 1 1 4 2.8c-.9.4-1.6 1.1-1.6 2.2M12 17h.01"></path></svg></span>
+      <div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:700;color:#0F1023">Stuck on this lesson?</div><a href="Help Center.dc.html" style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;color:#5A3DF5" style-hover="text-decoration:underline">Visit the Help Center<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></a></div>
+    </div>
+
+  </aside>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div style="position:fixed;left:0;right:0;bottom:0;z-index:35;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid #E7E9F2">
+  <div style="max-width:1600px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px">
+    <a href="Lesson Player.dc.html" style="display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:#4B5563;border:1px solid #E1E5F0;background:#fff;padding:11px 16px;border-radius:10px;white-space:nowrap" style-hover="border-color:#0F1023;color:#0F1023"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg><span style="white-space:nowrap">Previous</span></a>
+    <div style="display:flex;align-items:center;gap:12px;min-width:0">
+      <span style="font-size:12.5px;font-weight:600;color:#9AA1B4;white-space:nowrap">Lesson 2 of 4</span>
+      <button onClick="{{ markComplete }}" style="{{ completeStyle }}">
+        <sc-if value="{{ completed }}" hint-placeholder-val="{{ false }}"><svg class="lp-anim" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="animation:lp-pop .4s ease"><path class="lp-draw" d="M5 13l4 4L19 7" stroke-dasharray="24" stroke-dashoffset="24" style="animation:lp-draw .4s ease .15s forwards"></path></svg></sc-if>
+        <sc-if value="{{ notCompleted }}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg></sc-if>
+        {{ completeLabel }}
+      </button>
+    </div>
+    <a href="Quiz.dc.html" style="display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:#fff;background:#0F1023;padding:11px 18px;border-radius:10px;white-space:nowrap" style-hover="background:#000"><span style="white-space:nowrap">Next</span><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></a>
+  </div>
+</div>
+
+<dc-import name="HelpWidget" offset-bottom="84" hint-size="0,0"></dc-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { completed: false, transcriptOpen: false, tab: 'resources', showSample: false, checks: { 0:false, 1:false, 2:false, 3:false },
+    leftOpen: true, helpOpen: false, helpSent: false, ticketTopic: '', ticketMsg: '', ticketRef: '' };
+  componentDidMount(){
+    try{ const raw=localStorage.getItem('raelearn-lesson'); if(raw){ const s=JSON.parse(raw); if(s&&typeof s.leftOpen==='boolean') this.setState({leftOpen:s.leftOpen}); } }catch(e){}
+  }
+  componentDidUpdate(prev){
+    if(prev && prev.state.leftOpen===this.state.leftOpen) return;
+    try{ localStorage.setItem('raelearn-lesson', JSON.stringify({leftOpen:this.state.leftOpen})); }catch(e){}
+  }
+  toggleCheck(i){ this.setState(s => ({ checks: { ...s.checks, [i]: !s.checks[i] } })); }
+  sendTicket(){
+    if(!this.state.ticketMsg.trim()) return;
+    this.setState({ helpSent:true, ticketRef:'RL-'+Math.floor(1000+Math.random()*9000) });
+  }
+  renderVals() {
+    const DOT = (st) => 'width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;' +
+      (st==='done'?'background:#E4F0FF;color:#2D8BFF':st==='current'?'background:#EDE7F9;color:#7B61FF':'background:#F1ECE0;color:#A6ACC0');
+    const LI = { video:['#ECE9FE','#5A3DF5','M8 5v14l11-7z'], text:['#EDE7F9','#7B61FF','M4 6h16M4 12h16M4 18h10'], checklist:['#E4F0FF','#2D8BFF','M9 11l3 3 8-8M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'], quiz:['#ECE9FE','#7B61FF','M9.1 9a3 3 0 1 1 4 2.8c-.9.4-1.6 1.1-1.6 2.2M12 17h.01'] };
+    const nl = (title, type, time, st) => {
+      const i = LI[type]; const current = st==='current'; const locked = st==='locked'; const done = st==='done';
+      return { title, time, href: type==='quiz' ? 'Quiz.dc.html' : 'Lesson Player.dc.html', iconPath:i[2],
+        aria: current ? 'page' : 'false',
+        icon: 'width:24px;height:24px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:'+(locked?'#F1ECE0':done?'#E4F0FF':i[0])+';color:'+(locked?'#A6ACC0':done?'#2D8BFF':i[1]),
+        color: locked?'#A6ACC0':current?'#0F1023':'#4B5563',
+        weight: current ? '700' : '600',
+        row: 'display:flex;align-items:center;gap:9px;padding:8px;border-radius:9px;' + (current?'background:#FBF4E4;outline:1.5px solid #EFE0BD':'') };
+    };
+    const nav = [
+      { title:'Foundations', count:'4', dot:DOT('done'), mark:'✓', barPct:100, barColor:'#2D8BFF', lessons:[ nl('Why clean data matters','video','6m','done'), nl('Key CRM terms','text','8m','done'), nl('Setup checklist','checklist','10m','done'), nl('Knowledge check','quiz','5m','done') ]},
+      { title:'Cleaning & segmentation', count:'2/4', dot:DOT('current'), mark:'2', barPct:50, barColor:'#5A3DF5', lessons:[ nl('Auditing your donor list','video','12m','done'), nl('Tagging & segmentation','video','14m','current'), nl('Merging duplicates','text','10m','upcoming'), nl('Knowledge check','quiz','6m','locked') ]},
+      { title:'Acknowledgements', count:'0/3', dot:DOT('locked'), mark:'', barPct:0, barColor:'#C7CCDC', lessons:[ nl('Gift acknowledgement basics','video','10m','locked'), nl('Thank-you workflow','text','12m','locked') ]},
+    ];
+
+    const tagStyle = (c) => { const m={teal:['#5A3DF5','#ECE9FE'],gold:['#9c6c12','#ECE9FE'],blue:['#1F6F8B','#E2EEF2'],green:['#2D8BFF','#E4F0FF'],purple:['#7B61FF','#EDE7F9']}[c]; return 'font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:7px;color:'+m[0]+';background:'+m[1]; };
+    const tg = (label,c) => ({ label, style: tagStyle(c) });
+    const taxonomy = [
+      { family:'Giving level', note:'by gift size', tags:[tg('Grassroots','teal'),tg('Mid-level','gold'),tg('Major gift','green')] },
+      { family:'Donor type', note:'who they are', tags:[tg('Individual','blue'),tg('Foundation','purple'),tg('Corporate','gold')] },
+      { family:'Engagement', note:'recency & activity', tags:[tg('New donor','green'),tg('Active','teal'),tg('Lapsed','blue')] },
+    ];
+
+    const ext = (e) => { const c={ XLSX:['#E4F0FF','#2D8BFF'], PDF:['#DAF5FB','#C0432F'], DOCX:['#E2EEF2','#1F6F8B'] }[e]||['#EFEAE0','#857E70']; return 'width:34px;height:24px;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:800;background:'+c[0]+';color:'+c[1]; };
+    const resources = [ {title:'Segmentation cheat-sheet',ext:'PDF',meta:'PDF · 120 KB'}, {title:'Tag list template',ext:'XLSX',meta:'XLSX · 48 KB'}, {title:'Bulk-tagging guide',ext:'DOCX',meta:'DOCX · 36 KB'} ].map(r => ({ title:r.title, ext:r.ext, meta:r.meta, badge:ext(r.ext) }));
+
+    const tab = this.state.tab;
+    const TABS = [ ['resources','Resources'], ['notes','Notes'], ['checklist','Checklist'] ];
+    const tabBtn = (on) => 'flex:1;font-size:12.5px;font-weight:700;font-family:inherit;padding:8px 6px;border-radius:9px;border:none;cursor:pointer;' + (on ? 'background:#fff;color:#0F1023;box-shadow:0 1px 2px rgba(15,16,35,.12)' : 'background:transparent;color:#857E70');
+    const tabs = TABS.map(([k,label]) => ({ label, selected: tab===k ? 'true':'false', style: tabBtn(tab===k), choose: () => this.setState({ tab: k }) }));
+
+    const CL = ['Watch the full lesson','Download the tag list template','Tag 10 sample records','Spot-check your results'];
+    const checks = this.state.checks;
+    const doneCount = CL.filter((_,i)=>checks[i]).length;
+    const checklist = CL.map((label, i) => ({ label, done: !!checks[i], aria: checks[i]?'true':'false', toggle: () => this.toggleCheck(i), color: checks[i]?'#9AA1B4':'#3D4A66',
+      box: 'width:21px;height:21px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;' + (checks[i]?'background:#5A3DF5;border:1px solid #5A3DF5':'background:#fff;border:1.5px solid #C7CCDC') }));
+
+    const completed = this.state.completed;
+    const leftOpen = this.state.leftOpen;
+    const helpOpen = this.state.helpOpen, helpSent = this.state.helpSent;
+    const sendDisabled = !this.state.ticketMsg.trim();
+    return {
+      nav, taxonomy, resources, tabs, checklist,
+      leftOpen, leftCollapsed: !leftOpen,
+      toggleLeft: () => this.setState(s => ({ leftOpen: !s.leftOpen })),
+      gridCols: leftOpen ? '304px minmax(0,1fr) 340px' : 'minmax(0,1fr) 340px',
+      helpOpen, helpClosed: !helpOpen, toggleHelp: () => this.setState(s => ({ helpOpen: !s.helpOpen })),
+      closeHelp: () => this.setState({ helpOpen: false }),
+      helpSent, helpNotSent: !helpSent, ticketRef: this.state.ticketRef,
+      ticketTopic: this.state.ticketTopic, ticketMsg: this.state.ticketMsg,
+      onTopic: (e) => { const v=e.target.value; this.setState({ ticketTopic: v }); },
+      onMsg: (e) => { const v=e.target.value; this.setState({ ticketMsg: v }); },
+      sendTicket: () => this.sendTicket(),
+      resetTicket: () => this.setState({ helpSent:false, ticketTopic:'', ticketMsg:'', ticketRef:'' }),
+      sendDisabled,
+      sendStyle: 'display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:13px;font-weight:700;font-family:inherit;color:#fff;border:none;padding:10px 16px;border-radius:9px;width:100%;' + (sendDisabled ? 'background:#BFE0DA;cursor:not-allowed' : 'background:#5A3DF5;cursor:pointer'),
+      helpFabStyle: 'width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 16px 34px -10px rgba(90,61,245,.55);transition:background .2s,transform .15s;' + (helpOpen ? 'background:#0F1023' : 'background:#5A3DF5'),
+      tabResources: tab==='resources', tabNotes: tab==='notes', tabChecklist: tab==='checklist',
+      checkProgress: doneCount + ' of ' + CL.length, checkPct: Math.round(doneCount/CL.length*100),
+      transcriptOpen: this.state.transcriptOpen, transcriptCaret: this.state.transcriptOpen ? 180 : 0, transcriptAria: this.state.transcriptOpen?'true':'false',
+      toggleTranscript: () => this.setState(s => ({ transcriptOpen: !s.transcriptOpen })),
+      showSample: this.state.showSample, sampleAria: this.state.showSample?'true':'false',
+      sampleLabel: this.state.showSample ? 'Hide sample answer' : 'Compare with sample',
+      toggleSample: () => this.setState(s => ({ showSample: !s.showSample })),
+      completed, notCompleted: !completed,
+      markComplete: () => this.setState({ completed: true }),
+      completeLabel: completed ? 'Lesson complete' : 'Mark complete',
+      completeStyle: 'display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;font-family:inherit;padding:11px 20px;border-radius:10px;border:none;cursor:pointer;white-space:nowrap;' +
+        (completed ? 'background:#E4F0FF;color:#2D8BFF' : 'background:#5A3DF5;color:#fff'),
+    };
+  }
+}
+</script>
+</body>
+</html>

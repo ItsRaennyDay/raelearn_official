@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+    @keyframes q-fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    @media (prefers-reduced-motion:reduce){.q-anim{animation:none !important}}
+  </style>
+</helmet>
+
+<dc-import name="CourseTopBar" eyebrow="Module 2 · Knowledge check" title="Donor Records Cleanup" progress="46" back-href="Course Curriculum.dc.html" exit-href="Learner Dashboard.dc.html" exit-label="Save &amp; exit" hint-size="100%,60px" style="display:block;width:100%"></dc-import>
+
+<main style="max-width:720px;margin:0 auto;padding:30px 26px 70px">
+
+  <!-- intro -->
+  <div style="text-align:center;margin-bottom:22px">
+    <div style="font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#7B61FF;margin-bottom:8px">Knowledge check</div>
+    <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:26px;margin:0 0 12px;color:#0F1023">Cleaning &amp; segmentation</h1>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;justify-content:center;font-size:13px;color:#7C766C;font-weight:600">
+      <span>4 questions</span><span>~6 min</span><span>Pass: 80%</span><span>2 attempts</span>
+    </div>
+  </div>
+
+  <!-- progress dots -->
+  <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px">
+    <sc-for list="{{ dots }}" as="d" hint-placeholder-count="4"><span style="{{ d.style }}"></span></sc-for>
+  </div>
+
+  <!-- question card -->
+  <div style="background:#fff;border:1px solid #E7E9F2;border-radius:18px;padding:26px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <span style="font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9AA1B4">Question {{ qNum }} of 4</span>
+      <span style="{{ typeChip }}">{{ qType }}</span>
+    </div>
+    <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:20px;line-height:1.35;margin:0 0 20px;color:#0F1023">{{ qText }}</h2>
+
+    <div style="display:flex;flex-direction:column;gap:11px">
+      <sc-for list="{{ options }}" as="o" hint-placeholder-count="4">
+        <button onClick="{{ o.choose }}" style="{{ o.style }}">
+          <span style="{{ o.marker }}">{{ o.markerText }}</span>
+          <span style="flex:1;min-width:0;font-size:14.5px;font-weight:600;color:#2C2822;text-align:left">{{ o.label }}</span>
+          <sc-if value="{{ o.showIcon }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="{{ o.iconColor }}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="{{ o.iconPath }}"></path></svg></sc-if>
+        </button>
+      </sc-for>
+    </div>
+
+    <!-- feedback -->
+    <sc-if value="{{ answered }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:18px;border-radius:13px;padding:16px 18px;{{ fbStyle }}">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="{{ fbBadge }}">{{ fbLabel }}</span></div>
+        <p style="font-size:13.5px;line-height:1.55;color:#4B5563;margin:0 0 8px">{{ explanation }}</p>
+        <a href="Lesson Player.dc.html" style="font-size:12.5px;font-weight:700;color:#5A3DF5">Review: {{ relatedLesson }} →</a>
+      </div>
+    </sc-if>
+  </div>
+
+  <!-- nav -->
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:22px">
+    <button onClick="{{ prev }}" style="{{ prevStyle }}"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>Previous</button>
+    <span style="font-size:12.5px;color:#9AA1B4">{{ answeredCount }} of 4 answered</span>
+    <button onClick="{{ next }}" style="{{ nextStyle }}">{{ nextLabel }}<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></button>
+  </div>
+
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { i: 0, answers: {} };
+  Q = [
+    { type:'True / False', text:'You should finalize your tag list before you start tagging donor records.', correct:0,
+      options:['True','False'],
+      explanation:'Correct — deciding tags up front prevents the inconsistent, invented-as-you-go tags that create messy segments.',
+      lesson:'Tagging & segmentation' },
+    { type:'Multiple choice', text:'Which three tag families form a solid segmentation foundation?', correct:1,
+      options:['Name, address, phone','Giving level, donor type, engagement','Color, priority, urgency','First gift, last gift, next gift'],
+      explanation:'Giving level, donor type, and engagement status cover the dimensions most reports and outreach rely on.',
+      lesson:'Tagging & segmentation' },
+    { type:'Scenario', text:'A founder asks their VA to “just tag the big donors.” There is no defined giving-level threshold yet. What should the VA do first?',
+      correct:2,
+      options:['Tag anyone who gave over $1,000 — a safe guess','Skip it until the founder has more time','Confirm the giving-level thresholds, then tag consistently','Tag every donor as “big” to be safe'],
+      explanation:'Operations literacy means clarifying the rule before acting. Confirm thresholds so tags stay consistent and defensible — RaeLearn does not advise inventing financial cutoffs.',
+      lesson:'Auditing your donor list' },
+    { type:'Multiple choice', text:'After applying tags in bulk, what is the recommended next step?', correct:0,
+      options:['Spot-check ~10 records for accuracy','Delete the original list','Email all donors immediately','Lock the CRM for a week'],
+      explanation:'A quick spot-check catches bulk-tagging mistakes before they spread into reports and acknowledgements.',
+      lesson:'Tagging & segmentation' },
+  ];
+  choose(oi){ const i=this.state.i; if(this.state.answers[i]!==undefined) return; this.setState(s=>({answers:{...s.answers,[i]:oi}})); }
+  go(d){ this.setState(s=>({ i: Math.max(0, Math.min(this.Q.length-1, s.i+d)) })); }
+  renderVals() {
+    const i = this.state.i; const q = this.Q[i];
+    const sel = this.state.answers[i];
+    const answered = sel !== undefined;
+    const answeredCount = Object.keys(this.state.answers).length;
+    const last = i === this.Q.length - 1;
+    const typeColor = { 'True / False':'color:#1F6F8B;background:#E2EEF2', 'Multiple choice':'color:#7B61FF;background:#EDE7F9', 'Scenario':'color:#7B61FF;background:#ECE9FE' }[q.type] || 'color:#857E70;background:#EFEAE0';
+    const options = q.options.map((label, oi) => {
+      const isSel = sel === oi;
+      const isCorrect = oi === q.correct;
+      let style = 'display:flex;align-items:center;gap:13px;width:100%;padding:14px 16px;border-radius:12px;background:#fff;cursor:pointer;font-family:inherit;text-align:left;transition:border-color .15s;border:1.5px solid #E6DECD';
+      let markerBg = 'background:#F1ECE0;color:#857E70;border:none';
+      let showIcon = false, iconColor = '#2D8BFF', iconPath = 'M5 13l4 4L19 7';
+      if (answered) {
+        style = 'display:flex;align-items:center;gap:13px;width:100%;padding:14px 16px;border-radius:12px;font-family:inherit;text-align:left;cursor:default;border:1.5px solid ';
+        if (isCorrect) { style += '#9FD2A8;background:#EEF6EC'; markerBg='background:#2D8BFF;color:#fff;border:none'; showIcon=true; iconColor='#2D8BFF'; iconPath='M5 13l4 4L19 7'; }
+        else if (isSel) { style += '#E6B0A6;background:#FBF1EE'; markerBg='background:#C0432F;color:#fff;border:none'; showIcon=true; iconColor='#C0432F'; iconPath='M18 6L6 18M6 6l12 12'; }
+        else { style += '#EEE7D8;background:#F6F8FD;opacity:.7'; }
+      }
+      return {
+        label, choose: () => this.choose(oi),
+        style,
+        marker: 'width:26px;height:26px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;' + markerBg,
+        markerText: String.fromCharCode(65+oi),
+        showIcon, iconColor, iconPath,
+      };
+    });
+    const correct = answered && sel === q.correct;
+    const dots = this.Q.map((_, di) => {
+      const a = this.state.answers[di];
+      let bg = '#E1E5F0';
+      if (di === i) bg = '#0F1023';
+      else if (a !== undefined) bg = a === this.Q[di].correct ? '#2D8BFF' : '#C0432F';
+      return { style: 'width:'+(di===i?'26px':'9px')+';height:9px;border-radius:99px;background:'+bg+';transition:all .2s' };
+    });
+    return {
+      qKey: 'q'+i, qNum: i+1, qType: q.type, qText: q.text,
+      typeChip: 'font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;padding:4px 9px;border-radius:6px;' + typeColor,
+      options, dots, answered, answeredCount,
+      explanation: q.explanation, relatedLesson: q.lesson,
+      fbStyle: correct ? 'background:#EEF6EC;border:1px solid #CDE7CF' : 'background:#FBF1EE;border:1px solid #F0D9D2',
+      fbBadge: 'font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;padding:3px 9px;border-radius:6px;' + (correct ? 'color:#2D8BFF;background:#E4F0FF' : 'color:#C0432F;background:#DAF5FB'),
+      fbLabel: correct ? 'Correct' : 'Not quite',
+      prev: () => this.go(-1),
+      next: last ? (() => { window.location.href = 'Assessment Result.dc.html'; }) : (() => this.go(1)),
+      prevStyle: 'display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;font-family:inherit;padding:11px 16px;border-radius:10px;cursor:pointer;white-space:nowrap;border:1px solid #E1E5F0;background:#fff;color:' + (i===0 ? '#C7CCDC' : '#4B5563'),
+      nextStyle: 'display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;font-family:inherit;padding:11px 18px;border-radius:10px;cursor:pointer;white-space:nowrap;border:none;background:' + (answered ? '#0F1023' : '#C7CCDC') + ';color:#fff',
+      nextLabel: last ? 'Submit quiz' : 'Next',
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+  </style>
+</helmet>
+
+<dc-import name="CourseTopBar" eyebrow="Course · Nonprofit VA Path" title="Donor Records Cleanup" progress="46" back-href="My Courses.dc.html" exit-href="Learner Dashboard.dc.html" exit-label="Exit to dashboard" hint-size="100%,60px" style="display:block;width:100%"></dc-import>
+
+<main style="max-width:860px;margin:0 auto;padding:28px 26px 70px">
+
+  <!-- SUMMARY -->
+  <section style="background:linear-gradient(115deg,#FFFFFF 0%,#F6F4FF 100%);border:1px solid #E7E9F2;border-radius:18px;padding:24px;display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap;margin-bottom:24px">
+    <div style="min-width:220px;flex:1">
+      <div style="font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#5A3DF5;margin-bottom:7px">In progress · 46%</div>
+      <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:26px;margin:0 0 6px;color:#0F1023">Course curriculum</h1>
+      <p style="font-size:13.5px;color:#7C766C;margin:0">Up next — <strong style="color:#3D4A66">Module 2 · Tagging &amp; segmentation</strong></p>
+    </div>
+    <a href="Lesson Player.dc.html" style="display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:700;color:#fff;background:#0F1023;padding:13px 20px;border-radius:11px;white-space:nowrap" style-hover="background:#000"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>Resume course</a>
+  </section>
+
+  <!-- MODULES -->
+  <div style="display:flex;flex-direction:column;gap:14px">
+    <sc-for list="{{ modules }}" as="m" hint-placeholder-count="4">
+      <div style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;overflow:hidden;{{ m.lockedEdge }}">
+        <div onClick="{{ m.toggle }}" style="display:flex;align-items:center;gap:15px;padding:18px 20px;cursor:pointer;{{ m.headBg }}">
+          <span style="{{ m.statusDot }}">{{ m.statusMark }}</span>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap"><span style="font-family:'Poppins',serif;font-weight:700;font-size:16.5px;color:#0F1023">{{ m.title }}</span><span style="{{ m.tagStyle }}">{{ m.tag }}</span></div>
+            <div style="font-size:12.5px;color:#8A90A6;margin-top:3px">{{ m.meta }}</div>
+          </div>
+          <div style="width:96px;flex-shrink:0">
+            <div style="height:6px;background:#EEF1F8;border-radius:99px;overflow:hidden"><div style="{{ m.bar }}"></div></div>
+          </div>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#A6ACC0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;transform:rotate({{ m.caret }}deg);transition:transform .2s"><path d="M6 9l6 6 6-6"></path></svg>
+        </div>
+        <sc-if value="{{ m.open }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:4px 20px 14px;border-top:1px solid #F2EBDD">
+            <sc-for list="{{ m.lessons }}" as="ls" hint-placeholder-count="4">
+              <a href="{{ ls.href }}" style="display:flex;align-items:center;gap:13px;padding:12px 8px;border-radius:10px;{{ ls.rowStyle }}" style-hover="background:#F6F8FD">
+                <span style="{{ ls.iconWrap }}"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ ls.iconPath }}"></path></svg></span>
+                <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600;color:{{ ls.titleColor }}">{{ ls.title }}</div><div style="font-size:11.5px;color:#A6ACC0">{{ ls.typeLabel }} · {{ ls.time }}</div></div>
+                <span style="{{ ls.statusStyle }}">{{ ls.statusLabel }}</span>
+              </a>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { open: { 1: true } };
+  toggle(i, locked) { if (locked) return; this.setState(s => ({ open: { ...s.open, [i]: !s.open[i] } })); }
+  renderVals() {
+    const LT = {
+      video:['#ECE9FE','#5A3DF5','M8 5v14l11-7z','Video','Lesson Player.dc.html'],
+      text:['#EDE7F9','#7B61FF','M4 6h16M4 12h16M4 18h10','Reading','Lesson Player.dc.html'],
+      checklist:['#E4F0FF','#2D8BFF','M9 11l3 3 8-8M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11','Checklist','Lesson Player.dc.html'],
+      quiz:['#ECE9FE','#7B61FF','M9.1 9a3 3 0 1 1 4 2.8c-.9.4-1.6 1.1-1.6 2.2M12 17h.01','Knowledge check','Quiz.dc.html'],
+      assignment:['#DAF5FB','#C0432F','M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6','Assignment','Assignment.dc.html'],
+      assessment:['#E2EEF2','#1F6F8B','M12 3l2.1 5.4L20 10l-5.9 1.6L12 17l-2.1-5.4L4 10l5.9-1.6z','Final assessment','Quiz.dc.html'],
+    };
+    const lesson = (title, type, time, status) => {
+      const i = LT[type];
+      const done = status==='done', current = status==='current', locked = status==='locked';
+      return {
+        title, time, typeLabel:i[3],
+        href: locked ? 'Course Curriculum.dc.html' : i[4],
+        iconPath:i[2],
+        iconWrap:'width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:'+(locked?'#F1ECE0':i[0])+';color:'+(locked?'#A6ACC0':i[1]),
+        titleColor: locked ? '#A6ACC0' : '#0F1023',
+        rowStyle: current ? 'background:#F6F8FD;outline:1.5px solid #EFE2C4' : '',
+        statusLabel: done?'Done':current?'Resume':locked?'Locked':'Start',
+        statusStyle: 'font-size:11.5px;font-weight:800;white-space:nowrap;padding:4px 10px;border-radius:7px;' + (done?'color:#2D8BFF;background:#E4F0FF':current?'color:#9c6c12;background:#ECE9FE':locked?'color:#A6ACC0;background:#F1ECE0':'color:#5A3DF5;background:#ECE9FE'),
+      };
+    };
+    const MODS = [
+      { title:'Foundations of donor data', state:'done', pct:100, lessons:[
+        lesson('Why clean donor data matters','video','6 min','done'),
+        lesson('Key CRM terms','text','8 min','done'),
+        lesson('Setup checklist','checklist','10 min','done'),
+        lesson('Knowledge check','quiz','5 min','done'),
+      ]},
+      { title:'Cleaning & segmentation', state:'current', pct:50, lessons:[
+        lesson('Auditing your donor list','video','12 min','done'),
+        lesson('Tagging & segmentation','video','14 min','current'),
+        lesson('Merging duplicates','text','10 min','not-started'),
+        lesson('Knowledge check','quiz','6 min','locked'),
+      ]},
+      { title:'Acknowledgements & workflows', state:'locked', pct:0, lessons:[
+        lesson('Gift acknowledgement basics','video','10 min','locked'),
+        lesson('Building a thank-you workflow','text','12 min','locked'),
+        lesson('Assignment: donor workflow outline','assignment','30 min','locked'),
+      ]},
+      { title:'Reporting, maintenance & assessment', state:'locked', pct:0, lessons:[
+        lesson('Monthly donor reports','video','10 min','locked'),
+        lesson('Maintenance cadence','checklist','8 min','locked'),
+        lesson('Final assessment & certificate','assessment','20 min','locked'),
+      ]},
+    ];
+    const open = this.state.open;
+    const modules = MODS.map((m, i) => {
+      const done = m.state==='done', current = m.state==='current', locked = m.state==='locked';
+      const isOpen = !!open[i] && !locked;
+      const barColor = done?'#2D8BFF':current?'#5A3DF5':'#C7CCDC';
+      return {
+        title:m.title,
+        meta: m.lessons.length + ' lessons · ' + (done?'completed':current?(m.pct+'% complete'):'locked until you finish Module '+i),
+        lessons: m.lessons,
+        open: isOpen,
+        toggle: () => this.toggle(i, locked),
+        caret: isOpen ? 180 : 0,
+        lockedEdge: locked ? 'opacity:.92' : '',
+        headBg: current ? 'background:#F6F8FD' : '',
+        statusDot: 'width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;' +
+          (done?'background:#E4F0FF;color:#2D8BFF':current?'background:#EDE7F9;color:#7B61FF':'background:#F1ECE0;color:#A6ACC0'),
+        statusMark: done?'✓':current?(i+1):'',
+        tag: done?'Completed':current?'In progress':'Locked',
+        tagStyle: 'font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;padding:3px 8px;border-radius:6px;white-space:nowrap;' +
+          (done?'color:#2D8BFF;background:#E4F0FF':current?'color:#5A3DF5;background:#ECE9FE':'color:#A6ACC0;background:#F1ECE0'),
+        bar: 'height:100%;width:'+m.pct+'%;background:'+barColor+';border-radius:99px',
+      };
+    });
+    return { modules };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    ::selection{background:rgba(123,97,255,.32)}
+    a{color:inherit;text-decoration:none}
+    @keyframes rl-draw{from{stroke-dashoffset:var(--len,400)}to{stroke-dashoffset:0}}
+    @keyframes rl-float{0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}50%{transform:translateY(-7px) rotate(var(--rot,0deg))}}
+    @keyframes rl-grow{from{width:0}}
+  </style>
+</helmet>
+
+<div style="background:#F1F3FB;overflow-x:hidden">
+
+  <!-- ============ NAV ============ -->
+  <header style="position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid #E7E9F2">
+    <nav style="max-width:1240px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:28px;flex-wrap:wrap">
+      <a href="#top" style="display:flex;flex-direction:column;line-height:1;margin-right:6px">
+        <span style="font-family:'Poppins',serif;font-weight:800;font-size:24px;letter-spacing:-.01em;color:#0F1023">RaeLearn</span>
+        <span style="font-size:9.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#A6ACC0;margin-top:3px">by RAEFORM</span>
+      </a>
+      <div style="display:flex;align-items:center;gap:22px;flex-wrap:wrap;font-size:14.5px;font-weight:500;color:#4B5563">
+        <a href="#courses" style="padding:6px 0;border-bottom:2px solid transparent" style-hover="border-bottom:2px solid #0F1023">Courses</a>
+        <a href="#paths" style="padding:6px 0;border-bottom:2px solid transparent" style-hover="border-bottom:2px solid #0F1023">Learning Paths</a>
+        <a href="#categories" style="padding:6px 0;border-bottom:2px solid transparent" style-hover="border-bottom:2px solid #0F1023">For VAs</a>
+        <a href="#group" style="padding:6px 0;border-bottom:2px solid transparent" style-hover="border-bottom:2px solid #0F1023">For Founders &amp; Teams</a>
+        <a href="#free" style="padding:6px 0;border-bottom:2px solid transparent" style-hover="border-bottom:2px solid #0F1023">Free Courses</a>
+        <a href="#pricing" style="padding:6px 0;border-bottom:2px solid transparent" style-hover="border-bottom:2px solid #0F1023">Pricing</a>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;margin-left:auto">
+        <a href="#signin" style="font-size:14.5px;font-weight:600;color:#4B5563;padding:9px 4px;white-space:nowrap">Sign In</a>
+        <a href="#start" style="font-size:14px;font-weight:700;color:#fff;background:#0F1023;padding:11px 18px;border-radius:10px;white-space:nowrap" style-hover="background:#000">Start Learning</a>
+        <a href="#group" style="font-size:14px;font-weight:700;color:#0F1023;background:transparent;border:1.5px solid #0F1023;padding:9.5px 16px;border-radius:10px;white-space:nowrap" style-hover="background:#0F1023;color:#fff">Create Group Account</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section id="top" style="position:relative;max-width:1240px;margin:0 auto;padding:64px 28px 40px">
+    <!-- faint notebook grid backdrop -->
+    <div style="position:absolute;inset:0;background-image:linear-gradient(#0F1023 1px,transparent 1px),linear-gradient(90deg,#0F1023 1px,transparent 1px);background-size:34px 34px;opacity:.025;pointer-events:none"></div>
+
+    <div style="position:relative;display:flex;gap:54px;align-items:center;flex-wrap:wrap">
+      <!-- LEFT: copy -->
+      <div style="flex:1 1 440px;min-width:320px">
+        <div style="display:inline-flex;align-items:center;gap:9px;background:#fff;border:1px solid #E7E9F2;border-radius:999px;padding:7px 14px;margin-bottom:24px">
+          <span style="width:8px;height:8px;border-radius:50%;background:#5A3DF5"></span>
+          <span style="font-size:12px;font-weight:700;letter-spacing:.06em;color:#4B5563">PRACTICAL TRAINING FOR PEOPLE WHO RUN THINGS</span>
+        </div>
+
+        <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(36px,5.1vw,62px);line-height:1.04;letter-spacing:-.018em;margin:0 0 22px;color:#0F1023">
+          Learn the
+          <span style="position:relative;white-space:nowrap">
+            <span style="position:relative;z-index:1;background:linear-gradient(100deg,rgba(90,61,245,0) 1%,rgba(90,61,245,.28) 4%,rgba(90,61,245,.26) 94%,rgba(90,61,245,0) 99%);padding:0 .06em;border-radius:3px">systems</span>
+          </span>
+          behind better businesses, nonprofits, and
+          <span style="position:relative;white-space:nowrap">support teams
+            <svg viewBox="0 0 320 14" preserveAspectRatio="none" style="position:absolute;left:0;bottom:-9px;width:100%;height:13px;overflow:visible">
+              <path d="M3,9 Q80,2 160,7 T317,5" fill="none" stroke="#7B61FF" stroke-width="3.4" stroke-linecap="round" style="--len:340;stroke-dasharray:340;animation:rl-draw 1.1s .35s ease forwards"></path>
+            </svg>
+          </span>.
+        </h1>
+
+        <p style="font-size:clamp(16px,1.5vw,18.5px);line-height:1.62;color:#4B5563;max-width:560px;margin:0 0 32px">
+          RaeLearn gives VAs, founders, nonprofit leaders, and small teams practical courses on operations, admin systems, websites, compliance awareness, donor support, workflow setup, and digital business maintenance.
+        </p>
+
+        <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+          <a href="#start" style="display:inline-flex;align-items:center;gap:9px;font-size:16px;font-weight:700;color:#fff;background:#0F1023;padding:15px 26px;border-radius:12px;box-shadow:0 6px 18px rgba(15,16,35,.18);white-space:nowrap" style-hover="background:#000;transform:translateY(-1px)">
+            Start Learning
+            <span style="font-size:18px;line-height:1">&rarr;</span>
+          </a>
+          <a href="#group" style="display:inline-flex;align-items:center;font-size:16px;font-weight:700;color:#0F1023;background:#fff;border:1.6px solid #0F1023;padding:15px 24px;border-radius:12px" style-hover="background:#0F1023;color:#fff">
+            Create Group Account
+          </a>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:22px;margin-top:30px;flex-wrap:wrap">
+          <span style="font-size:13.5px;color:#8A90A6;font-weight:500">Trusted by VAs, nonprofit teams &amp; founders</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-family:'Caveat',cursive;font-size:21px;color:#5A3DF5;font-weight:700">free to start</span>
+            <svg viewBox="0 0 60 34" style="width:54px;height:30px;overflow:visible"><path d="M4,6 C26,2 40,14 50,26" fill="none" stroke="#5A3DF5" stroke-width="2.4" stroke-linecap="round"></path><path d="M40,26 L51,27 L46,17" fill="none" stroke="#5A3DF5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: sketch dashboard scene -->
+      <div style="flex:1 1 440px;min-width:320px;position:relative">
+        <!-- sticky note -->
+        <div style="position:absolute;top:-30px;left:14px;z-index:4;background:#E4F0FF;padding:9px 15px 11px;border-radius:3px;box-shadow:0 8px 18px rgba(15,16,35,.13);transform:rotate(-5deg);--rot:-5deg;animation:rl-float 5s ease-in-out infinite;white-space:nowrap">
+          <span style="font-family:'Caveat',cursive;font-size:19px;font-weight:700;color:#8a6a14;line-height:1">start here &rarr;</span>
+        </div>
+
+        <!-- main dashboard paper card -->
+        <div style="position:relative;background:#FFFFFF;border:1px solid #E7E9F2;border-radius:18px;padding:22px;box-shadow:0 22px 50px -18px rgba(15,16,35,.28),0 4px 12px rgba(15,16,35,.05);transform:rotate(1.1deg)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+            <div>
+              <div style="font-family:'Poppins',serif;font-weight:700;font-size:18px;color:#0F1023">Your learning dashboard</div>
+              <div style="font-size:12px;color:#8A90A6;margin-top:2px">Nonprofit VA Path · 3 of 7 complete</div>
+            </div>
+            <div style="display:flex;gap:5px">
+              <span style="width:9px;height:9px;border-radius:50%;background:#7B61FF"></span>
+              <span style="width:9px;height:9px;border-radius:50%;background:#7B61FF"></span>
+              <span style="width:9px;height:9px;border-radius:50%;background:#5A3DF5"></span>
+            </div>
+          </div>
+
+          <!-- learning path route -->
+          <div style="position:relative;height:58px;margin:4px 0 16px">
+            <svg viewBox="0 0 380 58" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%">
+              <path d="M18,40 C70,8 120,8 168,32 C210,52 250,52 300,22 C330,6 350,10 364,16" fill="none" stroke="#C7CCDC" stroke-width="2.4" stroke-dasharray="2 7" stroke-linecap="round"></path>
+            </svg>
+            <span style="position:absolute;left:8px;top:30px;width:22px;height:22px;border-radius:50%;background:#5A3DF5;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">✓</span>
+            <span style="position:absolute;left:152px;top:22px;width:22px;height:22px;border-radius:50%;background:#5A3DF5;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">✓</span>
+            <span style="position:absolute;left:288px;top:12px;width:24px;height:24px;border-radius:50%;background:#fff;border:2.5px solid #7B61FF;box-shadow:0 0 0 4px rgba(123,97,255,.16)"></span>
+            <span style="position:absolute;left:352px;top:6px;width:18px;height:18px;border-radius:50%;background:#EEF1F8;border:2px dashed #C7CCDC"></span>
+          </div>
+
+          <!-- mini course rows -->
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #EEF1F8;border-radius:12px;padding:12px 13px">
+              <div style="width:38px;height:38px;border-radius:9px;background:#ECE9FE;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#5A3DF5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"></path></svg>
+              </div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13.5px;font-weight:700;color:#0F1023">Inbox &amp; Calendar Systems</div>
+                <div style="height:6px;background:#EEF1F8;border-radius:99px;margin-top:7px;overflow:hidden"><div style="height:100%;width:100%;background:#5A3DF5;border-radius:99px;animation:rl-grow 1.2s .5s ease both"></div></div>
+              </div>
+              <span style="font-size:11px;font-weight:800;color:#5A3DF5">100%</span>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #EEF1F8;border-radius:12px;padding:12px 13px">
+              <div style="width:38px;height:38px;border-radius:9px;background:#EDE7F9;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"></path></svg>
+              </div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13.5px;font-weight:700;color:#0F1023">Donor Records Cleanup</div>
+                <div style="height:6px;background:#EEF1F8;border-radius:99px;margin-top:7px;overflow:hidden"><div style="height:100%;width:46%;background:#7B61FF;border-radius:99px;animation:rl-grow 1.2s .7s ease both"></div></div>
+              </div>
+              <span style="font-size:11px;font-weight:800;color:#7B61FF">46%</span>
+            </div>
+          </div>
+
+          <!-- category tags -->
+          <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:15px">
+            <span style="font-size:10.5px;font-weight:700;letter-spacing:.04em;color:#5A3DF5;background:#ECE9FE;padding:5px 10px;border-radius:99px">VA · Operations</span>
+            <span style="font-size:10.5px;font-weight:700;letter-spacing:.04em;color:#7B61FF;background:#EDE7F9;padding:5px 10px;border-radius:99px">Nonprofit</span>
+            <span style="font-size:10.5px;font-weight:700;letter-spacing:.04em;color:#4B5563;background:#EEF1F8;padding:5px 10px;border-radius:99px">+4 more</span>
+          </div>
+        </div>
+
+        <!-- floating mini certificate card -->
+        <div style="position:absolute;bottom:-26px;right:-8px;z-index:4;background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:13px 15px;box-shadow:0 14px 30px -10px rgba(15,16,35,.25);transform:rotate(-3deg);display:flex;align-items:center;gap:11px">
+          <div style="width:34px;height:34px;border-radius:50%;background:#ECE9FE;display:flex;align-items:center;justify-content:center">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg>
+          </div>
+          <div style="white-space:nowrap">
+            <div style="font-size:12.5px;font-weight:800;color:#0F1023;line-height:1.3">Certificate earned</div>
+            <div style="font-size:11px;color:#8A90A6;line-height:1.3">Nonprofit Ops VA</div>
+          </div>
+        </div>
+
+        <!-- hand-drawn arrow pointing to progress -->
+        <svg viewBox="0 0 70 50" style="position:absolute;bottom:38px;left:-40px;width:64px;height:46px;overflow:visible;z-index:3"><path d="M6,8 C2,28 20,40 44,40" fill="none" stroke="#7B61FF" stroke-width="2.4" stroke-linecap="round"></path><path d="M44,40 L33,35 M44,40 L37,48" fill="none" stroke="#7B61FF" stroke-width="2.4" stroke-linecap="round"></path></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CATEGORY CARDS ============ -->
+  <section id="categories" style="max-width:1240px;margin:0 auto;padding:72px 28px 40px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:38px">
+      <div>
+        <div style="font-size:12.5px;font-weight:800;letter-spacing:.16em;color:#A6ACC0;text-transform:uppercase;margin-bottom:12px">Find your starting point</div>
+        <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(28px,3.6vw,44px);line-height:1.08;letter-spacing:-.015em;margin:0;color:#0F1023">
+          Choose your
+          <span style="position:relative;white-space:nowrap">learning path
+            <svg viewBox="0 0 250 13" preserveAspectRatio="none" style="position:absolute;left:0;bottom:-7px;width:100%;height:12px;overflow:visible"><path d="M3,8 Q62,2 125,6 T247,5" fill="none" stroke="#7B61FF" stroke-width="3.2" stroke-linecap="round"></path></svg>
+          </span>.
+        </h2>
+      </div>
+      <p style="font-size:15.5px;line-height:1.6;color:#6A655C;max-width:340px;margin:0">Four practical tracks, organized by who you are and what you run — not by random topic lists.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(252px,1fr));gap:20px">
+
+      <!-- VA -->
+      <div style="position:relative;background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:26px 22px 22px;box-shadow:0 1px 0 #EEF1F8,0 14px 30px -22px rgba(15,16,35,.4);display:flex;flex-direction:column;transition:transform .18s ease,box-shadow .18s ease" style-hover="transform:translateY(-4px);box-shadow:0 18px 38px -20px rgba(15,16,35,.5)">
+        <span style="position:absolute;top:18px;right:18px;font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:#C7CCDC">01</span>
+        <div style="width:52px;height:52px;border-radius:13px;background:#ECE9FE;display:flex;align-items:center;justify-content:center;margin-bottom:18px">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#5A3DF5" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H5v4M9 5l-2 2.5"></path><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M11 9h7M11 14h7M7 14l-1.2 1.5L4.5 14"></path></svg>
+        </div>
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#5A3DF5;margin-bottom:6px">Support &amp; Operations</div>
+        <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:21px;margin:0 0 9px;color:#0F1023">For Virtual Assistants</h3>
+        <p style="font-size:14px;line-height:1.55;color:#6A655C;margin:0 0 20px;flex:1">Build practical support skills for founders, nonprofits, businesses, websites, operations, and remote teams.</p>
+        <a href="#courses" style="display:inline-flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px;font-weight:700;color:#5A3DF5;background:#ECE9FE;padding:12px 16px;border-radius:10px" style-hover="background:#5A3DF5;color:#fff">Explore VA Courses <span>&rarr;</span></a>
+      </div>
+
+      <!-- NONPROFITS -->
+      <div style="position:relative;background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:26px 22px 22px;box-shadow:0 1px 0 #EEF1F8,0 14px 30px -22px rgba(15,16,35,.4);display:flex;flex-direction:column;transition:transform .18s ease,box-shadow .18s ease" style-hover="transform:translateY(-4px);box-shadow:0 18px 38px -20px rgba(15,16,35,.5)">
+        <span style="position:absolute;top:18px;right:18px;font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:#C7CCDC">02</span>
+        <div style="width:52px;height:52px;border-radius:13px;background:#EDE7F9;display:flex;align-items:center;justify-content:center;margin-bottom:18px">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#7B61FF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><path d="M12 18s-3.2-2-3.2-4.3a1.8 1.8 0 0 1 3.2-1.1 1.8 1.8 0 0 1 3.2 1.1C15.2 16 12 18 12 18z"></path></svg>
+        </div>
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#7B61FF;margin-bottom:6px">Nonprofit Systems</div>
+        <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:21px;margin:0 0 9px;color:#0F1023">For Nonprofits</h3>
+        <p style="font-size:14px;line-height:1.55;color:#6A655C;margin:0 0 20px;flex:1">Learn U.S. nonprofit operations, board support, donor systems, grant readiness, compliance calendars, volunteer workflows, and website care.</p>
+        <a href="#courses" style="display:inline-flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px;font-weight:700;color:#7B61FF;background:#EDE7F9;padding:12px 16px;border-radius:10px" style-hover="background:#7B61FF;color:#fff">Explore NPO Courses <span>&rarr;</span></a>
+      </div>
+
+      <!-- BUSINESSES -->
+      <div style="position:relative;background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:26px 22px 22px;box-shadow:0 1px 0 #EEF1F8,0 14px 30px -22px rgba(15,16,35,.4);display:flex;flex-direction:column;transition:transform .18s ease,box-shadow .18s ease" style-hover="transform:translateY(-4px);box-shadow:0 18px 38px -20px rgba(15,16,35,.5)">
+        <span style="position:absolute;top:18px;right:18px;font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:#C7CCDC">03</span>
+        <div style="width:52px;height:52px;border-radius:13px;background:#DAF5FB;display:flex;align-items:center;justify-content:center;margin-bottom:18px">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#7B61FF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h7"></path><path d="M8 4l3 3-3 3"></path><path d="M20 17h-7"></path><path d="M16 14l-3 3 3 3"></path><circle cx="18" cy="7" r="2.4"></circle><circle cx="6" cy="17" r="2.4"></circle></svg>
+        </div>
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#7B61FF;margin-bottom:6px">Business Backend</div>
+        <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:21px;margin:0 0 9px;color:#0F1023">For Businesses</h3>
+        <p style="font-size:14px;line-height:1.55;color:#6A655C;margin:0 0 20px;flex:1">Learn business operations, startup systems, website maintenance, client workflows, SOPs, automation basics, and backend structure.</p>
+        <a href="#courses" style="display:inline-flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px;font-weight:700;color:#7B61FF;background:#DAF5FB;padding:12px 16px;border-radius:10px" style-hover="background:#7B61FF;color:#fff">Explore Business Courses <span>&rarr;</span></a>
+      </div>
+
+      <!-- FOUNDERS & TEAMS -->
+      <div style="position:relative;background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:26px 22px 22px;box-shadow:0 1px 0 #EEF1F8,0 14px 30px -22px rgba(15,16,35,.4);display:flex;flex-direction:column;transition:transform .18s ease,box-shadow .18s ease" style-hover="transform:translateY(-4px);box-shadow:0 18px 38px -20px rgba(15,16,35,.5)">
+        <span style="position:absolute;top:18px;right:18px;font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:#C7CCDC">04</span>
+        <div style="width:52px;height:52px;border-radius:13px;background:#ECE9FE;display:flex;align-items:center;justify-content:center;margin-bottom:18px">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#7B61FF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2.5"></rect><path d="M7 14l2.5-3 2.5 2 3-4"></path><circle cx="7" cy="9" r="0"></circle><path d="M9 21h6"></path></svg>
+        </div>
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#7B61FF;margin-bottom:6px">Group &amp; Team Training</div>
+        <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:21px;margin:0 0 9px;color:#0F1023">For Founders &amp; Teams</h3>
+        <p style="font-size:14px;line-height:1.55;color:#6A655C;margin:0 0 20px;flex:1">Create a paid group account, add learners, assign courses, and monitor training progress from one dashboard.</p>
+        <a href="#group" style="display:inline-flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px;font-weight:700;color:#fff;background:#7B61FF;padding:12px 16px;border-radius:10px" style-hover="background:#A97414">Create Group Account <span>&rarr;</span></a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ LEARNING PATHS ============ -->
+  <section id="paths" style="max-width:1240px;margin:0 auto;padding:56px 28px">
+    <div style="text-align:center;max-width:680px;margin:0 auto 36px">
+      <div style="font-size:12.5px;font-weight:800;letter-spacing:.16em;color:#A6ACC0;text-transform:uppercase;margin-bottom:12px">Guided, not random</div>
+      <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(28px,3.6vw,44px);line-height:1.08;letter-spacing:-.015em;margin:0 0 14px;color:#0F1023">
+        Follow a
+        <span style="position:relative;white-space:nowrap"><span style="position:relative;z-index:1;background:linear-gradient(100deg,rgba(123,97,255,0) 1%,rgba(123,97,255,.34) 4%,rgba(123,97,255,.3) 94%,rgba(123,97,255,0) 99%);padding:0 .08em;border-radius:3px">path</span></span>, not random lessons.
+      </h2>
+      <p style="font-size:16px;line-height:1.6;color:#6A655C;margin:0">RaeLearn organizes courses into practical learning paths based on role, organization type, and outcome.</p>
+    </div>
+
+    <!-- map board -->
+    <div style="position:relative;background:#F6F8FD;border:1px solid #E7E9F2;border-radius:24px;padding:40px 30px 34px;box-shadow:0 30px 60px -40px rgba(15,16,35,.4);overflow:hidden">
+      <!-- notebook grid -->
+      <div style="position:absolute;inset:0;background-image:linear-gradient(#0F1023 1px,transparent 1px),linear-gradient(90deg,#0F1023 1px,transparent 1px);background-size:30px 30px;opacity:.022;pointer-events:none"></div>
+      <!-- weaving dashed route -->
+      <svg viewBox="0 0 1100 360" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">
+        <path d="M40,90 C200,40 260,150 420,120 C580,90 640,210 800,180 C940,154 1000,250 1060,300" fill="none" stroke="#7B61FF" stroke-width="2.6" stroke-dasharray="3 10" stroke-linecap="round" opacity=".55"></path>
+      </svg>
+      <!-- start pin -->
+      <div style="position:absolute;top:18px;left:20px;display:flex;align-items:center;gap:7px;z-index:2">
+        <span style="font-family:'Caveat',cursive;font-size:21px;font-weight:700;color:#7B61FF">you start here</span>
+        <svg viewBox="0 0 40 26" style="width:38px;height:24px;overflow:visible"><path d="M4,4 C18,2 24,12 34,20" fill="none" stroke="#7B61FF" stroke-width="2.2" stroke-linecap="round"></path><path d="M34,20 L24,18 M34,20 L30,11" fill="none" stroke="#7B61FF" stroke-width="2.2" stroke-linecap="round"></path></svg>
+      </div>
+
+      <div style="position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:16px;margin-top:30px">
+
+        <!-- helper cards -->
+        <a href="#courses" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:18px 18px 17px;box-shadow:0 10px 26px -22px rgba(15,16,35,.5);display:block;transition:transform .16s ease" style-hover="transform:translateY(-4px)">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:13px"><span style="width:26px;height:26px;border-radius:50%;background:#5A3DF5;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">1</span><span style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#5A3DF5">VA · Beginner</span></div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 8px;color:#0F1023">New VA Path</h3>
+          <div style="font-size:13px;color:#7C766C;font-weight:500">5 courses · ~4 hrs · starter templates</div>
+        </a>
+
+        <a href="#courses" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:18px 18px 17px;box-shadow:0 10px 26px -22px rgba(15,16,35,.5);display:block;transition:transform .16s ease" style-hover="transform:translateY(-4px)">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:13px"><span style="width:26px;height:26px;border-radius:50%;background:#5A3DF5;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">2</span><span style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#5A3DF5">VA · Nonprofit</span></div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 8px;color:#0F1023">Nonprofit VA Path</h3>
+          <div style="font-size:13px;color:#7C766C;font-weight:500">7 courses · ~6 hrs · donor &amp; board basics</div>
+        </a>
+
+        <a href="#courses" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:18px 18px 17px;box-shadow:0 10px 26px -22px rgba(15,16,35,.5);display:block;transition:transform .16s ease" style-hover="transform:translateY(-4px)">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:13px"><span style="width:26px;height:26px;border-radius:50%;background:#7B61FF;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">3</span><span style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#7B61FF">Nonprofit · Founder</span></div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 8px;color:#0F1023">Nonprofit Founder Path</h3>
+          <div style="font-size:13px;color:#7C766C;font-weight:500">8 courses · ~7 hrs · 501(c)(3) operations</div>
+        </a>
+
+        <a href="#courses" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:18px 18px 17px;box-shadow:0 10px 26px -22px rgba(15,16,35,.5);display:block;transition:transform .16s ease" style-hover="transform:translateY(-4px)">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:13px"><span style="width:26px;height:26px;border-radius:50%;background:#7B61FF;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">4</span><span style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#7B61FF">Founder · Startup</span></div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 8px;color:#0F1023">Startup Founder Path</h3>
+          <div style="font-size:13px;color:#7C766C;font-weight:500">6 courses · ~5 hrs · backend setup</div>
+        </a>
+
+        <a href="#courses" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:18px 18px 17px;box-shadow:0 10px 26px -22px rgba(15,16,35,.5);display:block;transition:transform .16s ease" style-hover="transform:translateY(-4px)">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:13px"><span style="width:26px;height:26px;border-radius:50%;background:#5A3DF5;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">5</span><span style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#5A3DF5">VA · Website</span></div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 8px;color:#0F1023">Website Maintenance VA Path</h3>
+          <div style="font-size:13px;color:#7C766C;font-weight:500">5 courses · ~4 hrs · upkeep &amp; care</div>
+        </a>
+
+        <a href="#courses" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:18px 18px 17px;box-shadow:0 10px 26px -22px rgba(15,16,35,.5);display:block;transition:transform .16s ease" style-hover="transform:translateY(-4px)">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:13px"><span style="width:26px;height:26px;border-radius:50%;background:#7B61FF;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">6</span><span style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#7B61FF">Business · Ops</span></div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 8px;color:#0F1023">Small Business Operations Path</h3>
+          <div style="font-size:13px;color:#7C766C;font-weight:500">7 courses · ~6 hrs · SOPs &amp; workflows</div>
+        </a>
+
+        <a href="#group" style="position:relative;background:#0F1023;border:1px solid #0F1023;border-radius:14px;padding:18px 18px 17px;box-shadow:0 14px 30px -18px rgba(27,35,51,.7);display:block;transition:transform .16s ease" style-hover="transform:translateY(-4px)">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:13px"><span style="width:26px;height:26px;border-radius:50%;background:#7B61FF;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">7</span><span style="font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#00C6E8">Founders &amp; Teams</span></div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 8px;color:#fff">Founder &amp; Team Training Path</h3>
+          <div style="font-size:13px;color:#AEB6C6;font-weight:500">Assign to your whole team · group account</div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FREE COURSES ============ -->
+  <section id="free" style="max-width:1240px;margin:0 auto;padding:60px 28px 40px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:34px">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:12px"><span style="font-size:12.5px;font-weight:800;letter-spacing:.16em;color:#3E9A52;text-transform:uppercase">Free to start</span><span style="background:#E4F0FF;color:#2D8BFF;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px">NO CARD NEEDED</span></div>
+        <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(28px,3.6vw,44px);line-height:1.08;letter-spacing:-.015em;margin:0;color:#0F1023">Start free. Fix one thing today.</h2>
+      </div>
+      <p style="font-size:15.5px;line-height:1.6;color:#6A655C;max-width:360px;margin:0">Short practical courses with checklists, templates, and beginner-friendly lessons — before you move into deeper training.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px">
+
+      <!-- C1 -->
+      <div style="position:relative;background:#FFFFFF;border:1px solid #E7E9F2;border-radius:15px;padding:20px;box-shadow:0 12px 28px -24px rgba(15,16,35,.55);display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,16,35,.5)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div style="display:flex;gap:7px;flex-wrap:wrap"><span style="font-size:11px;font-weight:800;letter-spacing:.04em;color:#7B61FF;background:#EDE7F9;padding:4px 9px;border-radius:7px">Nonprofit</span><span style="font-size:11px;font-weight:700;color:#7C766C;background:#F0F2F8;padding:4px 9px;border-radius:7px">Compliance</span></div>
+          <span style="font-size:11px;font-weight:800;color:#2D8BFF;background:#E4F0FF;padding:4px 9px;border-radius:7px">FREE</span>
+        </div>
+        <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;line-height:1.25;margin:0 0 10px;color:#0F1023">Nonprofit vs 501(c)(3)</h3>
+        <p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0 0 16px;flex:1">Understand the real difference before you file, advise, or support a U.S. nonprofit.</p>
+        <div style="display:flex;align-items:center;gap:14px;font-size:12.5px;color:#8A90A6;font-weight:600;margin-bottom:16px"><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#3E9A52"></span>Beginner</span><span>· 6 lessons</span></div>
+        <a href="#start" style="display:block;text-align:center;font-size:14px;font-weight:700;color:#0F1023;border:1.5px solid #0F1023;padding:11px;border-radius:10px" style-hover="background:#0F1023;color:#fff">Enroll Free</a>
+      </div>
+
+      <!-- C2 -->
+      <div style="position:relative;background:#FFFFFF;border:1px solid #E7E9F2;border-radius:15px;padding:20px;box-shadow:0 12px 28px -24px rgba(15,16,35,.55);display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,16,35,.5)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div style="display:flex;gap:7px;flex-wrap:wrap"><span style="font-size:11px;font-weight:800;letter-spacing:.04em;color:#5A3DF5;background:#ECE9FE;padding:4px 9px;border-radius:7px">For VAs</span><span style="font-size:11px;font-weight:700;color:#7C766C;background:#F0F2F8;padding:4px 9px;border-radius:7px">Website</span></div>
+          <span style="font-size:11px;font-weight:800;color:#2D8BFF;background:#E4F0FF;padding:4px 9px;border-radius:7px">FREE</span>
+        </div>
+        <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;line-height:1.25;margin:0 0 10px;color:#0F1023">Website Maintenance Basics</h3>
+        <p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0 0 16px;flex:1">The recurring upkeep tasks every client website actually needs — explained plainly.</p>
+        <div style="display:flex;align-items:center;gap:14px;font-size:12.5px;color:#8A90A6;font-weight:600;margin-bottom:16px"><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#3E9A52"></span>Beginner</span><span>· 5 lessons</span></div>
+        <a href="#start" style="display:block;text-align:center;font-size:14px;font-weight:700;color:#0F1023;border:1.5px solid #0F1023;padding:11px;border-radius:10px" style-hover="background:#0F1023;color:#fff">Enroll Free</a>
+      </div>
+
+      <!-- C3 -->
+      <div style="position:relative;background:#FFFFFF;border:1px solid #E7E9F2;border-radius:15px;padding:20px;box-shadow:0 12px 28px -24px rgba(15,16,35,.55);display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,16,35,.5)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div style="display:flex;gap:7px;flex-wrap:wrap"><span style="font-size:11px;font-weight:800;letter-spacing:.04em;color:#5A3DF5;background:#ECE9FE;padding:4px 9px;border-radius:7px">For VAs</span><span style="font-size:11px;font-weight:700;color:#7C766C;background:#F0F2F8;padding:4px 9px;border-radius:7px">Onboarding</span></div>
+          <span style="font-size:11px;font-weight:800;color:#2D8BFF;background:#E4F0FF;padding:4px 9px;border-radius:7px">FREE</span>
+        </div>
+        <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;line-height:1.25;margin:0 0 10px;color:#0F1023">What VAs Need to Know Before Supporting a Nonprofit</h3>
+        <p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0 0 16px;flex:1">Avoid the common compliance and donor-data mistakes new nonprofit VAs make.</p>
+        <div style="display:flex;align-items:center;gap:14px;font-size:12.5px;color:#8A90A6;font-weight:600;margin-bottom:16px"><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#3E9A52"></span>Beginner</span><span>· 4 lessons</span></div>
+        <a href="#start" style="display:block;text-align:center;font-size:14px;font-weight:700;color:#0F1023;border:1.5px solid #0F1023;padding:11px;border-radius:10px" style-hover="background:#0F1023;color:#fff">Enroll Free</a>
+      </div>
+
+      <!-- C4 -->
+      <div style="position:relative;background:#FFFFFF;border:1px solid #E7E9F2;border-radius:15px;padding:20px;box-shadow:0 12px 28px -24px rgba(15,16,35,.55);display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,16,35,.5)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div style="display:flex;gap:7px;flex-wrap:wrap"><span style="font-size:11px;font-weight:800;letter-spacing:.04em;color:#7B61FF;background:#DAF5FB;padding:4px 9px;border-radius:7px">Business</span><span style="font-size:11px;font-weight:700;color:#7C766C;background:#F0F2F8;padding:4px 9px;border-radius:7px">Systems</span></div>
+          <span style="font-size:11px;font-weight:800;color:#2D8BFF;background:#E4F0FF;padding:4px 9px;border-radius:7px">FREE</span>
+        </div>
+        <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;line-height:1.25;margin:0 0 10px;color:#0F1023">Google Drive Cleanup for Small Businesses</h3>
+        <p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0 0 16px;flex:1">A repeatable folder system your whole team can actually find things in.</p>
+        <div style="display:flex;align-items:center;gap:14px;font-size:12.5px;color:#8A90A6;font-weight:600;margin-bottom:16px"><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#3E9A52"></span>Beginner</span><span>· 4 lessons</span></div>
+        <a href="#start" style="display:block;text-align:center;font-size:14px;font-weight:700;color:#0F1023;border:1.5px solid #0F1023;padding:11px;border-radius:10px" style-hover="background:#0F1023;color:#fff">Enroll Free</a>
+      </div>
+
+      <!-- C5 -->
+      <div style="position:relative;background:#FFFFFF;border:1px solid #E7E9F2;border-radius:15px;padding:20px;box-shadow:0 12px 28px -24px rgba(15,16,35,.55);display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,16,35,.5)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div style="display:flex;gap:7px;flex-wrap:wrap"><span style="font-size:11px;font-weight:800;letter-spacing:.04em;color:#7B61FF;background:#DAF5FB;padding:4px 9px;border-radius:7px">Business</span><span style="font-size:11px;font-weight:700;color:#7C766C;background:#F0F2F8;padding:4px 9px;border-radius:7px">SOPs</span></div>
+          <span style="font-size:11px;font-weight:800;color:#2D8BFF;background:#E4F0FF;padding:4px 9px;border-radius:7px">FREE</span>
+        </div>
+        <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;line-height:1.25;margin:0 0 10px;color:#0F1023">SOP Writing Basics</h3>
+        <p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0 0 16px;flex:1">Turn what's in your head into a clean, repeatable standard operating procedure.</p>
+        <div style="display:flex;align-items:center;gap:14px;font-size:12.5px;color:#8A90A6;font-weight:600;margin-bottom:16px"><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#3E9A52"></span>Beginner</span><span>· 5 lessons</span></div>
+        <a href="#start" style="display:block;text-align:center;font-size:14px;font-weight:700;color:#0F1023;border:1.5px solid #0F1023;padding:11px;border-radius:10px" style-hover="background:#0F1023;color:#fff">Enroll Free</a>
+      </div>
+
+      <!-- C6 -->
+      <div style="position:relative;background:#FFFFFF;border:1px solid #E7E9F2;border-radius:15px;padding:20px;box-shadow:0 12px 28px -24px rgba(15,16,35,.55);display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,16,35,.5)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div style="display:flex;gap:7px;flex-wrap:wrap"><span style="font-size:11px;font-weight:800;letter-spacing:.04em;color:#7B61FF;background:#EDE7F9;padding:4px 9px;border-radius:7px">Nonprofit</span><span style="font-size:11px;font-weight:700;color:#7C766C;background:#F0F2F8;padding:4px 9px;border-radius:7px">Governance</span></div>
+          <span style="font-size:11px;font-weight:800;color:#2D8BFF;background:#E4F0FF;padding:4px 9px;border-radius:7px">FREE</span>
+        </div>
+        <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;line-height:1.25;margin:0 0 10px;color:#0F1023">Board Basics for Startup Nonprofits</h3>
+        <p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0 0 16px;flex:1">What a working board actually does in year one — roles, meetings, and minutes.</p>
+        <div style="display:flex;align-items:center;gap:14px;font-size:12.5px;color:#8A90A6;font-weight:600;margin-bottom:16px"><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#3E9A52"></span>Beginner</span><span>· 6 lessons</span></div>
+        <a href="#start" style="display:block;text-align:center;font-size:14px;font-weight:700;color:#0F1023;border:1.5px solid #0F1023;padding:11px;border-radius:10px" style-hover="background:#0F1023;color:#fff">Enroll Free</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ PAID COURSES & CERTIFICATES ============ -->
+  <section id="courses" style="max-width:1240px;margin:0 auto;padding:60px 28px 40px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:34px">
+      <div style="max-width:560px">
+        <div style="font-size:12.5px;font-weight:800;letter-spacing:.16em;color:#A6ACC0;text-transform:uppercase;margin-bottom:12px">Paid courses &amp; certificates</div>
+        <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(28px,3.6vw,44px);line-height:1.08;letter-spacing:-.015em;margin:0 0 14px;color:#0F1023">Go deeper when you need the full system.</h2>
+        <p style="font-size:15.5px;line-height:1.6;color:#6A655C;margin:0">Paid courses and certificates help learners build real operational skills across nonprofit support, business systems, website care, SOPs, and founder support.</p>
+      </div>
+      <a href="#courses" style="display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:700;color:#0F1023;border:1.5px solid #0F1023;padding:12px 18px;border-radius:10px;white-space:nowrap" style-hover="background:#0F1023;color:#fff">Browse all courses &rarr;</a>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:18px">
+
+      <!-- P1 certificate -->
+      <div style="position:relative;background:#fff;border:1px solid #E7E9F2;border-radius:15px;overflow:hidden;box-shadow:0 12px 28px -24px rgba(15,16,35,.55);display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,16,35,.5)">
+        <div style="height:5px;background:#7B61FF"></div>
+        <div style="padding:20px;display:flex;flex-direction:column;flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
+            <span style="font-size:11px;font-weight:800;letter-spacing:.04em;color:#7B61FF;background:#EDE7F9;padding:4px 9px;border-radius:7px">Nonprofit · VA</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#9c6c12;background:#ECE9FE;padding:4px 9px;border-radius:7px"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#9c6c12" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg>CERTIFICATE</span>
+          </div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;line-height:1.25;margin:0 0 14px;color:#0F1023;flex:1">Nonprofit Operations VA Certificate</h3>
+          <div style="display:flex;align-items:center;gap:14px;font-size:12.5px;color:#8A90A6;font-weight:600;margin-bottom:16px"><span>~9 hrs</span><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#7B61FF"></span>Intermediate</span></div>
+          <a href="#courses" style="display:block;text-align:center;font-size:14px;font-weight:700;color:#fff;background:#0F1023;padding:11px;border-radius:10px" style-hover="background:#000">View Course</a>
+        </div>
+      </div>
+
+      <!-- P2 -->
+      <div style="position:relative;background:#fff;border:1px solid #E7E9F2;border-radius:15px;overflow:hidden;box-shadow:0 12px 28px -24px rgba(15,16,35,.55);display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,16,35,.5)">
+        <div style="height:5px;background:#5A3DF5"></div>
+        <div style="padding:20px;display:flex;flex-direction:column;flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
+            <span style="font-size:11px;font-weight:800;letter-spacing:.04em;color:#5A3DF5;background:#ECE9FE;padding:4px 9px;border-radius:7px">For VAs · Website</span>
+            <span style="font-size:11px;font-weight:800;color:#4B5563;background:#EEF1F8;padding:4px 9px;border-radius:7px">PAID</span>
+          </div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;line-height:1.25;margin:0 0 14px;color:#0F1023;flex:1">Website Maintenance for VAs</h3>
+          <div style="display:flex;align-items:center;gap:14px;font-size:12.5px;color:#8A90A6;font-weight:600;margin-bottom:16px"><span>~5 hrs</span><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#3E9A52"></span>Beginner</span></div>
+          <a href="#courses" style="display:block;text-align:center;font-size:14px;font-weight:700;color:#fff;background:#0F1023;padding:11px;border-radius:10px" style-hover="background:#000">View Course</a>
+        </div>
+      </div>
+
+      <!-- P3 -->
+      <div style="position:relative;background:#fff;border:1px solid #E7E9F2;border-radius:15px;overflow:hidden;box-shadow:0 12px 28px -24px rgba(15,16,35,.55);display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,16,35,.5)">
+        <div style="height:5px;background:#7B61FF"></div>
+        <div style="padding:20px;display:flex;flex-direction:column;flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
+            <span style="font-size:11px;font-weight:800;letter-spacing:.04em;color:#7B61FF;background:#EDE7F9;padding:4px 9px;border-radius:7px">Nonprofit</span>
+            <span style="font-size:11px;font-weight:800;color:#4B5563;background:#EEF1F8;padding:4px 9px;border-radius:7px">BOOTCAMP</span>
+          </div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;line-height:1.25;margin:0 0 14px;color:#0F1023;flex:1">U.S. Nonprofit Startup Operations Bootcamp</h3>
+          <div style="display:flex;align-items:center;gap:14px;font-size:12.5px;color:#8A90A6;font-weight:600;margin-bottom:16px"><span>~12 hrs</span><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#7B61FF"></span>Advanced</span></div>
+          <a href="#courses" style="display:block;text-align:center;font-size:14px;font-weight:700;color:#fff;background:#0F1023;padding:11px;border-radius:10px" style-hover="background:#000">View Course</a>
+        </div>
+      </div>
+
+      <!-- P4 -->
+      <div style="position:relative;background:#fff;border:1px solid #E7E9F2;border-radius:15px;overflow:hidden;box-shadow:0 12px 28px -24px rgba(15,16,35,.55);display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,16,35,.5)">
+        <div style="height:5px;background:#7B61FF"></div>
+        <div style="padding:20px;display:flex;flex-direction:column;flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
+            <span style="font-size:11px;font-weight:800;letter-spacing:.04em;color:#7B61FF;background:#DAF5FB;padding:4px 9px;border-radius:7px">Business</span>
+            <span style="font-size:11px;font-weight:800;color:#4B5563;background:#EEF1F8;padding:4px 9px;border-radius:7px">PAID</span>
+          </div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;line-height:1.25;margin:0 0 14px;color:#0F1023;flex:1">Startup Backend Setup</h3>
+          <div style="display:flex;align-items:center;gap:14px;font-size:12.5px;color:#8A90A6;font-weight:600;margin-bottom:16px"><span>~7 hrs</span><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#7B61FF"></span>Intermediate</span></div>
+          <a href="#courses" style="display:block;text-align:center;font-size:14px;font-weight:700;color:#fff;background:#0F1023;padding:11px;border-radius:10px" style-hover="background:#000">View Course</a>
+        </div>
+      </div>
+
+      <!-- P5 -->
+      <div style="position:relative;background:#fff;border:1px solid #E7E9F2;border-radius:15px;overflow:hidden;box-shadow:0 12px 28px -24px rgba(15,16,35,.55);display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,16,35,.5)">
+        <div style="height:5px;background:#7B61FF"></div>
+        <div style="padding:20px;display:flex;flex-direction:column;flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
+            <span style="font-size:11px;font-weight:800;letter-spacing:.04em;color:#7B61FF;background:#DAF5FB;padding:4px 9px;border-radius:7px">Business · Ops</span>
+            <span style="font-size:11px;font-weight:800;color:#4B5563;background:#EEF1F8;padding:4px 9px;border-radius:7px">PAID</span>
+          </div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;line-height:1.25;margin:0 0 14px;color:#0F1023;flex:1">SOP Builder Course</h3>
+          <div style="display:flex;align-items:center;gap:14px;font-size:12.5px;color:#8A90A6;font-weight:600;margin-bottom:16px"><span>~6 hrs</span><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#3E9A52"></span>Beginner</span></div>
+          <a href="#courses" style="display:block;text-align:center;font-size:14px;font-weight:700;color:#fff;background:#0F1023;padding:11px;border-radius:10px" style-hover="background:#000">View Course</a>
+        </div>
+      </div>
+
+      <!-- P6 -->
+      <div style="position:relative;background:#fff;border:1px solid #E7E9F2;border-radius:15px;overflow:hidden;box-shadow:0 12px 28px -24px rgba(15,16,35,.55);display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,16,35,.5)">
+        <div style="height:5px;background:#7B61FF"></div>
+        <div style="padding:20px;display:flex;flex-direction:column;flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
+            <span style="font-size:11px;font-weight:800;letter-spacing:.04em;color:#7B61FF;background:#EDE7F9;padding:4px 9px;border-radius:7px">Nonprofit · Donor</span>
+            <span style="font-size:11px;font-weight:800;color:#4B5563;background:#EEF1F8;padding:4px 9px;border-radius:7px">PAID</span>
+          </div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;line-height:1.25;margin:0 0 14px;color:#0F1023;flex:1">Donor Operations for Small Nonprofits</h3>
+          <div style="display:flex;align-items:center;gap:14px;font-size:12.5px;color:#8A90A6;font-weight:600;margin-bottom:16px"><span>~6 hrs</span><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#7B61FF"></span>Intermediate</span></div>
+          <a href="#courses" style="display:block;text-align:center;font-size:14px;font-weight:700;color:#fff;background:#0F1023;padding:11px;border-radius:10px" style-hover="background:#000">View Course</a>
+        </div>
+      </div>
+
+      <!-- P7 -->
+      <div style="position:relative;background:#fff;border:1px solid #E7E9F2;border-radius:15px;overflow:hidden;box-shadow:0 12px 28px -24px rgba(15,16,35,.55);display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,16,35,.5)">
+        <div style="height:5px;background:#5A3DF5"></div>
+        <div style="padding:20px;display:flex;flex-direction:column;flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
+            <span style="font-size:11px;font-weight:800;letter-spacing:.04em;color:#5A3DF5;background:#ECE9FE;padding:4px 9px;border-radius:7px">VA · Nonprofit</span>
+            <span style="font-size:11px;font-weight:800;color:#4B5563;background:#EEF1F8;padding:4px 9px;border-radius:7px">PAID</span>
+          </div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;line-height:1.25;margin:0 0 14px;color:#0F1023;flex:1">Board Admin Support for Nonprofit VAs</h3>
+          <div style="display:flex;align-items:center;gap:14px;font-size:12.5px;color:#8A90A6;font-weight:600;margin-bottom:16px"><span>~5 hrs</span><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#7B61FF"></span>Intermediate</span></div>
+          <a href="#courses" style="display:block;text-align:center;font-size:14px;font-weight:700;color:#fff;background:#0F1023;padding:11px;border-radius:10px" style-hover="background:#000">View Course</a>
+        </div>
+      </div>
+
+      <!-- P8 -->
+      <div style="position:relative;background:#fff;border:1px solid #E7E9F2;border-radius:15px;overflow:hidden;box-shadow:0 12px 28px -24px rgba(15,16,35,.55);display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,16,35,.5)">
+        <div style="height:5px;background:#7B61FF"></div>
+        <div style="padding:20px;display:flex;flex-direction:column;flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
+            <span style="font-size:11px;font-weight:800;letter-spacing:.04em;color:#7B61FF;background:#DAF5FB;padding:4px 9px;border-radius:7px">Business · Client</span>
+            <span style="font-size:11px;font-weight:800;color:#4B5563;background:#EEF1F8;padding:4px 9px;border-radius:7px">PAID</span>
+          </div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;line-height:1.25;margin:0 0 14px;color:#0F1023;flex:1">Client Operations Setup</h3>
+          <div style="display:flex;align-items:center;gap:14px;font-size:12.5px;color:#8A90A6;font-weight:600;margin-bottom:16px"><span>~6 hrs</span><span style="display:inline-flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:50%;background:#7B61FF"></span>Intermediate</span></div>
+          <a href="#courses" style="display:block;text-align:center;font-size:14px;font-weight:700;color:#fff;background:#0F1023;padding:11px;border-radius:10px" style-hover="background:#000">View Course</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ GROUP ACCOUNT (PREMIUM) ============ -->
+  <section id="group" style="background:#0F1023;width:100%;margin-top:36px">
+    <div style="max-width:1240px;margin:0 auto;padding:72px 28px;display:flex;gap:54px;align-items:center;flex-wrap:wrap">
+
+      <!-- LEFT copy -->
+      <div style="flex:1 1 400px;min-width:300px">
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(123,97,255,.14);border:1px solid rgba(123,97,255,.35);border-radius:999px;padding:6px 13px;margin-bottom:22px">
+          <span style="font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#00C6E8;white-space:nowrap">Paid group accounts</span>
+        </div>
+        <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(28px,3.7vw,46px);line-height:1.08;letter-spacing:-.015em;margin:0 0 16px;color:#fff">Train your people with structure.</h2>
+        <p style="font-size:16.5px;line-height:1.6;color:#B7BECC;margin:0 0 28px;max-width:520px">Founders, nonprofit heads, executive directors, operations leads, and business owners can create a paid group account, add learners, assign courses and learning paths, and monitor progress from one dashboard.</p>
+
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:11px 20px;margin-bottom:30px">
+          <div style="display:flex;align-items:center;gap:9px;font-size:14.5px;color:#E7EAF0;font-weight:500"><span style="width:19px;height:19px;border-radius:50%;background:rgba(62,154,82,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#5BC074" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span>Add learners</div>
+          <div style="display:flex;align-items:center;gap:9px;font-size:14.5px;color:#E7EAF0;font-weight:500"><span style="width:19px;height:19px;border-radius:50%;background:rgba(62,154,82,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#5BC074" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span>Assign courses</div>
+          <div style="display:flex;align-items:center;gap:9px;font-size:14.5px;color:#E7EAF0;font-weight:500"><span style="width:19px;height:19px;border-radius:50%;background:rgba(62,154,82,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#5BC074" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span>Assign full learning paths</div>
+          <div style="display:flex;align-items:center;gap:9px;font-size:14.5px;color:#E7EAF0;font-weight:500"><span style="width:19px;height:19px;border-radius:50%;background:rgba(62,154,82,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#5BC074" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span>Track progress</div>
+          <div style="display:flex;align-items:center;gap:9px;font-size:14.5px;color:#E7EAF0;font-weight:500"><span style="width:19px;height:19px;border-radius:50%;background:rgba(62,154,82,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#5BC074" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span>View completions</div>
+          <div style="display:flex;align-items:center;gap:9px;font-size:14.5px;color:#E7EAF0;font-weight:500"><span style="width:19px;height:19px;border-radius:50%;background:rgba(62,154,82,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#5BC074" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span>Manage seats</div>
+          <div style="display:flex;align-items:center;gap:9px;font-size:14.5px;color:#E7EAF0;font-weight:500"><span style="width:19px;height:19px;border-radius:50%;background:rgba(62,154,82,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#5BC074" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span>Export reports</div>
+          <div style="display:flex;align-items:center;gap:9px;font-size:14.5px;color:#E7EAF0;font-weight:500"><span style="width:19px;height:19px;border-radius:50%;background:rgba(62,154,82,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#5BC074" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span>Request custom training</div>
+        </div>
+
+        <div style="display:flex;gap:13px;flex-wrap:wrap">
+          <a href="#start" style="display:inline-flex;align-items:center;gap:9px;font-size:16px;font-weight:700;color:#0F1023;background:#00C6E8;padding:15px 24px;border-radius:12px;white-space:nowrap" style-hover="background:#f0b94a">Create Group Account &rarr;</a>
+          <a href="#group" style="display:inline-flex;align-items:center;font-size:16px;font-weight:700;color:#fff;background:transparent;border:1.5px solid rgba(255,255,255,.3);padding:15px 22px;border-radius:12px;white-space:nowrap" style-hover="border-color:#fff;background:rgba(255,255,255,.06)">View Group Features</a>
+        </div>
+      </div>
+
+      <!-- RIGHT admin dashboard -->
+      <div style="flex:1 1 440px;min-width:300px;position:relative">
+        <!-- sticky note 'assigned' -->
+        <div style="position:absolute;top:-20px;right:8px;z-index:5;background:#00C6E8;padding:8px 13px 10px;border-radius:3px;box-shadow:0 10px 22px rgba(0,0,0,.35);transform:rotate(4deg);white-space:nowrap"><span style="font-family:'Caveat',cursive;font-size:18px;font-weight:700;color:#5a4109">assigned ✓</span></div>
+
+        <div style="background:#FFFFFF;border-radius:18px;box-shadow:0 30px 70px -24px rgba(0,0,0,.55);overflow:hidden">
+          <!-- panel header -->
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;border-bottom:1px solid #EEF1F8;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:11px">
+              <div style="width:38px;height:38px;border-radius:10px;background:#0F1023;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Poppins',serif;font-weight:700;font-size:17px">A</div>
+              <div>
+                <div style="font-size:14.5px;font-weight:800;color:#0F1023;line-height:1.2;white-space:nowrap">Acme Foundation · Team</div>
+                <div style="font-size:11.5px;color:#8A90A6">Admin dashboard</div>
+              </div>
+            </div>
+            <a href="#group" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#0F1023;border:1.4px solid #DDD4C2;padding:7px 11px;border-radius:8px;white-space:nowrap" style-hover="background:#0F1023;color:#fff"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>Export report</a>
+          </div>
+
+          <!-- stat strip -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#EEF1F8">
+            <div style="background:#fff;padding:13px 16px"><div style="font-size:11px;font-weight:700;color:#8A90A6;text-transform:uppercase;letter-spacing:.05em">Seats used</div><div style="font-size:19px;font-weight:800;color:#0F1023;margin-top:2px">12 <span style="font-size:13px;color:#A6ACC0;font-weight:600">/ 15</span></div></div>
+            <div style="background:#fff;padding:13px 16px"><div style="font-size:11px;font-weight:700;color:#8A90A6;text-transform:uppercase;letter-spacing:.05em">Avg progress</div><div style="font-size:19px;font-weight:800;color:#0F1023;margin-top:2px">68%</div></div>
+            <div style="background:#fff;padding:13px 16px"><div style="font-size:11px;font-weight:700;color:#8A90A6;text-transform:uppercase;letter-spacing:.05em">Certificates</div><div style="font-size:19px;font-weight:800;color:#0F1023;margin-top:2px">7</div></div>
+          </div>
+
+          <!-- table header -->
+          <div style="display:grid;grid-template-columns:1.5fr 1.5fr 1.1fr;gap:10px;padding:12px 20px;background:#FAF6EF;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#A6ACC0">
+            <span>Learner</span><span>Assigned course</span><span>Progress</span>
+          </div>
+
+          <!-- rows -->
+          <div style="padding:6px 20px 18px">
+            <div style="display:grid;grid-template-columns:1.5fr 1.5fr 1.1fr;gap:10px;align-items:center;padding:13px 0;border-bottom:1px solid #F0F2F8">
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:50%;background:#ECE9FE;color:#5A3DF5;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">MS</span><span style="font-size:13.5px;font-weight:700;color:#0F1023;white-space:nowrap">Maria S.</span></div>
+              <span style="font-size:12.5px;color:#4B5563">Nonprofit Ops VA</span>
+              <div><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:#0F1023;margin-bottom:4px"><span style="color:#5A3DF5">80%</span></div><div style="height:6px;background:#EEF1F8;border-radius:99px;overflow:hidden"><div style="height:100%;width:80%;background:#5A3DF5;border-radius:99px"></div></div></div>
+            </div>
+
+            <div style="position:relative;display:grid;grid-template-columns:1.5fr 1.5fr 1.1fr;gap:10px;align-items:center;padding:13px 0;border-bottom:1px solid #F0F2F8">
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:50%;background:#DAF5FB;color:#7B61FF;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">JT</span><span style="font-size:13.5px;font-weight:700;color:#0F1023;white-space:nowrap">James T.</span></div>
+              <span style="font-size:12.5px;color:#4B5563">SOP Builder Course</span>
+              <div style="position:relative;display:flex;align-items:center;gap:7px;width:fit-content"><span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:800;color:#2D8BFF;background:#E4F0FF;padding:3px 8px;border-radius:6px;white-space:nowrap">Completed</span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg>
+                <svg viewBox="0 0 124 42" style="position:absolute;left:-12px;top:-9px;width:130px;height:46px;overflow:visible;pointer-events:none"><path d="M28,6 C70,-2 122,4 120,20 C118,37 58,41 20,34 C-2,30 2,11 34,8" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" opacity=".9"></path></svg>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1.5fr 1.5fr 1.1fr;gap:10px;align-items:center;padding:13px 0;border-bottom:1px solid #F0F2F8">
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:50%;background:#EDE7F9;color:#7B61FF;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">PK</span><span style="font-size:13.5px;font-weight:700;color:#0F1023;white-space:nowrap">Priya K.</span></div>
+              <span style="font-size:12.5px;color:#4B5563">Donor Operations</span>
+              <div><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;margin-bottom:4px"><span style="color:#7B61FF">45%</span></div><div style="height:6px;background:#EEF1F8;border-radius:99px;overflow:hidden"><div style="height:100%;width:45%;background:#7B61FF;border-radius:99px"></div></div></div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1.5fr 1.5fr 1.1fr;gap:10px;align-items:center;padding:13px 0">
+              <div style="display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:50%;background:#ECE9FE;color:#7B61FF;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">DR</span><span style="font-size:13.5px;font-weight:700;color:#0F1023;white-space:nowrap">Devin R.</span></div>
+              <span style="font-size:12.5px;color:#4B5563">Website Maintenance</span>
+              <div style="display:flex;align-items:center;gap:7px"><span style="font-size:11px;font-weight:800;color:#2D8BFF;background:#E4F0FF;padding:3px 8px;border-radius:6px">Completed</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- hand-drawn arrow + label pointing to progress -->
+        <div style="position:absolute;left:-28px;bottom:150px;z-index:5;display:flex;flex-direction:column;align-items:flex-start">
+          <span style="font-family:'Caveat',cursive;font-size:17px;font-weight:700;color:#00C6E8;transform:rotate(-4deg)">live progress</span>
+          <svg viewBox="0 0 60 40" style="width:56px;height:38px;overflow:visible"><path d="M6,4 C2,22 16,32 40,30" fill="none" stroke="#00C6E8" stroke-width="2.2" stroke-linecap="round"></path><path d="M40,30 L30,27 M40,30 L34,21" fill="none" stroke="#00C6E8" stroke-width="2.2" stroke-linecap="round"></path></svg>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ CUSTOM TRAINING ============ -->
+  <section id="custom" style="max-width:1240px;margin:0 auto;padding:72px 28px 40px">
+    <div style="text-align:center;max-width:720px;margin:0 auto 40px">
+      <div style="font-size:12.5px;font-weight:800;letter-spacing:.16em;color:#A6ACC0;text-transform:uppercase;margin-bottom:12px">RaeLearn Custom</div>
+      <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(28px,3.6vw,44px);line-height:1.1;letter-spacing:-.015em;margin:0 0 14px;color:#0F1023">Need training built around your actual organization?</h2>
+      <p style="font-size:16px;line-height:1.6;color:#6A655C;margin:0">RaeLearn Custom creates tailored learning plans and private training for nonprofits, businesses, founders, VAs, and teams that need support based on their real systems.</p>
+    </div>
+
+    <!-- workflow -->
+    <div style="position:relative;background:#F6F8FD;border:1px solid #E7E9F2;border-radius:24px;padding:38px 26px;box-shadow:0 30px 60px -40px rgba(15,16,35,.4);margin-bottom:30px">
+      <div style="position:absolute;inset:0;background-image:linear-gradient(#0F1023 1px,transparent 1px),linear-gradient(90deg,#0F1023 1px,transparent 1px);background-size:30px 30px;opacity:.022;pointer-events:none;border-radius:24px"></div>
+      <div style="position:relative;display:flex;align-items:stretch;justify-content:center;gap:6px;flex-wrap:wrap">
+
+        <div style="flex:1 1 150px;max-width:200px;min-width:140px;background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:18px 16px;text-align:center;box-shadow:0 10px 24px -22px rgba(15,16,35,.5)">
+          <div style="width:42px;height:42px;border-radius:11px;background:#ECE9FE;display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#5A3DF5" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"></rect><path d="M9 3v3h6V3M9 11h6M9 15h4"></path></svg></div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:.08em;color:#A6ACC0;margin-bottom:3px">STEP 1</div>
+          <div style="font-family:'Poppins',serif;font-weight:700;font-size:16px;color:#0F1023">Intake</div>
+        </div>
+        <div style="display:flex;align-items:center;flex:0 0 auto;padding:0 2px"><svg viewBox="0 0 40 24" style="width:34px;height:22px;overflow:visible"><path d="M3,12 C14,8 24,16 34,12" fill="none" stroke="#C7CCDC" stroke-width="2.2" stroke-linecap="round"></path><path d="M34,12 L26,9 M34,12 L27,16" fill="none" stroke="#C7CCDC" stroke-width="2.2" stroke-linecap="round"></path></svg></div>
+
+        <div style="flex:1 1 150px;max-width:200px;min-width:140px;background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:18px 16px;text-align:center;box-shadow:0 10px 24px -22px rgba(15,16,35,.5)">
+          <div style="width:42px;height:42px;border-radius:11px;background:#EDE7F9;display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#7B61FF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"></path><path d="M9 4v14M15 6v14"></path></svg></div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:.08em;color:#A6ACC0;margin-bottom:3px">STEP 2</div>
+          <div style="font-family:'Poppins',serif;font-weight:700;font-size:16px;color:#0F1023">Learning Plan</div>
+        </div>
+        <div style="display:flex;align-items:center;flex:0 0 auto;padding:0 2px"><svg viewBox="0 0 40 24" style="width:34px;height:22px;overflow:visible"><path d="M3,12 C14,8 24,16 34,12" fill="none" stroke="#C7CCDC" stroke-width="2.2" stroke-linecap="round"></path><path d="M34,12 L26,9 M34,12 L27,16" fill="none" stroke="#C7CCDC" stroke-width="2.2" stroke-linecap="round"></path></svg></div>
+
+        <div style="flex:1 1 150px;max-width:200px;min-width:140px;background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:18px 16px;text-align:center;box-shadow:0 10px 24px -22px rgba(15,16,35,.5)">
+          <div style="width:42px;height:42px;border-radius:11px;background:#DAF5FB;display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#7B61FF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l9-3 9 3-9 3-9-3z"></path><path d="M7 8v5c0 1.5 2.5 3 5 3s5-1.5 5-3V8M21 6v6"></path></svg></div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:.08em;color:#A6ACC0;margin-bottom:3px">STEP 3</div>
+          <div style="font-family:'Poppins',serif;font-weight:700;font-size:16px;color:#0F1023">Training</div>
+        </div>
+        <div style="display:flex;align-items:center;flex:0 0 auto;padding:0 2px"><svg viewBox="0 0 40 24" style="width:34px;height:22px;overflow:visible"><path d="M3,12 C14,8 24,16 34,12" fill="none" stroke="#C7CCDC" stroke-width="2.2" stroke-linecap="round"></path><path d="M34,12 L26,9 M34,12 L27,16" fill="none" stroke="#C7CCDC" stroke-width="2.2" stroke-linecap="round"></path></svg></div>
+
+        <div style="flex:1 1 150px;max-width:200px;min-width:140px;background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:18px 16px;text-align:center;box-shadow:0 10px 24px -22px rgba(15,16,35,.5)">
+          <div style="width:42px;height:42px;border-radius:11px;background:#ECE9FE;display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#7B61FF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="8" height="7" rx="1.5"></rect><rect x="13" y="4" width="8" height="7" rx="1.5"></rect><rect x="3" y="14" width="8" height="6" rx="1.5"></rect><rect x="13" y="14" width="8" height="6" rx="1.5"></rect></svg></div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:.08em;color:#A6ACC0;margin-bottom:3px">STEP 4</div>
+          <div style="font-family:'Poppins',serif;font-weight:700;font-size:16px;color:#0F1023">Assigned Courses</div>
+        </div>
+        <div style="display:flex;align-items:center;flex:0 0 auto;padding:0 2px"><svg viewBox="0 0 40 24" style="width:34px;height:22px;overflow:visible"><path d="M3,12 C14,8 24,16 34,12" fill="none" stroke="#C7CCDC" stroke-width="2.2" stroke-linecap="round"></path><path d="M34,12 L26,9 M34,12 L27,16" fill="none" stroke="#C7CCDC" stroke-width="2.2" stroke-linecap="round"></path></svg></div>
+
+        <div style="flex:1 1 150px;max-width:200px;min-width:140px;background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:18px 16px;text-align:center;box-shadow:0 10px 24px -22px rgba(15,16,35,.5)">
+          <div style="width:42px;height:42px;border-radius:11px;background:#E4F0FF;display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#3E9A52" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19h16M8 16l3.5-4 3 2.5L20 8"></path></svg></div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:.08em;color:#A6ACC0;margin-bottom:3px">STEP 5</div>
+          <div style="font-family:'Poppins',serif;font-weight:700;font-size:16px;color:#0F1023">Progress</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- training types + cta -->
+    <div style="display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+      <div style="display:flex;gap:9px;flex-wrap:wrap;flex:1 1 540px">
+        <span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:9px 14px;border-radius:99px">Nonprofit team training</span>
+        <span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:9px 14px;border-radius:99px">Business operations training</span>
+        <span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:9px 14px;border-radius:99px">VA onboarding training</span>
+        <span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:9px 14px;border-radius:99px">Website maintenance training</span>
+        <span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:9px 14px;border-radius:99px">Board / admin training</span>
+        <span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:9px 14px;border-radius:99px">Donor system training</span>
+        <span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:9px 14px;border-radius:99px">SOP &amp; workflow training</span>
+        <span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:9px 14px;border-radius:99px">Founder support training</span>
+      </div>
+      <a href="#custom" style="display:inline-flex;align-items:center;gap:9px;font-size:16px;font-weight:700;color:#fff;background:#0F1023;padding:15px 24px;border-radius:12px;white-space:nowrap" style-hover="background:#000">Request Custom Training &rarr;</a>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section id="start" style="max-width:1240px;margin:0 auto;padding:30px 28px 72px">
+    <div style="position:relative;background:#0F1023;border-radius:26px;padding:64px 32px;text-align:center;overflow:hidden">
+      <div style="position:absolute;inset:0;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:34px 34px;opacity:.035;pointer-events:none"></div>
+      <div style="position:relative">
+        <div style="position:relative;display:inline-block;margin-bottom:10px;white-space:nowrap">
+          <span style="font-family:'Caveat',cursive;font-size:24px;font-weight:700;color:#00C6E8">one course at a time</span>
+          <svg viewBox="0 0 240 62" preserveAspectRatio="none" style="position:absolute;left:-16px;top:-13px;width:calc(100% + 32px);height:calc(100% + 28px);overflow:visible;pointer-events:none"><path d="M44,10 C130,-1 232,7 224,31 C216,54 92,58 30,47 C-7,41 2,14 54,11" fill="none" stroke="#00C6E8" stroke-width="1.8" stroke-linecap="round" opacity=".75"></path></svg>
+        </div>
+        <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(30px,4.4vw,54px);line-height:1.08;letter-spacing:-.02em;margin:0 auto 28px;color:#fff;max-width:760px">Start with one course. Build the system from there.</h2>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+          <a href="#start" style="display:inline-flex;align-items:center;gap:9px;font-size:16.5px;font-weight:700;color:#0F1023;background:#fff;padding:16px 28px;border-radius:12px;white-space:nowrap" style-hover="transform:translateY(-1px);background:#F1F3FB">Start Learning &rarr;</a>
+          <a href="#group" style="display:inline-flex;align-items:center;font-size:16.5px;font-weight:700;color:#fff;background:transparent;border:1.6px solid rgba(255,255,255,.32);padding:16px 26px;border-radius:12px;white-space:nowrap" style-hover="border-color:#fff;background:rgba(255,255,255,.07)">Create Group Account</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer style="background:#0F1023;width:100%;color:#AEB6C6">
+    <div style="max-width:1240px;margin:0 auto;padding:56px 28px 30px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:36px">
+      <!-- brand -->
+      <div style="min-width:220px">
+        <div style="display:flex;flex-direction:column;line-height:1;margin-bottom:16px">
+          <span style="font-family:'Poppins',serif;font-weight:800;font-size:24px;color:#fff">RaeLearn</span>
+          <span style="font-size:9.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#7E8a9c;margin-top:5px">by RAEFORM</span>
+        </div>
+        <p style="font-size:14px;line-height:1.6;color:#9aa3b4;max-width:300px;margin:0 0 20px">Practical training on the systems behind better businesses, nonprofits, and support teams.</p>
+        <a href="https://byraeform.com" style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#fff;border:1.5px solid rgba(255,255,255,.28);padding:11px 16px;border-radius:10px" style-hover="border-color:#00C6E8;color:#00C6E8">Main RAEFORM Website &rarr;</a>
+      </div>
+
+      <!-- learn -->
+      <div>
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#00C6E8;margin-bottom:16px">Learn</div>
+        <div style="display:flex;flex-direction:column;gap:11px;font-size:14px">
+          <a href="#top" style="color:#AEB6C6" style-hover="color:#fff">Home</a>
+          <a href="#courses" style="color:#AEB6C6" style-hover="color:#fff">Courses</a>
+          <a href="#free" style="color:#AEB6C6" style-hover="color:#fff">Free Courses</a>
+          <a href="#paths" style="color:#AEB6C6" style-hover="color:#fff">Learning Paths</a>
+          <a href="#courses" style="color:#AEB6C6" style-hover="color:#fff">Certificates</a>
+          <a href="#pricing" style="color:#AEB6C6" style-hover="color:#fff">Pricing</a>
+        </div>
+      </div>
+
+      <!-- audiences -->
+      <div>
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#00C6E8;margin-bottom:16px">For you</div>
+        <div style="display:flex;flex-direction:column;gap:11px;font-size:14px">
+          <a href="#categories" style="color:#AEB6C6" style-hover="color:#fff">For VAs</a>
+          <a href="#categories" style="color:#AEB6C6" style-hover="color:#fff">Nonprofit Courses</a>
+          <a href="#categories" style="color:#AEB6C6" style-hover="color:#fff">Business Courses</a>
+          <a href="#group" style="color:#AEB6C6" style-hover="color:#fff">Group Account Signup</a>
+          <a href="#custom" style="color:#AEB6C6" style-hover="color:#fff">Custom Training</a>
+        </div>
+      </div>
+
+      <!-- support & legal -->
+      <div>
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#00C6E8;margin-bottom:16px">Support &amp; legal</div>
+        <div style="display:flex;flex-direction:column;gap:11px;font-size:14px">
+          <a href="#help" style="color:#AEB6C6" style-hover="color:#fff">Help Center</a>
+          <a href="#terms" style="color:#AEB6C6" style-hover="color:#fff">Terms of Use</a>
+          <a href="#privacy" style="color:#AEB6C6" style-hover="color:#fff">Privacy Policy</a>
+          <a href="#refund" style="color:#AEB6C6" style-hover="color:#fff">Refund Policy</a>
+          <a href="#edu" style="color:#AEB6C6" style-hover="color:#fff">Education Disclaimer</a>
+          <a href="#legal" style="color:#AEB6C6" style-hover="color:#fff">Legal &amp; Tax Disclaimer</a>
+        </div>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid rgba(255,255,255,.1)">
+      <div style="max-width:1240px;margin:0 auto;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12.5px;color:#7E8a9c">
+        <span>© 2026 RaeLearn by RAEFORM. All rights reserved.</span>
+        <span>raelearn.byraeform.com · Educational content only — not legal or tax advice.</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+</body>
+</html>

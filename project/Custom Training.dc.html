@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    ::selection{background:rgba(123,97,255,.28)}
+    a{color:inherit;text-decoration:none}
+    input,select,textarea{font-family:inherit}
+  </style>
+</helmet>
+
+<dc-import name="SiteNav" current="" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+<!-- HEADER -->
+<section style="position:relative;background:#F6F8FD;border-bottom:1px solid #E7E9F2;overflow:hidden">
+  <dc-import name="DoodleBackdrop" variant="minimal" accent="#7B61FF" hint-size="100%,100%" style="position:absolute;inset:0"></dc-import>
+  <div style="position:relative;max-width:1240px;margin:0 auto;padding:48px 28px 44px">
+    <div style="font-size:12.5px;font-weight:700;color:#A6ACC0;margin-bottom:14px"><a href="RaeLearn Homepage.dc.html" style="color:#A6ACC0" style-hover="color:#0F1023">Home</a> <span style="margin:0 7px">/</span> Custom Training</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #E7E9F2;border-radius:999px;padding:6px 13px;margin-bottom:16px"><span style="font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#7B61FF">RaeLearn Custom</span></div>
+    <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(32px,4.4vw,52px);line-height:1.05;letter-spacing:-.02em;margin:0 0 14px;color:#0F1023;max-width:780px">Training built around your actual organization.</h1>
+    <p style="font-size:16.5px;line-height:1.6;color:#5C574E;max-width:640px;margin:0 0 26px">RaeLearn Custom creates tailored learning plans and private training for nonprofits, businesses, founders, VAs, and teams that need support based on their real systems.</p>
+    <a href="#intake" style="font-size:16px;font-weight:700;color:#fff;background:#0F1023;padding:15px 26px;border-radius:12px;display:inline-flex;align-items:center;gap:9px" style-hover="background:#000">Request Custom Training &rarr;</a>
+  </div>
+</section>
+
+<!-- TYPES -->
+<section style="max-width:1240px;margin:0 auto;padding:52px 28px 20px">
+  <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(24px,3vw,34px);margin:0 0 22px;color:#0F1023">Custom training types</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:12px;padding:18px;font-size:14.5px;font-weight:600;color:#3D4A66;display:flex;align-items:center;gap:10px"><span style="width:9px;height:9px;border-radius:50%;background:#7B61FF"></span>Nonprofit team training</div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:12px;padding:18px;font-size:14.5px;font-weight:600;color:#3D4A66;display:flex;align-items:center;gap:10px"><span style="width:9px;height:9px;border-radius:50%;background:#7B61FF"></span>Business operations training</div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:12px;padding:18px;font-size:14.5px;font-weight:600;color:#3D4A66;display:flex;align-items:center;gap:10px"><span style="width:9px;height:9px;border-radius:50%;background:#5A3DF5"></span>VA onboarding training</div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:12px;padding:18px;font-size:14.5px;font-weight:600;color:#3D4A66;display:flex;align-items:center;gap:10px"><span style="width:9px;height:9px;border-radius:50%;background:#5A3DF5"></span>Website maintenance training</div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:12px;padding:18px;font-size:14.5px;font-weight:600;color:#3D4A66;display:flex;align-items:center;gap:10px"><span style="width:9px;height:9px;border-radius:50%;background:#7B61FF"></span>Board / admin training</div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:12px;padding:18px;font-size:14.5px;font-weight:600;color:#3D4A66;display:flex;align-items:center;gap:10px"><span style="width:9px;height:9px;border-radius:50%;background:#7B61FF"></span>Donor system training</div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:12px;padding:18px;font-size:14.5px;font-weight:600;color:#3D4A66;display:flex;align-items:center;gap:10px"><span style="width:9px;height:9px;border-radius:50%;background:#7B61FF"></span>SOP &amp; workflow training</div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:12px;padding:18px;font-size:14.5px;font-weight:600;color:#3D4A66;display:flex;align-items:center;gap:10px"><span style="width:9px;height:9px;border-radius:50%;background:#7B61FF"></span>Founder support training</div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section style="max-width:1240px;margin:0 auto;padding:40px 28px">
+  <div style="position:relative;background:#F6F8FD;border:1px solid #E7E9F2;border-radius:24px;padding:38px 26px;overflow:hidden">
+    <dc-import name="DoodleBackdrop" variant="minimal" accent="#7B61FF" hint-size="100%,100%" style="position:absolute;inset:0"></dc-import>
+    <div style="position:relative;text-align:center;margin-bottom:30px"><div style="font-size:12.5px;font-weight:800;letter-spacing:.16em;color:#A6ACC0;text-transform:uppercase;margin-bottom:10px">How it works</div><h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(24px,3vw,34px);margin:0;color:#0F1023">From intake to implementation</h2></div>
+    <div style="position:relative;display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+      <div style="flex:1 1 130px;max-width:160px;background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:16px;text-align:center"><div style="width:34px;height:34px;border-radius:50%;background:#0F1023;color:#00C6E8;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px">1</div><div style="font-family:'Poppins',serif;font-weight:700;font-size:14.5px;color:#0F1023">Intake</div></div>
+      <div style="flex:1 1 130px;max-width:160px;background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:16px;text-align:center"><div style="width:34px;height:34px;border-radius:50%;background:#0F1023;color:#00C6E8;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px">2</div><div style="font-family:'Poppins',serif;font-weight:700;font-size:14.5px;color:#0F1023">Review</div></div>
+      <div style="flex:1 1 130px;max-width:160px;background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:16px;text-align:center"><div style="width:34px;height:34px;border-radius:50%;background:#0F1023;color:#00C6E8;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px">3</div><div style="font-family:'Poppins',serif;font-weight:700;font-size:14.5px;color:#0F1023">Custom plan</div></div>
+      <div style="flex:1 1 130px;max-width:160px;background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:16px;text-align:center"><div style="width:34px;height:34px;border-radius:50%;background:#0F1023;color:#00C6E8;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px">4</div><div style="font-family:'Poppins',serif;font-weight:700;font-size:14.5px;color:#0F1023">Training delivery</div></div>
+      <div style="flex:1 1 130px;max-width:160px;background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:16px;text-align:center"><div style="width:34px;height:34px;border-radius:50%;background:#0F1023;color:#00C6E8;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px">5</div><div style="font-family:'Poppins',serif;font-weight:700;font-size:14.5px;color:#0F1023">Course assignment</div></div>
+      <div style="flex:1 1 130px;max-width:160px;background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:16px;text-align:center"><div style="width:34px;height:34px;border-radius:50%;background:#0F1023;color:#00C6E8;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px">6</div><div style="font-family:'Poppins',serif;font-weight:700;font-size:14.5px;color:#0F1023">Progress tracking</div></div>
+      <div style="flex:1 1 130px;max-width:160px;background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:16px;text-align:center"><div style="width:34px;height:34px;border-radius:50%;background:#7B61FF;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px">7</div><div style="font-family:'Poppins',serif;font-weight:700;font-size:14.5px;color:#0F1023">Implementation support</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- INCLUDED / NOT -->
+<section style="max-width:1240px;margin:0 auto;padding:20px 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px">
+  <div style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:26px">
+    <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;margin:0 0 16px;color:#0F1023">What's included</h3>
+    <div style="display:flex;flex-direction:column;gap:11px;font-size:14.5px;color:#4B5563">
+      <div style="display:flex;gap:10px"><span style="color:#2D8BFF;font-weight:800">✓</span>A tailored learning plan for your org</div>
+      <div style="display:flex;gap:10px"><span style="color:#2D8BFF;font-weight:800">✓</span>Private training sessions or workshops</div>
+      <div style="display:flex;gap:10px"><span style="color:#2D8BFF;font-weight:800">✓</span>Assigned courses mapped to your roles</div>
+      <div style="display:flex;gap:10px"><span style="color:#2D8BFF;font-weight:800">✓</span>Progress tracking in your dashboard</div>
+      <div style="display:flex;gap:10px"><span style="color:#2D8BFF;font-weight:800">✓</span>Optional implementation guidance</div>
+    </div>
+  </div>
+  <div style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:26px">
+    <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;margin:0 0 16px;color:#0F1023">What's not included</h3>
+    <div style="display:flex;flex-direction:column;gap:11px;font-size:14.5px;color:#4B5563">
+      <div style="display:flex;gap:10px"><span style="color:#B0463A;font-weight:800">×</span>Legal or tax advice</div>
+      <div style="display:flex;gap:10px"><span style="color:#B0463A;font-weight:800">×</span>Filing or submitting documents on your behalf</div>
+      <div style="display:flex;gap:10px"><span style="color:#B0463A;font-weight:800">×</span>Done-for-you operations work</div>
+      <div style="display:flex;gap:10px"><span style="color:#B0463A;font-weight:800">×</span>Guaranteed grant or funding outcomes</div>
+    </div>
+  </div>
+</section>
+
+<!-- INTAKE FORM -->
+<section id="intake" style="max-width:760px;margin:0 auto;padding:32px 28px 72px">
+  <div style="background:#0F1023;border-radius:22px;padding:36px 30px;color:#fff">
+    <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(24px,3vw,32px);margin:0 0 8px">Request custom training</h2>
+    <p style="font-size:15px;line-height:1.6;color:#AEB6C6;margin:0 0 24px">Tell us about your organization and we'll follow up with a tailored plan.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:14px">
+      <div><label style="display:block;font-size:12.5px;font-weight:700;color:#C7CDD9;margin-bottom:6px">Your name</label><input placeholder="Jane Founder" style="width:100%;font-size:14.5px;padding:12px 14px;border:1px solid #38415A;border-radius:10px;background:#222C42;color:#fff;outline:none" style-focus="border-color:#00C6E8" /></div>
+      <div><label style="display:block;font-size:12.5px;font-weight:700;color:#C7CDD9;margin-bottom:6px">Work email</label><input placeholder="jane@org.org" style="width:100%;font-size:14.5px;padding:12px 14px;border:1px solid #38415A;border-radius:10px;background:#222C42;color:#fff;outline:none" style-focus="border-color:#00C6E8" /></div>
+      <div><label style="display:block;font-size:12.5px;font-weight:700;color:#C7CDD9;margin-bottom:6px">Organization</label><input placeholder="Acme Foundation" style="width:100%;font-size:14.5px;padding:12px 14px;border:1px solid #38415A;border-radius:10px;background:#222C42;color:#fff;outline:none" style-focus="border-color:#00C6E8" /></div>
+      <div><label style="display:block;font-size:12.5px;font-weight:700;color:#C7CDD9;margin-bottom:6px">Team size</label><select style="width:100%;font-size:14.5px;padding:12px 14px;border:1px solid #38415A;border-radius:10px;background:#222C42;color:#fff;outline:none"><option>1–5</option><option>6–15</option><option>16–50</option><option>50+</option></select></div>
+    </div>
+    <div style="margin-bottom:14px"><label style="display:block;font-size:12.5px;font-weight:700;color:#C7CDD9;margin-bottom:6px">Training type</label><select style="width:100%;font-size:14.5px;padding:12px 14px;border:1px solid #38415A;border-radius:10px;background:#222C42;color:#fff;outline:none"><option>Nonprofit team training</option><option>Business operations training</option><option>VA onboarding training</option><option>Website maintenance training</option><option>Board / admin training</option><option>Donor system training</option><option>SOP &amp; workflow training</option><option>Founder support training</option></select></div>
+    <div style="margin-bottom:20px"><label style="display:block;font-size:12.5px;font-weight:700;color:#C7CDD9;margin-bottom:6px">What do you need help with?</label><textarea rows="3" placeholder="Tell us about your systems and goals…" style="width:100%;font-size:14.5px;padding:12px 14px;border:1px solid #38415A;border-radius:10px;background:#222C42;color:#fff;outline:none;resize:vertical" style-focus="border-color:#00C6E8"></textarea></div>
+    <button style="width:100%;font-size:15.5px;font-weight:700;color:#0F1023;background:#00C6E8;border:none;padding:15px;border-radius:11px;cursor:pointer" style-hover="background:#f0b94a">Request Custom Training</button>
+    <p style="font-size:12px;color:#8A93A6;margin:14px 0 0;text-align:center">Educational training only. RaeLearn does not provide legal or tax advice.</p>
+  </div>
+</section>
+
+<dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+</x-dc>
+</body>
+</html>

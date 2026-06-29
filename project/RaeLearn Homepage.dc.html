@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500&family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F5F0E8;color:#2A5230;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:clip}
+    ::selection{background:rgba(74,122,78,.28)}
+    a{color:inherit;text-decoration:none}
+    @keyframes rl-draw{from{stroke-dashoffset:var(--len,400)}to{stroke-dashoffset:0}}
+    @keyframes rl-float{0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}50%{transform:translateY(-7px) rotate(var(--rot,0deg))}}
+    @keyframes rl-grow{from{width:0}}
+  </style>
+</helmet>
+
+<dc-import name="SiteNav" current="" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+<!-- ============ HERO ============ -->
+<section id="top" style="position:relative;max-width:1240px;margin:0 auto;padding:64px 28px 48px">
+  <div style="position:relative;display:flex;gap:54px;align-items:center;flex-wrap:wrap">
+    <div style="flex:1 1 440px;min-width:320px">
+      <div style="display:inline-flex;align-items:center;gap:9px;background:#fff;border:1px solid #DDE8DA;border-radius:999px;padding:7px 14px;margin-bottom:24px">
+        <span style="width:8px;height:8px;border-radius:50%;background:#4A7A4E"></span>
+        <span style="font-size:12px;font-weight:700;letter-spacing:.06em;color:#4A6650">PRACTICAL TRAINING FOR PEOPLE WHO RUN THINGS</span>
+      </div>
+
+      <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(36px,5.1vw,62px);line-height:1.04;letter-spacing:-.018em;margin:0 0 22px;color:#2A5230">
+        Learn the
+        <span style="position:relative;white-space:nowrap"><span style="position:relative;z-index:1;background:linear-gradient(100deg,rgba(74,122,78,0) 1%,rgba(74,122,78,.22) 4%,rgba(74,122,78,.20) 94%,rgba(74,122,78,0) 99%);padding:0 .06em;border-radius:3px">systems</span></span>
+        behind better businesses, nonprofits, and
+        <span style="position:relative;white-space:nowrap">support teams
+          <svg viewBox="0 0 320 14" preserveAspectRatio="none" style="position:absolute;left:0;bottom:-9px;width:100%;height:13px;overflow:visible"><path d="M3,9 Q80,2 160,7 T317,5" fill="none" stroke="#4A7A4E" stroke-width="3.4" stroke-linecap="round" style="--len:340;stroke-dasharray:340;animation:rl-draw 1.1s .35s ease forwards"></path></svg>
+        </span>.
+      </h1>
+
+      <p style="font-size:clamp(16px,1.5vw,18.5px);line-height:1.62;color:#4A6650;max-width:560px;margin:0 0 32px">RaeLearn gives VAs, founders, nonprofit leaders, and small teams practical courses on operations, admin systems, websites, compliance awareness, donor support, workflow setup, and digital business maintenance.</p>
+
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+        <a href="Individual Signup.dc.html" style="display:inline-flex;align-items:center;gap:9px;font-size:16px;font-weight:700;color:#fff;background:#2A5230;padding:15px 26px;border-radius:12px;box-shadow:0 6px 18px rgba(42,82,48,.22);white-space:nowrap" style-hover="background:#1e3d24;transform:translateY(-1px)">Start Learning <span style="font-size:18px;line-height:1">&rarr;</span></a>
+        <a href="Group Signup.dc.html" style="display:inline-flex;align-items:center;font-size:16px;font-weight:700;color:#2A5230;background:#fff;border:1.6px solid #2A5230;padding:15px 24px;border-radius:12px;white-space:nowrap" style-hover="background:#2A5230;color:#fff">Create Group Account</a>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:22px;margin-top:30px;flex-wrap:wrap">
+        <span style="font-size:13.5px;color:#7A9878;font-weight:500">Trusted by VAs, nonprofit teams &amp; founders</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-family:'Caveat',cursive;font-size:21px;color:#4A7A4E;font-weight:700">free to start</span>
+          <svg viewBox="0 0 60 34" style="width:54px;height:30px;overflow:visible"><path d="M4,6 C26,2 40,14 50,26" fill="none" stroke="#4A7A4E" stroke-width="2.4" stroke-linecap="round"></path><path d="M40,26 L51,27 L46,17" fill="none" stroke="#4A7A4E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:1 1 440px;min-width:320px;position:relative">
+      <div style="position:absolute;top:-30px;left:14px;z-index:4;background:#D8EDD8;padding:9px 15px 11px;border-radius:3px;box-shadow:0 8px 18px rgba(42,82,48,.13);transform:rotate(-5deg);--rot:-5deg;animation:rl-float 5s ease-in-out infinite;white-space:nowrap"><span style="font-family:'Caveat',cursive;font-size:19px;font-weight:700;color:#2A5230;line-height:1">start here &rarr;</span></div>
+
+      <div style="position:relative;background:#FFFFFF;border:1px solid #DDE8DA;border-radius:18px;padding:22px;box-shadow:0 22px 50px -18px rgba(42,82,48,.20),0 4px 12px rgba(42,82,48,.06);transform:rotate(1.1deg)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+          <div>
+            <div style="font-family:'Poppins',serif;font-weight:700;font-size:18px;color:#2A5230">Your learning dashboard</div>
+            <div style="font-size:12px;color:#7A9878;margin-top:2px">Nonprofit VA Path · 3 of 7 complete</div>
+          </div>
+          <div style="display:flex;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#5A8C5E"></span><span style="width:9px;height:9px;border-radius:50%;background:#5A8C5E"></span><span style="width:9px;height:9px;border-radius:50%;background:#4A7A4E"></span></div>
+        </div>
+
+        <div style="position:relative;height:58px;margin:4px 0 16px">
+          <svg viewBox="0 0 380 58" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%"><path d="M18,40 C70,8 120,8 168,32 C210,52 250,52 300,22 C330,6 350,10 364,16" fill="none" stroke="#C5D8C5" stroke-width="2.4" stroke-dasharray="2 7" stroke-linecap="round"></path></svg>
+          <span style="position:absolute;left:8px;top:30px;width:22px;height:22px;border-radius:50%;background:#4A7A4E;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">✓</span>
+          <span style="position:absolute;left:152px;top:22px;width:22px;height:22px;border-radius:50%;background:#4A7A4E;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">✓</span>
+          <span style="position:absolute;left:288px;top:12px;width:24px;height:24px;border-radius:50%;background:#fff;border:2.5px solid #5A8C5E;box-shadow:0 0 0 4px rgba(90,140,94,.16)"></span>
+          <span style="position:absolute;left:352px;top:6px;width:18px;height:18px;border-radius:50%;background:#EAF2EA;border:2px dashed #C5D8C5"></span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #EAF2EA;border-radius:12px;padding:12px 13px">
+            <div style="width:38px;height:38px;border-radius:9px;background:#E4EFE4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#4A7A4E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"></path></svg></div>
+            <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:#2A5230">Inbox &amp; Calendar Systems</div><div style="height:6px;background:#EAF2EA;border-radius:99px;margin-top:7px;overflow:hidden"><div style="height:100%;width:100%;background:#4A7A4E;border-radius:99px;animation:rl-grow 1.2s .5s ease both"></div></div></div>
+            <span style="font-size:11px;font-weight:800;color:#4A7A4E">100%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #EAF2EA;border-radius:12px;padding:12px 13px">
+            <div style="width:38px;height:38px;border-radius:9px;background:#DDEADE;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#5A8C5E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"></path></svg></div>
+            <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:#2A5230">Donor Records Cleanup</div><div style="height:6px;background:#EAF2EA;border-radius:99px;margin-top:7px;overflow:hidden"><div style="height:100%;width:46%;background:#5A8C5E;border-radius:99px;animation:rl-grow 1.2s .7s ease both"></div></div></div>
+            <span style="font-size:11px;font-weight:800;color:#5A8C5E">46%</span>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:15px">
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:.04em;color:#4A7A4E;background:#E4EFE4;padding:5px 10px;border-radius:99px">VA · Operations</span>
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:.04em;color:#5A8C5E;background:#DDEADE;padding:5px 10px;border-radius:99px">Nonprofit</span>
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:.04em;color:#4A6650;background:#EAF2EA;padding:5px 10px;border-radius:99px">+4 more</span>
+        </div>
+      </div>
+
+      <div style="position:absolute;bottom:-26px;right:-8px;z-index:4;background:#fff;border:1px solid #DDE8DA;border-radius:13px;padding:13px 15px;box-shadow:0 14px 30px -10px rgba(42,82,48,.18);transform:rotate(-3deg);display:flex;align-items:center;gap:11px">
+        <div style="width:34px;height:34px;border-radius:50%;background:#E4EFE4;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#4A7A4E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg></div>
+        <div style="white-space:nowrap"><div style="font-size:12.5px;font-weight:800;color:#2A5230;line-height:1.3">Certificate earned</div><div style="font-size:11px;color:#7A9878;line-height:1.3">Nonprofit Ops VA</div></div>
+      </div>
+
+      <svg viewBox="0 0 70 50" style="position:absolute;bottom:38px;left:-40px;width:64px;height:46px;overflow:visible;z-index:3"><path d="M6,8 C2,28 20,40 44,40" fill="none" stroke="#4A7A4E" stroke-width="2.4" stroke-linecap="round"></path><path d="M44,40 L33,35 M44,40 L37,48" fill="none" stroke="#4A7A4E" stroke-width="2.4" stroke-linecap="round"></path></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section style="background:#EEE8DC;padding:88px 28px;border-top:1px solid #DDD5C4">
+  <div style="max-width:960px;margin:0 auto">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px">
+      <span style="width:6px;height:6px;border-radius:50%;background:#5A8C5E;flex-shrink:0"></span>
+      <span style="font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#5A8C5E">How it works</span>
+    </div>
+    <h2 style="font-family:'Fraunces',serif;font-weight:700;font-size:32px;color:#2A5230;margin:0 0 44px;line-height:1.2">Three steps to your first VA client.</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+      <div style="background:#fff;border:0.5px solid #DDE8DA;border-radius:12px;padding:28px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:36px;color:#4A7A4E;line-height:1;margin-bottom:12px">01</div>
+        <h3 style="font-family:'Fraunces',serif;font-weight:700;font-size:18px;color:#2A5230;margin:0 0 10px;line-height:1.3">Pick a course</h3>
+        <p style="font-size:14px;line-height:1.65;color:#4A6650;margin:0">Start with VA Foundations — it's free and covers exactly what beginners need to know.</p>
+      </div>
+      <div style="background:#fff;border:0.5px solid #DDE8DA;border-radius:12px;padding:28px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:36px;color:#4A7A4E;line-height:1;margin-bottom:12px">02</div>
+        <h3 style="font-family:'Fraunces',serif;font-weight:700;font-size:18px;color:#2A5230;margin:0 0 10px;line-height:1.3">Learn at your pace</h3>
+        <p style="font-size:14px;line-height:1.65;color:#4A6650;margin:0">Short lessons you can actually finish. Watch, read, and practice in under 20 minutes per session.</p>
+      </div>
+      <div style="background:#fff;border:0.5px solid #DDE8DA;border-radius:12px;padding:28px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:36px;color:#4A7A4E;line-height:1;margin-bottom:12px">03</div>
+        <h3 style="font-family:'Fraunces',serif;font-weight:700;font-size:18px;color:#2A5230;margin:0 0 10px;line-height:1.3">Apply it immediately</h3>
+        <p style="font-size:14px;line-height:1.65;color:#4A6650;margin:0">Every lesson ends with a clear action step. You leave with a deliverable, not just notes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ START HERE — COURSES ============ -->
+<section style="background:#F5F0E8;padding:88px 28px;border-top:1px solid #E5DDD0">
+  <div style="max-width:960px;margin:0 auto">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px">
+      <span style="width:6px;height:6px;border-radius:50%;background:#5A8C5E;flex-shrink:0"></span>
+      <span style="font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#5A8C5E">Start here</span>
+    </div>
+    <h2 style="font-family:'Fraunces',serif;font-weight:700;font-size:32px;color:#2A5230;margin:0 0 40px;line-height:1.2">Courses built for your first 90 days as a VA.</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+      <a href="Free Courses.dc.html" style="background:#fff;border:0.5px solid #DDE8DA;border-radius:12px;padding:24px;display:flex;flex-direction:column;transition:border-color .15s" style-hover="border-color:#B8D4B5">
+        <div style="margin-bottom:14px"><span style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#fff;background:#5A8C5E;padding:4px 11px;border-radius:99px">FREE</span></div>
+        <h3 style="font-family:'Fraunces',serif;font-weight:700;font-size:18px;color:#2A5230;margin:0 0 8px;line-height:1.3">VA Foundations: Your First 30 Days</h3>
+        <p style="font-size:14px;line-height:1.6;color:#4A6650;margin:0 0 16px;flex:1">The complete beginner guide. Tools, clients, pricing, proposals, and your first contract.</p>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8AA080">8 lessons · 2.5 hrs</span>
+          <span style="font-size:13px;font-weight:500;color:#5A8C5E">Start for free →</span>
+        </div>
+      </a>
+      <a href="Courses.dc.html" style="background:#fff;border:0.5px solid #DDE8DA;border-radius:12px;padding:24px;display:flex;flex-direction:column;transition:border-color .15s" style-hover="border-color:#B8D4B5">
+        <div style="margin-bottom:14px"><span style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#fff;background:#B86B4A;padding:4px 11px;border-radius:99px">$49</span></div>
+        <h3 style="font-family:'Fraunces',serif;font-weight:700;font-size:18px;color:#2A5230;margin:0 0 8px;line-height:1.3">Admin Support Essentials</h3>
+        <p style="font-size:14px;line-height:1.6;color:#4A6650;margin:0 0 16px;flex:1">Inbox management, calendars, SOPs, and everything that makes you an indispensable admin VA.</p>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8AA080">12 lessons · 4 hrs</span>
+          <span style="font-size:13px;font-weight:500;color:#5A8C5E">Enroll now →</span>
+        </div>
+      </a>
+      <a href="Courses.dc.html" style="background:#fff;border:0.5px solid #DDE8DA;border-radius:12px;padding:24px;display:flex;flex-direction:column;transition:border-color .15s" style-hover="border-color:#B8D4B5">
+        <div style="margin-bottom:14px"><span style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#fff;background:#B86B4A;padding:4px 11px;border-radius:99px">$37</span></div>
+        <h3 style="font-family:'Fraunces',serif;font-weight:700;font-size:18px;color:#2A5230;margin:0 0 8px;line-height:1.3">Client Communication That Actually Works</h3>
+        <p style="font-size:14px;line-height:1.6;color:#4A6650;margin:0 0 16px;flex:1">Templates, tone, difficult client scripts, and follow-up systems that build long-term trust.</p>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8AA080">10 lessons · 3 hrs</span>
+          <span style="font-size:13px;font-weight:500;color:#5A8C5E">Enroll now →</span>
+        </div>
+      </a>
+    </div>
+    <div style="text-align:center;margin-top:24px">
+      <a href="Courses.dc.html" style="display:inline-flex;align-items:center;font-size:14px;font-weight:600;color:#2A5230;border:1px solid #A8C4A4;padding:12px 24px;border-radius:10px;transition:border-color .15s" style-hover="border-color:#2A5230">See all courses →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section style="background:#EEE8DC;padding:88px 28px 104px;border-top:1px solid #DDD5C4">
+  <div style="max-width:960px;margin:0 auto">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px">
+      <span style="width:6px;height:6px;border-radius:50%;background:#5A8C5E;flex-shrink:0"></span>
+      <span style="font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#5A8C5E">What learners say</span>
+    </div>
+    <h2 style="font-family:'Fraunces',serif;font-weight:700;font-size:32px;color:#2A5230;margin:0 0 40px;line-height:1.2">Real people. Real results.</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+      <div style="background:#fff;border:0.5px solid #DDE8DA;border-radius:12px;padding:24px">
+        <div style="font-family:'Fraunces',serif;font-weight:900;font-size:48px;color:#4A7A4E;line-height:0.5;margin-bottom:20px">"</div>
+        <p style="font-size:15px;line-height:1.65;color:#2A5230;margin:0">I landed my first VA client 3 weeks after finishing VA Foundations. The proposal template alone was worth it.</p>
+        <div style="margin-top:16px">
+          <div style="font-size:14px;color:#C48A3A;margin-bottom:6px">★★★★★</div>
+          <div style="font-size:14px;font-weight:600;color:#2A5230;line-height:1.3">Maria S.</div>
+          <div style="font-size:12px;color:#6A8A6E;margin-top:2px">Aspiring VA, Philippines</div>
+        </div>
+      </div>
+      <div style="background:#fff;border:0.5px solid #DDE8DA;border-radius:12px;padding:24px">
+        <div style="font-family:'Fraunces',serif;font-weight:900;font-size:48px;color:#4A7A4E;line-height:0.5;margin-bottom:20px">"</div>
+        <p style="font-size:15px;line-height:1.65;color:#2A5230;margin:0">I had zero experience with admin work. After this course I had a full SOP ready for my first client. Completely changed how I showed up.</p>
+        <div style="margin-top:16px">
+          <div style="font-size:14px;color:#C48A3A;margin-bottom:6px">★★★★★</div>
+          <div style="font-size:14px;font-weight:600;color:#2A5230;line-height:1.3">Angela C.</div>
+          <div style="font-size:12px;color:#6A8A6E;margin-top:2px">Freelance admin VA</div>
+        </div>
+      </div>
+      <div style="background:#fff;border:0.5px solid #DDE8DA;border-radius:12px;padding:24px">
+        <div style="font-family:'Fraunces',serif;font-weight:900;font-size:48px;color:#4A7A4E;line-height:0.5;margin-bottom:20px">"</div>
+        <p style="font-size:15px;line-height:1.65;color:#2A5230;margin:0">The lessons are short enough to actually finish. I learned more in 2 hours than I did watching 10-hour YouTube tutorials.</p>
+        <div style="margin-top:16px">
+          <div style="font-size:14px;color:#C48A3A;margin-bottom:6px">★★★★★</div>
+          <div style="font-size:14px;font-weight:600;color:#2A5230;line-height:1.3">Priya M.</div>
+          <div style="font-size:12px;color:#6A8A6E;margin-top:2px">VA, now earning full-time</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+</x-dc>
+</body>
+</html>

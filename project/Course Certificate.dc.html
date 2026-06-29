@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#EAEDF6;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    .ct-side::-webkit-scrollbar{width:7px}
+    .ct-side::-webkit-scrollbar-thumb{background:#CDD3E2;border-radius:99px}
+    @media (max-width:920px){#ct-grid{grid-template-columns:1fr !important;height:auto !important;overflow:visible !important}#ctm{height:auto !important;overflow:visible !important}.ct-side{max-height:none !important;overflow:visible !important}.ct-cert{aspect-ratio:1.41/1 !important;height:auto !important}}
+  </style>
+</helmet>
+
+<dc-import name="CourseTopBar" eyebrow="Certificate" title="Donor Records Cleanup" progress="100" back-href="My Certificates.dc.html" exit-href="Learner Dashboard.dc.html" exit-label="Dashboard" hint-size="100%,60px" style="display:block;width:100%"></dc-import>
+
+<main id="ctm" style="height:calc(100vh - 60px);overflow:hidden;padding:22px 26px">
+  <div id="ct-grid" style="height:100%;max-width:1340px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 332px;gap:26px;align-items:center">
+
+    <!-- ============ CERTIFICATE ============ -->
+    <div style="display:flex;align-items:center;justify-content:center;height:100%;min-height:0">
+      <div class="ct-cert" style="position:relative;width:100%;max-width:100%;max-height:100%;aspect-ratio:1.41/1;overflow:hidden;border-radius:14px;{{ sheetStyle }}">
+        <div style="position:absolute;inset:0;pointer-events:none;{{ printStyle }}"></div>
+
+        <sc-if value="{{ isMidnight }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;top:-22%;left:-14%;width:52%;height:64%;border-radius:50%;background:radial-gradient(circle,#5A3DF5 0%,transparent 70%);opacity:.4;filter:blur(8px);pointer-events:none"></div>
+          <div style="position:absolute;bottom:-24%;right:-12%;width:50%;height:62%;border-radius:50%;background:radial-gradient(circle,#2D8BFF 0%,transparent 70%);opacity:.34;filter:blur(8px);pointer-events:none"></div>
+          <div style="position:absolute;top:30%;left:55%;width:32%;height:42%;border-radius:50%;background:radial-gradient(circle,#00C6E8 0%,transparent 70%);opacity:.22;filter:blur(8px);pointer-events:none"></div>
+        </sc-if>
+
+        <sc-if value="{{ hasBand }}" hint-placeholder-val="{{ true }}">
+          <div style="position:absolute;top:0;left:0;right:0;height:7px;background:linear-gradient(90deg,#5A3DF5,#2D8BFF,#00C6E8)"></div>
+        </sc-if>
+
+        <sc-if value="{{ isMinimal }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;top:0;bottom:0;left:0;width:7px;background:linear-gradient(180deg,#5A3DF5,#2D8BFF,#00C6E8)"></div>
+          <div style="position:absolute;inset:15px;border:1px solid #E7E9F2;border-radius:8px;pointer-events:none"></div>
+        </sc-if>
+
+        <svg viewBox="0 0 240 240" width="46%" style="position:absolute;left:50%;top:53%;transform:translate(-50%,-50%);opacity:{{ guillOpacity }};pointer-events:none"><g fill="none" stroke="{{ accentColor }}" stroke-width="1"><circle cx="120" cy="120" r="116"></circle><circle cx="120" cy="120" r="104"></circle><circle cx="120" cy="120" r="74"></circle></g></svg>
+
+        <!-- CONTENT -->
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;padding:clamp(20px,3.4%,40px) clamp(34px,7%,78px)">
+          <div style="display:flex;justify-content:center;flex-shrink:0"><dc-import name="RaeLogo" variant="full" tone="{{ logoTone }}" mark-size="26" hint-size="180px,38px"></dc-import></div>
+
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:0">
+            <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:clamp(17px,2.2vw,28px);letter-spacing:.11em;text-transform:uppercase;line-height:1;color:{{ titleColor }};white-space:nowrap">Certificate of Completion</div>
+            <div style="display:flex;align-items:center;gap:12px;margin-top:11px">
+              <span style="width:34px;height:2px;border-radius:2px;{{ gradRule }}"></span>
+              <span style="font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:{{ accentColor }}">Nonprofit Operations</span>
+              <span style="width:34px;height:2px;border-radius:2px;{{ gradRule }}"></span>
+            </div>
+            <p style="font-size:clamp(11px,1.15vw,13px);font-weight:500;color:{{ subColor }};margin:clamp(12px,2.2%,22px) 0 7px;letter-spacing:.02em">This is to certify that</p>
+            <div style="font-family:'Poppins',sans-serif;font-weight:600;font-size:clamp(28px,3.9vw,46px);letter-spacing:-.015em;line-height:1.04;color:{{ nameColor }};white-space:nowrap">Maria Sandoval</div>
+            <div style="width:clamp(160px,40%,320px);height:2.5px;border-radius:2px;margin-top:11px;{{ gradRule }}"></div>
+            <p style="font-size:clamp(11.5px,1.2vw,13.5px);line-height:1.65;font-weight:500;color:{{ subColor }};max-width:min(82%,580px);margin:15px 0 0">has successfully completed the <strong style="color:{{ strongColor }};font-weight:700">Donor Records Cleanup</strong> course, demonstrating practical skill in donor data audit, de-duplication, segmentation, and CRM maintenance.</p>
+          </div>
+
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-shrink:0">
+            <div style="text-align:center;flex:1;max-width:200px">
+              <div style="font-family:'Caveat',cursive;font-weight:700;font-size:clamp(19px,2.2vw,26px);color:{{ sigInk }};line-height:1;margin-bottom:5px">Rae Thompson</div>
+              <div style="border-top:1px solid {{ sigRule }};padding-top:6px"><div style="font-size:clamp(10px,1vw,12px);font-weight:700;color:{{ sigNameColor }}">Rae Thompson</div><div style="font-size:9.5px;color:{{ labelColor }};letter-spacing:.03em;margin-top:1px">Program Director</div></div>
+            </div>
+
+            <div style="position:relative;width:clamp(70px,8vw,92px);height:clamp(70px,8vw,92px);flex-shrink:0">
+              <svg viewBox="0 0 120 120" width="100%" height="100%" style="display:block;filter:drop-shadow(0 6px 12px rgba(30,20,80,.32))">
+                <defs>
+                  <radialGradient id="ctseal" cx="36%" cy="30%" r="74%"><stop offset="0%" stop-color="{{ sealLight }}"></stop><stop offset="55%" stop-color="{{ sealBase }}"></stop><stop offset="100%" stop-color="{{ sealDeep }}"></stop></radialGradient>
+                  <path id="ctsealarc" d="M60 24 a36 36 0 1 1 -0.1 0" fill="none"></path>
+                </defs>
+                <circle cx="60" cy="60" r="54" fill="{{ sealDeep }}"></circle>
+                <circle cx="60" cy="60" r="52" fill="url(#ctseal)"></circle>
+                <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1"></circle>
+                <circle cx="60" cy="60" r="33" fill="rgba(255,255,255,.12)"></circle>
+                <circle cx="60" cy="60" r="33" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1"></circle>
+                <text font-family="Poppins, sans-serif" font-size="8.6" font-weight="700" letter-spacing="2.3" fill="#FFFFFF"><textPath href="#ctsealarc" startOffset="2%">RAELEARN &#9670; VERIFIED &#9670; 2026 &#9670;</textPath></text>
+                <path d="M48 60l8 8 16-18" fill="none" stroke="#FFFFFF" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+
+            <div style="text-align:center;flex:1;max-width:200px">
+              <div style="font-family:'Caveat',cursive;font-weight:700;font-size:clamp(19px,2.2vw,26px);color:{{ sigInk }};line-height:1;margin-bottom:5px">M. Cole</div>
+              <div style="border-top:1px solid {{ sigRule }};padding-top:6px"><div style="font-size:clamp(10px,1vw,12px);font-weight:700;color:{{ sigNameColor }}">Marcus Cole</div><div style="font-size:9.5px;color:{{ labelColor }};letter-spacing:.03em;margin-top:1px">Lead Instructor</div></div>
+            </div>
+          </div>
+
+          <div style="margin-top:clamp(8px,1.4%,14px);display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;font-size:clamp(9.5px,0.95vw,11px);color:{{ footColor }};letter-spacing:.02em;flex-shrink:0">
+            <span>Issued <strong style="color:{{ footStrong }};font-weight:700">June 14, 2026</strong></span>
+            <span style="width:3px;height:3px;border-radius:50%;background:{{ footColor }};opacity:.6"></span>
+            <span>Credential <strong style="color:{{ footStrong }};font-weight:700">RL-DRC-2046</strong></span>
+            <span style="width:3px;height:3px;border-radius:50%;background:{{ footColor }};opacity:.6"></span>
+            <span style="display:inline-flex;align-items:center;gap:4px"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="{{ verifyColor }}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"></path><circle cx="12" cy="12" r="9"></circle></svg>Verified</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ CONTROL RAIL ============ -->
+    <div class="ct-side" style="display:flex;flex-direction:column;gap:13px;height:100%;max-height:100%;overflow-y:auto;padding-right:4px;min-height:0">
+
+      <div style="flex-shrink:0">
+        <div style="font-size:10.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#5A3DF5;margin-bottom:5px">Certificate earned</div>
+        <h1 style="font-family:'Poppins',sans-serif;font-weight:700;font-size:22px;line-height:1.12;margin:0 0 4px;color:#0F1023">Donor Records Cleanup</h1>
+        <div style="font-size:13px;font-weight:500;color:#6B7280">Awarded to <strong style="color:#0F1023;font-weight:700">Maria Sandoval</strong></div>
+      </div>
+
+      <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:16px 17px;flex-shrink:0;box-shadow:0 10px 26px -22px rgba(15,16,35,.4)">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px">
+          <h2 style="font-family:'Poppins',sans-serif;font-weight:600;font-size:15px;margin:0;color:#0F1023">Style</h2>
+          <span style="font-size:11.5px;color:#8A90A6;font-weight:600">{{ styleLabel }}</span>
+        </div>
+        <div style="display:flex;gap:9px">
+          <sc-for list="{{ presets }}" as="p" hint-placeholder-count="3">
+            <button onClick="{{ p.sel }}" aria-pressed="{{ p.on }}" style="{{ p.wrap }}">
+              <div style="{{ p.thumb }}">
+                <span style="{{ p.deco }}"></span>
+                <span style="position:absolute;left:50%;top:30%;transform:translateX(-50%);width:50%;height:3px;border-radius:2px;background:{{ p.titleBar }};opacity:.8"></span>
+                <span style="position:absolute;left:50%;top:46%;transform:translateX(-50%);width:34%;height:6px;border-radius:2px;background:{{ p.nameBar }}"></span>
+                <span style="position:absolute;left:50%;top:67%;transform:translateX(-50%);width:22%;height:2px;border-radius:2px;background:{{ p.titleBar }};opacity:.5"></span>
+                <span style="{{ p.seal }}"></span>
+              </div>
+              <span style="{{ p.label }}">{{ p.name }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid #F0F2F8;margin-top:14px;padding-top:13px">
+          <span style="font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#A6ACC0">Accent</span>
+          <div style="display:flex;gap:11px">
+            <sc-for list="{{ accents }}" as="a" hint-placeholder-count="4">
+              <button onClick="{{ a.sel }}" aria-label="{{ a.label }}" aria-pressed="{{ a.on }}" title="{{ a.label }}" style="{{ a.style }}"></button>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:14px 17px;flex-shrink:0;box-shadow:0 10px 26px -22px rgba(15,16,35,.4)">
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:12.5px;padding:5px 0"><span style="color:#8A90A6;font-weight:500">Issued</span><span style="font-weight:700;color:#0F1023;white-space:nowrap">June 14, 2026</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:12.5px;padding:5px 0;border-top:1px solid #F2F4FA"><span style="color:#8A90A6;font-weight:500">Credential ID</span><span style="font-weight:700;color:#0F1023;white-space:nowrap">RL-DRC-2046</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:12.5px;padding:5px 0;border-top:1px solid #F2F4FA"><span style="color:#8A90A6;font-weight:500">Status</span><span style="display:inline-flex;align-items:center;gap:5px;font-weight:700;color:#2D8BFF"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#2D8BFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"></path><circle cx="12" cy="12" r="9"></circle></svg>Verified</span></div>
+      </section>
+
+      <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:15px 17px;flex-shrink:0;box-shadow:0 10px 26px -22px rgba(15,16,35,.4)">
+        <div style="display:flex;gap:9px;margin-bottom:12px">
+          <a href="#" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:700;color:#fff;background:linear-gradient(135deg,#5A3DF5,#2D8BFF);padding:12px;border-radius:12px;box-shadow:0 12px 24px -12px rgba(90,61,245,.55)" style-hover="transform:translateY(-1px)"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path></svg>Download PDF</a>
+          <a href="#" title="Share link" style="display:flex;align-items:center;justify-content:center;width:46px;color:#0F1023;border:1.5px solid #E1E5F0;border-radius:12px;flex-shrink:0" style-hover="border-color:#0F1023"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"></path></svg></a>
+          <a href="#" title="Add to profile" style="display:flex;align-items:center;justify-content:center;width:46px;color:#2D8BFF;border:1.5px solid #BFD9FF;background:#EAF2FF;border-radius:12px;flex-shrink:0" style-hover="border-color:#2D8BFF"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"></path><circle cx="12" cy="12" r="9"></circle></svg></a>
+        </div>
+        <div style="border-top:1px solid #F0F2F8;padding-top:12px">
+          <div style="font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#A6ACC0;margin-bottom:9px">Skills covered</div>
+          <div style="display:flex;gap:7px;flex-wrap:wrap">
+            <sc-for list="{{ skills }}" as="s" hint-placeholder-count="5"><span style="font-size:11.5px;font-weight:600;color:#3D4A66;background:#EEF1F8;border:1px solid #E1E5F0;padding:5px 11px;border-radius:99px">{{ s }}</span></sc-for>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { style:'ribbon', accent:'violet' };
+  componentDidMount(){ try{ const r=localStorage.getItem('raelearn-cert4'); if(r){ const s=JSON.parse(r); this.setState({ style:s.style||'ribbon', accent:s.accent||'violet' }); } }catch(e){} }
+  componentDidUpdate(){ try{ localStorage.setItem('raelearn-cert4', JSON.stringify({ style:this.state.style, accent:this.state.accent })); }catch(e){} }
+  ACC = {
+    violet:{ label:'Violet', base:'#5A3DF5', light:'#9B86FF', deep:'#3B25B0' },
+    blue:  { label:'Blue',   base:'#2D8BFF', light:'#7FB6FF', deep:'#1A5FC0' },
+    cyan:  { label:'Cyan',   base:'#00C6E8', light:'#6FE0F2', deep:'#0090AD' },
+    purple:{ label:'Purple', base:'#7B61FF', light:'#B09BFF', deep:'#503BC0' },
+  };
+  STYLES = [ ['ribbon','Ribbon'], ['minimal','Minimal'], ['midnight','Midnight'] ];
+  conf(id, acc){
+    if(id==='midnight') return {
+      sheet:'background:radial-gradient(130% 120% at 50% -8%,#1B1C3E 0%,#0B0C1A 72%);border:1px solid #20223A;box-shadow:0 40px 90px -40px rgba(5,6,15,.9)',
+      print:'background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.02) 0 1px,transparent 1px 7px)',
+      title:'#FFFFFF', sub:'#AEB4CC', strong:'#FFFFFF', name:'#FFFFFF',
+      sigInk:acc.light, sigRule:'rgba(255,255,255,.22)', sigName:'#EAECF6', label:'#7C84A6',
+      foot:'#7C84A6', footStrong:'#C7CCE0', verify:acc.light,
+      hasBand:true, isMinimal:false, guill:'.1', logoTone:'light', accentText:acc.light,
+    };
+    if(id==='minimal') return {
+      sheet:'background:#FFFFFF;border:1px solid #E7E9F2;box-shadow:0 34px 80px -42px rgba(15,16,35,.5)',
+      print:'',
+      title:'#0F1023', sub:'#5A6072', strong:'#0F1023', name:'#0F1023',
+      sigInk:'#2A2E45', sigRule:'#DDE1EC', sigName:'#0F1023', label:'#8A90A6',
+      foot:'#9AA1B4', footStrong:'#4B5563', verify:'#2D8BFF',
+      hasBand:false, isMinimal:true, guill:'0', logoTone:'dark', accentText:acc.base,
+    };
+    return { // ribbon
+      sheet:'background:#FFFFFF;border:1px solid #E7E9F2;box-shadow:0 34px 80px -42px rgba(15,16,35,.5)',
+      print:'background-image:repeating-linear-gradient(90deg,rgba(15,16,35,.014) 0 1px,transparent 1px 7px)',
+      title:'#0F1023', sub:'#5A6072', strong:'#0F1023', name:'#0F1023',
+      sigInk:'#2A2E45', sigRule:'#DDE1EC', sigName:'#0F1023', label:'#8A90A6',
+      foot:'#9AA1B4', footStrong:'#4B5563', verify:'#2D8BFF',
+      hasBand:true, isMinimal:false, guill:'.05', logoTone:'dark', accentText:acc.base,
+    };
+  }
+  renderVals(){
+    const acc = this.ACC[this.state.accent] || this.ACC.violet;
+    const id = ['ribbon','minimal','midnight'].includes(this.state.style) ? this.state.style : 'ribbon';
+    const c = this.conf(id, acc);
+    const gradRule = 'background:linear-gradient(90deg,'+acc.base+','+acc.light+')';
+    const presets = this.STYLES.map(([pid,label]) => {
+      const on = id===pid; const dark = pid==='midnight';
+      const tBg = dark ? 'radial-gradient(130% 120% at 50% -8%,#1B1C3E,#0B0C1A)' : '#FFFFFF';
+      const tBorder = dark ? '1px solid #20223A' : '1px solid #E1E5F0';
+      const deco = pid==='minimal'
+        ? 'position:absolute;top:0;bottom:0;left:0;width:4px;background:linear-gradient(180deg,#5A3DF5,#2D8BFF,#00C6E8)'
+        : 'position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#5A3DF5,#2D8BFF,#00C6E8)';
+      return { id:pid, name:label, on, sel: () => this.setState({ style:pid }),
+        wrap:'min-width:0;flex:1;background:none;border:none;padding:0;cursor:pointer;display:flex;flex-direction:column;gap:6px;font-family:inherit',
+        thumb:'position:relative;height:60px;border-radius:8px;overflow:hidden;border:'+tBorder+';background:'+tBg+';'+(on?'outline:2px solid '+acc.base+';outline-offset:1.5px;':''),
+        deco,
+        titleBar: dark ? '#C7CCE0' : '#9AA1B4',
+        nameBar: dark ? '#FFFFFF' : '#0F1023',
+        seal:'position:absolute;right:7px;bottom:7px;width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 36% 30%,'+acc.light+','+acc.base+' 70%,'+acc.deep+')',
+        label:'font-size:11px;font-weight:700;text-align:center;color:'+(on?'#0F1023':'#8A90A6')+';' };
+    });
+    const accents = Object.keys(this.ACC).map(k => {
+      const a = this.ACC[k]; const on = this.state.accent===k;
+      return { id:k, label:a.label, on, sel: () => this.setState({ accent:k }),
+        style:'width:26px;height:26px;border-radius:50%;cursor:pointer;background:'+a.base+';border:none;box-shadow:'+(on?'0 0 0 2px #fff,0 0 0 4px '+a.base:'0 0 0 1px #DCE0EC') };
+    });
+    return {
+      isMidnight:id==='midnight', isMinimal:id==='minimal', hasBand:c.hasBand,
+      sheetStyle:c.sheet, printStyle:c.print, guillOpacity:c.guill, logoTone:c.logoTone,
+      titleColor:c.title, subColor:c.sub, strongColor:c.strong, nameColor:c.name,
+      sigInk:c.sigInk, sigRule:c.sigRule, sigNameColor:c.sigName, labelColor:c.label,
+      footColor:c.foot, footStrong:c.footStrong, verifyColor:c.verify,
+      accentColor:c.accentText, gradRule,
+      sealLight:acc.light, sealBase:acc.base, sealDeep:acc.deep,
+      styleLabel:(this.STYLES.find(s=>s[0]===id)||['','Ribbon'])[1]+' · '+acc.label,
+      presets, accents,
+      skills:['Donor data audit','De-duplication','Segmentation','CRM upkeep','Reporting'],
+    };
+  }
+}
+</script>
+</body>
+</html>

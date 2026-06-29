@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    ::selection{background:rgba(123,97,255,.28)}
+    a{color:inherit;text-decoration:none}
+  </style>
+</helmet>
+
+<dc-import name="SiteNav" current="pricing" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+<!-- HEADER -->
+<section style="position:relative;background:#F6F8FD;border-bottom:1px solid #E7E9F2;overflow:hidden">
+  <dc-import name="DoodleBackdrop" variant="minimal" accent="#7B61FF" hint-size="100%,100%" style="position:absolute;inset:0"></dc-import>
+  <div style="position:relative;max-width:1240px;margin:0 auto;padding:48px 28px 40px;text-align:center">
+    <div style="font-size:12.5px;font-weight:800;letter-spacing:.16em;color:#A6ACC0;text-transform:uppercase;margin-bottom:14px">Pricing</div>
+    <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(32px,4.4vw,52px);line-height:1.05;letter-spacing:-.02em;margin:0 auto 14px;color:#0F1023;max-width:720px">Start free. Pay only when you need more.</h1>
+    <p style="font-size:16.5px;line-height:1.6;color:#5C574E;max-width:600px;margin:0 auto">Four ways to learn with RaeLearn — from free starters to fully custom training built around your organization.</p>
+  </div>
+</section>
+
+<!-- PLANS -->
+<section style="max-width:1240px;margin:0 auto;padding:44px 28px 24px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:18px;align-items:stretch">
+
+    <!-- FREE -->
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:18px;padding:26px 24px;display:flex;flex-direction:column;box-shadow:0 14px 30px -26px rgba(15,16,35,.5)">
+      <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:22px;margin:0 0 4px;color:#0F1023">Free</h2>
+      <p style="font-size:13.5px;color:#8A90A6;margin:0 0 16px;min-height:38px">For beginners getting started.</p>
+      <div style="font-family:'Poppins',serif;font-weight:800;font-size:36px;color:#0F1023;margin-bottom:18px">$0</div>
+      <div style="display:flex;flex-direction:column;gap:9px;font-size:13.5px;color:#4B5563;flex:1;margin-bottom:20px">
+        <div style="display:flex;gap:9px"><span style="color:#3E9A52;font-weight:800">✓</span>Free courses</div>
+        <div style="display:flex;gap:9px"><span style="color:#3E9A52;font-weight:800">✓</span>Starter templates</div>
+        <div style="display:flex;gap:9px"><span style="color:#3E9A52;font-weight:800">✓</span>Checklists</div>
+        <div style="display:flex;gap:9px"><span style="color:#3E9A52;font-weight:800">✓</span>Personal progress tracking</div>
+      </div>
+      <a href="Individual Signup.dc.html" style="text-align:center;font-size:14.5px;font-weight:700;color:#0F1023;border:1.6px solid #0F1023;padding:12px;border-radius:10px" style-hover="background:#0F1023;color:#fff">Start Free</a>
+    </div>
+
+    <!-- INDIVIDUAL -->
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:18px;padding:26px 24px;display:flex;flex-direction:column;box-shadow:0 14px 30px -26px rgba(15,16,35,.5)">
+      <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:22px;margin:0 0 4px;color:#0F1023">Individual</h2>
+      <p style="font-size:13.5px;color:#8A90A6;margin:0 0 16px;min-height:38px">For VAs, freelancers, founders, and independent learners.</p>
+      <div style="font-family:'Poppins',serif;font-weight:800;font-size:36px;color:#0F1023;margin-bottom:2px">Per course</div>
+      <div style="font-size:13px;color:#8A90A6;margin-bottom:18px">or certificate bundles</div>
+      <div style="display:flex;flex-direction:column;gap:9px;font-size:13.5px;color:#4B5563;flex:1;margin-bottom:20px">
+        <div style="display:flex;gap:9px"><span style="color:#3E9A52;font-weight:800">✓</span>Everything in Free</div>
+        <div style="display:flex;gap:9px"><span style="color:#3E9A52;font-weight:800">✓</span>Paid courses</div>
+        <div style="display:flex;gap:9px"><span style="color:#3E9A52;font-weight:800">✓</span>Certificates</div>
+        <div style="display:flex;gap:9px"><span style="color:#3E9A52;font-weight:800">✓</span>Workbooks &amp; resources</div>
+        <div style="display:flex;gap:9px"><span style="color:#3E9A52;font-weight:800">✓</span>Learner dashboard</div>
+      </div>
+      <a href="Courses.dc.html" style="text-align:center;font-size:14.5px;font-weight:700;color:#0F1023;border:1.6px solid #0F1023;padding:12px;border-radius:10px" style-hover="background:#0F1023;color:#fff">Browse Courses</a>
+    </div>
+
+    <!-- GROUP (featured) -->
+    <div style="position:relative;background:#0F1023;border:1px solid #0F1023;border-radius:18px;padding:26px 24px;display:flex;flex-direction:column;box-shadow:0 24px 50px -24px rgba(27,35,51,.6);color:#fff">
+      <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#00C6E8;color:#5a4109;font-size:11px;font-weight:800;letter-spacing:.05em;padding:4px 12px;border-radius:7px;white-space:nowrap">FOR ORGANIZATIONS</div>
+      <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:22px;margin:0 0 4px;color:#fff">Group Account</h2>
+      <p style="font-size:13.5px;color:#AEB6C6;margin:0 0 16px;min-height:38px">For founders, nonprofit heads, owners, and team leads.</p>
+      <div style="font-family:'Poppins',serif;font-weight:800;font-size:36px;color:#fff;margin-bottom:2px">Per seat</div>
+      <div style="font-size:13px;color:#AEB6C6;margin-bottom:18px">plans from 3 seats up</div>
+      <div style="display:flex;flex-direction:column;gap:9px;font-size:13.5px;color:#E7EAF0;flex:1;margin-bottom:20px">
+        <div style="display:flex;gap:9px"><span style="color:#5BC074;font-weight:800">✓</span>Buy &amp; manage seats</div>
+        <div style="display:flex;gap:9px"><span style="color:#5BC074;font-weight:800">✓</span>Assign courses &amp; paths</div>
+        <div style="display:flex;gap:9px"><span style="color:#5BC074;font-weight:800">✓</span>Track team progress</div>
+        <div style="display:flex;gap:9px"><span style="color:#5BC074;font-weight:800">✓</span>Completions &amp; certificates</div>
+        <div style="display:flex;gap:9px"><span style="color:#5BC074;font-weight:800">✓</span>Export reports</div>
+        <div style="display:flex;gap:9px"><span style="color:#5BC074;font-weight:800">✓</span>Group dashboard</div>
+      </div>
+      <a href="Group Signup.dc.html" style="text-align:center;font-size:14.5px;font-weight:700;color:#0F1023;background:#00C6E8;padding:12px;border-radius:10px" style-hover="background:#f0b94a">Create Group Account</a>
+    </div>
+
+    <!-- CUSTOM -->
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:18px;padding:26px 24px;display:flex;flex-direction:column;box-shadow:0 14px 30px -26px rgba(15,16,35,.5)">
+      <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:22px;margin:0 0 4px;color:#0F1023">Custom Training</h2>
+      <p style="font-size:13.5px;color:#8A90A6;margin:0 0 16px;min-height:38px">For organizations needing tailored training.</p>
+      <div style="font-family:'Poppins',serif;font-weight:800;font-size:36px;color:#0F1023;margin-bottom:2px">Let's talk</div>
+      <div style="font-size:13px;color:#8A90A6;margin-bottom:18px">scoped to your org</div>
+      <div style="display:flex;flex-direction:column;gap:9px;font-size:13.5px;color:#4B5563;flex:1;margin-bottom:20px">
+        <div style="display:flex;gap:9px"><span style="color:#3E9A52;font-weight:800">✓</span>Intake &amp; review</div>
+        <div style="display:flex;gap:9px"><span style="color:#3E9A52;font-weight:800">✓</span>Custom learning plan</div>
+        <div style="display:flex;gap:9px"><span style="color:#3E9A52;font-weight:800">✓</span>Private training</div>
+        <div style="display:flex;gap:9px"><span style="color:#3E9A52;font-weight:800">✓</span>Workshops</div>
+        <div style="display:flex;gap:9px"><span style="color:#3E9A52;font-weight:800">✓</span>Implementation guidance</div>
+      </div>
+      <a href="Custom Training.dc.html" style="text-align:center;font-size:14.5px;font-weight:700;color:#0F1023;border:1.6px solid #0F1023;padding:12px;border-radius:10px" style-hover="background:#0F1023;color:#fff">Request Custom Quote</a>
+    </div>
+  </div>
+</section>
+
+<!-- INDIVIDUAL VS GROUP -->
+<section style="max-width:1020px;margin:0 auto;padding:24px 28px 16px">
+  <div style="background:#F6F8FD;border:1px solid #E7E9F2;border-radius:20px;padding:32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px">
+    <div>
+      <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#5A3DF5;margin-bottom:12px">Individual learner account</div>
+      <p style="font-size:14.5px;line-height:1.6;color:#4B5563;margin:0 0 12px">For VAs, freelancers, founders, nonprofit founders, business owners, and learners taking courses for themselves.</p>
+      <div style="font-size:13.5px;color:#6A655C;line-height:1.9">Enroll in free courses · buy paid courses · complete certificates · download resources · track your own progress</div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#7B61FF;margin-bottom:12px">Group account</div>
+      <p style="font-size:14.5px;line-height:1.6;color:#4B5563;margin:0 0 12px">For founders, executive directors, nonprofit heads, business owners, team leads, operations managers, and agency owners.</p>
+      <div style="font-size:13.5px;color:#6A655C;line-height:1.9">Add learners · buy seats · assign courses &amp; paths · monitor progress · view completions · export reports · manage seats · request custom training</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<section style="max-width:1240px;margin:0 auto;padding:30px 28px 72px;text-align:center">
+  <p style="font-size:15px;color:#6A655C;margin:0 0 18px">Not sure which fits? Start free and upgrade anytime.</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="Individual Signup.dc.html" style="font-size:15px;font-weight:700;color:#fff;background:#0F1023;padding:14px 22px;border-radius:11px;white-space:nowrap" style-hover="background:#000">Start Free</a>
+    <a href="Courses.dc.html" style="font-size:15px;font-weight:700;color:#0F1023;border:1.5px solid #0F1023;padding:14px 22px;border-radius:11px;white-space:nowrap" style-hover="background:#0F1023;color:#fff">Browse Courses</a>
+    <a href="Custom Training.dc.html" style="font-size:15px;font-weight:700;color:#0F1023;border:1.5px solid #0F1023;padding:14px 22px;border-radius:11px;white-space:nowrap" style-hover="background:#0F1023;color:#fff">Request Custom Quote</a>
+  </div>
+</section>
+
+<dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+</x-dc>
+</body>
+</html>

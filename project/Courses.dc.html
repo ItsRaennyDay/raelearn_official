@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    ::selection{background:rgba(123,97,255,.32)}
+    a{color:inherit;text-decoration:none}
+    input{font-family:inherit}
+  </style>
+</helmet>
+
+<dc-import name="SiteNav" current="courses" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+<!-- header band -->
+<section style="position:relative;background:#F6F8FD;border-bottom:1px solid #E7E9F2;overflow:hidden">
+  <dc-import name="DoodleBackdrop" variant="cards" accent="#7B61FF" hint-size="100%,100%" style="position:absolute;inset:0"></dc-import>
+  <div style="position:relative;max-width:1240px;margin:0 auto;padding:48px 28px 40px">
+    <div style="font-size:12.5px;font-weight:700;color:#A6ACC0;margin-bottom:14px"><a href="RaeLearn Homepage.dc.html" style="color:#A6ACC0" style-hover="color:#0F1023">Home</a> <span style="margin:0 7px">/</span> Courses</div>
+    <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(32px,4.4vw,52px);line-height:1.05;letter-spacing:-.02em;margin:0 0 14px;color:#0F1023">The full course catalog.</h1>
+    <p style="font-size:16.5px;line-height:1.6;color:#5C574E;max-width:600px;margin:0 0 26px">Every RaeLearn course in one place — free starters, paid deep-dives, and certificates. Filter by access, audience, topic, and skill level.</p>
+    <div style="position:relative;max-width:480px">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#A6ACC0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:16px;top:50%;transform:translateY(-50%)"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+      <input value="{{ q }}" onInput="{{ onSearch }}" placeholder="Search courses, topics, audiences…" style="width:100%;font-size:15px;padding:14px 16px 14px 44px;border:1.5px solid #E2DACA;border-radius:12px;background:#fff;color:#0F1023;outline:none" style-focus="border-color:#0F1023" />
+    </div>
+  </div>
+</section>
+
+<!-- body -->
+<section style="max-width:1240px;margin:0 auto;padding:36px 28px 72px;display:flex;gap:34px;align-items:flex-start;flex-wrap:wrap">
+
+  <!-- filter rail -->
+  <aside style="flex:0 0 248px;min-width:220px;position:sticky;top:88px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <span style="font-family:'Poppins',serif;font-weight:700;font-size:18px;color:#0F1023">Filters</span>
+      <button onClick="{{ clearAll }}" style="font-size:12.5px;font-weight:700;color:#8A90A6;background:none;border:none;cursor:pointer;padding:4px" style-hover="color:#7B61FF">Clear all</button>
+    </div>
+
+    <sc-for list="{{ groups }}" as="g" hint-placeholder-count="4">
+      <div style="margin-bottom:22px">
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#A6ACC0;margin-bottom:11px">{{ g.label }}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <sc-for list="{{ g.chips }}" as="c" hint-placeholder-count="3">
+            <button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </aside>
+
+  <!-- grid -->
+  <div style="flex:1 1 560px;min-width:300px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+      <span style="font-size:14.5px;font-weight:600;color:#5C574E"><strong style="color:#0F1023">{{ count }}</strong> courses</span>
+      <span style="font-size:13px;color:#8A90A6">{{ activeSummary }}</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:18px">
+      <sc-for list="{{ filtered }}" as="c" hint-placeholder-count="9">
+        <a href="Course Detail.dc.html" style="position:relative;background:#FFFFFF;border:1px solid #E7E9F2;border-radius:15px;overflow:hidden;box-shadow:0 12px 28px -24px rgba(15,16,35,.55);display:flex;flex-direction:column;transition:transform .16s ease,box-shadow .16s ease" style-hover="transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,16,35,.5)">
+          <div style="{{ c.bar }}"></div>
+          <div style="padding:18px;display:flex;flex-direction:column;flex:1">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px">
+              <span style="{{ c.tagStyle }}">{{ c.audLabel }}</span>
+              <span style="{{ c.accessStyle }}">{{ c.accessLabel }}</span>
+            </div>
+            <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:17.5px;line-height:1.25;margin:0 0 12px;color:#0F1023;flex:1">{{ c.title }}</h3>
+            <div style="display:flex;align-items:center;gap:12px;font-size:12px;color:#8A90A6;font-weight:600;margin-bottom:14px">
+              <span>{{ c.hours }}</span>
+              <span style="display:inline-flex;align-items:center;gap:5px"><span style="{{ c.levelDot }}"></span>{{ c.levelLabel }}</span>
+            </div>
+            <span style="display:block;text-align:center;font-size:13.5px;font-weight:700;color:#0F1023;border:1.5px solid #E2DACA;padding:10px;border-radius:9px">{{ c.cta }}</span>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+      <div style="text-align:center;padding:60px 20px;color:#8A90A6">
+        <div style="font-family:'Caveat',cursive;font-size:26px;color:#7B61FF;margin-bottom:6px">nothing here yet</div>
+        <p style="font-size:15px;margin:0 0 16px">No courses match those filters.</p>
+        <button onClick="{{ clearAll }}" style="font-size:14px;font-weight:700;color:#fff;background:#0F1023;border:none;padding:11px 20px;border-radius:10px;cursor:pointer">Clear filters</button>
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { access:'all', aud:'all', topic:'all', level:'all', q:'' };
+
+  AUD = {
+    va:{label:'VA',color:'#5A3DF5',bg:'#ECE9FE'},
+    nonprofit:{label:'Nonprofit',color:'#7B61FF',bg:'#EDE7F9'},
+    business:{label:'Business',color:'#7B61FF',bg:'#DAF5FB'},
+    founder:{label:'Founder',color:'#7B61FF',bg:'#ECE9FE'},
+    team:{label:'Team',color:'#7B61FF',bg:'#ECE9FE'},
+  };
+  LVL = {
+    beginner:{label:'Beginner',dot:'#3E9A52'},
+    intermediate:{label:'Intermediate',dot:'#7B61FF'},
+    advanced:{label:'Advanced',dot:'#7B61FF'},
+  };
+  ACC = {
+    free:{label:'FREE',color:'#2D8BFF',bg:'#E4F0FF',cta:'Enroll Free'},
+    paid:{label:'PAID',color:'#4B5563',bg:'#EEF1F8',cta:'View Course'},
+    certificate:{label:'CERTIFICATE',color:'#9c6c12',bg:'#ECE9FE',cta:'View Certificate'},
+  };
+  TOPIC = {website:'Website',operations:'Operations',compliance:'Compliance',board:'Board Support',donor:'Donor/Fundraising',grant:'Grant Readiness',automation:'Automation'};
+
+  COURSES = [
+    {t:'Nonprofit vs 501(c)(3)',acc:'free',aud:['nonprofit'],topic:'compliance',lvl:'beginner',h:'~1.5 hrs'},
+    {t:'What Is Form 990?',acc:'free',aud:['nonprofit'],topic:'compliance',lvl:'beginner',h:'~1 hr'},
+    {t:'Board Basics for Startup Nonprofits',acc:'free',aud:['nonprofit'],topic:'board',lvl:'beginner',h:'~1.5 hrs'},
+    {t:'Donor Records Basics',acc:'free',aud:['nonprofit'],topic:'donor',lvl:'beginner',h:'~1 hr'},
+    {t:'Grant Readiness Basics',acc:'free',aud:['nonprofit'],topic:'grant',lvl:'beginner',h:'~1.5 hrs'},
+    {t:'Website Maintenance Basics',acc:'free',aud:['va','business'],topic:'website',lvl:'beginner',h:'~1 hr'},
+    {t:'SOP Writing Basics',acc:'free',aud:['business'],topic:'operations',lvl:'beginner',h:'~1.5 hrs'},
+    {t:'Google Drive Cleanup for Small Businesses',acc:'free',aud:['business'],topic:'operations',lvl:'beginner',h:'~1 hr'},
+    {t:'What VAs Need to Know Before Supporting a Nonprofit',acc:'free',aud:['va'],topic:'operations',lvl:'beginner',h:'~1 hr'},
+    {t:'Inbox & Calendar Basics',acc:'free',aud:['va'],topic:'operations',lvl:'beginner',h:'~1 hr'},
+    {t:'Nonprofit Operations VA Certificate',acc:'certificate',aud:['nonprofit','va'],topic:'operations',lvl:'intermediate',h:'~9 hrs'},
+    {t:'Founder Support VA Certificate',acc:'certificate',aud:['va','founder'],topic:'operations',lvl:'intermediate',h:'~8 hrs'},
+    {t:'SOP & Workflow Certificate',acc:'certificate',aud:['business'],topic:'operations',lvl:'intermediate',h:'~7 hrs'},
+    {t:'Website Maintenance for VAs',acc:'paid',aud:['va'],topic:'website',lvl:'beginner',h:'~5 hrs'},
+    {t:'U.S. Nonprofit Startup Operations Bootcamp',acc:'paid',aud:['nonprofit'],topic:'operations',lvl:'advanced',h:'~12 hrs'},
+    {t:'Startup Backend Setup',acc:'paid',aud:['business'],topic:'operations',lvl:'intermediate',h:'~7 hrs'},
+    {t:'SOP Builder Course',acc:'paid',aud:['business'],topic:'operations',lvl:'beginner',h:'~6 hrs'},
+    {t:'Donor Operations for Small Nonprofits',acc:'paid',aud:['nonprofit'],topic:'donor',lvl:'intermediate',h:'~6 hrs'},
+    {t:'Board Admin Support for Nonprofit VAs',acc:'paid',aud:['va','nonprofit'],topic:'board',lvl:'intermediate',h:'~5 hrs'},
+    {t:'Client Operations Setup',acc:'paid',aud:['business'],topic:'operations',lvl:'intermediate',h:'~6 hrs'},
+    {t:'Automation Basics for Small Teams',acc:'paid',aud:['business','team'],topic:'automation',lvl:'beginner',h:'~4 hrs'},
+    {t:'Compliance Calendar Support',acc:'paid',aud:['nonprofit'],topic:'compliance',lvl:'intermediate',h:'~4 hrs'},
+  ];
+
+  set(group, value) {
+    this.setState(s => ({ [group]: s[group] === value ? 'all' : value }));
+  }
+  renderVals() {
+    const s = this.state;
+    const q = (s.q || '').trim().toLowerCase();
+    const match = (c) =>
+      (s.access==='all' || c.acc===s.access) &&
+      (s.aud==='all' || c.aud.includes(s.aud)) &&
+      (s.topic==='all' || c.topic===s.topic) &&
+      (s.level==='all' || c.lvl===s.level) &&
+      (!q || c.t.toLowerCase().includes(q) || (this.TOPIC[c.topic]||'').toLowerCase().includes(q) || c.aud.some(a=>this.AUD[a].label.toLowerCase().includes(q)));
+
+    const filtered = this.COURSES.filter(match).map(c => {
+      const m = this.AUD[c.aud[0]];
+      const lvl = this.LVL[c.lvl];
+      const acc = this.ACC[c.acc];
+      return {
+        title: c.t,
+        bar: `height:5px;background:${m.color}`,
+        tagStyle: `font-size:11px;font-weight:800;letter-spacing:.04em;color:${m.color};background:${m.bg};padding:4px 9px;border-radius:7px;white-space:nowrap`,
+        audLabel: c.aud.map(a=>this.AUD[a].label).join(' · '),
+        accessStyle: `font-size:10.5px;font-weight:800;letter-spacing:.03em;color:${acc.color};background:${acc.bg};padding:4px 9px;border-radius:7px;white-space:nowrap`,
+        accessLabel: acc.label,
+        hours: c.h,
+        levelDot: `width:7px;height:7px;border-radius:50%;background:${lvl.dot}`,
+        levelLabel: lvl.label,
+        cta: acc.cta,
+      };
+    });
+
+    const chipBase = 'font-size:12.5px;font-weight:600;padding:7px 12px;border-radius:9px;cursor:pointer;transition:all .14s ease;white-space:nowrap;';
+    const mkChip = (group, value, label) => {
+      const active = s[group] === value;
+      return {
+        label,
+        onClick: () => this.set(group, value),
+        style: chipBase + (active
+          ? 'background:#0F1023;color:#fff;border:1.5px solid #0F1023'
+          : 'background:#fff;color:#4B5563;border:1.5px solid #E2DACA'),
+      };
+    };
+
+    const groups = [
+      { label:'Access', chips:[mkChip('access','free','Free'),mkChip('access','paid','Paid'),mkChip('access','certificate','Certificate')] },
+      { label:'Audience', chips:[mkChip('aud','nonprofit','Nonprofit'),mkChip('aud','business','Business'),mkChip('aud','va','VA'),mkChip('aud','founder','Founder'),mkChip('aud','team','Team Training')] },
+      { label:'Topic', chips:[mkChip('topic','website','Website'),mkChip('topic','operations','Operations'),mkChip('topic','compliance','Compliance Awareness'),mkChip('topic','board','Board Support'),mkChip('topic','donor','Donor/Fundraising'),mkChip('topic','grant','Grant Readiness'),mkChip('topic','automation','Automation')] },
+      { label:'Skill level', chips:[mkChip('level','beginner','Beginner'),mkChip('level','intermediate','Intermediate'),mkChip('level','advanced','Advanced')] },
+    ];
+
+    const activeBits = [];
+    if (s.access!=='all') activeBits.push(this.ACC[s.access].label.toLowerCase());
+    if (s.aud!=='all') activeBits.push(this.AUD[s.aud].label);
+    if (s.topic!=='all') activeBits.push(this.TOPIC[s.topic]);
+    if (s.level!=='all') activeBits.push(this.LVL[s.level].label);
+
+    return {
+      q: s.q,
+      onSearch: (e) => this.setState({ q: e.target.value }),
+      clearAll: () => this.setState({ access:'all', aud:'all', topic:'all', level:'all', q:'' }),
+      groups,
+      filtered,
+      count: filtered.length,
+      isEmpty: filtered.length === 0,
+      activeSummary: activeBits.length ? 'Filtered: ' + activeBits.join(' · ') : 'Showing everything',
+    };
+  }
+}
+</script>
+</body>
+</html>

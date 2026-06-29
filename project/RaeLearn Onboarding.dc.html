@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+    input{font-family:inherit}
+    @keyframes ob-rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    @media (max-width:860px){#ob-grid{grid-template-columns:1fr !important}#ob-rail{position:static !important}#ob-chips{grid-template-columns:1fr 1fr !important}}
+  </style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;flex-direction:column">
+
+  <!-- TOP BAR -->
+  <header style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 30px;border-bottom:1px solid #E7E9F2;background:rgba(255,255,255,.9);backdrop-filter:blur(8px)">
+    <div style="display:flex;flex-direction:column;line-height:1"><span style="font-family:'Poppins',serif;font-weight:800;font-size:20px;color:#0F1023">RaeLearn</span><span style="font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#A6ACC0;margin-top:3px">by RAEFORM</span></div>
+    <div role="tablist" style="display:inline-flex;background:#E7E9F2;border-radius:11px;padding:3px;gap:2px">
+      <button onClick="{{ setLearner }}" style="{{ learnerTab }}">Learner setup</button>
+      <button onClick="{{ setAdmin }}" style="{{ adminTab }}">Admin setup</button>
+    </div>
+    <a href="{{ skipHref }}" style="font-size:13px;font-weight:700;color:#857E70" style-hover="color:#0F1023">Skip for now →</a>
+  </header>
+
+  <main style="flex:1;width:100%;max-width:1060px;margin:0 auto;padding:30px 30px 60px">
+    <div id="ob-grid" style="display:grid;grid-template-columns:264px 1fr;gap:26px;align-items:start">
+
+      <!-- RAIL -->
+      <aside id="ob-rail" style="position:sticky;top:30px;display:flex;flex-direction:column;gap:16px">
+        <div style="background:#fff;border:1px solid #E7E9F2;border-radius:18px;padding:20px">
+          <div style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#A6ACC0;margin-bottom:6px">Setup</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-family:'Poppins',serif;font-weight:800;font-size:15px;color:#0F1023">Step {{ stepNum }} of {{ stepTotal }}</span></div>
+          <div style="height:7px;background:#EEF1F8;border-radius:99px;overflow:hidden;margin-bottom:18px"><div style="height:100%;width:{{ progressPct }}%;background:#5A3DF5;border-radius:99px;transition:width .35s"></div></div>
+          <div style="display:flex;flex-direction:column;gap:3px">
+            <sc-for list="{{ rail }}" as="s" hint-placeholder-count="5">
+              <button onClick="{{ s.go }}" style="{{ s.row }}">
+                <span style="{{ s.dot }}"><sc-if value="{{ s.done }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg></sc-if><sc-if value="{{ s.showNum }}" hint-placeholder-val="{{ true }}">{{ s.num }}</sc-if></span>
+                <span style="flex:1;min-width:0;font-size:13px;font-weight:{{ s.weight }};color:{{ s.color }};text-align:left">{{ s.title }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#F6F8FD;border:1px solid #EEF1F8;border-radius:16px;padding:18px">
+            <div style="font-family:'Caveat',cursive;font-size:19px;font-weight:700;color:#9c6c12;line-height:1;margin-bottom:11px">Your setup checklist</div>
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <sc-for list="{{ checklist }}" as="c" hint-placeholder-count="5">
+                <div style="display:flex;align-items:center;gap:9px"><span style="{{ c.box }}"><sc-if value="{{ c.done }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg></sc-if></span><span style="font-size:12.5px;color:{{ c.color }}">{{ c.label }}</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </aside>
+
+      <!-- BODY -->
+      <section style="background:#fff;border:1px solid #E7E9F2;border-radius:20px;overflow:hidden;min-height:420px;display:flex;flex-direction:column">
+        <div style="position:relative;overflow:hidden;background:linear-gradient(120deg,#EAF4F1 0%,#F3F0E6 60%,#FBF4E4 100%);border-bottom:1px solid #E6EDE6;padding:22px 30px">
+          <dc-import name="DoodleBackdrop" variant="minimal" accent="#5A3DF5" hint-size="100%,100%" style="position:absolute;inset:0"></dc-import>
+          <div style="position:relative"><div style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#5A3DF5;margin-bottom:5px">{{ eyebrow }}</div><h1 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(22px,3vw,28px);line-height:1.1;margin:0;color:#0F1023">{{ heading }}</h1></div>
+        </div>
+
+        <div style="flex:1;padding:26px 30px" key="{{ stepKey }}">
+
+          <!-- L0 WELCOME -->
+          <sc-if value="{{ isL0 }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <p style="font-size:15.5px;line-height:1.6;color:#4A453D;margin:0 0 22px;max-width:520px">RaeLearn helps you build real operational skills — from clean donor data to SOPs — with short, practical courses you can finish between client work.</p>
+              <div style="display:flex;flex-direction:column;gap:13px;max-width:540px">
+                <div style="display:flex;align-items:center;gap:13px"><span style="width:38px;height:38px;border-radius:11px;background:#ECE9FE;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#5A3DF5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg></span><div><div style="font-size:14px;font-weight:700;color:#0F1023">Learn by doing</div><div style="font-size:12.5px;color:#7C7669">Practical lessons with templates you keep</div></div></div>
+                <div style="display:flex;align-items:center;gap:13px"><span style="width:38px;height:38px;border-radius:11px;background:#EDE7F9;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="2.6"></circle><circle cx="18" cy="5" r="2.6"></circle><path d="M6 16.4V9a4 4 0 0 1 4-4h5"></path></svg></span><div><div style="font-size:14px;font-weight:700;color:#0F1023">Follow a path</div><div style="font-size:12.5px;color:#7C7669">Guided routes for your role and goals</div></div></div>
+                <div style="display:flex;align-items:center;gap:13px"><span style="width:38px;height:38px;border-radius:11px;background:#ECE9FE;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"></circle><path d="M8.5 13L7 21l5-2.5L17 21l-1.5-8"></path></svg></span><div><div style="font-size:14px;font-weight:700;color:#0F1023">Earn certificates</div><div style="font-size:12.5px;color:#7C7669">Show clients the skills you've proven</div></div></div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- L1 TYPE -->
+          <sc-if value="{{ isL1 }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <p style="font-size:14.5px;line-height:1.55;color:#5C574E;margin:0 0 18px">This tailors your recommendations. Pick the one that fits best.</p>
+              <div id="ob-chips" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+                <sc-for list="{{ types }}" as="t" hint-placeholder-count="8">
+                  <button onClick="{{ t.choose }}" aria-pressed="{{ t.aria }}" style="{{ t.style }}">{{ t.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- L2 INTERESTS -->
+          <sc-if value="{{ isL2 }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <p style="font-size:14.5px;line-height:1.55;color:#5C574E;margin:0 0 18px">Choose any that interest you — we'll suggest courses and a path. <span style="color:#9AA1B4">{{ interestCount }}</span></p>
+              <div style="display:flex;flex-wrap:wrap;gap:9px">
+                <sc-for list="{{ interests }}" as="i" hint-placeholder-count="10">
+                  <button onClick="{{ i.choose }}" aria-pressed="{{ i.aria }}" style="{{ i.style }}"><span style="{{ i.tick }}"></span>{{ i.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- L3 PATH -->
+          <sc-if value="{{ isL3 }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <p style="font-size:14.5px;line-height:1.55;color:#5C574E;margin:0 0 18px">{{ pathReason }}</p>
+              <div style="border:1.5px solid #CDE7E0;background:#F3F8F7;border-radius:16px;padding:20px">
+                <div style="display:flex;align-items:center;gap:13px;margin-bottom:14px"><span style="width:44px;height:44px;border-radius:12px;background:#ECE9FE;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#5A3DF5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="2.6"></circle><circle cx="18" cy="5" r="2.6"></circle><path d="M6 16.4V9a4 4 0 0 1 4-4h5"></path></svg></span><div><div style="display:inline-flex;align-items:center;gap:7px;margin-bottom:2px"><span style="font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#1A6F62;background:#D7EFE9;padding:3px 8px;border-radius:5px">Recommended</span></div><div style="font-family:'Poppins',serif;font-weight:800;font-size:18px;color:#0F1023">{{ pathName }}</div><div style="font-size:12.5px;color:#7C7669">{{ pathMeta }}</div></div></div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px">
+                  <sc-for list="{{ pathCourses }}" as="c" hint-placeholder-count="4"><span style="display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:#3A3F49;background:#fff;border:1px solid #E0E9E6;padding:6px 11px;border-radius:8px"><span style="width:6px;height:6px;border-radius:50%;background:#5A3DF5"></span>{{ c }}</span></sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- L4 START -->
+          <sc-if value="{{ isL4 }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <div style="display:flex;align-items:center;gap:11px;margin-bottom:18px"><span style="width:42px;height:42px;border-radius:50%;background:#E4F0FF;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#2D8BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg></span><div><div style="font-family:'Poppins',serif;font-weight:800;font-size:19px;color:#0F1023">You're all set</div><div style="font-size:13px;color:#7C7669">Your dashboard is ready. Jump into your first lesson.</div></div></div>
+              <a href="Lesson Player.dc.html" style="display:flex;align-items:center;gap:14px;border:1px solid #E7E9F2;border-radius:14px;padding:15px 17px;margin-bottom:12px" style-hover="border-color:#C7CCDC">
+                <span style="width:46px;height:46px;border-radius:11px;background:#ECE9FE;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="20" height="20" fill="#5A3DF5"><polygon points="8 5 20 12 8 19 8 5"></polygon></svg></span>
+                <div style="flex:1;min-width:0"><div style="font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#A6ACC0">First lesson</div><div style="font-size:15px;font-weight:700;color:#0F1023">Why clean donor data matters</div><div style="font-size:12px;color:#9AA1B4">Video · 6 min</div></div>
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#C7CCDC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg>
+              </a>
+            </div>
+          </sc-if>
+
+          <!-- A0 WELCOME -->
+          <sc-if value="{{ isA0 }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <p style="font-size:15.5px;line-height:1.6;color:#4A453D;margin:0 0 22px;max-width:540px">Your organization workspace lets you invite learners, assign courses and paths, and track your whole team's progress in one place.</p>
+              <div style="display:flex;flex-wrap:wrap;gap:1px;background:#EAECEF;border:1px solid #EAECEF;border-radius:14px;overflow:hidden;max-width:540px">
+                <div style="flex:1 1 150px;background:#fff;padding:15px 17px"><div style="font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2">Plan</div><div style="font-family:'Poppins',serif;font-weight:800;font-size:18px;color:#0F1023;margin-top:3px">Team</div></div>
+                <div style="flex:1 1 150px;background:#fff;padding:15px 17px"><div style="font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2">Seats</div><div style="font-family:'Poppins',serif;font-weight:800;font-size:18px;color:#0F1023;margin-top:3px">15</div></div>
+                <div style="flex:1 1 150px;background:#fff;padding:15px 17px"><div style="font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2">Admin</div><div style="font-family:'Poppins',serif;font-weight:800;font-size:18px;color:#0F1023;margin-top:3px">You</div></div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- A1 ORG DETAILS -->
+          <sc-if value="{{ isA1 }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <p style="font-size:14.5px;line-height:1.55;color:#5C574E;margin:0 0 18px">Confirm your organization details so certificates and reports are correct.</p>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;max-width:560px">
+                <label style="display:block"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Organization name</span><input value="{{ org.name }}" onChange="{{ onOrgName }}" style="width:100%;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0F1023;outline:none" style-focus="border-color:#5A3DF5"></label>
+                <label style="display:block"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Website</span><input value="{{ org.website }}" onChange="{{ onOrgWeb }}" style="width:100%;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0F1023;outline:none" style-focus="border-color:#5A3DF5"></label>
+                <label style="display:block"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Type</span><button onClick="{{ cycleType }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0F1023;background:#fff;cursor:pointer;font-family:inherit" style-hover="border-color:#5A3DF5">{{ org.type }}<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#9097A2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button></label>
+                <label style="display:block"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Team size</span><button onClick="{{ cycleTeam }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0F1023;background:#fff;cursor:pointer;font-family:inherit" style-hover="border-color:#5A3DF5">{{ org.team }}<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#9097A2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button></label>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- A2 INVITE -->
+          <sc-if value="{{ isA2 }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <p style="font-size:14.5px;line-height:1.55;color:#5C574E;margin:0 0 18px">Add a few teammates now — you can always invite more later, or bulk-import a CSV.</p>
+              <div style="display:flex;flex-direction:column;gap:10px;max-width:560px">
+                <sc-for list="{{ invites }}" as="row" hint-placeholder-count="2">
+                  <div style="display:flex;gap:10px;align-items:center">
+                    <input value="{{ row.email }}" onChange="{{ row.onEmail }}" placeholder="name@organization.org" style="flex:1;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0F1023;outline:none" style-focus="border-color:#5A3DF5">
+                    <button onClick="{{ row.cycleRole }}" style="display:flex;align-items:center;justify-content:space-between;gap:6px;width:128px;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13px;color:#0F1023;background:#fff;cursor:pointer;font-family:inherit" style-hover="border-color:#5A3DF5">{{ row.role }}<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#9097A2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+                    <sc-if value="{{ row.canRemove }}" hint-placeholder-val="{{ false }}"><button onClick="{{ row.remove }}" aria-label="Remove row" style="width:40px;height:42px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid #ECE4D4;background:#fff;border-radius:10px;color:#B0463A;cursor:pointer" style-hover="background:#DAF5FB;border-color:#F1C9BF"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg></button></sc-if>
+                  </div>
+                </sc-for>
+                <div style="display:flex;align-items:center;gap:12px;margin-top:4px"><button onClick="{{ addInvite }}" style="display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;font-family:inherit;color:#0F1023;border:1px dashed #C7CCDC;background:#fff;padding:9px 13px;border-radius:10px;cursor:pointer" style-hover="border-color:#0F1023"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg>Add row</button><button onClick="{{ uploadCsv }}" style="font-size:12.5px;font-weight:700;font-family:inherit;color:#5A3DF5;background:none;border:none;cursor:pointer" style-hover="text-decoration:underline">Upload CSV instead</button><span style="font-size:12px;color:#9AA1B4;margin-left:auto">{{ inviteHint }}</span></div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- A3 CHOOSE -->
+          <sc-if value="{{ isA3 }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <p style="font-size:14.5px;line-height:1.55;color:#5C574E;margin:0 0 18px">Pick what to assign first. Choose a full path for a role, or a single course. {{ chosenCount }}</p>
+              <div style="display:flex;flex-direction:column;gap:9px;max-width:580px">
+                <sc-for list="{{ assignables }}" as="a" hint-placeholder-count="4">
+                  <button onClick="{{ a.choose }}" aria-pressed="{{ a.aria }}" style="{{ a.style }}">
+                    <span style="{{ a.iconWrap }}"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="{{ a.iconColor }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ a.iconPath }}"></path></svg></span>
+                    <div style="flex:1;min-width:0;text-align:left"><div style="font-size:13.5px;font-weight:700;color:#0F1023">{{ a.title }}</div><div style="font-size:12px;color:#7C7669">{{ a.meta }}</div></div>
+                    <span style="{{ a.check }}"><sc-if value="{{ a.on }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg></sc-if></span>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- A4 ASSIGN -->
+          <sc-if value="{{ isA4 }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <p style="font-size:14.5px;line-height:1.55;color:#5C574E;margin:0 0 18px">Set who it's for and when it's due. You can change this anytime.</p>
+              <div style="border:1px solid #E7E9F2;border-radius:14px;padding:18px;max-width:560px">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #F2EBDD"><span style="font-size:12.5px;color:#7C7669">Training</span><span style="font-size:13.5px;font-weight:700;color:#0F1023">{{ assignSummary }}</span></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #F2EBDD"><span style="font-size:12.5px;color:#7C7669">Assign to</span><span style="font-size:13.5px;font-weight:700;color:#0F1023">{{ assignTo }}</span></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #F2EBDD"><span style="font-size:12.5px;color:#7C7669">Due date</span><span style="font-size:13.5px;font-weight:700;color:#0F1023">Jul 31, 2026</span></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0"><span style="font-size:12.5px;color:#7C7669">Status</span><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#B0463A;background:#DAF5FB;padding:4px 10px;border-radius:7px">Required</span></div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- A5 DONE -->
+          <sc-if value="{{ isA5 }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <div style="display:flex;align-items:center;gap:11px;margin-bottom:18px"><span style="width:42px;height:42px;border-radius:50%;background:#E4F0FF;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#2D8BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg></span><div><div style="font-family:'Poppins',serif;font-weight:800;font-size:19px;color:#0F1023">Workspace ready</div><div style="font-size:13px;color:#7C7669">Your team is invited and the first training is assigned.</div></div></div>
+              <p style="font-size:14px;line-height:1.55;color:#5C574E;margin:0 0 8px;max-width:520px">Head to your admin overview to watch progress roll in, send reminders, and assign more along the way.</p>
+            </div>
+          </sc-if>
+
+        </div>
+
+        <!-- FOOTER NAV -->
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 30px;border-top:1px solid #F0F2F8;background:#FCFAF5">
+          <button onClick="{{ back }}" style="{{ backStyle }}"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>Back</button>
+          <div style="display:flex;align-items:center;gap:10px">
+            <sc-if value="{{ notLast }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ next }}" disabled="{{ nextDisabled }}" style="{{ nextStyle }}">{{ nextLabel }}<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></button>
+            </sc-if>
+            <sc-if value="{{ isLast }}" hint-placeholder-val="{{ false }}">
+              <a href="{{ finishHref }}" style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#fff;background:#0F1023;padding:11px 22px;border-radius:11px" style-hover="background:#000">{{ finishLabel }}<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+            </sc-if>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { flow:'learner', step:0, ltype:null, interests:{}, chosen:{0:true},
+    invites:[{email:'james@raeform.org',role:'Learner'},{email:'',role:'Learner'}],
+    org:{ name:'Raeform Foundation', website:'raeform.org', type:'Nonprofit', team:'6–15 people' } };
+  ORG_TYPES = ['Nonprofit','For-profit','Education','Government','Other'];
+  TEAM_SIZES = ['1–5 people','6–15 people','16–50 people','51+ people'];
+  PATHS = {
+    nonprofitVA:{ name:'Nonprofit VA Path', meta:'4 courses · ~6 hrs · earns a certificate', courses:['Nonprofit Ops Foundations','Donor Records Cleanup','Comms VA','Board Admin Support'] },
+    webVA:{ name:'Website Maintenance VA Path', meta:'4 courses · ~5 hrs · earns a certificate', courses:['Web Care Basics','Content Updates & SEO','Backups & Security','Client Reporting'] },
+    bizOps:{ name:'Business Operations Path', meta:'4 courses · ~6 hrs · earns a certificate', courses:['Ops Foundations','SOP Builder','Automation Essentials','Workflow Design'] },
+    founder:{ name:'Founder Systems Path', meta:'5 courses · ~7 hrs · earns a certificate', courses:['Startup Systems','SOPs / Workflows','Automation Essentials','Grant Readiness','Hiring & Delegation'] },
+    foundations:{ name:'RaeLearn Foundations Path', meta:'3 courses · ~4 hrs · earns a certificate', courses:['Getting Organized','SOP Builder','Tools & Automation'] },
+  };
+  L_TITLES = ['Welcome','Your role','Your interests','Recommended path','Start learning'];
+  A_TITLES = ['Welcome','Organization','Invite learners','Choose training','Assign training','All set'];
+  L_HEAD = ['Welcome to RaeLearn','What best describes you?','What do you want to learn?','Your recommended path','Start your first course'];
+  A_HEAD = ['Welcome to your workspace','Confirm organization details','Invite your team','Choose training to assign','Assign your first training','Your workspace is ready'];
+  L_EYE = ['Get started','Step 1','Step 2','Step 3','Step 4'];
+  A_EYE = ['Get started','Step 1','Step 2','Step 3','Step 4','Step 5'];
+  TYPES = ['VA','Freelancer','Founder','Nonprofit Founder','Small Business Owner','Team Member','Student / Learner','Other'];
+  INTERESTS = ['Nonprofit Operations','Business Operations','VA Support','Website Maintenance','Donor / Fundraising Admin','Board Support','Startup Systems','SOPs / Workflows','Automation','Grant Readiness'];
+  componentDidMount(){
+    try{ const raw=localStorage.getItem('raelearn-onboarding'); if(raw){ const s=JSON.parse(raw); if(s&&typeof s==='object') this.setState(s); } }catch(e){}
+  }
+  componentDidUpdate(){
+    try{ const {flow,step,ltype,interests,chosen,invites,org}=this.state;
+      localStorage.setItem('raelearn-onboarding',JSON.stringify({flow,step,ltype,interests,chosen,invites,org})); }catch(e){}
+  }
+  pickPath(){
+    const t=this.state.ltype; const k=Object.keys(this.state.interests).filter(x=>this.state.interests[x]); const has=(n)=>k.includes(n);
+    let id='foundations';
+    if(has('Website Maintenance')) id='webVA';
+    else if(has('Nonprofit Operations')||has('Donor / Fundraising Admin')||has('Board Support')||has('Grant Readiness')||t==='Nonprofit Founder') id='nonprofitVA';
+    else if(t==='Founder'||has('Startup Systems')) id='founder';
+    else if(has('Business Operations')||has('Automation')||has('SOPs / Workflows')) id='bizOps';
+    else if(t==='VA'||has('VA Support')) id='nonprofitVA';
+    return this.PATHS[id];
+  }
+  setFlow(f){ this.setState({ flow:f, step:0 }); }
+  go(i){ this.setState({ step:i }); }
+  renderVals(){
+    const admin = this.state.flow==='admin';
+    const total = admin ? this.A_TITLES.length : this.L_TITLES.length;
+    const step = Math.min(this.state.step, total-1);
+    const titles = admin ? this.A_TITLES : this.L_TITLES;
+    const heads = admin ? this.A_HEAD : this.L_HEAD;
+    const eyes = admin ? this.A_EYE : this.L_EYE;
+
+    const rail = titles.map((title,i)=>{
+      const done=i<step, current=i===step;
+      return { title, num:(i+1), go:()=>this.go(i),
+        showNum:!done, done,
+        weight: current?'700':'600',
+        color: current?'#0F1023':done?'#4B5563':'#A6ACC0',
+        row:'display:flex;align-items:center;gap:11px;padding:8px 9px;border-radius:9px;border:none;cursor:pointer;font-family:inherit;width:100%;'+(current?'background:#F3F8F7':'background:transparent'),
+        dot:'width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;'+(done?'background:#5A3DF5;color:#fff':current?'background:#5A3DF5;color:#fff':'background:#EEF1F8;color:#A6ACC0') };
+    });
+
+    const tabBtn=(on)=>'font-size:12.5px;font-weight:700;font-family:inherit;padding:7px 14px;border-radius:9px;border:none;cursor:pointer;'+(on?'background:#fff;color:#0F1023;box-shadow:0 1px 2px rgba(15,16,35,.12)':'background:transparent;color:#857E70');
+
+    // learner type chips
+    const types=this.TYPES.map(label=>{ const on=this.state.ltype===label; return { label, aria:on?'true':'false',
+      choose:()=>this.setState({ltype:label}),
+      style:'font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;padding:13px 12px;border-radius:11px;text-align:center;'+(on?'background:#F3F8F7;border:1.5px solid #5A3DF5;color:#0E5A50':'background:#fff;border:1px solid #E1E5F0;color:#3D4A66') }; });
+
+    // interests chips
+    const interests=this.INTERESTS.map(label=>{ const on=!!this.state.interests[label]; return { label, aria:on?'true':'false',
+      choose:()=>this.setState(s=>({interests:{...s.interests,[label]:!s.interests[label]}})),
+      tick:'width:14px;height:14px;border-radius:5px;display:inline-block;flex-shrink:0;'+(on?'background:#5A3DF5':'background:#fff;border:1.5px solid #C7CCDC'),
+      style:'display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;padding:9px 13px;border-radius:99px;'+(on?'background:#F3F8F7;border:1.5px solid #5A3DF5;color:#0E5A50':'background:#fff;border:1px solid #E1E5F0;color:#3D4A66') }; });
+    const icount=Object.values(this.state.interests).filter(Boolean).length;
+
+    // admin assignables
+    const AI={ path:['#EDE7F9','#7B61FF','M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM6 17V9a4 4 0 0 1 4-4h6'], course:['#ECE9FE','#5A3DF5','M4 6h16M4 12h16M4 18h10'] };
+    const ASSIGN=[
+      {kind:'path', title:'Nonprofit VA Path', meta:'4 courses · for new VAs'},
+      {kind:'course', title:'Donor Records Cleanup', meta:'Certificate course · ~4.5 hrs'},
+      {kind:'course', title:'SOP Builder Course', meta:'Operations · ~3 hrs'},
+      {kind:'path', title:'Website Maintenance VA Path', meta:'4 courses · for web VAs'},
+    ];
+    const assignables=ASSIGN.map((a,i)=>{ const ic=AI[a.kind]; const on=!!this.state.chosen[i]; return {
+      title:a.title, meta:a.meta, aria:on?'true':'false', on,
+      choose:()=>this.setState(s=>({chosen:{...s.chosen,[i]:!s.chosen[i]}})),
+      iconColor:ic[1], iconPath:ic[2], iconWrap:'width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:'+ic[0],
+      check:'width:20px;height:20px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;'+(on?'background:#5A3DF5;border:1px solid #5A3DF5':'background:#fff;border:1.5px solid #C7CCDC'),
+      style:'display:flex;align-items:center;gap:13px;width:100%;font-family:inherit;cursor:pointer;padding:13px 15px;border-radius:13px;'+(on?'background:#F3F8F7;border:1.5px solid #5A3DF5':'background:#fff;border:1px solid #E1E5F0') }; });
+    const chosenN=Object.values(this.state.chosen).filter(Boolean).length;
+    const firstChosen=ASSIGN[Object.keys(this.state.chosen).find(k=>this.state.chosen[k])] || ASSIGN[0];
+    const assignSummary = chosenN>1 ? (firstChosen.title+' +'+(chosenN-1)+' more') : firstChosen.title;
+
+    // recommended path (derived from role + interests)
+    const picked=this.pickPath();
+    const topInterest=Object.keys(this.state.interests).find(k=>this.state.interests[k]);
+    const lt=this.state.ltype;
+    const pathReason = lt&&topInterest ? ("Because you're a "+lt+" focused on "+topInterest+", this path is the fastest route to job-ready skills.")
+      : lt ? ("Because you're a "+lt+", we picked the fastest route to job-ready skills.")
+      : topInterest ? ("Because you're interested in "+topInterest+", we picked the fastest route to job-ready skills.")
+      : 'Based on your answers, this path is the fastest route to job-ready skills.';
+
+    // admin invites (functional, controlled)
+    const invites=(this.state.invites||[]).map((r,i)=>({
+      email:r.email, role:r.role, canRemove:(this.state.invites||[]).length>1,
+      onEmail:(e)=>{ const v=e.target.value; this.setState(s=>{ const arr=s.invites.slice(); arr[i]={...arr[i],email:v}; return {invites:arr}; }); },
+      cycleRole:()=>this.setState(s=>{ const arr=s.invites.slice(); arr[i]={...arr[i],role:arr[i].role==='Learner'?'Admin':'Learner'}; return {invites:arr}; }),
+      remove:()=>this.setState(s=>({invites:s.invites.filter((_,j)=>j!==i)})),
+    }));
+    const invitedCount=(this.state.invites||[]).filter(r=>(r.email||'').trim()).length;
+
+    // org details (controlled)
+    const org=this.state.org;
+    const cycleArr=(arr,cur)=>arr[(arr.indexOf(cur)+1)%arr.length];
+
+    // gating
+    const nextDisabled = (!admin&&step===1&&!this.state.ltype) || (!admin&&step===2&&icount===0) || (admin&&step===3&&chosenN===0);
+    const nextStyle='display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;font-family:inherit;color:#fff;padding:11px 20px;border-radius:11px;transition:background .15s;'+(nextDisabled?'background:#BFE0DA;cursor:not-allowed':'background:#5A3DF5;cursor:pointer');
+
+    // checklist (admin)
+    const CL=['Complete organization profile','Invite learners','Assign first course','Assign first learning path','Review progress dashboard'];
+    const clDone=[step>=1, step>=2, step>=4, step>=4, step>=5];
+    const checklist=CL.map((label,i)=>({ label, done:clDone[i], color:clDone[i]?'#9AA1B4':'#4B5563',
+      box:'width:18px;height:18px;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;'+(clDone[i]?'background:#5A3DF5;border:1px solid #5A3DF5':'background:#fff;border:1.5px solid #C7CCDC') }));
+
+    const isLast = step===total-1;
+    const finishHref = admin ? 'Group Admin Dashboard.dc.html' : 'Learner Dashboard.dc.html';
+
+    return {
+      isAdmin:admin,
+      setLearner:()=>this.setFlow('learner'), setAdmin:()=>this.setFlow('admin'),
+      learnerTab:tabBtn(!admin), adminTab:tabBtn(admin),
+      skipHref:finishHref,
+      stepNum:step+1, stepTotal:total, progressPct:Math.round((step+1)/total*100),
+      rail, checklist,
+      eyebrow:eyes[step], heading:heads[step], stepKey:this.state.flow+step,
+      isL0:!admin&&step===0, isL1:!admin&&step===1, isL2:!admin&&step===2, isL3:!admin&&step===3, isL4:!admin&&step===4,
+      isA0:admin&&step===0, isA1:admin&&step===1, isA2:admin&&step===2, isA3:admin&&step===3, isA4:admin&&step===4, isA5:admin&&step===5,
+      types, interests, interestCount:icount?('· '+icount+' selected'):'',
+      pathName:picked.name, pathMeta:picked.meta, pathCourses:picked.courses, pathReason,
+      assignables, chosenCount:chosenN?('· '+chosenN+' selected'):'', assignSummary,
+      assignTo:'All learners ('+invitedCount+' invited)',
+      invites, invitedCount, inviteHint: invitedCount?(invitedCount+' to invite'):'No emails yet',
+      addInvite:()=>this.setState(s=>({invites:[...s.invites,{email:'',role:'Learner'}]})),
+      uploadCsv:()=>this.setState(s=>{ const sample=[{email:'maria@raeform.org',role:'Learner'},{email:'devon@raeform.org',role:'Learner'},{email:'priya@raeform.org',role:'Admin'}]; const kept=s.invites.filter(r=>(r.email||'').trim()); return {invites:[...kept,...sample]}; }),
+      org,
+      onOrgName:(e)=>{ const v=e.target.value; this.setState(s=>({org:{...s.org,name:v}})); },
+      onOrgWeb:(e)=>{ const v=e.target.value; this.setState(s=>({org:{...s.org,website:v}})); },
+      cycleType:()=>this.setState(s=>({org:{...s.org,type:cycleArr(this.ORG_TYPES,s.org.type)}})),
+      cycleTeam:()=>this.setState(s=>({org:{...s.org,team:cycleArr(this.TEAM_SIZES,s.org.team)}})),
+      back:()=>this.go(Math.max(0,step-1)),
+      backStyle:'display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;font-family:inherit;padding:10px 15px;border-radius:10px;cursor:pointer;border:1px solid #E1E5F0;background:#fff;'+(step===0?'color:#C7CCDC;pointer-events:none;opacity:.5':'color:#4B5563'),
+      next:()=>{ if(nextDisabled) return; this.go(Math.min(total-1,step+1)); }, nextLabel: step===0?'Get started':'Continue',
+      nextStyle, nextDisabled,
+      notLast:!isLast, isLast,
+      finishHref, finishLabel: admin?'Go to admin overview':'Go to my dashboard',
+      noop:()=>{},
+    };
+  }
+}
+</script>
+</body>
+</html>

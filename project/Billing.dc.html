@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+    @media (max-width:900px){#bill-grid{grid-template-columns:1fr !important}}
+  </style>
+</helmet>
+
+<div style="display:flex;align-items:stretch;min-height:100vh">
+  <dc-import name="AppSidebar" mode="{{ sidebarMode }}" current="billing" hint-size="248px,100%" style="flex:0 0 248px"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;background:#F1F3FB">
+    <dc-import name="AppTopBar" mode="{{ sidebarMode }}" eyebrow="Account" title="Billing" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+    <main style="flex:1;width:100%;max-width:1000px;margin:0 auto;padding:26px 30px 64px">
+
+      <!-- VIEW SWITCH -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px">
+        <p style="font-size:14px;color:#6F695F;margin:0;max-width:480px">Purchases, subscriptions, invoices, and seats — kept separate from your learning.</p>
+        <div style="display:inline-flex;background:#E7E9F2;border-radius:11px;padding:3px;gap:2px">
+          <button onClick="{{ showLearner }}" style="{{ learnerTab }}">Individual</button>
+          <button onClick="{{ showAdmin }}" style="{{ adminTab }}">Organization</button>
+        </div>
+      </div>
+
+      <!-- ============ INDIVIDUAL ============ -->
+      <sc-if value="{{ isLearnerView }}" hint-placeholder-val="{{ true }}">
+        <div id="bill-grid" style="display:grid;grid-template-columns:1.5fr 1fr;gap:22px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:22px;min-width:0">
+
+            <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:24px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><h2 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;margin:0;color:#0F1023">Purchased courses</h2><a href="Courses.dc.html" style="font-size:13px;font-weight:700;color:#5A3DF5">Browse →</a></div>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ purchases }}" as="p" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid #F0F2F8">
+                    <span style="width:38px;height:38px;border-radius:10px;background:#ECE9FE;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v13"></path><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4H12v13H5.5A2.5 2.5 0 0 0 3 19.5z"></path><path d="M21 6.5A2.5 2.5 0 0 0 18.5 4H12"></path></svg></span>
+                    <div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:700;color:#0F1023">{{ p.title }}</div><div style="font-size:12px;color:#8A90A6;margin-top:2px">{{ p.date }}</div></div>
+                    <span style="font-family:'Poppins',serif;font-weight:700;font-size:15px;color:#0F1023">{{ p.price }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </section>
+
+            <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:24px">
+              <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;margin:0 0 16px;color:#0F1023">Receipts &amp; invoices</h2>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ receipts }}" as="r" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid #F0F2F8">
+                    <div style="display:flex;align-items:center;gap:11px"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#9AA1B4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg><div><div style="font-size:13.5px;font-weight:700;color:#0F1023">{{ r.id }}</div><div style="font-size:11.5px;color:#9AA1B4">{{ r.date }}</div></div></div>
+                    <div style="display:flex;align-items:center;gap:16px"><span style="font-size:13.5px;font-weight:700;color:#3D4A66">{{ r.amount }}</span><a href="#" style="font-size:12.5px;font-weight:700;color:#5A3DF5">Download</a></div>
+                  </div>
+                </sc-for>
+              </div>
+            </section>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:22px;min-width:0">
+            <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:22px">
+              <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 14px;color:#0F1023">Payment method</h2>
+              <div style="display:flex;align-items:center;gap:13px;padding:14px;background:#F6F8FD;border:1px solid #EEF1F8;border-radius:12px">
+                <span style="width:42px;height:30px;border-radius:6px;background:#0F1023;color:#00C6E8;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">VISA</span>
+                <div style="flex:1"><div style="font-size:13.5px;font-weight:700;color:#0F1023">•••• 4242</div><div style="font-size:11.5px;color:#8A90A6">Expires 08/27</div></div>
+                <a href="#" style="font-size:12.5px;font-weight:700;color:#5A3DF5">Edit</a>
+              </div>
+            </section>
+            <section style="background:linear-gradient(135deg,#5A3DF5 0%,#0B6F64 100%);border-radius:16px;padding:22px;color:#fff">
+              <div style="font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#BFE6E0">Subscription</div>
+              <h3 style="font-family:'Poppins',serif;font-weight:800;font-size:21px;margin:6px 0 4px">Individual · Free</h3>
+              <p style="font-size:13px;color:#DCF0EC;margin:0 0 16px">Pay per course. Upgrade to All-Access for unlimited courses and paths.</p>
+              <a href="Pricing.dc.html" style="display:inline-block;font-size:13px;font-weight:700;color:#5A3DF5;background:#fff;padding:10px 16px;border-radius:9px" style-hover="background:#F1F3FB">Upgrade plan</a>
+            </section>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ ORGANIZATION ============ -->
+      <sc-if value="{{ isAdminView }}" hint-placeholder-val="{{ false }}">
+        <div id="bill-grid" style="display:grid;grid-template-columns:1.5fr 1fr;gap:22px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:22px;min-width:0">
+
+            <section style="background:#0F1023;border-radius:16px;padding:24px;color:#fff">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+                <div><div style="font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#8B93A4">Current plan</div><h2 style="font-family:'Poppins',serif;font-weight:800;font-size:22px;margin:5px 0 2px">Team · Raeform Foundation</h2><p style="font-size:13px;color:#AEB6C6;margin:0">$49 / mo · renews Jul 14, 2026</p></div>
+                <div style="display:flex;gap:9px;flex-wrap:wrap"><a href="#" style="font-size:13px;font-weight:700;color:#0F1023;background:#00C6E8;padding:10px 15px;border-radius:9px" style-hover="background:#EEB652">Upgrade</a><a href="#" style="font-size:13px;font-weight:700;color:#fff;border:1.5px solid rgba(255,255,255,.3);padding:10px 15px;border-radius:9px">Downgrade</a></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:14px;margin-top:20px"><div style="flex:1;height:8px;background:#2C3650;border-radius:99px;overflow:hidden"><div style="height:100%;width:80%;background:#00C6E8;border-radius:99px"></div></div><span style="font-size:13px;font-weight:700;color:#00C6E8;white-space:nowrap">12 / 15 seats</span></div>
+            </section>
+
+            <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:24px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px"><h2 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;margin:0;color:#0F1023">Seats</h2><a href="#" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#fff;background:#0F1023;padding:9px 14px;border-radius:9px" style-hover="background:#080814"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg>Add seats</a></div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+                <div style="background:#EEF1F8;border-radius:12px;padding:16px;text-align:center"><div style="font-family:'Poppins',serif;font-weight:800;font-size:26px;color:#0F1023">15</div><div style="font-size:12px;color:#8A90A6;font-weight:600">Total</div></div>
+                <div style="background:#EEF1F8;border-radius:12px;padding:16px;text-align:center"><div style="font-family:'Poppins',serif;font-weight:800;font-size:26px;color:#5A3DF5">12</div><div style="font-size:12px;color:#8A90A6;font-weight:600">Active</div></div>
+                <div style="background:#EEF1F8;border-radius:12px;padding:16px;text-align:center"><div style="font-family:'Poppins',serif;font-weight:800;font-size:26px;color:#7B61FF">3</div><div style="font-size:12px;color:#8A90A6;font-weight:600">Unused</div></div>
+              </div>
+            </section>
+
+            <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:24px">
+              <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:19px;margin:0 0 16px;color:#0F1023">Invoices</h2>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ orgInvoices }}" as="r" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid #F0F2F8">
+                    <div style="display:flex;align-items:center;gap:11px"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#9AA1B4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg><div><div style="font-size:13.5px;font-weight:700;color:#0F1023">{{ r.id }}</div><div style="font-size:11.5px;color:#9AA1B4">{{ r.date }}</div></div></div>
+                    <div style="display:flex;align-items:center;gap:16px"><span style="font-size:13.5px;font-weight:700;color:#3D4A66">{{ r.amount }}</span><a href="#" style="font-size:12.5px;font-weight:700;color:#5A3DF5">Download</a></div>
+                  </div>
+                </sc-for>
+              </div>
+            </section>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:22px;min-width:0">
+            <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:22px">
+              <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 14px;color:#0F1023">Payment method</h2>
+              <div style="display:flex;align-items:center;gap:13px;padding:14px;background:#F6F8FD;border:1px solid #EEF1F8;border-radius:12px">
+                <span style="width:42px;height:30px;border-radius:6px;background:#0F1023;color:#00C6E8;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">VISA</span>
+                <div style="flex:1"><div style="font-size:13.5px;font-weight:700;color:#0F1023">•••• 8810</div><div style="font-size:11.5px;color:#8A90A6">Expires 03/28</div></div>
+                <a href="#" style="font-size:12.5px;font-weight:700;color:#5A3DF5">Edit</a>
+              </div>
+            </section>
+            <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:22px">
+              <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 14px;color:#0F1023">Billing details</h2>
+              <div style="display:flex;flex-direction:column">
+                <div style="padding:11px 0;border-bottom:1px solid #F0F2F8"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#A6ACC0">Billing email</div><div style="font-size:14px;font-weight:600;color:#0F1023;margin-top:3px">finance@raeform.org</div></div>
+                <div style="padding:11px 0;border-bottom:1px solid #F0F2F8"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#A6ACC0">Renewal date</div><div style="font-size:14px;font-weight:600;color:#0F1023;margin-top:3px">Jul 14, 2026</div></div>
+                <div style="padding:11px 0"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#A6ACC0">Billing contact</div><div style="font-size:14px;font-weight:600;color:#0F1023;margin-top:3px">Maria Sandoval</div></div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </sc-if>
+
+    </main>
+
+    <dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { view: 'learner' };
+  renderVals() {
+    const view = this.state.view;
+    const tab = (on) => 'display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:9px;font-size:13px;font-family:inherit;border:none;cursor:pointer;' +
+      (on ? 'background:#FFFFFF;color:#0F1023;font-weight:700;box-shadow:0 1px 2px rgba(15,16,35,.12)' : 'background:transparent;color:#857E70;font-weight:600');
+    return {
+      sidebarMode: view === 'admin' ? 'admin' : 'learner',
+      isLearnerView: view === 'learner',
+      isAdminView: view === 'admin',
+      learnerTab: tab(view === 'learner'),
+      adminTab: tab(view === 'admin'),
+      showLearner: () => this.setState({ view: 'learner' }),
+      showAdmin: () => this.setState({ view: 'admin' }),
+      purchases: [
+        { title: 'Board Meeting Prep', date: 'Purchased Jun 2, 2026', price: '$39' },
+        { title: 'Grant Writing for VAs', date: 'Purchased Mar 18, 2026', price: '$49' },
+        { title: 'Compliance Calendar Support', date: 'Purchased Feb 4, 2026', price: '$29' },
+      ],
+      receipts: [
+        { id: 'INV-2046', date: 'Jun 2, 2026', amount: '$39.00' },
+        { id: 'INV-1985', date: 'Mar 18, 2026', amount: '$49.00' },
+        { id: 'INV-1903', date: 'Feb 4, 2026', amount: '$29.00' },
+      ],
+      orgInvoices: [
+        { id: 'INV-RF-0094', date: 'Jun 14, 2026', amount: '$49.00' },
+        { id: 'INV-RF-0081', date: 'May 14, 2026', amount: '$49.00' },
+        { id: 'INV-RF-0068', date: 'Apr 14, 2026', amount: '$49.00' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

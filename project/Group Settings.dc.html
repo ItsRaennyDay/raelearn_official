@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3F6;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+    input,select{font-family:inherit}
+    @media (max-width:920px){#st-grid{grid-template-columns:1fr !important}#st-side{position:static !important}}
+  </style>
+</helmet>
+
+<div style="display:flex;align-items:stretch;min-height:100vh">
+  <dc-import name="AppSidebar" mode="admin" current="org" hint-size="248px,100%" style="flex:0 0 248px"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;background:#F1F3F6">
+    <dc-import name="AppTopBar" mode="admin" eyebrow="Raeform Foundation" title="Organization Settings" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+    <main style="flex:1;width:100%;max-width:1200px;margin:0 auto;padding:24px 30px 64px">
+
+      <div style="font-size:12.5px;font-weight:600;color:#8A8F99;margin-bottom:14px"><a href="Group Admin Dashboard.dc.html" style="color:#8A8F99" style-hover="color:#0F1023">Overview</a> <span style="margin:0 6px">/</span> Organization Settings</div>
+
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px">
+        <div>
+          <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:26px;margin:0;color:#0F1023">Organization settings</h1>
+          <p style="font-size:13.5px;color:#7C828C;margin:5px 0 0">Manage your organization profile, admins, and preferences.</p>
+        </div>
+        <button onClick="{{ noop }}" style="font-size:13px;font-weight:700;font-family:inherit;color:#fff;background:#0F1023;padding:10px 18px;border-radius:10px;cursor:pointer" style-hover="background:#080814">Save changes</button>
+      </div>
+
+      <div id="st-grid" style="display:grid;grid-template-columns:1.6fr 1fr;gap:20px;align-items:start">
+
+        <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+
+          <!-- PROFILE -->
+          <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:24px">
+            <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 18px;color:#0F1023">Organization profile</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <label style="display:block"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Organization name</span><input value="Raeform Foundation" style="width:100%;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0F1023;background:#fff;outline:none" style-focus="border-color:#5A3DF5"></label>
+              <label style="display:block"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Website</span><input value="raeform.org" style="width:100%;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0F1023;background:#fff;outline:none" style-focus="border-color:#5A3DF5"></label>
+              <label style="display:block"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Organization type</span><div style="display:flex;align-items:center;justify-content:space-between;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0F1023;background:#fff">Nonprofit<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#9097A2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></div></label>
+              <label style="display:block"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Industry / category</span><div style="display:flex;align-items:center;justify-content:space-between;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0F1023;background:#fff">Community &amp; social services<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#9097A2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></div></label>
+              <label style="display:block"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Country</span><div style="display:flex;align-items:center;justify-content:space-between;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0F1023;background:#fff">United States<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#9097A2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></div></label>
+              <label style="display:block"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">State / region</span><input value="Oregon" style="width:100%;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0F1023;background:#fff;outline:none" style-focus="border-color:#5A3DF5"></label>
+            </div>
+          </section>
+
+          <!-- PERMISSIONS -->
+          <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:24px">
+            <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 6px;color:#0F1023">Admins &amp; permissions</h2>
+            <p style="font-size:12.5px;color:#7C828C;margin:0 0 16px">Control who can manage learners and assignments.</p>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px">
+              <sc-for list="{{ admins }}" as="a" hint-placeholder-count="2">
+                <div style="display:flex;align-items:center;gap:12px;background:#F7F8FA;border:1px solid #EEF0F3;border-radius:11px;padding:11px 14px">
+                  <span style="{{ a.avStyle }}">{{ a.initials }}</span>
+                  <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:#0F1023">{{ a.name }}</div><div style="font-size:11.5px;color:#7C828C">{{ a.email }}</div></div>
+                  <span style="{{ a.badge }}">{{ a.role }}</span>
+                </div>
+              </sc-for>
+              <button onClick="{{ noop }}" style="display:inline-flex;align-items:center;gap:7px;align-self:flex-start;font-size:12.5px;font-weight:700;font-family:inherit;color:#0F1023;border:1px dashed #C9CDD4;background:#fff;padding:9px 14px;border-radius:10px;cursor:pointer" style-hover="border-color:#0F1023"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg>Add admin</button>
+            </div>
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ perms }}" as="p" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-top:1px solid #F0F2F5">
+                  <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600;color:#0F1023">{{ p.title }}</div><div style="font-size:12px;color:#7C828C">{{ p.desc }}</div></div>
+                  <button onClick="{{ p.toggle }}" aria-pressed="{{ p.aria }}" style="{{ p.track }}"><span style="{{ p.knob }}"></span></button>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+
+          <!-- NOTIFICATIONS -->
+          <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:24px">
+            <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 6px;color:#0F1023">Notification preferences</h2>
+            <p style="font-size:12.5px;color:#7C828C;margin:0 0 10px">Choose what the admin team is emailed about.</p>
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="4">
+                <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-top:1px solid #F0F2F5">
+                  <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600;color:#0F1023">{{ n.title }}</div><div style="font-size:12px;color:#7C828C">{{ n.desc }}</div></div>
+                  <button onClick="{{ n.toggle }}" aria-pressed="{{ n.aria }}" style="{{ n.track }}"><span style="{{ n.knob }}"></span></button>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+
+          <!-- BRANDING -->
+          <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:24px">
+            <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 6px;color:#0F1023">Branding</h2>
+            <p style="font-size:12.5px;color:#7C828C;margin:0 0 16px">Add your logo so learners recognise your organization.</p>
+            <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+              <div style="width:64px;height:64px;border-radius:14px;background:#00C6E8;color:#0F1023;font-family:'Poppins',serif;font-weight:800;font-size:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0">R</div>
+              <div style="flex:1;min-width:160px">
+                <button onClick="{{ noop }}" style="font-size:12.5px;font-weight:700;font-family:inherit;color:#3A4254;border:1px solid #D7DBE2;background:#fff;padding:9px 14px;border-radius:10px;cursor:pointer" style-hover="background:#F7F8FA">Upload logo</button>
+                <p style="font-size:11.5px;color:#9097A2;margin:9px 0 0">PNG or SVG, at least 256×256px.</p>
+              </div>
+              <div style="display:flex;align-items:center;gap:9px">
+                <span style="font-size:12px;font-weight:600;color:#7C828C">Accent</span>
+                <span style="width:26px;height:26px;border-radius:8px;background:#00C6E8;border:2px solid #fff;box-shadow:0 0 0 1.5px #00C6E8"></span>
+                <span style="width:26px;height:26px;border-radius:8px;background:#5A3DF5"></span>
+                <span style="width:26px;height:26px;border-radius:8px;background:#7B61FF"></span>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div id="st-side" style="position:sticky;top:88px;display:flex;flex-direction:column;gap:16px;min-width:0">
+          <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:20px 22px">
+            <div style="font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#9097A2;margin-bottom:14px">Primary admin</div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+              <span style="width:44px;height:44px;border-radius:50%;background:#0F1023;color:#00C6E8;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0">MS</span>
+              <div style="min-width:0"><div style="font-size:14px;font-weight:700;color:#0F1023">Maria Sandoval</div><div style="font-size:12px;color:#7C828C">maria@raeform.org</div></div>
+            </div>
+            <button onClick="{{ noop }}" style="width:100%;font-size:12.5px;font-weight:700;font-family:inherit;color:#3A4254;border:1px solid #D7DBE2;background:#fff;padding:10px;border-radius:10px;cursor:pointer" style-hover="background:#F7F8FA">Transfer primary admin</button>
+          </section>
+          <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:20px 22px">
+            <div style="font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#9097A2;margin-bottom:12px">Team</div>
+            <div style="display:flex;flex-direction:column;gap:11px">
+              <div style="display:flex;align-items:center;justify-content:space-between;font-size:13px"><span style="color:#7C828C">Admins</span><span style="font-weight:700;color:#0F1023">2</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;font-size:13px"><span style="color:#7C828C">Learners</span><span style="font-weight:700;color:#0F1023">12</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;font-size:13px"><span style="color:#7C828C">Plan</span><span style="font-weight:700;color:#0F1023">Team</span></div>
+            </div>
+          </section>
+          <section style="background:#F6F8FD;border:1px solid #EEF1F8;border-radius:16px;padding:18px 20px">
+            <div style="font-size:13.5px;font-weight:700;color:#0F1023;margin-bottom:4px">Plan &amp; billing</div>
+            <p style="font-size:12px;line-height:1.5;color:#7A6A4A;margin:0 0 12px">Seats, invoices, and payment are managed in your account billing.</p>
+            <a href="Billing.dc.html" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:#9c6c12" style-hover="text-decoration:underline">Go to billing<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></a>
+          </section>
+        </div>
+
+      </div>
+    </main>
+
+    <dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    perms:{ invite:true, selfEnroll:false, requireDue:true },
+    notifs:{ digest:true, overdue:true, certs:true, inactivity:false },
+  };
+  sw(on){ return {
+    track:'position:relative;width:42px;height:24px;border-radius:99px;border:none;cursor:pointer;flex-shrink:0;transition:background .2s;background:'+(on?'#5A3DF5':'#D7DBE2'),
+    knob:'position:absolute;top:3px;left:'+(on?'21px':'3px')+';width:18px;height:18px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)',
+    aria:on?'true':'false',
+  }; }
+  renderVals(){
+    const initials=(n)=>n.split(' ').map(w=>w[0]).join('').slice(0,2);
+    const av=(bg,c)=>'width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;background:'+bg+';color:'+c;
+    const admins=[
+      {name:'Maria Sandoval', email:'maria@raeform.org', role:'Primary admin', primary:true, av:['#0F1023','#00C6E8']},
+      {name:'James Tran', email:'james@raeform.org', role:'Admin', primary:false, av:['#DAF5FB','#7B61FF']},
+    ].map(a=>({ name:a.name, email:a.email, role:a.role, initials:initials(a.name), avStyle:av(a.av[0],a.av[1]),
+      badge:'font-size:10.5px;font-weight:800;padding:4px 9px;border-radius:6px;white-space:nowrap;flex-shrink:0;'+(a.primary?'color:#9c6c12;background:#ECE9FE':'color:#5A6070;background:#EEF0F3') }));
+
+    const P=this.state.perms;
+    const permDefs=[
+      ['invite','Admins can invite learners','Any admin can send invitations and bulk imports'],
+      ['selfEnroll','Learners can self-enroll','Allow learners to add optional courses themselves'],
+      ['requireDue','Require due dates on assignments','Every assignment must include a due date'],
+    ];
+    const perms=permDefs.map(([k,title,desc])=>{ const s=this.sw(P[k]); return { title, desc, ...s, toggle:()=>this.setState(st=>({perms:{...st.perms,[k]:!st.perms[k]}})) }; });
+
+    const N=this.state.notifs;
+    const notifDefs=[
+      ['digest','Weekly progress digest','A Monday summary of team progress'],
+      ['overdue','Overdue assignment alerts','Email when an assignment passes its due date'],
+      ['certs','New certificate earned','Notify when a learner earns a certificate'],
+      ['inactivity','Learner inactivity','Flag learners inactive for 14+ days'],
+    ];
+    const notifs=notifDefs.map(([k,title,desc])=>{ const s=this.sw(N[k]); return { title, desc, ...s, toggle:()=>this.setState(st=>({notifs:{...st.notifs,[k]:!st.notifs[k]}})) }; });
+
+    return { admins, perms, notifs, noop:()=>{} };
+  }
+}
+</script>
+</body>
+</html>

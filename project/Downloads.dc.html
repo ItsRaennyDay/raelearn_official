@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+  </style>
+</helmet>
+
+<div style="display:flex;align-items:stretch;min-height:100vh">
+  <dc-import name="AppSidebar" mode="learner" current="downloads" hint-size="248px,100%" style="flex:0 0 248px"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;background:#F1F3FB">
+    <dc-import name="AppTopBar" mode="learner" eyebrow="Library" title="Downloads &amp; Resources" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+    <main style="flex:1;width:100%;max-width:1020px;margin:0 auto;padding:26px 30px 64px">
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px">
+        <span style="font-size:13px;font-weight:700;color:#fff;background:#0F1023;padding:9px 15px;border-radius:99px">All files</span>
+        <span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:9px 15px;border-radius:99px">Templates</span>
+        <span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:9px 15px;border-radius:99px">Checklists</span>
+        <span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:9px 15px;border-radius:99px">Workbooks</span>
+        <span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:9px 15px;border-radius:99px">Trackers</span>
+      </div>
+
+      <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+        <section style="margin-bottom:26px">
+          <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 13px;color:#0F1023">{{ g.label }}</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">
+            <sc-for list="{{ g.items }}" as="d" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:13px;background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:15px 16px">
+                <span style="{{ d.iconWrap }}">{{ d.ext }}</span>
+                <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:700;color:#0F1023;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ d.title }}</div><div style="font-size:11.5px;color:#9AA1B4;margin-top:1px">{{ d.meta }}</div></div>
+                <a href="#" title="Download" style="width:34px;height:34px;border-radius:9px;border:1px solid #E1E5F0;display:flex;align-items:center;justify-content:center;color:#4B5563;flex-shrink:0" style-hover="background:#F6F8FD;color:#0F1023"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path></svg></a>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+      </sc-for>
+
+    </main>
+
+    <dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals() {
+    const extColor = (e) => ({ XLSX:['#E4F0FF','#2D8BFF'], PDF:['#DAF5FB','#C0432F'], DOCX:['#E2EEF2','#1F6F8B'], ZIP:['#EDE7F9','#7B61FF'] }[e] || ['#EFEAE0','#857E70']);
+    const mk = (title, ext, meta) => {
+      const c = extColor(ext);
+      return { title, ext, meta, iconWrap: 'width:40px;height:40px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:800;background:'+c[0]+';color:'+c[1] };
+    };
+    const groups = [
+      { label:'From your courses', items:[
+        mk('Donor records template','XLSX','From Donor Records Cleanup · 48 KB'),
+        mk('Compliance calendar starter','PDF','From Compliance Calendar Support · 120 KB'),
+        mk('Inbox triage workbook','DOCX','From Inbox & Calendar Systems · 64 KB'),
+        mk('Website maintenance checklist','PDF','From Website Maintenance · 90 KB'),
+      ]},
+      { label:'RaeLearn resource library', items:[
+        mk('Weekly client report template','DOCX','Template · 36 KB'),
+        mk('VA onboarding checklist','PDF','Checklist · 90 KB'),
+        mk('Grant deadline tracker','XLSX','Tracker · 52 KB'),
+        mk('Board meeting prep kit','ZIP','Workbook bundle · 1.2 MB'),
+      ]},
+    ];
+    return { groups };
+  }
+}
+</script>
+</body>
+</html>

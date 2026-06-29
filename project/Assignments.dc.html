@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+  </style>
+</helmet>
+
+<div style="display:flex;align-items:stretch;min-height:100vh">
+  <dc-import name="AppSidebar" mode="learner" current="assignments" hint-size="248px,100%" style="flex:0 0 248px"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;background:#F1F3FB">
+    <dc-import name="AppTopBar" mode="learner" eyebrow="My learning" title="Assignments" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+    <main style="flex:1;width:100%;max-width:1000px;margin:0 auto;padding:26px 30px 64px">
+
+      <div style="display:flex;align-items:center;gap:10px;background:#F3EFF8;border:1px solid #E3D9F2;border-radius:12px;padding:13px 16px;margin-bottom:22px">
+        <span style="width:34px;height:34px;border-radius:9px;background:#EDE7F9;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></span>
+        <div style="flex:1"><div style="font-size:13.5px;font-weight:700;color:#3A2E5C">Assigned by Raeform Foundation</div><div style="font-size:12px;color:#7A6E9C">These are set by your organization admin and are view-only — you can't reassign them.</div></div>
+      </div>
+
+      <!-- DUE / OVERDUE -->
+      <section style="margin-bottom:24px">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0;color:#0F1023">Active</h2><span style="font-size:11.5px;font-weight:800;color:#B0463A;background:#DAF5FB;padding:3px 9px;border-radius:6px">1 overdue</span></div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ active }}" as="a" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:16px;background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:17px 19px;flex-wrap:wrap;{{ a.edge }}">
+              <span style="width:44px;height:44px;border-radius:11px;background:#EDE7F9;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"></path></svg></span>
+              <div style="flex:1;min-width:170px">
+                <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap"><span style="font-family:'Poppins',serif;font-weight:700;font-size:16px;color:#0F1023">{{ a.title }}</span><span style="{{ a.reqChip }}">{{ a.req }}</span></div>
+                <div style="display:flex;align-items:center;gap:7px;font-size:12.5px;margin-top:5px;color:{{ a.dueColor }};font-weight:600"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg>{{ a.dueLabel }}</div>
+              </div>
+              <div style="width:150px;flex-shrink:0">
+                <div style="display:flex;justify-content:space-between;gap:6px;margin-bottom:5px"><span style="font-size:11px;font-weight:700;color:#8A90A6;white-space:nowrap">{{ a.status }}</span><span style="font-size:11px;font-weight:800;color:#8A90A6">{{ a.pctLabel }}</span></div>
+                <div style="height:6px;background:#EEF1F8;border-radius:99px;overflow:hidden"><div style="{{ a.bar }}"></div></div>
+              </div>
+              <a href="Course Detail.dc.html" style="font-size:13.5px;font-weight:700;color:#fff;background:#0F1023;padding:11px 17px;border-radius:10px;white-space:nowrap" style-hover="background:#000">{{ a.cta }}</a>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- COMPLETED -->
+      <section>
+        <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 14px;color:#0F1023">Completed</h2>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ completed }}" as="a" hint-placeholder-count="2">
+            <div style="display:flex;align-items:center;gap:16px;background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:15px 19px;flex-wrap:wrap">
+              <span style="width:40px;height:40px;border-radius:10px;background:#E4F0FF;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#2D8BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg></span>
+              <div style="flex:1;min-width:170px"><div style="font-size:15px;font-weight:700;color:#0F1023">{{ a.title }}</div><div style="font-size:12px;color:#8A90A6;margin-top:2px">Completed {{ a.done }}</div></div>
+              <span style="font-size:11.5px;font-weight:800;color:#2D8BFF;background:#E4F0FF;padding:4px 10px;border-radius:6px">Done</span>
+              <a href="Course Detail.dc.html" style="font-size:13px;font-weight:700;color:#0F1023;border:1.5px solid #E1E5F0;padding:9px 15px;border-radius:9px;white-space:nowrap" style-hover="border-color:#0F1023">Review</a>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+    </main>
+
+    <dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals() {
+    const reqChip = (r) => 'font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;padding:3px 8px;border-radius:6px;white-space:nowrap;' + (r==='Required'?'color:#B0463A;background:#DAF5FB':'color:#857E70;background:#EFEAE0');
+    const barColor = (p) => p>=100?'#2D8BFF':p>=50?'#5A3DF5':p>=25?'#7B61FF':'#7B61FF';
+    const A = [
+      { title:'Donor Records Cleanup', req:'Required', due:'Jun 12, 2026', overdue:true, pct:46, status:'In progress' },
+      { title:'Compliance Calendar Support', req:'Required', due:'Jul 12, 2026', pct:20, status:'In progress' },
+      { title:'Data Privacy Basics', req:'Optional', due:'Jul 30, 2026', pct:0, status:'Not started' },
+    ];
+    const active = A.map(a => ({
+      title:a.title, req:a.req, reqChip:reqChip(a.req),
+      dueLabel: a.overdue ? ('Overdue · was due '+a.due) : ('Due '+a.due),
+      dueColor: a.overdue ? '#B0463A' : '#8A90A6',
+      pctLabel: a.pct+'%', status:a.status,
+      bar:'height:100%;width:'+a.pct+'%;background:'+barColor(a.pct)+';border-radius:99px',
+      cta: a.pct===0?'Start':'Resume',
+      edge: a.overdue ? 'box-shadow:inset 4px 0 0 #7B61FF' : '',
+    }));
+    const completed = [
+      { title:'Inbox & Calendar Systems', done:'Apr 2026' },
+      { title:'Website Maintenance for VAs', done:'Apr 2026' },
+    ];
+    return { active, completed };
+  }
+}
+</script>
+</body>
+</html>

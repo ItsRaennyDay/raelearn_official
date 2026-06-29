@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3F6;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+    @media (max-width:760px){#lp-avail{grid-template-columns:1fr !important}}
+  </style>
+</helmet>
+
+<div style="display:flex;align-items:stretch;min-height:100vh">
+  <dc-import name="AppSidebar" mode="admin" current="paths" hint-size="248px,100%" style="flex:0 0 248px"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;background:#F1F3F6">
+    <dc-import name="AppTopBar" mode="admin" eyebrow="Raeform Foundation" title="Learning Paths" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+    <main style="flex:1;width:100%;max-width:1200px;margin:0 auto;padding:24px 30px 64px">
+
+      <div style="font-size:12.5px;font-weight:600;color:#8A8F99;margin-bottom:14px"><a href="Group Admin Dashboard.dc.html" style="color:#8A8F99" style-hover="color:#0F1023">Overview</a> <span style="margin:0 6px">/</span> Learning Paths</div>
+
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px">
+        <div>
+          <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:26px;margin:0;color:#0F1023">Learning paths</h1>
+          <p style="font-size:13.5px;color:#7C828C;margin:5px 0 0">3 paths assigned · 12 learners on a path</p>
+        </div>
+        <button onClick="{{ noop }}" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;font-family:inherit;color:#fff;background:#0F1023;padding:10px 16px;border-radius:10px;cursor:pointer" style-hover="background:#080814"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg>Assign path</button>
+      </div>
+
+      <!-- ASSIGNED PATHS -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0;color:#0F1023">Assigned paths</h2><span style="flex:1;height:1px;background:#E4E7EC"></span></div>
+      <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:32px">
+        <sc-for list="{{ assigned }}" as="p" hint-placeholder-count="3">
+          <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:20px 22px">
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px">
+              <span style="{{ p.iconWrap }}"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="{{ p.iconColor }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="2.6"></circle><circle cx="18" cy="5" r="2.6"></circle><path d="M6 16.4V9a4 4 0 0 1 4-4h5"></path></svg></span>
+              <div style="flex:1;min-width:0"><div style="font-size:16px;font-weight:700;color:#0F1023">{{ p.name }}</div><div style="font-size:12.5px;color:#7C828C">{{ p.meta }}</div></div>
+              <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+                <div style="text-align:right"><div style="font-size:11px;font-weight:700;color:{{ p.color }}">{{ p.pct }}% avg</div><div style="width:120px;height:6px;background:#EDEFF2;border-radius:99px;overflow:hidden;margin-top:5px"><div style="height:100%;width:{{ p.pct }}%;background:{{ p.color }};border-radius:99px"></div></div></div>
+                <div style="display:flex;gap:7px"><a href="Group Reports.dc.html" style="font-size:12px;font-weight:700;color:#0F1023;border:1px solid #D7DBE2;background:#fff;padding:7px 12px;border-radius:9px;white-space:nowrap" style-hover="background:#F1F3F6">Progress</a><button onClick="{{ noop }}" style="font-size:12px;font-weight:700;font-family:inherit;color:#3A4254;border:1px solid #D7DBE2;background:#fff;padding:7px 12px;border-radius:9px;cursor:pointer;white-space:nowrap" style-hover="background:#F1F3F6">Edit</button></div>
+              </div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:14px;border-top:1px solid #F0F2F5">
+              <span style="font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-right:2px">Courses</span>
+              <sc-for list="{{ p.courses }}" as="c" hint-placeholder-count="3">
+                <span style="{{ c.style }}"><span style="{{ c.dot }}"></span>{{ c.title }}<span style="{{ c.tag }}">{{ c.tagLabel }}</span></span>
+              </sc-for>
+            </div>
+          </section>
+        </sc-for>
+      </div>
+
+      <!-- AVAILABLE PATHS -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0;color:#0F1023">Available paths</h2><span style="flex:1;height:1px;background:#E4E7EC"></span><span style="font-size:12.5px;color:#8A8F99">7 templates</span></div>
+      <div id="lp-avail" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <sc-for list="{{ available }}" as="a" hint-placeholder-count="6">
+          <section style="background:#fff;border:1px solid #E4E7EC;border-radius:14px;padding:18px 20px;display:flex;align-items:center;gap:15px">
+            <span style="{{ a.iconWrap }}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="{{ a.iconColor }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="2.6"></circle><circle cx="18" cy="5" r="2.6"></circle><path d="M6 16.4V9a4 4 0 0 1 4-4h5"></path></svg></span>
+            <div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:700;color:#0F1023;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.name }}</div><div style="font-size:12px;color:#7C828C">{{ a.meta }}</div></div>
+            <button onClick="{{ noop }}" style="font-size:12.5px;font-weight:700;font-family:inherit;color:#0F1023;border:1.4px solid #0F1023;background:#fff;padding:8px 14px;border-radius:9px;cursor:pointer;white-space:nowrap;flex-shrink:0" style-hover="background:#0F1023;color:#fff">Assign</button>
+          </section>
+        </sc-for>
+      </div>
+    </main>
+
+    <dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  iconWrap(tone,sz){ const M={teal:'#ECE9FE',purple:'#EDE7F9',gold:'#ECE9FE',red:'#DAF5FB',blue:'#E2EEF2'}[tone]; const s=sz||38; return 'width:'+s+'px;height:'+s+'px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:'+M; }
+  iconColor(tone){ return {teal:'#5A3DF5',purple:'#7B61FF',gold:'#7B61FF',red:'#7B61FF',blue:'#1F6F8B'}[tone]; }
+  course(title,req){ return {
+    title,
+    style:'display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:#3A3F49;background:#F7F8FA;border:1px solid #EEF0F3;padding:6px 10px;border-radius:8px',
+    dot:'width:7px;height:7px;border-radius:50%;background:'+(req?'#5A3DF5':'#C9CDD4'),
+    tagLabel:req?'Required':'Optional',
+    tag:'font-size:9.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:2px 6px;border-radius:5px;'+(req?'color:#1A6F62;background:#ECE9FE':'color:#857E70;background:#EEF0F3'),
+  }; }
+  renderVals(){
+    const assigned=[
+      {name:'Nonprofit VA Path', tone:'teal', pct:72, meta:'8 learners · 4 courses · ~6 hrs',
+        courses:[this.course('Nonprofit Ops Foundations',true),this.course('Donor Records Cleanup',true),this.course('Comms VA',false),this.course('Board Admin Support',false)]},
+      {name:'Donor Operations Training', tone:'purple', pct:54, meta:'5 learners · 3 courses · ~4.5 hrs',
+        courses:[this.course('Donor Records Cleanup',true),this.course('Donor Operations',true),this.course('CRM Foundations',false)]},
+      {name:'Website Maintenance Team', tone:'red', pct:38, meta:'4 learners · 3 courses · ~5 hrs',
+        courses:[this.course('Web Basics',true),this.course('Website Maintenance VA',true),this.course('Performance Tuning',false)]},
+    ].map(p=>({ ...p, iconWrap:this.iconWrap(p.tone), iconColor:this.iconColor(p.tone), color:this.iconColor(p.tone) }));
+
+    const available=[
+      {name:'New VA Path', tone:'teal', meta:'5 courses · Beginner · ~7 hrs'},
+      {name:'Nonprofit VA Path', tone:'purple', meta:'4 courses · Intermediate · ~6 hrs'},
+      {name:'Nonprofit Founder Path', tone:'gold', meta:'6 courses · Mixed · ~9 hrs'},
+      {name:'Startup Founder Path', tone:'blue', meta:'5 courses · Intermediate · ~8 hrs'},
+      {name:'Website Maintenance VA Path', tone:'red', meta:'4 courses · Beginner · ~5 hrs'},
+      {name:'Small Business Operations Path', tone:'teal', meta:'5 courses · Mixed · ~7.5 hrs'},
+      {name:'Team Onboarding Path', tone:'gold', meta:'3 courses · Beginner · ~3 hrs'},
+    ].map(a=>({ ...a, iconWrap:this.iconWrap(a.tone), iconColor:this.iconColor(a.tone) }));
+
+    return { assigned, available, noop:()=>{} };
+  }
+}
+</script>
+</body>
+</html>

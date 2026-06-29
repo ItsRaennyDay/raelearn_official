@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<a href="{{ href }}" style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E7E9F2;border-radius:16px;padding:18px;position:relative;box-shadow:0 10px 26px -22px rgba(15,16,35,.4)" style-hover="border-color:#C7CCDC">
+
+  <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:13px">
+    <span style="{{ catChip }}">{{ category }}</span>
+    <span style="font-size:10.5px;font-weight:700;color:#857E70;background:#F1ECE0;padding:3px 9px;border-radius:6px;white-space:nowrap">{{ audience }}</span>
+    <sc-if value="{{ assigned }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:800;color:#7B61FF;background:#EDE7F9;padding:3px 8px;border-radius:6px;white-space:nowrap;margin-left:auto"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>Assigned</span></sc-if>
+  </div>
+
+  <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;line-height:1.25;margin:0 0 7px;color:#0F1023">{{ title }}</h3>
+  <div style="font-size:12.5px;color:#8A90A6;margin-bottom:14px">{{ meta }}</div>
+
+  <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:16px">
+    <span style="{{ typeChip }}">{{ typeLabel }}</span>
+    <sc-if value="{{ certificate }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:800;color:#9c6c12;background:#ECE9FE;padding:3px 8px;border-radius:6px;white-space:nowrap"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg>Certificate</span></sc-if>
+  </div>
+
+  <sc-if value="{{ enrolled }}" hint-placeholder-val="{{ false }}">
+    <div style="margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="{{ statusChip }}">{{ status }}</span><span style="font-size:11.5px;font-weight:800;color:#8A90A6">{{ progressLabel }}</span></div>
+      <div style="height:7px;background:#EEF1F8;border-radius:99px;overflow:hidden"><div style="{{ bar }}"></div></div>
+    </div>
+  </sc-if>
+
+  <span style="{{ ctaStyle }}">{{ cta }}</span>
+</a>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:300,&quot;height&quot;:280},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Donor Records Cleanup&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;category&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Nonprofit · Data &amp; CRM&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;audience&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;For VAs&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;courseType&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Free&quot;,&quot;Paid&quot;,&quot;Certificate&quot;],&quot;default&quot;:&quot;Certificate&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;level&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Intermediate&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;duration&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;~4.5 hrs&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;modules&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;4&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;enrolled&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;progress&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:46,&quot;min&quot;:0,&quot;max&quot;:100,&quot;tsType&quot;:&quot;number&quot;},&quot;status&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Not started&quot;,&quot;In progress&quot;,&quot;Completed&quot;],&quot;default&quot;:&quot;In progress&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;assigned&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;certificate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;cta&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Continue&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;href&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Course Detail.dc.html&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const bool = (v) => v === true || v === 'true';
+    const num = (v) => v === undefined ? 0 : Number(v) || 0;
+    const category = this.props.category || 'Nonprofit · Data & CRM';
+    const catColor = {
+      'Nonprofit · Data & CRM':'color:#7B61FF;background:#EDE7F9',
+    }[category] || (/nonprofit/i.test(category) ? 'color:#7B61FF;background:#EDE7F9' : /business/i.test(category) ? 'color:#7B61FF;background:#DAF5FB' : /technical|web/i.test(category) ? 'color:#1F6F8B;background:#E2EEF2' : 'color:#5A3DF5;background:#ECE9FE');
+    const type = this.props.courseType || 'Certificate';
+    const typeChipMap = { Free:'color:#3E9A52;background:#E4F0FF', Paid:'color:#7B61FF;background:#ECE9FE', Certificate:'color:#1F6F8B;background:#E2EEF2' };
+    const status = this.props.status || 'In progress';
+    const statusMap = { Completed:'color:#2D8BFF;background:#E4F0FF', 'In progress':'color:#5A3DF5;background:#ECE9FE', 'Not started':'color:#857E70;background:#EFEAE0' };
+    const p = num(this.props.progress);
+    const barColor = p>=100?'#2D8BFF':p>=50?'#5A3DF5':p>=25?'#7B61FF':'#7B61FF';
+    const cta = this.props.cta || 'View Course';
+    const variant = this.props.ctaVariant || (cta==='Continue'?'primary':cta==='View Course'?'outline':'primary');
+    return {
+      href: this.props.href || 'Course Detail.dc.html',
+      title: this.props.title || 'Donor Records Cleanup',
+      category, audience: this.props.audience || 'For VAs',
+      meta: this.props.meta || (this.props.level || 'Intermediate') + ' · ' + (this.props.duration || '~4.5 hrs') + ' · ' + (this.props.modules || '4') + ' modules',
+      catChip: 'font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:6px;white-space:nowrap;' + catColor,
+      typeLabel: type, typeChip: 'font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:6px;white-space:nowrap;' + (typeChipMap[type] || typeChipMap.Free),
+      assigned: bool(this.props.assigned),
+      certificate: bool(this.props.certificate) || type==='Certificate',
+      enrolled: bool(this.props.enrolled),
+      status, statusChip: 'font-size:10px;font-weight:800;padding:3px 7px;border-radius:6px;white-space:nowrap;' + (statusMap[status]||statusMap['Not started']),
+      progressLabel: p + '%',
+      bar: 'height:100%;width:'+p+'%;background:'+barColor+';border-radius:99px',
+      cta,
+      ctaStyle: 'display:block;text-align:center;font-size:13.5px;font-weight:700;padding:11px 0;border-radius:10px;white-space:nowrap;' + (variant==='primary' ? 'color:#fff;background:#0F1023' : 'color:#0F1023;border:1.5px solid #E1E5F0'),
+    };
+  }
+}
+</script>
+</body>
+</html>

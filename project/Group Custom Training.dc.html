@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3F6;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+    input,select,textarea{font-family:inherit}
+    @media (max-width:920px){#ct-grid{grid-template-columns:1fr !important}#ct-side{position:static !important}#ct-types{grid-template-columns:1fr 1fr !important}#ct-fields{grid-template-columns:1fr !important}}
+  </style>
+</helmet>
+
+<div style="display:flex;align-items:stretch;min-height:100vh">
+  <dc-import name="AppSidebar" mode="admin" current="custom" hint-size="248px,100%" style="flex:0 0 248px"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;background:#F1F3F6">
+    <dc-import name="AppTopBar" mode="admin" eyebrow="Raeform Foundation" title="Custom Training" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+    <main style="flex:1;width:100%;max-width:1200px;margin:0 auto;padding:24px 30px 64px">
+
+      <div style="font-size:12.5px;font-weight:600;color:#8A8F99;margin-bottom:14px"><a href="Group Admin Dashboard.dc.html" style="color:#8A8F99" style-hover="color:#0F1023">Overview</a> <span style="margin:0 6px">/</span> Custom Training</div>
+
+      <!-- INTRO -->
+      <section style="position:relative;overflow:hidden;background:#F6F8FD;border:1px solid #EEF1F8;border-radius:18px;padding:24px 26px;margin-bottom:20px">
+        <dc-import name="DoodleBackdrop" variant="minimal" accent="#7B61FF" hint-size="100%,100%" style="position:absolute;inset:0"></dc-import>
+        <div style="position:relative;max-width:660px">
+          <div style="display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid #EEF1F8;border-radius:999px;padding:5px 12px;margin-bottom:13px"><span style="font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#7B61FF">RaeLearn Custom</span></div>
+          <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(22px,2.8vw,30px);line-height:1.1;margin:0 0 10px;color:#0F1023">Training built around your organization</h1>
+          <p style="font-size:14.5px;line-height:1.55;color:#5C574E;margin:0">Request a tailored learning plan or private workshop for your team. Tell us what you need and a RaeLearn specialist will follow up within two business days.</p>
+        </div>
+      </section>
+
+      <div id="ct-grid" style="display:grid;grid-template-columns:1.6fr 1fr;gap:20px;align-items:start">
+
+        <!-- INTAKE FORM -->
+        <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:24px">
+          <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 4px;color:#0F1023">Request intake</h2>
+          <p style="font-size:12.5px;color:#7C828C;margin:0 0 18px">All fields help us scope the right plan.</p>
+
+          <div style="font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:10px">Training type</div>
+          <div id="ct-types" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:22px">
+            <sc-for list="{{ types }}" as="t" hint-placeholder-count="6">
+              <button onClick="{{ t.choose }}" aria-pressed="{{ t.aria }}" style="{{ t.style }}">
+                <span style="{{ t.dotWrap }}"><span style="width:8px;height:8px;border-radius:50%;background:{{ t.color }}"></span></span>
+                <span style="font-size:13px;font-weight:600;text-align:left">{{ t.label }}</span>
+              </button>
+            </sc-for>
+          </div>
+
+          <div id="ct-fields" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <label style="display:block"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Organization need</span><input placeholder="e.g. Onboard 5 new VAs" style="width:100%;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0F1023;background:#fff;outline:none" style-focus="border-color:#7B61FF"></label>
+            <label style="display:block"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Team size</span><div style="display:flex;align-items:center;justify-content:space-between;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0F1023;background:#fff">6–15 people<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#9097A2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></div></label>
+            <label style="display:block"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Preferred format</span><div style="display:flex;align-items:center;justify-content:space-between;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0F1023;background:#fff">Live workshop<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#9097A2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></div></label>
+            <label style="display:block"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Target learners</span><input placeholder="e.g. Ops team, donor admins" style="width:100%;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;color:#0F1023;background:#fff;outline:none" style-focus="border-color:#7B61FF"></label>
+            <label style="display:block;grid-column:1 / -1"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Current problem</span><textarea placeholder="What's not working today?" style="width:100%;min-height:74px;resize:vertical;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;line-height:1.5;color:#0F1023;background:#fff;outline:none" style-focus="border-color:#7B61FF"></textarea></label>
+            <label style="display:block;grid-column:1 / -1"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Desired outcome</span><textarea placeholder="What does success look like in 90 days?" style="width:100%;min-height:74px;resize:vertical;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;line-height:1.5;color:#0F1023;background:#fff;outline:none" style-focus="border-color:#7B61FF"></textarea></label>
+            <label style="display:block;grid-column:1 / -1"><span style="display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-bottom:7px">Notes <span style="color:#C2C7CF;font-weight:600;text-transform:none;letter-spacing:0">(optional)</span></span><textarea placeholder="Timing, budget range, anything else…" style="width:100%;min-height:60px;resize:vertical;border:1px solid #DDE1E8;border-radius:10px;padding:11px 13px;font-size:13.5px;line-height:1.5;color:#0F1023;background:#fff;outline:none" style-focus="border-color:#7B61FF"></textarea></label>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px;padding-top:18px;border-top:1px solid #F0F2F5">
+            <button onClick="{{ noop }}" style="display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;font-family:inherit;color:#fff;background:#0F1023;padding:12px 20px;border-radius:11px;cursor:pointer" style-hover="background:#080814">Submit request<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+            <span style="font-size:12px;color:#9097A2">A specialist replies within 2 business days.</span>
+          </div>
+        </section>
+
+        <!-- RIGHT -->
+        <div id="ct-side" style="position:sticky;top:88px;display:flex;flex-direction:column;gap:16px;min-width:0">
+          <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:20px 22px">
+            <div style="font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#9097A2;margin-bottom:14px">How it works</div>
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+                <div style="display:flex;align-items:flex-start;gap:12px"><span style="width:26px;height:26px;border-radius:8px;background:#0F1023;color:#00C6E8;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">{{ s.n }}</span><div><div style="font-size:13.5px;font-weight:700;color:#0F1023">{{ s.title }}</div><div style="font-size:12px;color:#7C828C;line-height:1.45">{{ s.desc }}</div></div></div>
+              </sc-for>
+            </div>
+          </section>
+
+          <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:20px 22px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px"><div style="font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#9097A2">Request history</div><span style="font-size:11.5px;color:#9097A2">{{ historyCount }}</span></div>
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ history }}" as="h" hint-placeholder-count="2">
+                <div style="display:flex;align-items:center;gap:11px;padding:12px 0;border-top:1px solid #F0F2F5">
+                  <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;color:#0F1023;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ h.title }}</div><div style="font-size:11.5px;color:#9097A2">{{ h.date }}</div></div>
+                  <span style="{{ h.statusStyle }}">{{ h.status }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </main>
+
+    <dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { type:0 };
+  TYPES=[
+    ['Nonprofit team','#7B61FF'],['Business operations','#7B61FF'],['VA / team onboarding','#5A3DF5'],
+    ['Website maintenance','#7B61FF'],['SOP & workflow','#1F6F8B'],['Founder support','#7B61FF'],
+  ];
+  renderVals(){
+    const sel=this.state.type;
+    const types=this.TYPES.map(([label,color],i)=>{ const on=i===sel; return {
+      label, color, aria:on?'true':'false',
+      choose:()=>this.setState({type:i}),
+      style:'display:flex;align-items:center;gap:10px;font-family:inherit;cursor:pointer;text-align:left;padding:12px 13px;border-radius:11px;'+(on?'background:#F6F8FD;border:1.5px solid #00C6E8':'background:#fff;border:1px solid #E4E7EC'),
+      dotWrap:'width:22px;height:22px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:'+(on?'#fff':'#F7F8FA'),
+    };});
+    const steps=[
+      {n:'1', title:'Intake', desc:'You submit this form with your needs'},
+      {n:'2', title:'Scoping call', desc:'A specialist reviews and follows up'},
+      {n:'3', title:'Custom plan', desc:'We map courses and sessions to your roles'},
+      {n:'4', title:'Delivery & tracking', desc:'Training runs, progress shows in your dashboard'},
+    ];
+    const statusMap={ 'In review':'color:#9c6c12;background:#ECE9FE', 'Scheduled':'color:#1F6F8B;background:#E2EEF2', 'Delivered':'color:#2D8BFF;background:#E4F0FF' };
+    const ss=(s)=>'font-size:10.5px;font-weight:800;padding:4px 9px;border-radius:6px;white-space:nowrap;flex-shrink:0;'+statusMap[s];
+    const history=[
+      {title:'Donor CRM workshop', date:'Requested May 8, 2026', status:'Scheduled'},
+      {title:'VA onboarding bundle', date:'Requested Mar 2, 2026', status:'Delivered'},
+    ].map(h=>({ ...h, statusStyle:ss(h.status) }));
+    return { types, steps, history, historyCount:'2 requests', noop:()=>{} };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#ECEAE3;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+    .grid-empty{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+    @media (max-width:680px){.grid-empty{grid-template-columns:1fr}}
+  </style>
+</helmet>
+
+<div style="max-width:1180px;margin:0 auto;padding:34px 30px 80px">
+
+  <!-- HEADER -->
+  <header style="margin-bottom:30px">
+    <div style="display:flex;flex-direction:column;line-height:1;margin-bottom:16px"><span style="font-family:'Poppins',serif;font-weight:800;font-size:19px;color:#0F1023">RaeLearn</span><span style="font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#A6ACC0;margin-top:3px">by RAEFORM</span></div>
+    <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(26px,3.4vw,34px);margin:0 0 8px;color:#0F1023">Product states &amp; empty screens</h1>
+    <p style="font-size:15px;line-height:1.55;color:#6A655C;margin:0;max-width:640px">A reference for course status badges, empty states, system errors, and feedback — reusable across the learner and admin product.</p>
+  </header>
+
+  <!-- ========== COURSE STATES ========== -->
+  <section style="margin-bottom:38px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><h2 style="font-family:'Poppins',serif;font-weight:700;font-size:20px;margin:0;color:#0F1023">Course states</h2><span style="font-size:12px;font-weight:700;color:#857E70;background:#fff;border:1px solid #E0DBCF;padding:3px 10px;border-radius:99px;white-space:nowrap">15 states</span><span style="flex:1;height:1px;background:#DAD5C8"></span></div>
+    <div style="background:#fff;border:1px solid #E4DECF;border-radius:18px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:170px 1fr 180px;gap:14px;padding:12px 22px;background:#F7F4EC;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#A39A86"><span>Badge</span><span>What it means</span><span>Primary action</span></div>
+      <sc-for list="{{ courseStates }}" as="s" hint-placeholder-count="8">
+        <div style="display:grid;grid-template-columns:170px 1fr 180px;gap:14px;align-items:center;padding:13px 22px;border-top:1px solid #F2EEE4">
+          <span style="justify-self:start"><span style="{{ s.badge }}"><sc-if value="{{ s.hasIcon }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="{{ s.iconPath }}"></path></svg></sc-if>{{ s.label }}</span></span>
+          <span style="font-size:13px;color:#4B5563;line-height:1.45">{{ s.meaning }}</span>
+          <span style="font-size:12.5px;font-weight:700;color:{{ s.ctaColor }}">{{ s.cta }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ========== EMPTY STATES ========== -->
+  <section style="margin-bottom:38px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><h2 style="font-family:'Poppins',serif;font-weight:700;font-size:20px;margin:0;color:#0F1023">Empty states</h2><span style="flex:1;height:1px;background:#DAD5C8"></span></div>
+    <div class="grid-empty">
+      <sc-for list="{{ emptyStates }}" as="e" hint-placeholder-count="6">
+        <div style="background:#fff;border:1px solid #E4DECF;border-radius:18px;padding:26px 22px;text-align:center;display:flex;flex-direction:column;align-items:center">
+          <span style="{{ e.scope }}">{{ e.scopeLabel }}</span>
+          <span style="{{ e.iconWrap }}"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="{{ e.iconColor }}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ e.iconPath }}"></path></svg></span>
+          <svg viewBox="0 0 80 12" width="74" height="11" fill="none" style="margin:13px 0 14px"><path d="M3 7 q 9 -7 18 0 t 18 0 t 18 0 t 18 0" stroke="{{ e.iconColor }}" stroke-width="2" stroke-linecap="round" opacity=".35"></path></svg>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 7px;color:#0F1023">{{ e.title }}</h3>
+          <p style="font-size:13px;line-height:1.5;color:#7C7669;margin:0 0 16px;max-width:240px">{{ e.body }}</p>
+          <a href="{{ e.href }}" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#fff;background:#0F1023;padding:9px 16px;border-radius:10px;white-space:nowrap" style-hover="background:#080814">{{ e.cta }}</a>
+          <a href="#" style="font-size:12px;font-weight:700;color:#857E70;margin-top:11px" style-hover="color:#0F1023">{{ e.secondary }}</a>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ========== SYSTEM / ERROR STATES ========== -->
+  <section style="margin-bottom:38px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><h2 style="font-family:'Poppins',serif;font-weight:700;font-size:20px;margin:0;color:#0F1023">System &amp; error states</h2><span style="flex:1;height:1px;background:#DAD5C8"></span></div>
+    <div class="grid-empty">
+      <sc-for list="{{ errorStates }}" as="x" hint-placeholder-count="6">
+        <div style="position:relative;overflow:hidden;background:#0F1023;border-radius:18px;padding:24px 22px;color:#fff;display:flex;flex-direction:column">
+          <div style="display:flex;align-items:center;gap:11px;margin-bottom:14px">
+            <span style="width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="{{ x.accent }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.iconPath }}"></path></svg></span>
+            <span style="font-family:'Poppins',serif;font-weight:800;font-size:22px;color:{{ x.accent }}">{{ x.code }}</span>
+          </div>
+          <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 7px;color:#fff">{{ x.title }}</h3>
+          <p style="font-size:12.5px;line-height:1.5;color:#AEB6C6;margin:0 0 18px;flex:1">{{ x.body }}</p>
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <a href="{{ x.href }}" style="font-size:12.5px;font-weight:700;color:#0F1023;background:{{ x.accent }};padding:9px 15px;border-radius:9px;white-space:nowrap">{{ x.cta }}</a>
+            <a href="#" style="font-size:12px;font-weight:700;color:#AEB6C6" style-hover="color:#fff">{{ x.secondary }}</a>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ========== TOASTS & ALERTS ========== -->
+  <section>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><h2 style="font-family:'Poppins',serif;font-weight:700;font-size:20px;margin:0;color:#0F1023">Toasts &amp; alerts</h2><span style="flex:1;height:1px;background:#DAD5C8"></span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <div style="font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#A39A86;margin-bottom:1px">Toasts</div>
+        <sc-for list="{{ toasts }}" as="t" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #E4DECF;border-left:4px solid {{ t.color }};border-radius:12px;padding:13px 15px;box-shadow:0 10px 24px -18px rgba(15,16,35,.5)">
+            <span style="{{ t.iconWrap }}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="{{ t.color }}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ t.iconPath }}"></path></svg></span>
+            <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;color:#0F1023">{{ t.title }}</div><div style="font-size:12px;color:#7C7669">{{ t.body }}</div></div>
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#A6ACC0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <div style="font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#A39A86;margin-bottom:1px">Inline alerts</div>
+        <sc-for list="{{ alerts }}" as="a" hint-placeholder-count="3">
+          <div style="display:flex;gap:12px;background:{{ a.bg }};border:1px solid {{ a.border }};border-radius:12px;padding:14px 16px">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="{{ a.color }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="{{ a.iconPath }}"></path></svg>
+            <div><div style="font-size:13px;font-weight:700;color:{{ a.color }};margin-bottom:2px">{{ a.title }}</div><div style="font-size:12.5px;line-height:1.5;color:{{ a.textColor }}">{{ a.body }}</div></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals(){
+    const TONE={ neutral:['#5A6070','#EEF0F3'], teal:['#5A3DF5','#ECE9FE'], green:['#2D8BFF','#E4F0FF'], purple:['#7B61FF','#EDE7F9'], red:['#B0463A','#DAF5FB'], gold:['#9c6c12','#ECE9FE'], slate:['#475066','#E3E6EC'], muted:['#857E70','#EFEAE0'] };
+    const badge=(tone)=>{ const c=TONE[tone]; return 'display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;padding:5px 11px;border-radius:7px;white-space:nowrap;color:'+c[0]+';background:'+c[1]; };
+    const CS=[
+      ['Not enrolled','neutral','You haven\u2019t added this course yet.','Enroll','#5A3DF5','',''],
+      ['Enrolled','teal','Added to your courses, ready to begin.','Open course','#5A3DF5','',''],
+      ['Not started','muted','Enrolled but no lessons completed.','Start course','#5A3DF5','',''],
+      ['In progress','teal','You\u2019re partway through this course.','Continue','#5A3DF5','',''],
+      ['Completed','green','All lessons and requirements finished.','Review','#0F1023','check','M5 13l4 4L19 7'],
+      ['Assigned','purple','Assigned to you by your organization.','View','#7B61FF','',''],
+      ['Required','red','Must be completed by the due date.','Start now','#B0463A','',''],
+      ['Optional','neutral','Recommended but not mandatory.','Browse','#5A6070','',''],
+      ['Locked','muted','Complete the previous lesson to unlock.','Locked','#857E70','lock','M6 11V8a6 6 0 1 1 12 0v3M5 11h14v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z'],
+      ['Unlocked','teal','Now available to start.','Open','#5A3DF5','',''],
+      ['Coming soon','gold','Not open yet \u2014 we\u2019ll notify you.','Notify me','#9c6c12','',''],
+      ['Certificate eligible','gold','Finish final requirements to download.','Finish','#9c6c12','star','M12 3l2.1 5.4L20 10l-5.9 1.6L12 17l-2.1-5.4L4 10l5.9-1.6z'],
+      ['Access expired','red','Your access window has ended.','Renew access','#B0463A','',''],
+      ['Draft','slate','Admin only \u2014 not visible to learners.','Edit','#475066','',''],
+      ['Unpublished','slate','Admin only \u2014 hidden until published.','Publish','#475066','',''],
+    ];
+    const courseStates=CS.map(([label,tone,meaning,cta,ctaColor,icon,iconPath])=>({ label, meaning, cta, ctaColor, badge:badge(tone), hasIcon:!!icon, iconPath }));
+
+    const ew=(c)=>'width:60px;height:60px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:'+c;
+    const ES=[
+      ['learner','No courses in progress','Enroll in a course or pick a learning path to get started.','Browse courses','Courses.dc.html','Explore learning paths','#5A3DF5','#ECE9FE','M4 6h16M4 12h16M4 18h10'],
+      ['learner','No assignments yet','When your organization assigns training, it shows up here.','Browse catalog','Courses.dc.html','Go to dashboard','#7B61FF','#EDE7F9','M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1zM16 6h2a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2'],
+      ['learner','No certificates yet','Complete a certificate course to earn your first one.','Find a course','Courses.dc.html','What\u2019s required?','#7B61FF','#ECE9FE','M12 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM8.5 13L7 21l5-2.5L17 21l-1.5-8'],
+      ['admin','No learners yet','Invite your first learner so you can assign courses and track progress.','Invite learner','Group Learners.dc.html','Bulk import CSV','#1F6F8B','#E2EEF2','M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6'],
+      ['admin','No courses assigned','Assign a course or learning path to get your team learning.','Assign course','Group Assigned Courses.dc.html','Browse catalog','#5A3DF5','#ECE9FE','M9 11l3 3 8-8M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'],
+      ['admin','No results found','We couldn\u2019t find anything for that search. Try different keywords.','Clear search','#','Browse all','#857E70','#EFEAE0','M11 11m-7 0a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-4-4'],
+    ];
+    const scopeStyle=(s)=>'font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:6px;margin-bottom:16px;'+(s==='admin'?'color:#475066;background:#E3E6EC':'color:#5A3DF5;background:#ECE9FE');
+    const emptyStates=ES.map(([scope,title,body,cta,href,secondary,ic,bg,iconPath])=>({ scope:scopeStyle(scope), scopeLabel:scope==='admin'?'Admin':'Learner', title, body, cta, href, secondary, iconColor:ic, iconWrap:ew(bg), iconPath }));
+
+    const XS=[
+      ['404','Page not found','We can\u2019t find the page you\u2019re looking for. It may have moved.','Go to dashboard','Learner Dashboard.dc.html','Contact support','#00C6E8','M9 10h.01M15 10h.01M9.5 15.5a3.5 3.5 0 0 1 5 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z'],
+      ['500','Something went wrong','An error occurred on our end. Try again in a moment.','Retry','#','Contact support','#DC7A6B','M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z'],
+      ['403','Access denied','You don\u2019t have access to this page. Switch views or ask an admin.','Go to dashboard','Learner Dashboard.dc.html','Request access','#00C6E8','M6 11V8a6 6 0 1 1 12 0v3M5 11h14v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z'],
+      ['','Course unavailable','This course isn\u2019t open yet or has been unpublished.','Browse courses','Courses.dc.html','Notify me','#6FD2BE','M4 6h16M4 12h16M4 18h10'],
+      ['','Invite expired','This invite link has expired. Ask your admin to resend it.','Request new invite','#','Back to sign in','#00C6E8','M12 8v4l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z'],
+      ['','Maintenance','RaeLearn is briefly down for maintenance. We\u2019ll be right back.','Check status','#','Contact support','#6FD2BE','M14.7 6.3a4 4 0 0 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2.1-2.1z'],
+    ];
+    const errorStates=XS.map(([code,title,body,cta,href,secondary,accent,iconPath])=>({ code:code||'', title, body, cta, href, secondary, accent, iconPath }));
+
+    const tw=(c)=>'width:32px;height:32px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:'+c+'1f';
+    const TS=[
+      ['#2D8BFF','Saved','Your changes were saved.','M5 13l4 4L19 7'],
+      ['#1F6F8B','Report ready','Your export is ready to download.','M12 16v-4M12 8h.01M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z'],
+      ['#7B61FF','Assignment due soon','Donor Records Cleanup is due in 2 days.','M12 8v4l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z'],
+      ['#C0432F','Upload failed','That file was too large. Max 25 MB.','M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z'],
+    ];
+    const toasts=TS.map(([color,title,body,iconPath])=>({ color, title, body, iconPath, iconWrap:tw(color) }));
+
+    const AL=[
+      ['#2D8BFF','#E4F0FF','#CDE7C9','#3F6B43','Invite sent','We emailed an invite to 2 learners.','M5 13l4 4L19 7'],
+      ['#9c6c12','#FBF4E4','#EDD9A8','#7A5A12','Heads up','3 assignments are overdue across your team.','M12 8v4M12 16h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z'],
+      ['#B0463A','#DAF5FB','#F0D5CE','#8A4439','Action needed','This learner\u2019s access has expired.','M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z'],
+    ];
+    const alerts=AL.map(([color,bg,border,textColor,title,body,iconPath])=>({ color, bg, border, textColor, title, body, iconPath }));
+
+    return { courseStates, emptyStates, errorStates, toasts, alerts };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3F6;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+    @media (max-width:920px){#rp-grid{grid-template-columns:1fr !important}}
+  </style>
+</helmet>
+
+<div style="display:flex;align-items:stretch;min-height:100vh">
+  <dc-import name="AppSidebar" mode="admin" current="reports" hint-size="248px,100%" style="flex:0 0 248px"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;background:#F1F3F6">
+    <dc-import name="AppTopBar" mode="admin" eyebrow="Raeform Foundation" title="Reports" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+    <main style="flex:1;width:100%;max-width:1200px;margin:0 auto;padding:24px 30px 64px">
+
+      <div style="font-size:12.5px;font-weight:600;color:#8A8F99;margin-bottom:14px"><a href="Group Admin Dashboard.dc.html" style="color:#8A8F99" style-hover="color:#0F1023">Overview</a> <span style="margin:0 6px">/</span> Reports</div>
+
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px">
+        <div>
+          <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:26px;margin:0;color:#0F1023">Reports</h1>
+          <p style="font-size:13.5px;color:#7C828C;margin:5px 0 0">Track progress, completion, and certificates — export anytime.</p>
+        </div>
+        <div style="display:flex;gap:9px;flex-wrap:wrap">
+          <button onClick="{{ noop }}" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;font-family:inherit;color:#3A4254;border:1px solid #D7DBE2;background:#fff;padding:10px 15px;border-radius:10px;cursor:pointer" style-hover="background:#F7F8FA"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>Export CSV</button>
+          <button onClick="{{ noop }}" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;font-family:inherit;color:#fff;background:#0F1023;padding:10px 16px;border-radius:10px;cursor:pointer" style-hover="background:#080814"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>Export PDF</button>
+        </div>
+      </div>
+
+      <!-- FILTERS -->
+      <section style="background:#fff;border:1px solid #E4E7EC;border-radius:14px;padding:15px 18px;margin-bottom:18px">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;margin-right:2px">Filters</span>
+          <sc-for list="{{ filters }}" as="f" hint-placeholder-count="7">
+            <button onClick="{{ noop }}" style="display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;font-family:inherit;color:#3A3F49;background:#F7F8FA;border:1px solid #E6E9EE;padding:8px 12px;border-radius:9px;cursor:pointer" style-hover="border-color:#CBD0D8"><span style="color:#9097A2;font-weight:700">{{ f.label }}:</span>{{ f.value }}<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#9097A2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          </sc-for>
+          <div style="flex:1"></div>
+          <button onClick="{{ noop }}" style="font-size:12.5px;font-weight:700;font-family:inherit;color:#8A8F99;background:none;border:none;cursor:pointer" style-hover="color:#0F1023">Reset</button>
+          <button onClick="{{ noop }}" style="font-size:12.5px;font-weight:700;font-family:inherit;color:#fff;background:#5A3DF5;border:none;padding:8px 15px;border-radius:9px;cursor:pointer" style-hover="background:#0B7468">Apply</button>
+        </div>
+      </section>
+
+      <!-- KPI STRIP -->
+      <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;overflow:hidden;margin-bottom:18px">
+        <div style="display:flex;flex-wrap:wrap;gap:1px;background:#EAECEF">
+          <div style="flex:1 1 150px;background:#fff;padding:16px 18px"><div style="font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2">Completions</div><div style="font-family:'Poppins',serif;font-weight:800;font-size:24px;color:#0F1023;margin-top:4px">31</div><div style="font-size:11.5px;color:#2D8BFF;margin-top:3px">+8 this month</div></div>
+          <div style="flex:1 1 150px;background:#fff;padding:16px 18px"><div style="font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2">Avg progress</div><div style="font-family:'Poppins',serif;font-weight:800;font-size:24px;color:#5A3DF5;margin-top:4px">68%</div><div style="font-size:11.5px;color:#2D8BFF;margin-top:3px">+6% vs last mo</div></div>
+          <div style="flex:1 1 150px;background:#fff;padding:16px 18px"><div style="font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2">Active learners</div><div style="font-family:'Poppins',serif;font-weight:800;font-size:24px;color:#0F1023;margin-top:4px">11 <span style="font-size:14px;color:#A0A5AE;font-weight:600">/ 12</span></div><div style="font-size:11.5px;color:#9097A2;margin-top:3px">last 30 days</div></div>
+          <div style="flex:1 1 150px;background:#fff;padding:16px 18px"><div style="font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2">Overdue</div><div style="font-family:'Poppins',serif;font-weight:800;font-size:24px;color:#C0432F;margin-top:4px">2</div><div style="font-size:11.5px;color:#9097A2;margin-top:3px">across 1 course</div></div>
+        </div>
+      </section>
+
+      <div id="rp-grid" style="display:grid;grid-template-columns:1.3fr 1fr;gap:18px;margin-bottom:18px;align-items:start">
+        <!-- COMPLETIONS CHART -->
+        <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:22px 24px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><h2 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0;color:#0F1023">Completions by month</h2><span style="font-size:11.5px;font-weight:700;color:#5A3DF5;background:#ECE9FE;padding:3px 9px;border-radius:6px">Last 6 mo</span></div>
+          <div style="display:flex;align-items:flex-end;gap:14px;height:170px;padding-top:22px">
+            <sc-for list="{{ bars }}" as="b" hint-placeholder-count="6">
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end">
+                <span style="font-size:11px;font-weight:700;color:#5A6070">{{ b.val }}</span>
+                <div style="width:100%;max-width:42px;height:{{ b.h }}%;background:{{ b.color }};border-radius:7px 7px 3px 3px"></div>
+                <span style="font-size:11px;color:#9097A2">{{ b.mon }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+        <!-- TOP COURSES -->
+        <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:22px 24px">
+          <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 16px;color:#0F1023">Completion by course</h2>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <sc-for list="{{ courseStats }}" as="c" hint-placeholder-count="5">
+              <div><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px"><span style="font-size:12.5px;font-weight:600;color:#3A3F49;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.name }}</span><span style="font-size:11.5px;font-weight:700;color:{{ c.color }}">{{ c.pct }}%</span></div><div style="height:7px;background:#EDEFF2;border-radius:99px;overflow:hidden"><div style="height:100%;width:{{ c.pct }}%;background:{{ c.color }};border-radius:99px"></div></div></div>
+            </sc-for>
+          </div>
+        </section>
+      </div>
+
+      <!-- REPORT LIBRARY -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0;color:#0F1023">Report library</h2><span style="flex:1;height:1px;background:#E4E7EC"></span></div>
+      <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;overflow:hidden">
+        <sc-for list="{{ reports }}" as="r" hint-placeholder-count="6">
+          <div style="display:flex;align-items:center;gap:15px;padding:16px 22px;border-bottom:1px solid #F0F2F5">
+            <span style="{{ r.iconWrap }}"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="{{ r.iconColor }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.iconPath }}"></path></svg></span>
+            <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:700;color:#0F1023">{{ r.title }}</div><div style="font-size:12.5px;color:#7C828C">{{ r.desc }}</div></div>
+            <div style="display:flex;gap:7px;flex-shrink:0"><button onClick="{{ noop }}" style="font-size:12px;font-weight:700;font-family:inherit;color:#3A4254;border:1px solid #D7DBE2;background:#fff;padding:7px 12px;border-radius:8px;cursor:pointer" style-hover="background:#F1F3F6">CSV</button><button onClick="{{ noop }}" style="font-size:12px;font-weight:700;font-family:inherit;color:#3A4254;border:1px solid #D7DBE2;background:#fff;padding:7px 12px;border-radius:8px;cursor:pointer" style-hover="background:#F1F3F6">PDF</button></div>
+          </div>
+        </sc-for>
+      </section>
+    </main>
+
+    <dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals(){
+    const filters=[
+      {label:'Learner', value:'All'}, {label:'Course', value:'All'}, {label:'Path', value:'All'},
+      {label:'Category', value:'All'}, {label:'Status', value:'All'}, {label:'Certificate', value:'All'},
+      {label:'Range', value:'Last 30 days'},
+    ];
+    const raw=[['Jan',12],['Feb',18],['Mar',15],['Apr',22],['May',19],['Jun',26]];
+    const max=Math.max(...raw.map(r=>r[1]));
+    const bars=raw.map(([mon,val],i)=>({ mon, val, h:Math.round(val/max*100), color:i===raw.length-1?'#5A3DF5':'#9FD6CC' }));
+    const barColor=(p)=>p>=100?'#2D8BFF':p>=50?'#5A3DF5':p>=25?'#7B61FF':'#7B61FF';
+    const courseStats=[
+      {name:'SOP Builder Course',pct:80},{name:'Nonprofit Ops VA Cert',pct:72},
+      {name:'Donor Records Cleanup',pct:61},{name:'Donor Operations',pct:54},
+      {name:'Website Maintenance VA',pct:38},
+    ].map(c=>({...c,color:barColor(c.pct)}));
+
+    const RI={
+      progress:['#ECE9FE','#5A3DF5','M4 20V10M10 20V4M16 20v-7M22 20H2'],
+      course:['#EDE7F9','#7B61FF','M9 11l3 3 8-8M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'],
+      path:['#E2EEF2','#1F6F8B','M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM6 17V9a4 4 0 0 1 4-4h6'],
+      cert:['#ECE9FE','#7B61FF','M12 8a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM8.5 16L7 22l5-2.5L17 22l-1.5-6'],
+      activity:['#ECE9FE','#5A3DF5','M22 12h-4l-3 9L9 3l-3 9H2'],
+      overdue:['#DAF5FB','#C0432F','M12 8v4l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z'],
+    };
+    const mkR=(kind,title,desc)=>{ const i=RI[kind]; return { title, desc, iconColor:i[1], iconPath:i[2], iconWrap:'width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:'+i[0] }; };
+    const reports=[
+      mkR('progress','Learner progress report','Per-learner completion across all assigned courses'),
+      mkR('course','Course completion report','Completion rates and pass rates by course'),
+      mkR('path','Learning path report','Progress through each assigned learning path'),
+      mkR('cert','Certificate report','Certificates earned, pending, and expiring'),
+      mkR('activity','Activity report','Logins, lesson views, and submissions over time'),
+      mkR('overdue','Overdue report','Assignments past their due date by learner'),
+    ];
+    return { filters, bars, courseStats, reports, noop:()=>{} };
+  }
+}
+</script>
+</body>
+</html>

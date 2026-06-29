@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+  </style>
+</helmet>
+
+<div style="display:flex;align-items:stretch;min-height:100vh">
+  <dc-import name="AppSidebar" mode="learner" current="courses" hint-size="248px,100%" style="flex:0 0 248px"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;background:#F1F3FB">
+    <dc-import name="AppTopBar" mode="learner" eyebrow="My learning" title="My Courses" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+    <main style="flex:1;width:100%;max-width:1040px;margin:0 auto;padding:26px 30px 64px">
+
+      <!-- summary + filters -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px">
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <span style="font-size:13px;font-weight:700;color:#fff;background:#0F1023;padding:9px 15px;border-radius:99px">All · 6</span>
+          <span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:9px 15px;border-radius:99px">In progress · 3</span>
+          <span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:9px 15px;border-radius:99px">Completed · 2</span>
+          <span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:9px 15px;border-radius:99px">Not started · 1</span>
+        </div>
+        <a href="Courses.dc.html" style="display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;color:#0F1023;border:1.5px solid #C7CCDC;padding:10px 16px;border-radius:10px;white-space:nowrap" style-hover="border-color:#0F1023"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg>Browse catalog</a>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <sc-for list="{{ courses }}" as="c" hint-placeholder-count="6">
+          <div style="display:flex;align-items:center;gap:18px;background:#fff;border:1px solid #E7E9F2;border-radius:15px;padding:18px 20px;flex-wrap:wrap">
+            <span style="{{ c.iconWrap }}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"></path></svg></span>
+            <div style="flex:1;min-width:180px">
+              <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap"><span style="font-family:'Poppins',serif;font-weight:700;font-size:17px;color:#0F1023">{{ c.title }}</span><span style="{{ c.accessChip }}">{{ c.access }}</span></div>
+              <div style="font-size:12.5px;color:#8A90A6;margin-top:4px">{{ c.category }} · {{ c.hours }}</div>
+            </div>
+            <div style="width:170px;flex-shrink:0">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="{{ c.statusChip }}">{{ c.status }}</span><span style="font-size:12px;font-weight:800;color:#8A90A6">{{ c.pctLabel }}</span></div>
+              <div style="height:7px;background:#EEF1F8;border-radius:99px;overflow:hidden"><div style="{{ c.bar }}"></div></div>
+            </div>
+            <a href="Course Detail.dc.html" style="{{ c.ctaStyle }}">{{ c.cta }}</a>
+          </div>
+        </sc-for>
+      </div>
+
+    </main>
+
+    <dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals() {
+    const accessChip = (a) => {
+      const m = { Free:'color:#3E9A52;background:#E4F0FF', Paid:'color:#7B61FF;background:#ECE9FE', Assigned:'color:#7B61FF;background:#EDE7F9', Certificate:'color:#1F6F8B;background:#E2EEF2' }[a] || 'color:#857E70;background:#EFEAE0';
+      return 'font-size:10px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;padding:3px 7px;border-radius:6px;white-space:nowrap;' + m;
+    };
+    const statusChip = (s) => {
+      const m = { Completed:'color:#2D8BFF;background:#E4F0FF', 'In progress':'color:#5A3DF5;background:#ECE9FE', 'Not started':'color:#857E70;background:#EFEAE0' }[s] || 'color:#857E70;background:#EFEAE0';
+      return 'font-size:10px;font-weight:800;padding:3px 7px;border-radius:6px;white-space:nowrap;' + m;
+    };
+    const barColor = (p) => p>=100?'#2D8BFF':p>=50?'#5A3DF5':p>=25?'#7B61FF':'#7B61FF';
+    const iconWrap = (bg,c) => 'width:46px;height:46px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:'+bg+';color:'+c;
+    const C = [
+      { title:'Donor Records Cleanup', category:'Nonprofit · Data & CRM', hours:'4 hrs', status:'In progress', pct:46, access:'Assigned', ic:['#EDE7F9','#7B61FF'] },
+      { title:'Compliance Calendar Support', category:'Nonprofit · Operations', hours:'3 hrs', status:'In progress', pct:20, access:'Certificate', ic:['#ECE9FE','#7B61FF'] },
+      { title:'Inbox & Calendar Systems', category:'Foundations · Productivity', hours:'2.5 hrs', status:'Completed', pct:100, access:'Free', ic:['#ECE9FE','#5A3DF5'] },
+      { title:'Website Maintenance for VAs', category:'Technical · Web', hours:'5 hrs', status:'Completed', pct:100, access:'Certificate', ic:['#E2EEF2','#1F6F8B'] },
+      { title:'Grant Tracker Basics', category:'Nonprofit · Grants', hours:'3.5 hrs', status:'In progress', pct:62, access:'Paid', ic:['#DAF5FB','#7B61FF'] },
+      { title:'Board Meeting Prep', category:'Nonprofit · Governance', hours:'4 hrs', status:'Not started', pct:0, access:'Paid', ic:['#DAF5FB','#7B61FF'] },
+    ];
+    const courses = C.map(c => ({
+      title:c.title, category:c.category, hours:c.hours, status:c.status, access:c.access,
+      pctLabel: c.pct+'%',
+      iconWrap: iconWrap(c.ic[0], c.ic[1]),
+      accessChip: accessChip(c.access),
+      statusChip: statusChip(c.status),
+      bar: 'height:100%;width:'+c.pct+'%;background:'+barColor(c.pct)+';border-radius:99px',
+      cta: c.pct===0?'Start':c.pct===100?'Review':'Resume',
+      ctaStyle: 'font-size:13.5px;font-weight:700;white-space:nowrap;padding:11px 18px;border-radius:10px;' + (c.pct===100 ? 'color:#0F1023;border:1.5px solid #E1E5F0;background:transparent' : 'color:#fff;background:#0F1023'),
+    }));
+    return { courses };
+  }
+}
+</script>
+</body>
+</html>

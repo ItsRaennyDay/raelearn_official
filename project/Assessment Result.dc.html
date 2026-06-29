@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+  </style>
+</helmet>
+
+<dc-import name="CourseTopBar" eyebrow="Module 2 · Result" title="Donor Records Cleanup" progress="58" back-href="Course Curriculum.dc.html" exit-href="Learner Dashboard.dc.html" exit-label="Exit" hint-size="100%,60px" style="display:block;width:100%"></dc-import>
+
+<main style="max-width:720px;margin:0 auto;padding:30px 26px 70px">
+
+  <!-- RESULT HERO -->
+  <section style="background:linear-gradient(135deg,#EEF6EC 0%,#ECE9FE 100%);border:1px solid #CDE7CF;border-radius:20px;padding:30px;display:flex;align-items:center;gap:26px;flex-wrap:wrap;margin-bottom:20px">
+    <div style="position:relative;width:118px;height:118px;flex-shrink:0">
+      <svg viewBox="0 0 100 100" width="118" height="118" style="transform:rotate(-90deg)"><circle cx="50" cy="50" r="42" fill="none" stroke="#fff" stroke-width="9"></circle><circle cx="50" cy="50" r="42" fill="none" stroke="#2D8BFF" stroke-width="9" stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="21.1"></circle></svg>
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font-family:'Poppins',serif;font-weight:800;font-size:30px;color:#0F1023">92%</span></div>
+    </div>
+    <div style="flex:1;min-width:200px">
+      <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#2D8BFF;background:#fff;padding:5px 12px;border-radius:8px;margin-bottom:10px"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg>Passed</span>
+      <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:26px;margin:0 0 6px;color:#0F1023">Nicely done, Maria</h1>
+      <p style="font-size:14px;color:#3F6B41;margin:0">You scored above the 80% needed to pass. Your progress has been saved.</p>
+    </div>
+  </section>
+
+  <!-- BREAKDOWN -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:16px;text-align:center"><div style="font-family:'Poppins',serif;font-weight:800;font-size:22px;color:#2D8BFF">11</div><div style="font-size:11.5px;color:#8A90A6;font-weight:600">Correct</div></div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:16px;text-align:center"><div style="font-family:'Poppins',serif;font-weight:800;font-size:22px;color:#C0432F">1</div><div style="font-size:11.5px;color:#8A90A6;font-weight:600">Incorrect</div></div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:16px;text-align:center"><div style="font-family:'Poppins',serif;font-weight:800;font-size:22px;color:#0F1023">80%</div><div style="font-size:11.5px;color:#8A90A6;font-weight:600">To pass</div></div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:16px;text-align:center"><div style="font-family:'Poppins',serif;font-weight:800;font-size:22px;color:#0F1023">1 / 2</div><div style="font-size:11.5px;color:#8A90A6;font-weight:600">Attempt</div></div>
+  </div>
+
+  <!-- REVIEW -->
+  <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:24px;margin-bottom:20px">
+    <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 6px;color:#0F1023">Recommended review</h2>
+    <p style="font-size:13px;color:#8A90A6;margin:0 0 14px">One question tripped you up — a quick refresher will lock it in.</p>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <a href="Lesson Player.dc.html" style="display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid #EEF1F8;border-radius:11px" style-hover="background:#F6F8FD">
+        <span style="width:34px;height:34px;border-radius:9px;background:#ECE9FE;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#5A3DF5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg></span>
+        <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:700;color:#0F1023">Auditing your donor list</div><div style="font-size:12px;color:#8A90A6">Module 2 · video · 12 min</div></div>
+        <span style="font-size:18px;color:#C7CCDC">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ACTIONS -->
+  <div style="display:flex;gap:11px;flex-wrap:wrap;margin-bottom:30px">
+    <a href="Course Completion.dc.html" style="flex:1;min-width:170px;text-align:center;font-size:14.5px;font-weight:700;color:#fff;background:#0F1023;padding:14px;border-radius:11px" style-hover="background:#000">Continue course</a>
+    <a href="Quiz.dc.html" style="font-size:14.5px;font-weight:700;color:#0F1023;border:1.5px solid #E1E5F0;background:#fff;padding:14px 20px;border-radius:11px" style-hover="border-color:#0F1023">Retake (1 left)</a>
+  </div>
+
+  <!-- ASSIGNMENT RESULT VARIANT -->
+  <div style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#A6ACC0;margin-bottom:10px">Assignment feedback</div>
+  <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:22px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <span style="width:40px;height:40px;border-radius:10px;background:#E4F0FF;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#2D8BFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg></span>
+      <div style="flex:1"><div style="font-size:15px;font-weight:700;color:#0F1023">Donor workflow outline</div><div style="font-size:12px;color:#8A90A6">Submitted Jul 2, 2026</div></div>
+      <span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:#2D8BFF;background:#E4F0FF;padding:4px 10px;border-radius:7px">Approved</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:11px;background:#F6F8FD;border:1px solid #EEF1F8;border-radius:11px;padding:12px 14px;margin-bottom:14px">
+      <span style="width:34px;height:26px;border-radius:6px;background:#E2EEF2;color:#1F6F8B;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">DOCX</span>
+      <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;color:#0F1023">donor-workflow-outline.docx</div></div>
+      <a href="#" style="font-size:12.5px;font-weight:700;color:#5A3DF5">View</a>
+    </div>
+    <div style="background:#F3F8F0;border:1px solid #D8E9D2;border-radius:11px;padding:14px 16px">
+      <div style="font-size:12px;font-weight:800;color:#2D8BFF;margin-bottom:4px">Reviewer feedback</div>
+      <p style="font-size:13px;line-height:1.55;color:#3F6B41;margin:0">Clear, well-sequenced workflow with realistic timeframes. Nice work naming a responsible role at each step.</p>
+    </div>
+  </section>
+
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}"></script>
+</body>
+</html>

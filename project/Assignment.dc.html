@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+    textarea{font-family:inherit}
+    @media (max-width:880px){#as-grid{grid-template-columns:1fr !important}#as-side{position:static !important}}
+  </style>
+</helmet>
+
+<dc-import name="CourseTopBar" eyebrow="Module 3 · Assignment" title="Donor Records Cleanup" progress="46" back-href="Course Curriculum.dc.html" exit-href="Learner Dashboard.dc.html" exit-label="Save &amp; exit" hint-size="100%,60px" style="display:block;width:100%"></dc-import>
+
+<main style="max-width:1000px;margin:0 auto;padding:28px 26px 70px">
+
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+    <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:#C0432F;background:#DAF5FB;padding:4px 10px;border-radius:7px"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6"></path></svg>Assignment</span>
+    <span style="{{ statusChip }}">{{ statusLabel }}</span>
+    <span style="font-size:12.5px;color:#9AA1B4;margin-left:auto">Due Jul 5, 2026 · assigned by Raeform Foundation</span>
+  </div>
+  <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(24px,3vw,30px);margin:0 0 22px;color:#0F1023">Donor workflow outline</h1>
+
+  <div id="as-grid" style="display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:start">
+
+    <!-- LEFT: brief + submission -->
+    <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+
+      <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:24px">
+        <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 10px;color:#0F1023">Instructions</h2>
+        <p style="font-size:14px;line-height:1.65;color:#3D4A66;margin:0 0 16px">Using the workbook from Module 3, outline a repeatable donor acknowledgement workflow for a small nonprofit. Map each step from gift received to thank-you sent, noting who is responsible and the target timeframe.</p>
+        <div style="display:flex;gap:11px;background:#F3F8F0;border:1px solid #D8E9D2;border-radius:12px;padding:14px 16px">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#2D8BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 2"></path></svg>
+          <div><div style="font-size:12.5px;font-weight:800;color:#2D8BFF;margin-bottom:2px">Learning objective</div><p style="font-size:13px;line-height:1.5;color:#3F6B41;margin:0">Show you can translate a process into a clear, assignable workflow others can follow.</p></div>
+        </div>
+      </section>
+
+      <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:24px">
+        <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 6px;color:#0F1023">Your submission</h2>
+        <p style="font-size:12.5px;color:#8A90A6;margin:0 0 14px">Write a short summary and attach your completed workflow file.</p>
+        <textarea placeholder="Summarize your workflow and any assumptions you made…" style="width:100%;min-height:120px;resize:vertical;border:1px solid #E6DECD;border-radius:12px;padding:14px;font-size:14px;color:#3D4A66;background:#FCFAF5;outline:none;margin-bottom:14px" style-focus="border-color:#5A3DF5"></textarea>
+
+        <div style="border:1.6px dashed #C7CCDC;border-radius:13px;padding:24px;text-align:center;background:#FCFAF5">
+          <div style="width:46px;height:46px;border-radius:12px;background:#EDE7F9;display:flex;align-items:center;justify-content:center;margin:0 auto 10px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"></path><path d="M5 20h14"></path></svg></div>
+          <div style="font-size:14px;font-weight:700;color:#0F1023">Drag a file here, or <span style="color:#7B61FF">browse</span></div>
+          <div style="font-size:12px;color:#9AA1B4;margin-top:4px">Accepted: PDF, DOCX, XLSX · up to 10 MB</div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:11px;background:#F6F8FD;border:1px solid #EEF1F8;border-radius:11px;padding:12px 14px;margin-top:12px">
+          <span style="width:34px;height:26px;border-radius:6px;background:#E2EEF2;color:#1F6F8B;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">DOCX</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;color:#0F1023">donor-workflow-outline.docx</div><div style="font-size:11px;color:#9AA1B4">Attached · 64 KB</div></div>
+          <span style="font-size:18px;color:#A6ACC0;cursor:pointer">×</span>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+          <button onClick="{{ submit }}" style="flex:1;min-width:150px;font-size:14.5px;font-weight:700;font-family:inherit;color:#fff;background:#0F1023;border:none;padding:13px;border-radius:11px;cursor:pointer" style-hover="background:#000">Submit assignment</button>
+          <button onClick="{{ saveDraft }}" style="font-size:14.5px;font-weight:700;font-family:inherit;color:#0F1023;background:#fff;border:1.5px solid #E1E5F0;padding:13px 20px;border-radius:11px;cursor:pointer" style-hover="border-color:#0F1023">{{ draftLabel }}</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- RIGHT: rubric + details -->
+    <div id="as-side" style="position:sticky;top:80px;display:flex;flex-direction:column;gap:16px">
+      <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:22px">
+        <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:16px;margin:0 0 14px;color:#0F1023">Rubric checklist</h2>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <sc-for list="{{ rubric }}" as="r" hint-placeholder-count="4">
+            <div style="display:flex;gap:10px;align-items:flex-start"><span style="width:20px;height:20px;border-radius:6px;background:#F1ECE0;border:1.5px solid #C7CCDC;flex-shrink:0;margin-top:1px"></span><span style="font-size:13px;color:#3D4A66;line-height:1.45">{{ r }}</span></div>
+          </sc-for>
+        </div>
+      </section>
+      <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:22px">
+        <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:16px;margin:0 0 12px;color:#0F1023">Required deliverable</h2>
+        <div style="display:flex;flex-direction:column;gap:9px;font-size:13px;color:#4B5563">
+          <div style="display:flex;gap:9px"><span style="color:#5A3DF5;flex-shrink:0">●</span>One workflow outline (file)</div>
+          <div style="display:flex;gap:9px"><span style="color:#5A3DF5;flex-shrink:0">●</span>Short written summary</div>
+          <div style="display:flex;gap:9px"><span style="color:#5A3DF5;flex-shrink:0">●</span>Roles &amp; timeframes noted</div>
+        </div>
+      </section>
+      <div style="background:#FBF4F2;border:1px solid #F0DAD3;border-radius:13px;padding:15px 16px">
+        <p style="font-size:12px;line-height:1.5;color:#8A574C;margin:0">RaeLearn reviews this for operations clarity only — not as legal, tax, or compliance approval.</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { status: 'Draft saved' };
+  renderVals() {
+    const status = this.state.status;
+    const map = { 'Not started':'color:#857E70;background:#EFEAE0', 'Draft saved':'color:#9c6c12;background:#ECE9FE', 'Submitted':'color:#1F6F8B;background:#E2EEF2', 'Needs revision':'color:#C0432F;background:#DAF5FB', 'Approved':'color:#2D8BFF;background:#E4F0FF' };
+    return {
+      statusLabel: status,
+      statusChip: 'font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;padding:4px 10px;border-radius:7px;' + (map[status] || map['Not started']),
+      draftLabel: status === 'Draft saved' ? 'Draft saved ✓' : 'Save draft',
+      saveDraft: () => this.setState({ status: 'Draft saved' }),
+      submit: () => { window.location.href = 'Assessment Result.dc.html'; },
+      rubric: [
+        'All workflow steps are in logical order',
+        'Each step names a responsible role',
+        'Timeframes are realistic and specific',
+        'Summary explains key assumptions',
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

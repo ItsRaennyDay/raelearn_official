@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+  </style>
+</helmet>
+
+<div style="display:flex;align-items:stretch;min-height:100vh">
+  <dc-import name="AppSidebar" mode="learner" current="notifications" hint-size="248px,100%" style="flex:0 0 248px"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;background:#F1F3FB">
+    <dc-import name="AppTopBar" mode="learner" eyebrow="Activity" title="Notifications" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+    <main style="flex:1;width:100%;max-width:760px;margin:0 auto;padding:26px 30px 64px">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px">
+        <div style="display:flex;gap:9px"><span style="font-size:13px;font-weight:700;color:#fff;background:#0F1023;padding:8px 14px;border-radius:99px">All</span><span style="font-size:13px;font-weight:600;color:#4B5563;background:#fff;border:1px solid #E7E9F2;padding:8px 14px;border-radius:99px">Unread · 3</span></div>
+        <a href="#" style="font-size:13px;font-weight:700;color:#5A3DF5">Mark all read</a>
+      </div>
+
+      <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+        <div style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#A6ACC0;margin:18px 0 10px">{{ g.label }}</div>
+        <div style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;overflow:hidden">
+          <sc-for list="{{ g.items }}" as="n" hint-placeholder-count="3">
+            <div style="display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border-bottom:1px solid #F0F2F8;background:{{ n.rowBg }}">
+              <span style="{{ n.iconWrap }}"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.iconPath }}"></path></svg></span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:14px;color:#2C2822;line-height:1.45">{{ n.text }}</div>
+                <div style="font-size:11.5px;color:#A6ACC0;margin-top:3px">{{ n.time }}</div>
+              </div>
+              <sc-if value="{{ n.unread }}" hint-placeholder-val="{{ false }}"><span style="width:9px;height:9px;border-radius:50%;background:#7B61FF;flex-shrink:0;margin-top:6px"></span></sc-if>
+              <a href="{{ n.href }}" style="font-size:12.5px;font-weight:700;color:#5A3DF5;white-space:nowrap;flex-shrink:0">{{ n.action }}</a>
+            </div>
+          </sc-for>
+        </div>
+      </sc-for>
+
+    </main>
+
+    <dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals() {
+    const ICON = {
+      due:['#DAF5FB','#C0432F','M12 8v4l3 2'],
+      admin:['#E2EEF2','#1F6F8B','M3 11l18-7-7 18-2-7z'],
+      cert:['#ECE9FE','#7B61FF','M9 11l3 3 8-8'],
+      rec:['#EDE7F9','#7B61FF','M12 3l2 6 6 .5-4.5 4 1.5 6-5-3.5'],
+      update:['#ECE9FE','#5A3DF5','M4 6h16M4 12h16M4 18h10'],
+    };
+    const mk = (kind, text, time, action, href, unread) => {
+      const ic = ICON[kind];
+      return {
+        text, time, action, href: href || '#', unread: !!unread,
+        rowBg: unread ? '#FCFAF5' : '#FFFFFF',
+        iconWrap: 'width:34px;height:34px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:'+ic[0]+';color:'+ic[1],
+        iconPath: ic[2],
+      };
+    };
+    const groups = [
+      { label:'Today', items:[
+        mk('due','“Donor Records Cleanup” is due in 14 days.','2 hours ago','View','Assignments.dc.html', true),
+        mk('admin','Raeform Foundation assigned you “Compliance Calendar Support”.','5 hours ago','Open','Assignments.dc.html', true),
+        mk('rec','New course recommended for you: Donor Operations.','9 hours ago','View','My Courses.dc.html', true),
+      ]},
+      { label:'Earlier this week', items:[
+        mk('cert','You earned the Nonprofit Operations VA certificate.','3 days ago','View','My Certificates.dc.html', false),
+        mk('update','“Inbox & Calendar Systems” added 2 new lessons.','4 days ago','Open','My Courses.dc.html', false),
+        mk('admin','Raeform Foundation posted an announcement.','5 days ago','Read','#', false),
+      ]},
+    ];
+    return { groups };
+  }
+}
+</script>
+</body>
+</html>

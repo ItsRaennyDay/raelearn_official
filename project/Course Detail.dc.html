@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+    @media (max-width:920px){#cd-body{grid-template-columns:1fr !important}#cd-side{position:static !important}}
+  </style>
+</helmet>
+
+<dc-import name="SiteNav" current="courses" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+<!-- HERO -->
+<section style="position:relative;background:#FAF2DF;border-bottom:1px solid #EBDCB6;overflow:hidden">
+  <dc-import name="DoodleBackdrop" variant="cards" accent="#7B61FF" hint-size="100%,100%" style="position:absolute;inset:0"></dc-import>
+  <div style="position:relative;max-width:1240px;margin:0 auto;padding:34px 28px 34px">
+    <div style="font-size:12.5px;font-weight:700;color:#BFA265;margin-bottom:14px"><a href="RaeLearn Homepage.dc.html" style="color:#BFA265" style-hover="color:#7B61FF">Home</a> <span style="margin:0 7px">/</span> <a href="Courses.dc.html" style="color:#BFA265" style-hover="color:#7B61FF">Courses</a> <span style="margin:0 7px">/</span> Donor Records Cleanup</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px">
+      <span style="font-size:11.5px;font-weight:800;color:#7B61FF;background:#EDE7F9;padding:5px 11px;border-radius:7px">Nonprofit · Data &amp; CRM</span>
+      <span style="font-size:11.5px;font-weight:800;color:#5A3DF5;background:#ECE9FE;padding:5px 11px;border-radius:7px">For VAs</span>
+      <span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:800;color:#9c6c12;background:#fff;border:1px solid #EBDCB6;padding:5px 11px;border-radius:7px"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#9c6c12" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"></circle><path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5"></path></svg>CERTIFICATE</span>
+      <span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:800;color:#7B61FF;background:#fff;border:1px solid #E3D9F2;padding:5px 11px;border-radius:7px"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>ASSIGNED · RAEFORM</span>
+    </div>
+    <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(30px,4vw,44px);line-height:1.06;letter-spacing:-.02em;margin:0 0 12px;color:#3A2A08;max-width:740px">Donor Records Cleanup</h1>
+    <p style="font-size:16.5px;line-height:1.6;color:#6A5526;max-width:640px;margin:0 0 18px">Turn a messy donor list into a clean, segmented, report-ready CRM — the practical skill nonprofits need most from an operations VA.</p>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;font-size:13.5px;font-weight:600;color:#7A6736">
+      <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#7B61FF"></span>Intermediate</span>
+      <span>~4.5 hours</span>
+      <span>4 modules · 14 lessons</span>
+      <span>Certificate included</span>
+    </div>
+  </div>
+</section>
+
+<!-- BODY -->
+<section id="cd-body" style="max-width:1240px;margin:0 auto;padding:38px 28px 72px;display:grid;grid-template-columns:1.6fr 1fr;gap:34px;align-items:start">
+
+  <!-- MAIN -->
+  <div style="display:flex;flex-direction:column;gap:30px;min-width:0">
+
+    <!-- OVERVIEW -->
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:24px">
+      <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:21px;margin:0 0 16px;color:#0F1023">Course overview</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px">
+        <div><div style="font-size:11.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#5A3DF5;margin-bottom:6px">Who it's for</div><p style="font-size:13.5px;line-height:1.55;color:#4B5563;margin:0">VAs and operations staff supporting a nonprofit who own donor data and CRM upkeep.</p></div>
+        <div><div style="font-size:11.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#7B61FF;margin-bottom:6px">The problem it solves</div><p style="font-size:13.5px;line-height:1.55;color:#4B5563;margin:0">Duplicate, inconsistent records that break reports, segmentation, and acknowledgements.</p></div>
+        <div><div style="font-size:11.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#7B61FF;margin-bottom:6px">After this course</div><p style="font-size:13.5px;line-height:1.55;color:#4B5563;margin:0">You can audit, de-duplicate, tag, and maintain a clean donor CRM your team can trust.</p></div>
+      </div>
+    </div>
+
+    <!-- WHAT YOU'LL LEARN -->
+    <div>
+      <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:22px;margin:0 0 14px;color:#0F1023">What you'll learn</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:11px">
+        <sc-for list="{{ learn }}" as="l" hint-placeholder-count="6">
+          <div style="display:flex;gap:10px;font-size:14.5px;color:#4B5563"><span style="color:#2D8BFF;font-weight:800;flex-shrink:0">✓</span>{{ l }}</div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- CURRICULUM PREVIEW -->
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><h2 style="font-family:'Poppins',serif;font-weight:800;font-size:22px;margin:0;color:#0F1023">Curriculum</h2><span style="font-size:13px;color:#8A90A6">4 modules · 14 lessons</span></div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <sc-for list="{{ modules }}" as="m" hint-placeholder-count="4">
+          <div style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:14px;padding:15px 18px;border-bottom:1px solid #F2EBDD">
+              <span style="{{ m.numStyle }}">{{ m.num }}</span>
+              <div style="flex:1;min-width:0"><div style="font-size:15.5px;font-weight:700;color:#0F1023">{{ m.title }}</div><div style="font-size:12.5px;color:#8A90A6">{{ m.meta }}</div></div>
+            </div>
+            <div style="padding:6px 18px 12px">
+              <sc-for list="{{ m.lessons }}" as="ls" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:11px;padding:8px 0">
+                  <span style="{{ ls.iconWrap }}"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ ls.iconPath }}"></path></svg></span>
+                  <span style="flex:1;min-width:0;font-size:13.5px;color:#3D4A66">{{ ls.title }}</span>
+                  <span style="font-size:11.5px;color:#A6ACC0">{{ ls.time }}</span>
+                  <sc-if value="{{ ls.free }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:800;color:#3E9A52;background:#E4F0FF;padding:2px 7px;border-radius:5px">FREE</span></sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- RESOURCES + REQUIREMENTS -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px">
+      <div style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:22px">
+        <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 13px;color:#0F1023">Included resources</h3>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{ resources }}" as="r" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:9px;font-size:13.5px;color:#4B5563"><span style="{{ r.badge }}">{{ r.ext }}</span>{{ r.title }}</div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:22px">
+        <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 13px;color:#0F1023">Completion requirements</h3>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:9px;font-size:13.5px;color:#4B5563"><span style="color:#5A3DF5;flex-shrink:0">●</span>Complete all 14 required lessons</div>
+          <div style="display:flex;gap:9px;font-size:13.5px;color:#4B5563"><span style="color:#5A3DF5;flex-shrink:0">●</span>Pass 2 knowledge checks (80%+)</div>
+          <div style="display:flex;gap:9px;font-size:13.5px;color:#4B5563"><span style="color:#5A3DF5;flex-shrink:0">●</span>Submit the donor workflow assignment</div>
+          <div style="display:flex;gap:9px;font-size:13.5px;color:#4B5563"><span style="color:#5A3DF5;flex-shrink:0">●</span>Pass the final assessment (80%+)</div>
+          <div style="display:flex;gap:9px;font-size:13.5px;color:#0F1023;font-weight:700"><span style="color:#7B61FF;flex-shrink:0">★</span>Earn the Donor Records certificate</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div style="background:#FBF4F2;border:1px solid #F0DAD3;border-radius:14px;padding:20px 22px">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#B0463A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:16px;margin:0;color:#9A3C2E">What's not included</h3></div>
+      <p style="font-size:13px;line-height:1.55;color:#8A574C;margin:0 0 12px">RaeLearn teaches operations literacy and admin preparation. It does <strong>not</strong> provide legal or tax advice.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px">
+        <div style="display:flex;gap:8px;font-size:13px;color:#8A574C"><span style="color:#C0432F;flex-shrink:0">×</span>Legal or tax advice</div>
+        <div style="display:flex;gap:8px;font-size:13px;color:#8A574C"><span style="color:#C0432F;flex-shrink:0">×</span>Filing on a client's behalf</div>
+        <div style="display:flex;gap:8px;font-size:13px;color:#8A574C"><span style="color:#C0432F;flex-shrink:0">×</span>Done-for-you CRM setup</div>
+        <div style="display:flex;gap:8px;font-size:13px;color:#8A574C"><span style="color:#C0432F;flex-shrink:0">×</span>Custom data migration</div>
+        <div style="display:flex;gap:8px;font-size:13px;color:#8A574C"><span style="color:#C0432F;flex-shrink:0">×</span>Donor solicitation strategy</div>
+        <div style="display:flex;gap:8px;font-size:13px;color:#8A574C"><span style="color:#C0432F;flex-shrink:0">×</span>Private consulting (sold separately)</div>
+      </div>
+    </div>
+
+    <!-- GROUP ADMIN BOX -->
+    <div style="background:#0F1023;border-radius:16px;padding:24px;color:#fff">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:6px"><span style="font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#00C6E8">Group admin</span></div>
+      <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 4px">Manage this course for your team</h3>
+      <p style="font-size:13px;color:#AEB6C6;margin:0 0 16px">Visible to group admins only · Raeform Foundation</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a href="Admin Course Progress.dc.html" style="font-size:13px;font-weight:700;color:#0F1023;background:#00C6E8;padding:10px 15px;border-radius:9px" style-hover="background:#EEB652">Assign this course</a>
+        <a href="My Learning Paths.dc.html" style="font-size:13px;font-weight:700;color:#fff;border:1.5px solid rgba(255,255,255,.3);padding:10px 15px;border-radius:9px" style-hover="border-color:#fff">Add to learning path</a>
+        <a href="Admin Course Progress.dc.html" style="font-size:13px;font-weight:700;color:#fff;border:1.5px solid rgba(255,255,255,.3);padding:10px 15px;border-radius:9px" style-hover="border-color:#fff">View team progress</a>
+      </div>
+    </div>
+
+    <!-- RELATED -->
+    <div>
+      <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:22px;margin:0 0 16px;color:#0F1023">Related courses</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px">
+        <dc-import name="CourseCard" title="Donor Operations" category="Nonprofit · CRM" audience="For VAs" course-type="Paid" level="Intermediate" duration="~6 hrs" modules="5" enrolled="false" cta="View Course" href="Course Detail.dc.html" hint-size="100%,260px" style="display:block"></dc-import>
+        <dc-import name="CourseCard" title="Board Admin Support" category="Nonprofit · Governance" audience="For VAs" course-type="Paid" level="Beginner" duration="~5 hrs" modules="4" enrolled="false" cta="View Course" href="Course Detail.dc.html" hint-size="100%,260px" style="display:block"></dc-import>
+        <dc-import name="CourseCard" title="Grant Readiness Basics" category="Nonprofit · Grants" audience="For VAs" course-type="Free" level="Beginner" duration="~1.5 hrs" modules="3" enrolled="false" certificate="false" cta="Enroll Free" href="Course Detail.dc.html" hint-size="100%,260px" style="display:block"></dc-import>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div id="cd-side" style="position:sticky;top:88px;display:flex;flex-direction:column;gap:16px">
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:18px;padding:24px;box-shadow:0 18px 40px -28px rgba(15,16,35,.5)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><span style="font-size:11.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#5A3DF5">In progress</span><span style="font-size:13px;font-weight:800;color:#5A3DF5">46%</span></div>
+      <div style="height:8px;background:#EEF1F8;border-radius:99px;overflow:hidden;margin-bottom:16px"><div style="height:100%;width:46%;background:#5A3DF5;border-radius:99px"></div></div>
+      <a href="Lesson Player.dc.html" style="display:block;text-align:center;font-size:15px;font-weight:700;color:#fff;background:#0F1023;padding:14px;border-radius:11px;margin-bottom:10px" style-hover="background:#000">Continue Course</a>
+      <a href="Course Curriculum.dc.html" style="display:block;text-align:center;font-size:14.5px;font-weight:700;color:#0F1023;border:1.6px solid #0F1023;padding:13px;border-radius:11px" style-hover="background:#0F1023;color:#fff">View Curriculum</a>
+      <div style="border-top:1px solid #EEF1F8;margin-top:16px;padding-top:16px;display:flex;flex-direction:column;gap:10px;font-size:13px;color:#6A655C">
+        <div style="display:flex;justify-content:space-between"><span>Skill level</span><span style="font-weight:700;color:#0F1023">Intermediate</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Estimated time</span><span style="font-weight:700;color:#0F1023">~4.5 hours</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Modules</span><span style="font-weight:700;color:#0F1023">4 + assessment</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Certificate</span><span style="font-weight:700;color:#2D8BFF">Included</span></div>
+      </div>
+    </div>
+    <div style="background:#F3EFF8;border:1px solid #E3D9F2;border-radius:14px;padding:16px">
+      <div style="font-size:12px;font-weight:800;color:#7B61FF;margin-bottom:4px">Assigned by Raeform Foundation</div>
+      <div style="font-size:12.5px;color:#7A6E9C">Required · due Jun 28, 2026</div>
+    </div>
+  </div>
+
+</section>
+
+<dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals() {
+    const learn = [
+      'Audit a donor list for errors and gaps',
+      'De-duplicate and merge records safely',
+      'Tag and segment donors for outreach',
+      'Build a repeatable acknowledgement workflow',
+      'Produce clean monthly donor reports',
+      'Maintain CRM hygiene on a cadence',
+    ];
+    const LT = {
+      video:['#ECE9FE','#5A3DF5','M8 5v14l11-7z'],
+      text:['#EDE7F9','#7B61FF','M4 6h16M4 12h16M4 18h10'],
+      checklist:['#E4F0FF','#2D8BFF','M9 11l3 3 8-8M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'],
+      quiz:['#ECE9FE','#7B61FF','M9.1 9a3 3 0 1 1 4 2.8c-.9.4-1.6 1.1-1.6 2.2M12 17h.01'],
+      assignment:['#DAF5FB','#C0432F','M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6'],
+      assessment:['#E2EEF2','#1F6F8B','M12 3l2.1 5.4L20 10l-5.9 1.6L12 17l-2.1-5.4L4 10l5.9-1.6z'],
+    };
+    const L = (title, type, time, free) => { const i=LT[type]; return { title, time, free:!!free, iconPath:i[2], iconWrap:'width:26px;height:26px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:'+i[0]+';color:'+i[1] }; };
+    const numStyle = (kind) => 'width:32px;height:32px;border-radius:9px;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;' + (kind==='star'?'background:#E4F0FF;color:#2D8BFF':'background:#ECE9FE;color:#9c6c12');
+    const modules = [
+      { num:'1', numStyle:numStyle(), title:'Foundations of donor data', meta:'4 lessons · ~1 hr', lessons:[
+        L('Why clean donor data matters','video','6 min', true),
+        L('Key CRM terms','text','8 min'),
+        L('Setup checklist','checklist','10 min'),
+        L('Knowledge check','quiz','5 min'),
+      ]},
+      { num:'2', numStyle:numStyle(), title:'Cleaning & segmentation', meta:'4 lessons · ~1.5 hrs', lessons:[
+        L('Auditing your donor list','video','12 min'),
+        L('Tagging & segmentation','video','14 min'),
+        L('Merging duplicates','text','10 min'),
+        L('Knowledge check','quiz','6 min'),
+      ]},
+      { num:'3', numStyle:numStyle(), title:'Acknowledgements & workflows', meta:'3 lessons · ~1 hr', lessons:[
+        L('Gift acknowledgement basics','video','10 min'),
+        L('Building a thank-you workflow','text','12 min'),
+        L('Assignment: donor workflow outline','assignment','30 min'),
+      ]},
+      { num:'★', numStyle:numStyle('star'), title:'Reporting, maintenance & assessment', meta:'3 lessons · ~1 hr', lessons:[
+        L('Monthly donor reports','video','10 min'),
+        L('Maintenance cadence','checklist','8 min'),
+        L('Final assessment & certificate','assessment','20 min'),
+      ]},
+    ];
+    const ext = (e) => { const c={ XLSX:['#E4F0FF','#2D8BFF'], PDF:['#DAF5FB','#C0432F'], DOCX:['#E2EEF2','#1F6F8B'], ZIP:['#EDE7F9','#7B61FF'] }[e]||['#EFEAE0','#857E70']; return 'width:38px;height:28px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;background:'+c[0]+';color:'+c[1]; };
+    const resources = [
+      { title:'Donor records template', ext:'XLSX' },
+      { title:'Segmentation cheat-sheet', ext:'PDF' },
+      { title:'Duplicate-merge checklist', ext:'PDF' },
+      { title:'Donor workflow workbook', ext:'ZIP' },
+    ].map(r => ({ title:r.title, ext:r.ext, badge:ext(r.ext) }));
+    return { learn, modules, resources };
+  }
+}
+</script>
+</body>
+</html>

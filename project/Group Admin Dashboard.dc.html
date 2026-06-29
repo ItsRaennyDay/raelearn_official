@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3F6;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+    @media (max-width:980px){#ov-grid{grid-template-columns:1fr !important}#ov-side{display:none !important}}
+  </style>
+</helmet>
+
+<div style="display:flex;align-items:stretch;min-height:100vh">
+  <dc-import name="AppSidebar" mode="admin" current="dashboard" hint-size="248px,100%" style="flex:0 0 248px"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;background:#F1F3F6">
+    <dc-import name="AppTopBar" mode="admin" eyebrow="Raeform Foundation" title="Overview" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+    <main style="flex:1;width:100%;max-width:1200px;margin:0 auto;padding:26px 30px 64px">
+
+      <!-- ORG HERO -->
+      <section style="position:relative;overflow:hidden;background:#0F1023;color:#fff;border-radius:22px;padding:28px 30px;margin-bottom:20px">
+        <dc-import name="DoodleBackdrop" variant="dark" accent="#00C6E8" hint-size="100%,100%" style="position:absolute;inset:0"></dc-import>
+        <div style="position:relative">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:22px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:16px">
+              <div style="width:54px;height:54px;border-radius:15px;background:#00C6E8;color:#0F1023;font-family:'Poppins',serif;font-weight:800;font-size:23px;display:flex;align-items:center;justify-content:center;flex-shrink:0">R</div>
+              <div>
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px">
+                  <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(22px,2.6vw,28px);margin:0">Raeform Foundation</h2>
+                  <span style="font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#0F1023;background:#00C6E8;padding:4px 9px;border-radius:6px;white-space:nowrap">Team plan</span>
+                </div>
+                <p style="font-size:13.5px;color:#AEB6C6;margin:0">Nonprofit · 12 learners · admin Maria Sandoval</p>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8B93A4">Team health</div>
+              <div style="display:flex;align-items:baseline;gap:7px;justify-content:flex-end;margin-top:3px"><span style="font-family:'Poppins',serif;font-weight:800;font-size:30px;color:#fff">Good</span><span style="font-size:12.5px;font-weight:700;color:#6FD2BE">68% avg</span></div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:22px">
+            <span style="font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8B93A4;margin-right:2px">Quick actions</span>
+            <a href="Group Learners.dc.html" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#0F1023;background:#00C6E8;padding:10px 15px;border-radius:10px" style-hover="background:#EEB652"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg>Add learner</a>
+            <a href="Group Assigned Courses.dc.html" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#fff;border:1.5px solid rgba(255,255,255,.28);padding:10px 15px;border-radius:10px" style-hover="border-color:#fff">Assign course</a>
+            <a href="Group Learning Paths.dc.html" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#fff;border:1.5px solid rgba(255,255,255,.28);padding:10px 15px;border-radius:10px" style-hover="border-color:#fff">Assign path</a>
+            <a href="Group Reports.dc.html" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#fff;border:1.5px solid rgba(255,255,255,.28);padding:10px 15px;border-radius:10px" style-hover="border-color:#fff">View reports</a>
+            <a href="Group Custom Training.dc.html" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#fff;border:1.5px solid rgba(255,255,255,.28);padding:10px 15px;border-radius:10px" style-hover="border-color:#fff">Request custom training</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- KPI STRIP -->
+      <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;overflow:hidden;margin-bottom:20px">
+        <div style="display:flex;flex-wrap:wrap;gap:1px;background:#EAECEF">
+          <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="7">
+            <div style="flex:1 1 140px;background:#fff;padding:16px 18px">
+              <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px"><span style="{{ k.dot }}"></span><span style="font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9097A2;white-space:nowrap">{{ k.label }}</span></div>
+              <div style="font-family:'Poppins',serif;font-weight:800;font-size:25px;color:{{ k.valColor }};line-height:1">{{ k.value }}</div>
+              <div style="font-size:11.5px;color:#9097A2;margin-top:5px">{{ k.sub }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <div id="ov-grid" style="display:grid;grid-template-columns:1.55fr 1fr;gap:20px;align-items:start">
+
+        <!-- LEFT COLUMN -->
+        <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+
+          <!-- NEEDS ATTENTION -->
+          <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:22px 24px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+              <span style="width:30px;height:30px;border-radius:9px;background:#DAF5FB;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#C0432F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg></span>
+              <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0;color:#0F1023;flex:1">Needs attention</h2>
+              <span style="font-size:11.5px;font-weight:800;color:#C0432F;background:#DAF5FB;padding:4px 10px;border-radius:99px;white-space:nowrap">{{ alertCount }}</span>
+            </div>
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ alerts }}" as="a" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:13px;padding:14px 0;border-top:1px solid #F0F2F5">
+                  <span style="{{ a.iconWrap }}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="{{ a.iconColor }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ a.iconPath }}"></path></svg></span>
+                  <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:#0F1023">{{ a.title }}</div><div style="font-size:12px;color:#7C828C;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.desc }}</div></div>
+                  <a href="{{ a.href }}" style="font-size:12px;font-weight:700;color:#0F1023;border:1px solid #D7DBE2;padding:7px 12px;border-radius:9px;white-space:nowrap;flex-shrink:0" style-hover="background:#F1F3F6">{{ a.action }}</a>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+
+          <!-- RECENT ACTIVITY -->
+          <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:22px 24px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px">
+              <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0;color:#0F1023">Recent activity</h2>
+              <a href="Group Reports.dc.html" style="font-size:12.5px;font-weight:700;color:#0F1023" style-hover="text-decoration:underline">View in reports →</a>
+            </div>
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ activity }}" as="ev" hint-placeholder-count="5">
+                <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid #F0F2F5">
+                  <span style="{{ ev.avStyle }}">{{ ev.initials }}</span>
+                  <div style="flex:1;min-width:0;font-size:13px;color:#3A3F49;line-height:1.4"><strong style="color:#0F1023;font-weight:700">{{ ev.name }}</strong> {{ ev.text }}</div>
+                  <span style="font-size:11.5px;color:#9097A2;white-space:nowrap;flex-shrink:0">{{ ev.time }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div id="ov-side" style="display:flex;flex-direction:column;gap:20px;min-width:0">
+
+          <!-- UPCOMING DUE DATES -->
+          <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:22px 24px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px">
+              <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0;color:#0F1023">Upcoming due dates</h2>
+              <a href="Group Assigned Courses.dc.html" style="font-size:12.5px;font-weight:700;color:#0F1023" style-hover="text-decoration:underline">All →</a>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:11px">
+              <sc-for list="{{ dueDates }}" as="d" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:13px">
+                  <div style="{{ d.dateWrap }}"><div style="font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;line-height:1">{{ d.mon }}</div><div style="font-size:17px;font-weight:800;line-height:1.1">{{ d.day }}</div></div>
+                  <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:#0F1023;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ d.course }}</div><div style="font-size:11.5px;color:#7C828C">{{ d.assigned }} · {{ d.rel }}</div></div>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+
+          <!-- PATHS SNAPSHOT -->
+          <section style="background:#fff;border:1px solid #E4E7EC;border-radius:16px;padding:22px 24px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px">
+              <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0;color:#0F1023">Assigned paths</h2>
+              <a href="Group Learning Paths.dc.html" style="font-size:12.5px;font-weight:700;color:#0F1023" style-hover="text-decoration:underline">Manage →</a>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <sc-for list="{{ paths }}" as="p" hint-placeholder-count="3">
+                <div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px"><span style="font-size:13px;font-weight:600;color:#3A3F49;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</span><span style="font-size:11px;font-weight:700;color:{{ p.color }};white-space:nowrap">{{ p.assigned }} · {{ p.pct }}%</span></div>
+                  <div style="height:6px;background:#EDEFF2;border-radius:99px;overflow:hidden"><div style="height:100%;width:{{ p.pct }}%;background:{{ p.color }};border-radius:99px"></div></div>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+
+          <!-- ORG SNAPSHOT -->
+          <section style="background:#F6F8FD;border:1px solid #EEF1F8;border-radius:16px;padding:20px 22px">
+            <div style="font-family:'Caveat',cursive;font-size:20px;font-weight:700;color:#9c6c12;line-height:1;margin-bottom:8px">On track for the quarter</div>
+            <p style="font-size:12.5px;line-height:1.55;color:#7A6A4A;margin:0 0 14px">31 certificates earned and 68% average progress across the team — 2 learners need a nudge to stay on pace.</p>
+            <a href="Group Reports.dc.html" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:#fff;background:#7B61FF;padding:9px 14px;border-radius:9px" style-hover="background:#a97414">Open reports<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></a>
+          </section>
+
+        </div>
+      </div>
+
+    </main>
+
+    <dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+  </div>
+</div>
+
+<dc-import name="HelpWidget" hint-size="0,0"></dc-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals(){
+    const dot = (c) => 'width:8px;height:8px;border-radius:50%;flex-shrink:0;background:'+c;
+    const KP = [
+      {label:'Total learners', value:'12', sub:'across the org', c:'#0F1023', vc:'#0F1023'},
+      {label:'Active learners', value:'11', sub:'last 30 days', c:'#5A3DF5', vc:'#0F1023'},
+      {label:'Completion rate', value:'68%', sub:'+6% vs last mo', c:'#5A3DF5', vc:'#5A3DF5'},
+      {label:'Courses assigned', value:'6', sub:'2 required', c:'#1F6F8B', vc:'#0F1023'},
+      {label:'Paths assigned', value:'3', sub:'12 learners', c:'#7B61FF', vc:'#0F1023'},
+      {label:'Certificates', value:'31', sub:'all-time', c:'#7B61FF', vc:'#0F1023'},
+      {label:'Overdue', value:'2', sub:'need a nudge', c:'#7B61FF', vc:'#C0432F'},
+    ];
+    const kpis = KP.map(k => ({ label:k.label, value:k.value, sub:k.sub, dot:dot(k.c), valColor:k.vc }));
+
+    const ICON = {
+      warn:['#DAF5FB','#C0432F','M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z'],
+      user:['#ECE9FE','#7B61FF','M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z'],
+      path:['#ECE9FE','#5A3DF5','M4 20V10M10 20V4M16 20v-7M22 20H2'],
+    };
+    const mkAlert = (kind,title,desc,action,href) => { const i=ICON[kind]; return { title, desc, action, href, iconColor:i[1], iconPath:i[2],
+      iconWrap:'width:34px;height:34px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:'+i[0] }; };
+    const alerts = [
+      mkAlert('warn','2 overdue assignments','Sam Okafor, Lena Park · Donor Records Cleanup','Remind','Group Assigned Courses.dc.html'),
+      mkAlert('user','1 inactive learner','Hannah Cole · no activity in 3 weeks','View','Group Learners.dc.html'),
+      mkAlert('path','Website Maintenance path is behind','38% avg progress · due Aug 15','Open','Group Learning Paths.dc.html'),
+    ];
+
+    const initials = (n) => n.split(' ').map(w=>w[0]).join('').slice(0,2);
+    const av = (bg,c) => 'width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;background:'+bg+';color:'+c;
+    const AV = { teal:['#ECE9FE','#5A3DF5'], purple:['#EDE7F9','#7B61FF'], gold:['#ECE9FE','#7B61FF'], red:['#DAF5FB','#7B61FF'], blue:['#E2EEF2','#1F6F8B'] };
+    const mkEv = (name,text,time,tone) => ({ name, text, time, initials:initials(name), avStyle:av(AV[tone][0],AV[tone][1]) });
+    const activity = [
+      mkEv('Maria Sandoval','submitted the donor workflow assignment','2h ago','teal'),
+      mkEv('Grace Okoro','passed the Nonprofit VA knowledge check','5h ago','purple'),
+      mkEv('Priya Kapoor','started Donor Operations','3h ago','purple'),
+      mkEv('James Tran','completed SOP Builder Course','1d ago','red'),
+      mkEv('Devin Reyes','earned the Website Maintenance VA certificate','5d ago','gold'),
+    ];
+
+    const dateWrap = (tone) => { const m={red:['#DAF5FB','#C0432F'],gold:['#ECE9FE','#9c6c12'],teal:['#ECE9FE','#5A3DF5']}[tone]; return 'width:46px;height:46px;border-radius:11px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:'+m[0]+';color:'+m[1]; };
+    const mkDue = (course,mon,day,assigned,rel,tone) => ({ course, mon, day, assigned, rel, dateWrap:dateWrap(tone) });
+    const dueDates = [
+      mkDue('Donor Records Cleanup','Jun','28','8 learners','in 14 days','red'),
+      mkDue('SOP Builder Course','Jul','12','5 learners','in 28 days','gold'),
+      mkDue('Nonprofit VA Path','Jul','31','8 learners','in 47 days','teal'),
+    ];
+
+    const paths = [
+      {name:'Nonprofit VA Path', assigned:'8 assigned', pct:72, color:'#5A3DF5'},
+      {name:'Donor Operations Training', assigned:'5 assigned', pct:54, color:'#7B61FF'},
+      {name:'Website Maintenance Team', assigned:'4 assigned', pct:38, color:'#7B61FF'},
+    ];
+
+    return { kpis, alerts, alertCount:'3 items', activity, dueDates, paths };
+  }
+}
+</script>
+</body>
+</html>

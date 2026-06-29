@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    ::selection{background:rgba(106,72,192,.2)}
+    a{color:inherit;text-decoration:none}
+  </style>
+</helmet>
+
+<dc-import name="SiteNav" current="" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+<!-- HEADER -->
+<section style="position:relative;background:#EFEAFA;border-bottom:1px solid #DED3F2;overflow:hidden">
+  <dc-import name="DoodleBackdrop" variant="org" accent="#7B61FF" hint-size="100%,100%" style="position:absolute;inset:0"></dc-import>
+  <div style="position:relative;max-width:1240px;margin:0 auto;padding:48px 28px 52px">
+    <div style="font-size:12.5px;font-weight:700;color:#9988C0;margin-bottom:16px"><a href="RaeLearn Homepage.dc.html" style="color:#9988C0" style-hover="color:#7B61FF">Home</a> <span style="margin:0 7px">/</span> Categories <span style="margin:0 7px">/</span> Nonprofit</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #DED3F2;border-radius:999px;padding:6px 13px;margin-bottom:18px"><span style="width:8px;height:8px;border-radius:50%;background:#7B61FF"></span><span style="font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#7B61FF">U.S. Nonprofit Systems</span></div>
+    <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(32px,4.6vw,54px);line-height:1.04;letter-spacing:-.02em;margin:0 0 16px;color:#2A2150;max-width:820px">Run your nonprofit's operations with confidence.</h1>
+    <p style="font-size:17px;line-height:1.6;color:#4D4470;max-width:620px;margin:0 0 28px">Practical, compliance-aware training on U.S. nonprofit operations — board support, donor systems, grant readiness, compliance calendars, volunteer workflows, and website care. For founders, teams, and the VAs who support them.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <a href="Courses.dc.html" style="font-size:16px;font-weight:700;color:#fff;background:#7B61FF;padding:15px 24px;border-radius:12px;white-space:nowrap" style-hover="background:#583aa3">Start Nonprofit Courses &rarr;</a>
+      <a href="Group Signup.dc.html" style="font-size:16px;font-weight:700;color:#7B61FF;background:#fff;border:1.6px solid #7B61FF;padding:15px 22px;border-radius:12px;white-space:nowrap" style-hover="background:#7B61FF;color:#fff">Create NPO Group Account</a>
+      <a href="Custom Training.dc.html" style="font-size:16px;font-weight:700;color:#4D4470;padding:15px 14px;border-radius:12px;white-space:nowrap" style-hover="color:#7B61FF">Request Custom Training &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section style="max-width:1240px;margin:0 auto;padding:56px 28px 32px">
+  <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(24px,3vw,34px);margin:0 0 22px;color:#0F1023">Who this is for</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:20px"><div style="font-family:'Poppins',serif;font-weight:700;font-size:16.5px;margin:0 0 6px;color:#0F1023">Startup nonprofit founders</div><p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0">Stand up operations the right way from year one.</p></div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:20px"><div style="font-family:'Poppins',serif;font-weight:700;font-size:16.5px;margin:0 0 6px;color:#0F1023">Small nonprofit organizations</div><p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0">Tighten admin without adding headcount.</p></div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:20px"><div style="font-family:'Poppins',serif;font-weight:700;font-size:16.5px;margin:0 0 6px;color:#0F1023">Heads &amp; executive directors</div><p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0">Train a team on one consistent system.</p></div>
+    <div style="background:#fff;border:1px solid #E7E9F2;border-radius:13px;padding:20px"><div style="font-family:'Poppins',serif;font-weight:700;font-size:16.5px;margin:0 0 6px;color:#0F1023">VAs supporting nonprofits</div><p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0">Specialize and support clients with care.</p></div>
+  </div>
+</section>
+
+<!-- COMPLIANCE NOTE -->
+<section style="max-width:1240px;margin:0 auto;padding:12px 28px 40px">
+  <div style="background:#fff;border:1px solid #DED3F2;border-left:5px solid #7B61FF;border-radius:14px;padding:22px 24px;display:flex;gap:16px;align-items:flex-start">
+    <div style="width:40px;height:40px;border-radius:10px;background:#EDE7F9;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"></path><path d="M9.5 12l1.8 1.8L15 10"></path></svg></div>
+    <div>
+      <h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 6px;color:#0F1023">A note on scope</h3>
+      <p style="font-size:14.5px;line-height:1.6;color:#4B5563;margin:0">RaeLearn teaches nonprofit <strong>operations literacy</strong> — admin workflows, organization, and preparation. It does <strong>not</strong> provide legal or tax advice. For filings, governance decisions, and tax matters, work with a qualified attorney or CPA.</p>
+    </div>
+  </div>
+</section>
+
+<!-- COURSE GROUPS -->
+<section style="max-width:1240px;margin:0 auto;padding:24px 28px 36px">
+  <div style="margin-bottom:26px">
+    <div style="font-size:12.5px;font-weight:800;letter-spacing:.16em;color:#A6ACC0;text-transform:uppercase;margin-bottom:12px">Organized by system</div>
+    <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(24px,3vw,36px);margin:0;color:#0F1023">Course groups</h2>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(252px,1fr));gap:16px">
+    <a href="Courses.dc.html" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:22px;display:flex;flex-direction:column;box-shadow:0 10px 24px -22px rgba(15,16,35,.5)" style-hover="transform:translateY(-3px);transition:transform .15s ease"><span style="font-family:'Caveat',cursive;font-size:20px;font-weight:700;color:#B7A6E0;margin-bottom:4px">01</span><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 7px;color:#0F1023">U.S. Nonprofit Foundations</h3><p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0 0 12px;flex:1">Nonprofit vs 501(c)(3), Form 990 literacy, and the basics every org needs.</p><span style="font-size:12.5px;font-weight:700;color:#7B61FF">View courses &rarr;</span></a>
+    <a href="Courses.dc.html" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:22px;display:flex;flex-direction:column;box-shadow:0 10px 24px -22px rgba(15,16,35,.5)" style-hover="transform:translateY(-3px);transition:transform .15s ease"><span style="font-family:'Caveat',cursive;font-size:20px;font-weight:700;color:#B7A6E0;margin-bottom:4px">02</span><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 7px;color:#0F1023">Compliance Calendar Support</h3><p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0 0 12px;flex:1">Build and maintain the recurring deadlines an org has to track.</p><span style="font-size:12.5px;font-weight:700;color:#7B61FF">View courses &rarr;</span></a>
+    <a href="Courses.dc.html" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:22px;display:flex;flex-direction:column;box-shadow:0 10px 24px -22px rgba(15,16,35,.5)" style-hover="transform:translateY(-3px);transition:transform .15s ease"><span style="font-family:'Caveat',cursive;font-size:20px;font-weight:700;color:#B7A6E0;margin-bottom:4px">03</span><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 7px;color:#0F1023">Board &amp; Governance Admin</h3><p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0 0 12px;flex:1">Board packets, minutes, meeting prep, and clean records.</p><span style="font-size:12.5px;font-weight:700;color:#7B61FF">View courses &rarr;</span></a>
+    <a href="Courses.dc.html" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:22px;display:flex;flex-direction:column;box-shadow:0 10px 24px -22px rgba(15,16,35,.5)" style-hover="transform:translateY(-3px);transition:transform .15s ease"><span style="font-family:'Caveat',cursive;font-size:20px;font-weight:700;color:#B7A6E0;margin-bottom:4px">04</span><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 7px;color:#0F1023">Donor &amp; Fundraising Operations</h3><p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0 0 12px;flex:1">Donor records, acknowledgements, and clean fundraising data.</p><span style="font-size:12.5px;font-weight:700;color:#7B61FF">View courses &rarr;</span></a>
+    <a href="Courses.dc.html" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:22px;display:flex;flex-direction:column;box-shadow:0 10px 24px -22px rgba(15,16,35,.5)" style-hover="transform:translateY(-3px);transition:transform .15s ease"><span style="font-family:'Caveat',cursive;font-size:20px;font-weight:700;color:#B7A6E0;margin-bottom:4px">05</span><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 7px;color:#0F1023">Grant Readiness</h3><p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0 0 12px;flex:1">Get organized before you apply — documents, narratives, and trackers.</p><span style="font-size:12.5px;font-weight:700;color:#7B61FF">View courses &rarr;</span></a>
+    <a href="Courses.dc.html" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:22px;display:flex;flex-direction:column;box-shadow:0 10px 24px -22px rgba(15,16,35,.5)" style-hover="transform:translateY(-3px);transition:transform .15s ease"><span style="font-family:'Caveat',cursive;font-size:20px;font-weight:700;color:#B7A6E0;margin-bottom:4px">06</span><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 7px;color:#0F1023">Program &amp; Volunteer Operations</h3><p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0 0 12px;flex:1">Run programs and coordinate volunteers without the chaos.</p><span style="font-size:12.5px;font-weight:700;color:#7B61FF">View courses &rarr;</span></a>
+    <a href="Courses.dc.html" style="background:#fff;border:1px solid #E7E9F2;border-radius:14px;padding:22px;display:flex;flex-direction:column;box-shadow:0 10px 24px -22px rgba(15,16,35,.5)" style-hover="transform:translateY(-3px);transition:transform .15s ease"><span style="font-family:'Caveat',cursive;font-size:20px;font-weight:700;color:#B7A6E0;margin-bottom:4px">07</span><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 7px;color:#0F1023">Nonprofit Website Maintenance</h3><p style="font-size:13.5px;line-height:1.5;color:#6A655C;margin:0 0 12px;flex:1">Keep the site current, backed up, and donation-ready.</p><span style="font-size:12.5px;font-weight:700;color:#7B61FF">View courses &rarr;</span></a>
+    <div style="background:#7B61FF;border-radius:14px;padding:22px;display:flex;flex-direction:column;color:#fff"><h3 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 7px">Train your whole team</h3><p style="font-size:13.5px;line-height:1.5;color:#DCD3F2;margin:0 0 14px;flex:1">Create a group account and assign these to staff and volunteers.</p><a href="Group Signup.dc.html" style="font-size:13px;font-weight:700;color:#7B61FF;background:#fff;padding:10px 14px;border-radius:9px;text-align:center" style-hover="background:#EFEAFA">Create Group Account</a></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="max-width:1240px;margin:0 auto;padding:24px 28px 72px">
+  <div style="background:#2A2150;border-radius:22px;padding:48px 32px;text-align:center;color:#fff">
+    <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);margin:0 0 12px">Start free, or train your team.</h2>
+    <p style="font-size:16px;line-height:1.6;color:#C7BEE8;margin:0 auto 26px;max-width:540px">Take a free nonprofit course today, or set up a group account to train staff and volunteers on one system.</p>
+    <div style="display:flex;gap:13px;justify-content:center;flex-wrap:wrap">
+      <a href="Free Courses.dc.html" style="font-size:16px;font-weight:700;color:#2A2150;background:#fff;padding:15px 26px;border-radius:12px;white-space:nowrap" style-hover="background:#EFEAFA">Browse Free Courses</a>
+      <a href="Custom Training.dc.html" style="font-size:16px;font-weight:700;color:#fff;border:1.6px solid rgba(255,255,255,.5);padding:15px 24px;border-radius:12px;white-space:nowrap" style-hover="border-color:#fff;background:rgba(255,255,255,.1)">Request Custom Training</a>
+    </div>
+  </div>
+</section>
+
+<dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+</x-dc>
+</body>
+</html>

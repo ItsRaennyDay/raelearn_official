@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    @keyframes bb-float1{0%,100%{transform:translate(0,0)}50%{transform:translate(26px,-30px)}}
+    @keyframes bb-float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-24px,22px)}}
+    @keyframes bb-float3{0%,100%{transform:translate(0,0)}50%{transform:translate(18px,26px)}}
+    @media (prefers-reduced-motion:reduce){.bb-orb{animation:none!important}}
+  </style>
+</helmet>
+
+<sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;inset:0;overflow:hidden;background:#0B0C1A">
+    <div class="bb-orb" style="position:absolute;top:-14%;left:-8%;width:48%;height:60%;border-radius:50%;background:radial-gradient(circle,#5A3DF5 0%,transparent 70%);opacity:.5;filter:blur(20px);animation:bb-float1 16s ease-in-out infinite"></div>
+    <div class="bb-orb" style="position:absolute;bottom:-18%;right:-6%;width:46%;height:58%;border-radius:50%;background:radial-gradient(circle,#2D8BFF 0%,transparent 70%);opacity:.42;filter:blur(20px);animation:bb-float2 19s ease-in-out infinite"></div>
+    <div class="bb-orb" style="position:absolute;top:38%;left:52%;width:30%;height:38%;border-radius:50%;background:radial-gradient(circle,#00C6E8 0%,transparent 70%);opacity:.3;filter:blur(20px);animation:bb-float3 22s ease-in-out infinite"></div>
+    <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.5) 1px,transparent 1px);background-size:26px 26px;opacity:.05;-webkit-mask:radial-gradient(ellipse 70% 70% at 50% 45%,#000,transparent 75%);mask:radial-gradient(ellipse 70% 70% at 50% 45%,#000,transparent 75%)"></div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}">
+  <div style="position:absolute;inset:0;overflow:hidden;background:linear-gradient(180deg,#FBFCFF 0%,#F1F3FB 100%)">
+    <div class="bb-orb" style="position:absolute;top:-16%;left:-10%;width:50%;height:62%;border-radius:50%;background:radial-gradient(circle,#5A3DF5 0%,transparent 70%);opacity:.16;filter:blur(18px);animation:bb-float1 16s ease-in-out infinite"></div>
+    <div class="bb-orb" style="position:absolute;bottom:-20%;right:-8%;width:48%;height:60%;border-radius:50%;background:radial-gradient(circle,#2D8BFF 0%,transparent 70%);opacity:.16;filter:blur(18px);animation:bb-float2 19s ease-in-out infinite"></div>
+    <div class="bb-orb" style="position:absolute;top:36%;left:50%;width:32%;height:40%;border-radius:50%;background:radial-gradient(circle,#00C6E8 0%,transparent 70%);opacity:.12;filter:blur(18px);animation:bb-float3 22s ease-in-out infinite"></div>
+    <div style="position:absolute;inset:0;background-image:radial-gradient(#5A3DF5 1px,transparent 1px);background-size:26px 26px;opacity:.05;-webkit-mask:radial-gradient(ellipse 70% 70% at 50% 45%,#000,transparent 75%);mask:radial-gradient(ellipse 70% 70% at 50% 45%,#000,transparent 75%)"></div>
+  </div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:640,&quot;height&quot;:400},&quot;tone&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals(){
+    const tone = this.props.tone || 'light';
+    return { isDark: tone==='dark', isLight: tone!=='dark' };
+  }
+}
+</script>
+</body>
+</html>

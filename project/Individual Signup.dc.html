@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    ::selection{background:rgba(90,61,245,.2)}
+    a{color:inherit;text-decoration:none}
+    input{font-family:inherit}
+  </style>
+</helmet>
+
+<dc-import name="SiteNav" current="" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+<section style="max-width:1100px;margin:0 auto;padding:40px 28px 72px">
+  <div style="font-size:12.5px;font-weight:700;color:#A6ACC0;margin-bottom:20px"><a href="RaeLearn Homepage.dc.html" style="color:#A6ACC0" style-hover="color:#0F1023">Home</a> <span style="margin:0 7px">/</span> Create individual account</div>
+
+  <div style="display:grid;grid-template-columns:1.55fr 1fr;gap:30px;align-items:start">
+    <!-- FORM -->
+    <div>
+      <h1 style="font-family:'Poppins',serif;font-weight:800;font-size:clamp(28px,3.6vw,40px);line-height:1.06;letter-spacing:-.015em;margin:0 0 10px;color:#0F1023">Create your learner account</h1>
+      <p style="font-size:15.5px;line-height:1.6;color:#6A655C;margin:0 0 28px">For VAs, freelancers, founders, and anyone learning for themselves. Free to start — no card needed.</p>
+
+      <div style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:26px;margin-bottom:18px">
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#5A3DF5;margin-bottom:14px">Step 1 · I am a…</div>
+        <div style="display:flex;flex-wrap:wrap;gap:9px">
+          <sc-for list="{{ typeChips }}" as="c" hint-placeholder-count="8">
+            <button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:26px;margin-bottom:18px">
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#5A3DF5;margin-bottom:6px">Step 2 · I'm interested in…</div>
+        <div style="font-size:13px;color:#8A90A6;margin-bottom:14px">Pick as many as you like.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:9px">
+          <sc-for list="{{ interestChips }}" as="c" hint-placeholder-count="10">
+            <button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:26px">
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#5A3DF5;margin-bottom:14px">Step 3 · Create account</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+          <div><label style="display:block;font-size:12.5px;font-weight:700;color:#4B5563;margin-bottom:6px">Full name</label><input placeholder="Jane Doe" style="width:100%;font-size:14.5px;padding:12px 14px;border:1.5px solid #E2DACA;border-radius:10px;background:#FCFBF7;outline:none" style-focus="border-color:#5A3DF5" /></div>
+          <div><label style="display:block;font-size:12.5px;font-weight:700;color:#4B5563;margin-bottom:6px">Email</label><input placeholder="jane@email.com" style="width:100%;font-size:14.5px;padding:12px 14px;border:1.5px solid #E2DACA;border-radius:10px;background:#FCFBF7;outline:none" style-focus="border-color:#5A3DF5" /></div>
+        </div>
+        <div style="margin-bottom:20px"><label style="display:block;font-size:12.5px;font-weight:700;color:#4B5563;margin-bottom:6px">Password</label><input type="password" placeholder="Create a password" style="width:100%;font-size:14.5px;padding:12px 14px;border:1.5px solid #E2DACA;border-radius:10px;background:#FCFBF7;outline:none" style-focus="border-color:#5A3DF5" /></div>
+        <button style="width:100%;font-size:15.5px;font-weight:700;color:#fff;background:#5A3DF5;border:none;padding:15px;border-radius:11px;cursor:pointer" style-hover="background:#0a6f63">Create Free Account</button>
+        <p style="font-size:12.5px;color:#8A90A6;margin:14px 0 0;text-align:center">Already have an account? <a href="Individual Signup.dc.html" style="color:#5A3DF5;font-weight:700">Sign in</a></p>
+      </div>
+    </div>
+
+    <!-- RECOMMENDATION -->
+    <div style="position:sticky;top:88px">
+      <div style="background:#F6F8FD;border:1px solid #E7E9F2;border-radius:18px;padding:24px">
+        <div style="font-family:'Caveat',cursive;font-size:21px;font-weight:700;color:#5A3DF5;margin-bottom:4px">we recommend</div>
+        <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:22px;margin:0 0 6px;color:#0F1023">{{ recPath }}</h2>
+        <p style="font-size:13.5px;line-height:1.55;color:#6A655C;margin:0 0 16px">{{ recDesc }}</p>
+        <div style="background:#fff;border:1px solid #E7E9F2;border-radius:12px;padding:14px;margin-bottom:16px">
+          <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#A6ACC0;margin-bottom:8px">Starts with</div>
+          <div style="font-size:14px;font-weight:700;color:#0F1023;margin-bottom:3px">{{ recFirst }}</div>
+          <div style="font-size:12.5px;color:#8A90A6">Free · beginner-friendly</div>
+        </div>
+        <a href="Learning Paths.dc.html" style="display:block;text-align:center;font-size:14px;font-weight:700;color:#5A3DF5;background:#ECE9FE;padding:11px;border-radius:10px" style-hover="background:#5A3DF5;color:#fff">See full path &rarr;</a>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:18px;padding:0 6px">
+        <span style="font-size:13px;color:#8A90A6">Leading a team instead?</span>
+        <a href="Group Signup.dc.html" style="font-size:13px;font-weight:700;color:#7B61FF">Create a group account &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { type:'va', interests:['nonprofit_ops'] };
+
+  TYPES = [
+    ['va','VA'],['freelancer','Freelancer'],['founder','Founder'],['np_founder','Nonprofit founder'],
+    ['biz_owner','Small business owner'],['team_member','Team member'],['student','Student / learner'],['other','Other'],
+  ];
+  INTERESTS = [
+    ['nonprofit_ops','Nonprofit operations'],['business_ops','Business operations'],['va_support','VA support'],
+    ['website','Website maintenance'],['donor','Donor / fundraising admin'],['board','Board support'],
+    ['startup','Startup systems'],['sops','SOPs / workflows'],['automation','Automation'],['grants','Grant readiness'],
+  ];
+  REC = {
+    va:{p:'New VA Path',d:'Build the core support skills every VA needs, then specialize.',f:'Inbox & Calendar Basics'},
+    freelancer:{p:'Founder Support VA Path',d:'Turn freelance skills into reliable client systems.',f:'Beginner VA Business Toolkit'},
+    founder:{p:'Startup Founder Path',d:'Set up the backend your business runs on before you scale.',f:'Startup Systems'},
+    np_founder:{p:'Nonprofit Founder Path',d:'Stand up your nonprofit operations the right way.',f:'Nonprofit vs 501(c)(3)'},
+    biz_owner:{p:'Small Business Operations Path',d:'Get out of the weeds with repeatable processes.',f:'Google Drive Cleanup'},
+    team_member:{p:'General VA Foundations',d:'Learn the systems your team relies on day to day.',f:'Inbox & Calendar Basics'},
+    student:{p:'New VA Path',d:'A practical, beginner-friendly place to start.',f:'Inbox & Calendar Basics'},
+    other:{p:'Choose your path',d:'Tell us your interests and we\u2019ll point you to the right place.',f:'Nonprofit vs 501(c)(3)'},
+  };
+
+  setType(v){ this.setState({type:v}); }
+  toggleInterest(v){
+    this.setState(s => {
+      const has = s.interests.includes(v);
+      return { interests: has ? s.interests.filter(x=>x!==v) : [...s.interests, v] };
+    });
+  }
+  renderVals(){
+    const s = this.state;
+    const base = 'font-size:13px;font-weight:600;padding:9px 14px;border-radius:10px;cursor:pointer;transition:all .14s ease;white-space:nowrap;';
+    const typeChips = this.TYPES.map(([k,label]) => ({
+      label, onClick: () => this.setType(k),
+      style: base + (s.type===k ? 'background:#5A3DF5;color:#fff;border:1.5px solid #5A3DF5' : 'background:#FCFBF7;color:#4B5563;border:1.5px solid #E2DACA'),
+    }));
+    const interestChips = this.INTERESTS.map(([k,label]) => ({
+      label, onClick: () => this.toggleInterest(k),
+      style: base + (s.interests.includes(k) ? 'background:#241B70;color:#fff;border:1.5px solid #241B70' : 'background:#FCFBF7;color:#4B5563;border:1.5px solid #E2DACA'),
+    }));
+    const rec = this.REC[s.type] || this.REC.other;
+    return { typeChips, interestChips, recPath: rec.p, recDesc: rec.d, recFirst: rec.f };
+  }
+}
+</script>
+</body>
+</html>

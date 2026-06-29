@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+    @media (max-width:880px){#set-grid{grid-template-columns:1fr !important}#set-grid .setlabel{margin-bottom:6px}}
+  </style>
+</helmet>
+
+<div style="display:flex;align-items:stretch;min-height:100vh">
+  <dc-import name="AppSidebar" mode="learner" current="settings" hint-size="248px,100%" style="flex:0 0 248px"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;background:#F1F3FB">
+    <dc-import name="AppTopBar" mode="learner" eyebrow="Account" title="Account Settings" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+    <main style="flex:1;width:100%;max-width:880px;margin:0 auto;padding:26px 30px 64px">
+      <p style="font-size:14px;color:#6F695F;margin:0 0 22px;max-width:560px">Manage your personal account — sign-in details, security, and preferences. Your public identity lives on your <a href="Profile.dc.html" style="color:#5A3DF5;font-weight:700">Profile</a>.</p>
+
+      <!-- ACCOUNT -->
+      <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:26px;margin-bottom:20px">
+        <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 18px;color:#0F1023">Account</h2>
+        <div id="set-grid" style="display:grid;grid-template-columns:200px 1fr;gap:16px 24px;align-items:center">
+          <div class="setlabel" style="font-size:13.5px;font-weight:700;color:#3D4A66">Full name</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:#F6F8FD;border:1px solid #EEF1F8;border-radius:10px;padding:11px 14px;font-size:14px;color:#0F1023">Maria Sandoval<a href="#" style="font-size:12.5px;font-weight:700;color:#5A3DF5">Edit</a></div>
+          <div class="setlabel" style="font-size:13.5px;font-weight:700;color:#3D4A66">Email</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:#F6F8FD;border:1px solid #EEF1F8;border-radius:10px;padding:11px 14px;font-size:14px;color:#0F1023">maria@raeform.org<a href="#" style="font-size:12.5px;font-weight:700;color:#5A3DF5">Change</a></div>
+          <div class="setlabel" style="font-size:13.5px;font-weight:700;color:#3D4A66">Time zone</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:#F6F8FD;border:1px solid #EEF1F8;border-radius:10px;padding:11px 14px;font-size:14px;color:#0F1023">(GMT−05:00) Eastern Time<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#9097A2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></div>
+        </div>
+      </section>
+
+      <!-- SECURITY -->
+      <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:26px;margin-bottom:20px">
+        <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 4px;color:#0F1023">Password &amp; security</h2>
+        <p style="font-size:13px;color:#8A90A6;margin:0 0 18px">Keep your account secure.</p>
+        <div style="display:flex;flex-direction:column">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 0;border-bottom:1px solid #F0F2F8"><div><div style="font-size:14px;font-weight:700;color:#0F1023">Password</div><div style="font-size:12.5px;color:#8A90A6;margin-top:2px">Last changed 3 months ago</div></div><a href="#" style="font-size:13px;font-weight:700;color:#0F1023;border:1.5px solid #E1E5F0;padding:9px 15px;border-radius:9px" style-hover="border-color:#0F1023">Update</a></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 0;border-bottom:1px solid #F0F2F8"><div><div style="font-size:14px;font-weight:700;color:#0F1023">Two-factor authentication</div><div style="font-size:12.5px;color:#8A90A6;margin-top:2px">Add an extra layer of security at sign-in</div></div><div style="display:flex;align-items:center;gap:10px"><span style="font-size:11.5px;font-weight:800;color:#B0463A;background:#DAF5FB;padding:3px 9px;border-radius:6px">Off</span><a href="#" style="font-size:13px;font-weight:700;color:#0F1023;border:1.5px solid #E1E5F0;padding:9px 15px;border-radius:9px" style-hover="border-color:#0F1023">Enable</a></div></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 0"><div><div style="font-size:14px;font-weight:700;color:#0F1023">Active sessions</div><div style="font-size:12.5px;color:#8A90A6;margin-top:2px">2 devices signed in</div></div><a href="#" style="font-size:13px;font-weight:700;color:#0F1023;border:1.5px solid #E1E5F0;padding:9px 15px;border-radius:9px" style-hover="border-color:#0F1023">Manage</a></div>
+        </div>
+      </section>
+
+      <!-- NOTIFICATION PREFS -->
+      <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:26px;margin-bottom:20px">
+        <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 18px;color:#0F1023">Notification preferences</h2>
+        <div style="display:flex;flex-direction:column">
+          <sc-for list="{{ prefs }}" as="p" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid #F0F2F8">
+              <div><div style="font-size:14px;font-weight:600;color:#2C2822">{{ p.label }}</div><div style="font-size:12px;color:#9AA1B4;margin-top:2px">{{ p.desc }}</div></div>
+              <span style="{{ p.toggle }}"><span style="{{ p.knob }}"></span></span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- ACCESSIBILITY -->
+      <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:26px;margin-bottom:20px">
+        <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0 0 18px;color:#0F1023">Accessibility</h2>
+        <div style="display:flex;flex-direction:column">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid #F0F2F8"><div><div style="font-size:14px;font-weight:600;color:#2C2822">Reduced motion</div><div style="font-size:12px;color:#9AA1B4;margin-top:2px">Minimize background animation across RaeLearn</div></div><span style="width:44px;height:25px;border-radius:99px;background:#5A3DF5;position:relative;flex-shrink:0"><span style="position:absolute;top:3px;left:22px;width:19px;height:19px;border-radius:50%;background:#fff"></span></span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 0"><div><div style="font-size:14px;font-weight:600;color:#2C2822">Larger text</div><div style="font-size:12px;color:#9AA1B4;margin-top:2px">Increase base font size for readability</div></div><span style="width:44px;height:25px;border-radius:99px;background:#E1E5F0;position:relative;flex-shrink:0"><span style="position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff"></span></span></div>
+        </div>
+      </section>
+
+      <!-- DANGER -->
+      <section style="background:#FCF6F4;border:1px solid #F1D9D2;border-radius:16px;padding:24px">
+        <h2 style="font-family:'Poppins',serif;font-weight:700;font-size:17px;margin:0 0 4px;color:#A23A2C">Deactivate or delete account</h2>
+        <p style="font-size:13px;color:#9A6157;margin:0 0 16px;max-width:520px">Deactivating pauses your account and hides your profile. Deleting permanently removes your learning history and certificates.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><a href="#" style="font-size:13px;font-weight:700;color:#A23A2C;border:1.5px solid #E5BDB3;padding:10px 16px;border-radius:9px;background:#fff" style-hover="border-color:#A23A2C">Deactivate account</a><a href="#" style="font-size:13px;font-weight:700;color:#fff;background:#C0432F;padding:10px 16px;border-radius:9px" style-hover="background:#A53727">Request deletion</a></div>
+      </section>
+
+    </main>
+
+    <dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals() {
+    const toggle = (on) => 'width:44px;height:25px;border-radius:99px;flex-shrink:0;position:relative;background:' + (on ? '#5A3DF5' : '#E1E5F0');
+    const knob = (on) => 'position:absolute;top:3px;width:19px;height:19px;border-radius:50%;background:#fff;left:' + (on ? '22px' : '3px');
+    const PREFS = [
+      { label: 'Course & assignment reminders', desc: 'Due dates and new assignments', on: true },
+      { label: 'Certificate alerts', desc: 'When you earn or complete a certificate', on: true },
+      { label: 'Recommendations', desc: 'New courses suggested for you', on: false },
+      { label: 'Organization announcements', desc: 'Updates from Raeform Foundation', on: true },
+    ];
+    return {
+      prefs: PREFS.map(p => ({ label: p.label, desc: p.desc, toggle: toggle(p.on), knob: knob(p.on) })),
+    };
+  }
+}
+</script>
+</body>
+</html>

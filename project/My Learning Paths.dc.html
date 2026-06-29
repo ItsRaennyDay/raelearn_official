@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:#F1F3FB;color:#0F1023;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{text-wrap:balance}
+  </style>
+</helmet>
+
+<div style="display:flex;align-items:stretch;min-height:100vh">
+  <dc-import name="AppSidebar" mode="learner" current="paths" hint-size="248px,100%" style="flex:0 0 248px"></dc-import>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;background:#F1F3FB">
+    <dc-import name="AppTopBar" mode="learner" eyebrow="My learning" title="Learning Paths" hint-size="100%,68px" style="display:block;width:100%"></dc-import>
+
+    <main style="flex:1;width:100%;max-width:1000px;margin:0 auto;padding:26px 30px 64px">
+
+      <!-- ACTIVE PATH -->
+      <section style="background:#fff;border:1px solid #E7E9F2;border-radius:18px;padding:26px;margin-bottom:22px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:20px">
+          <div style="display:flex;align-items:center;gap:16px">
+            <div style="width:54px;height:54px;border-radius:14px;background:#EDE7F9;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"></circle><circle cx="18" cy="5" r="3"></circle><path d="M6 16V9a4 4 0 0 1 4-4h5"></path></svg></div>
+            <div>
+              <div style="font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#7B61FF">Current path</div>
+              <h2 style="font-family:'Poppins',serif;font-weight:800;font-size:24px;margin:3px 0 0;color:#0F1023">Nonprofit VA Path</h2>
+              <p style="font-size:13px;color:#8A90A6;margin:4px 0 0">4 of 6 courses complete · ~7 hrs left</p>
+            </div>
+          </div>
+          <div style="text-align:right"><div style="font-family:'Poppins',serif;font-weight:800;font-size:30px;color:#7B61FF">68%</div><div style="font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#9AA1B4">Complete</div></div>
+        </div>
+        <div style="height:9px;background:#EDE6D8;border-radius:99px;overflow:hidden;margin-bottom:22px"><div style="height:100%;width:68%;background:#7B61FF;border-radius:99px"></div></div>
+
+        <div style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#A6ACC0;margin-bottom:12px">Required courses</div>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:20px">
+          <sc-for list="{{ required }}" as="p" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:13px;padding:13px 15px;border:1px solid #F0F2F8;border-radius:12px;background:{{ p.rowBg }}">
+              <span style="{{ p.dot }}">{{ p.mark }}</span>
+              <div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:600;color:#2C2822">{{ p.title }}</div><div style="font-size:12px;color:#9AA1B4;margin-top:1px">{{ p.meta }}</div></div>
+              <span style="font-size:12.5px;font-weight:700;color:{{ p.statusColor }};white-space:nowrap">{{ p.status }}</span>
+              <a href="Course Detail.dc.html" style="{{ p.ctaStyle }}">{{ p.cta }}</a>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#A6ACC0;margin-bottom:12px">Optional courses</div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{ optional }}" as="p" hint-placeholder-count="2">
+            <div style="display:flex;align-items:center;gap:13px;padding:13px 15px;border:1px solid #F0F2F8;border-radius:12px">
+              <span style="width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#F1ECE0;color:#A6ACC0"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg></span>
+              <div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:600;color:#2C2822">{{ p.title }}</div><div style="font-size:12px;color:#9AA1B4;margin-top:1px">{{ p.meta }}</div></div>
+              <a href="Course Detail.dc.html" style="font-size:13px;font-weight:700;color:#0F1023;border:1.5px solid #E1E5F0;padding:9px 15px;border-radius:9px;white-space:nowrap" style-hover="border-color:#0F1023">Add</a>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- EXPLORE MORE PATHS -->
+      <section style="background:#fff;border:1px solid #E7E9F2;border-radius:16px;padding:24px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><h2 style="font-family:'Poppins',serif;font-weight:700;font-size:18px;margin:0;color:#0F1023">Explore more paths</h2><a href="Learning Paths.dc.html" style="font-size:13px;font-weight:700;color:#5A3DF5">All paths →</a></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:13px">
+          <sc-for list="{{ explore }}" as="e" hint-placeholder-count="3">
+            <a href="Learning Paths.dc.html" style="border:1px solid #EEF1F8;border-radius:13px;padding:18px;display:block" style-hover="border-color:#C7CCDC">
+              <span style="{{ e.tagChip }}">{{ e.tag }}</span>
+              <div style="font-family:'Poppins',serif;font-weight:700;font-size:16px;margin:11px 0 5px;color:#0F1023">{{ e.title }}</div>
+              <div style="font-size:12.5px;color:#8A90A6">{{ e.meta }}</div>
+            </a>
+          </sc-for>
+        </div>
+      </section>
+
+    </main>
+
+    <dc-import name="SiteFooter" hint-size="100%,360px" style="display:block;width:100%"></dc-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  renderVals() {
+    const REQ = [
+      { title:'Inbox & Calendar Systems', meta:'Foundations · 2.5 hrs', done:true },
+      { title:'Donor Records Cleanup', meta:'Data & CRM · 4 hrs', active:true },
+      { title:'Compliance Calendar Support', meta:'Operations · 3 hrs', next:true },
+      { title:'Board Meeting Prep', meta:'Governance · 4 hrs' },
+    ];
+    const required = REQ.map(s => {
+      const status = s.done?'Done':s.active?'In progress':s.next?'Up next':'Locked';
+      const statusColor = s.done?'#2D8BFF':s.active?'#7B61FF':s.next?'#7B61FF':'#A6ACC0';
+      return {
+        title:s.title, meta:s.meta, status, statusColor,
+        rowBg: s.active?'#F6F8FD':'#FFFFFF',
+        mark: s.done?'✓':'',
+        dot: 'width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;' +
+          (s.done?'background:#E4F0FF;color:#2D8BFF':s.active?'background:#EDE7F9;color:#7B61FF':'background:#EFEAE0;color:#A6ACC0'),
+        cta: s.done?'Review':s.active?'Resume':s.next?'Start':'Locked',
+        ctaStyle: 'font-size:13px;font-weight:700;white-space:nowrap;padding:9px 15px;border-radius:9px;' +
+          (s.active||s.next ? 'color:#fff;background:#0F1023' : 'color:#0F1023;border:1.5px solid #E1E5F0;background:transparent'),
+      };
+    });
+    const optional = [
+      { title:'Grant Tracker Basics', meta:'Grants · 3.5 hrs' },
+      { title:'Volunteer Coordination', meta:'Operations · 2 hrs' },
+    ];
+    const tagChip = (t) => 'font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:6px;' + ({ Nonprofit:'color:#7B61FF;background:#EDE7F9', Donor:'color:#1F6F8B;background:#E2EEF2', Grants:'color:#7B61FF;background:#ECE9FE' }[t] || 'color:#857E70;background:#EFEAE0');
+    const explore = [
+      { tag:'Donor', title:'Donor Operations Path', meta:'4 courses · certificate' },
+      { tag:'Grants', title:'Grant Admin VA Path', meta:'5 courses · certificate' },
+      { tag:'Nonprofit', title:'Founder Support VA', meta:'4 courses · certificate' },
+    ].map(e => ({ tag:e.tag, title:e.title, meta:e.meta, tagChip: tagChip(e.tag) }));
+    return { required, optional, explore };
+  }
+}
+</script>
+</body>
+</html>
