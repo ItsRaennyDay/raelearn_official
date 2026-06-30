@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
-const PROTECTED_PREFIXES = ["/dashboard", "/group-dashboard", "/admin"];
+const PROTECTED_PREFIXES = ["/dashboard", "/group-dashboard", "/admin", "/learn"];
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
 export async function proxy(request: NextRequest) {
