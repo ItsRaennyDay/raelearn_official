@@ -14,7 +14,8 @@ interface QuoteBlock     { type: "quote";     text: string; attribution?: string
 interface CalloutBlock   { type: "callout";   variant: CalloutVariant; title?: string; text: string }
 interface VideoBlock     { type: "video";     url: string; title?: string; caption?: string }
 interface QuizBlock      { type: "quiz";      question: string; options: string[]; correct: number; explanation?: string }
-interface FlashcardBlock { type: "flashcard"; front: string; back: string; hint?: string }
+interface FlashcardCard  { front: string; back: string; hint?: string }
+interface FlashcardBlock { type: "flashcard"; cards: FlashcardCard[]; columns: 1 | 2 | 3 | 4; front?: string; back?: string; hint?: string }
 interface ChecklistBlock { type: "checklist"; items: { text: string; checked: boolean }[] }
 interface CodeBlock      { type: "code";      code: string; language?: string }
 interface ResourceBlock  { type: "resource";  url: string; title: string; description?: string; fileType: ResourceFileType }
@@ -196,7 +197,7 @@ const makeBlock: Record<BlockType, () => Block> = {
   callout:   () => ({ type: "callout",   variant: "tip", title: "", text: "" }),
   video:     () => ({ type: "video",     url: "", title: "", caption: "" }),
   quiz:      () => ({ type: "quiz",      question: "", options: ["", "", "", ""], correct: 0, explanation: "" }),
-  flashcard: () => ({ type: "flashcard", front: "", back: "", hint: "" }),
+  flashcard: () => ({ type: "flashcard" as const, cards: [{ front: "", back: "", hint: "" }], columns: 1 as const }),
   checklist: () => ({ type: "checklist", items: [{ text: "", checked: false }] }),
   code:      () => ({ type: "code",      code: "", language: "text" }),
   resource:  () => ({ type: "resource",  url: "", title: "", description: "", fileType: "link" }),
@@ -521,45 +522,102 @@ function QuizEditor({ block, onChange }: { block: QuizBlock; onChange: (b: QuizB
   );
 }
 
-function FlashcardEditor({ block, onChange }: { block: FlashcardBlock; onChange: (b: FlashcardBlock) => void }) {
+function normalizeFlashcardCards(block: FlashcardBlock): FlashcardCard[] {
+  if (Array.isArray(block.cards) && block.cards.length > 0) return block.cards;
+  return [{ front: block.front ?? "", back: block.back ?? "", hint: block.hint }];
+}
+
+function ColIcon({ n }: { n: number }) {
+  const w = 28; const h = 18; const gap = 2; const colW = (w - gap * (n - 1)) / n;
   return (
-    <div className="space-y-3">
-      <div className="grid grid-cols-2 gap-3">
-        <div
-          className="rounded-xl p-4"
-          style={{ background: "#EEF5EE", border: "2px solid #B8D4B5" }}
-        >
-          <div className={label} style={{ color: "#2A5230" }}>Front (Question)</div>
-          <AutoTextarea
-            value={block.front}
-            onChange={(v) => onChange({ ...block, front: v })}
-            placeholder="Question, term, or concept…"
-            className="w-full text-sm text-[#1A2E1C] bg-transparent focus:outline-none leading-relaxed"
-            minRows={3}
-          />
-        </div>
-        <div
-          className="rounded-xl p-4"
-          style={{ background: "#F5F0E8", border: "2px solid #E8D8B0" }}
-        >
-          <div className={label} style={{ color: "#8A6020" }}>Back (Answer)</div>
-          <AutoTextarea
-            value={block.back}
-            onChange={(v) => onChange({ ...block, back: v })}
-            placeholder="Answer, definition, or explanation…"
-            className="w-full text-sm text-[#1A2E1C] bg-transparent focus:outline-none leading-relaxed"
-            minRows={3}
-          />
+    <svg viewBox={`0 0 ${w} ${h}`} width={w} height={h} fill="currentColor" style={{ display: "block" }}>
+      {Array.from({ length: n }).map((_, i) => (
+        <rect key={i} x={i * (colW + gap)} y={0} width={colW} height={h} rx={2} />
+      ))}
+    </svg>
+  );
+}
+
+function FlashcardEditor({ block, onChange }: { block: FlashcardBlock; onChange: (b: FlashcardBlock) => void }) {
+  const cards = normalizeFlashcardCards(block);
+  const columns = block.columns ?? 1;
+
+  function update(cards: FlashcardCard[], columns: 1 | 2 | 3 | 4) {
+    onChange({ type: "flashcard", cards, columns });
+  }
+  function setCard(i: number, card: FlashcardCard) {
+    update(cards.map((c, x) => x === i ? card : c), columns);
+  }
+  function addCard() { update([...cards, { front: "", back: "", hint: "" }], columns); }
+  function removeCard(i: number) { update(cards.filter((_, x) => x !== i), columns); }
+
+  return (
+    <div className="space-y-4">
+      {/* Column layout picker */}
+      <div>
+        <div className={label}>Column Layout</div>
+        <div className="flex items-center gap-2 mt-1">
+          {([1, 2, 3, 4] as const).map((n) => (
+            <button
+              key={n}
+              title={`${n} column${n > 1 ? "s" : ""}`}
+              onClick={() => update(cards, n)}
+              className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl text-xs font-bold border-2 transition-all"
+              style={{
+                borderColor: columns === n ? "#2A5230" : "#E5E7EB",
+                background: columns === n ? "#EEF5EE" : "#fff",
+                color: columns === n ? "#2A5230" : "#9CA3AF",
+              }}
+            >
+              <ColIcon n={n} />
+              {n} {n === 1 ? "col" : "cols"}
+            </button>
+          ))}
         </div>
       </div>
-      <div>
-        <div className={label}>Hint (optional)</div>
-        <input
-          className={input}
-          value={block.hint ?? ""}
-          onChange={(e) => onChange({ ...block, hint: e.target.value })}
-          placeholder="Optional clue shown before flip"
-        />
+
+      {/* Card editors */}
+      <div className="space-y-3">
+        <div className={label}>Cards ({cards.length})</div>
+        {cards.map((card, i) => (
+          <div key={i} className="rounded-xl border-2 border-[#E5E7EB] p-3 space-y-2">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-xs font-bold" style={{ color: "#9CA3AF" }}>Card {i + 1}</span>
+              {cards.length > 1 && (
+                <button onClick={() => removeCard(i)} className="text-red-400 hover:text-red-600 transition-colors"><Ico.Close /></button>
+              )}
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="rounded-lg p-3" style={{ background: "#EEF5EE", border: "1.5px solid #B8D4B5" }}>
+                <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: "#7A9878" }}>Front</div>
+                <AutoTextarea
+                  value={card.front}
+                  onChange={(v) => setCard(i, { ...card, front: v })}
+                  placeholder="Question, term, or concept…"
+                  className="w-full text-sm text-[#1A2E1C] bg-transparent focus:outline-none leading-relaxed"
+                  minRows={2}
+                />
+              </div>
+              <div className="rounded-lg p-3" style={{ background: "#F5F0E8", border: "1.5px solid #E8D8B0" }}>
+                <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: "#B8965A" }}>Back</div>
+                <AutoTextarea
+                  value={card.back}
+                  onChange={(v) => setCard(i, { ...card, back: v })}
+                  placeholder="Answer, definition, or explanation…"
+                  className="w-full text-sm text-[#1A2E1C] bg-transparent focus:outline-none leading-relaxed"
+                  minRows={2}
+                />
+              </div>
+            </div>
+            <input
+              className={input}
+              value={card.hint ?? ""}
+              onChange={(e) => setCard(i, { ...card, hint: e.target.value })}
+              placeholder="Hint (optional, shown before flip)"
+            />
+          </div>
+        ))}
+        <button onClick={addCard} className="text-xs font-bold text-[#2A5230] hover:underline">+ Add card</button>
       </div>
     </div>
   );
@@ -810,94 +868,72 @@ function QuizPreview({ block }: { block: QuizBlock }) {
   );
 }
 
-function FlashcardPreview({ block }: { block: FlashcardBlock }) {
+function FlipCard({ front, back, hint }: { front: string; back: string; hint?: string }) {
   const [flipped, setFlipped] = useState(false);
-
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-col gap-2">
+      {/* Fixed height wrapper — required so absolute-inset faces have a real container */}
       <div
-        className="w-full cursor-pointer select-none"
-        style={{ perspective: "1000px", minHeight: "160px" }}
+        className="cursor-pointer select-none"
+        style={{ perspective: "1000px", height: 180 }}
         onClick={() => setFlipped((f) => !f)}
       >
         <div
           style={{
             position: "relative",
             width: "100%",
-            minHeight: "160px",
+            height: "100%",
             transformStyle: "preserve-3d",
             transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1)",
             transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
           }}
         >
-          {/* Front */}
           <div
-            className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center p-6 text-center"
+            className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center p-4 text-center overflow-auto"
             style={{
               backfaceVisibility: "hidden",
               WebkitBackfaceVisibility: "hidden",
-              background: "linear-gradient(135deg, #EEF5EE 0%, #E0EEE0 100%)",
+              background: "linear-gradient(135deg,#EEF5EE,#E0EEE0)",
               border: "2px solid #B8D4B5",
             }}
           >
-            <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#7A9878" }}>
-              Question
-            </div>
-            <p className="font-semibold text-base leading-snug" style={{ color: "#1A2E1C" }}>
-              {block.front || "Front of card"}
-            </p>
-            {block.hint && (
-              <p className="mt-3 text-xs italic" style={{ color: "#9AB89E" }}>
-                Hint: {block.hint}
-              </p>
-            )}
-            <div className="mt-4 text-xs" style={{ color: "#B8D4B5" }}>Click to flip →</div>
+            <div className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: "#7A9878" }}>Question</div>
+            <p className="font-semibold text-sm leading-snug" style={{ color: "#1A2E1C" }}>{front || "Front of card"}</p>
+            {hint && <p className="mt-2 text-xs italic" style={{ color: "#9AB89E" }}>Hint: {hint}</p>}
+            <div className="mt-3 text-[10px]" style={{ color: "#B8D4B5" }}>Click to flip →</div>
           </div>
-
-          {/* Back */}
           <div
-            className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center p-6 text-center"
+            className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center p-4 text-center overflow-auto"
             style={{
               backfaceVisibility: "hidden",
               WebkitBackfaceVisibility: "hidden",
               transform: "rotateY(180deg)",
-              background: "linear-gradient(135deg, #FFF8E8 0%, #F5EED8 100%)",
+              background: "linear-gradient(135deg,#FFF8E8,#F5EED8)",
               border: "2px solid #E8D8B0",
             }}
           >
-            <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#B8965A" }}>
-              Answer
-            </div>
-            <p className="text-base leading-relaxed" style={{ color: "#1A2E1C" }}>
-              {block.back || "Back of card"}
-            </p>
-            <div className="mt-4 text-xs" style={{ color: "#E8D8B0" }}>← Click to flip back</div>
+            <div className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: "#B8965A" }}>Answer</div>
+            <p className="text-sm leading-relaxed" style={{ color: "#1A2E1C" }}>{back || "Back of card"}</p>
+            <div className="mt-3 text-[10px]" style={{ color: "#E8D8B0" }}>← Flip back</div>
           </div>
         </div>
       </div>
-
-      <div className="flex items-center gap-2">
-        <button
-          onClick={() => setFlipped(false)}
-          className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all"
-          style={{
-            background: !flipped ? "#2A5230" : "#EEF5EE",
-            color: !flipped ? "#fff" : "#2A5230",
-          }}
-        >
-          Question
-        </button>
-        <button
-          onClick={() => setFlipped(true)}
-          className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all"
-          style={{
-            background: flipped ? "#C48A3A" : "#FFF8E8",
-            color: flipped ? "#fff" : "#C48A3A",
-          }}
-        >
-          Answer
-        </button>
+      <div className="flex items-center gap-1.5 justify-center">
+        <button onClick={(e) => { e.stopPropagation(); setFlipped(false); }} className="text-xs font-bold px-2.5 py-1 rounded-lg transition-all" style={{ background: !flipped ? "#2A5230" : "#EEF5EE", color: !flipped ? "#fff" : "#2A5230" }}>Q</button>
+        <button onClick={(e) => { e.stopPropagation(); setFlipped(true); }} className="text-xs font-bold px-2.5 py-1 rounded-lg transition-all" style={{ background: flipped ? "#C48A3A" : "#FFF8E8", color: flipped ? "#fff" : "#C48A3A" }}>A</button>
       </div>
+    </div>
+  );
+}
+
+function FlashcardPreview({ block }: { block: FlashcardBlock }) {
+  const cards = normalizeFlashcardCards(block);
+  const columns = block.columns ?? 1;
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: `repeat(${columns}, 1fr)`, gap: 12 }}>
+      {cards.map((card, i) => (
+        <FlipCard key={i} front={card.front} back={card.back} hint={card.hint} />
+      ))}
     </div>
   );
 }

@@ -149,7 +149,7 @@ function RenderBlock({ block, isDark }: { block: ContentBlock; isDark: boolean }
   }
 
   if (block.type === "flashcard") {
-    return <InlineFlashcard block={block} isDark={isDark} />;
+    return <InlineFlashcard block={block} />;
   }
 
   if (block.type === "checklist") {
@@ -232,25 +232,49 @@ function InlineQuiz({ block, isDark }: { block: ContentBlock; isDark: boolean })
   );
 }
 
-function InlineFlashcard({ block, isDark }: { block: ContentBlock; isDark: boolean }) {
+function FlipCardPlayer({ front, back, hint }: { front: string; back: string; hint?: string }) {
   const [flipped, setFlipped] = useState(false);
-  void isDark;
   return (
-    <div className="flex flex-col items-center gap-3">
-      <div className="w-full cursor-pointer select-none" style={{ perspective: "1000px", minHeight: 160 }} onClick={() => setFlipped(f => !f)}>
-        <div style={{ position: "relative", width: "100%", minHeight: 160, transformStyle: "preserve-3d", transition: "transform 0.5s", transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}>
-          <div className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center p-6 text-center" style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", background: "linear-gradient(135deg,#EEF5EE,#E0EEE0)", border: "2px solid #B8D4B5" }}>
+    <div className="flex flex-col gap-2">
+      {/* Fixed height container — prevents face collision during 3D flip */}
+      <div
+        className="cursor-pointer select-none"
+        style={{ perspective: "1000px", height: 180 }}
+        onClick={() => setFlipped(f => !f)}
+      >
+        <div style={{ position: "relative", width: "100%", height: "100%", transformStyle: "preserve-3d", transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1)", transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}>
+          <div className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center p-6 text-center overflow-auto" style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", background: "linear-gradient(135deg,#EEF5EE,#E0EEE0)", border: "2px solid #B8D4B5" }}>
             <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#7A9878" }}>Question</div>
-            <p className="font-semibold text-base leading-snug" style={{ color: "#1A2E1C" }}>{String(block.front ?? "")}</p>
-            {!!block.hint && <p className="mt-2 text-xs italic" style={{ color: "#9AB89E" }}>Hint: {String(block.hint)}</p>}
+            <p className="font-semibold text-base leading-snug" style={{ color: "#1A2E1C" }}>{front}</p>
+            {!!hint && <p className="mt-2 text-xs italic" style={{ color: "#9AB89E" }}>Hint: {hint}</p>}
             <div className="mt-3 text-xs" style={{ color: "#B8D4B5" }}>Click to flip →</div>
           </div>
-          <div className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center p-6 text-center" style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)", background: "linear-gradient(135deg,#FFF8E8,#F5EED8)", border: "2px solid #E8D8B0" }}>
+          <div className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center p-6 text-center overflow-auto" style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)", background: "linear-gradient(135deg,#FFF8E8,#F5EED8)", border: "2px solid #E8D8B0" }}>
             <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#B8965A" }}>Answer</div>
-            <p className="text-base leading-relaxed" style={{ color: "#1A2E1C" }}>{String(block.back ?? "")}</p>
+            <p className="text-base leading-relaxed" style={{ color: "#1A2E1C" }}>{back}</p>
+            <div className="mt-3 text-xs" style={{ color: "#E8D8B0" }}>← Click to flip back</div>
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function InlineFlashcard({ block }: { block: ContentBlock }) {
+  const rawCards = Array.isArray(block.cards)
+    ? (block.cards as { front: unknown; back: unknown; hint?: unknown }[])
+    : [{ front: block.front, back: block.back, hint: block.hint }];
+  const columns = typeof block.columns === "number" ? Math.min(4, Math.max(1, Math.round(block.columns))) : 1;
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: `repeat(${columns}, 1fr)`, gap: 16 }}>
+      {rawCards.map((card, i) => (
+        <FlipCardPlayer
+          key={i}
+          front={String(card.front ?? "")}
+          back={String(card.back ?? "")}
+          hint={card.hint ? String(card.hint) : undefined}
+        />
+      ))}
     </div>
   );
 }
