@@ -32,17 +32,21 @@ function DashboardMockup() {
         </div>
 
         {/* Path line */}
-        <div className="relative h-[58px] my-1 mb-4">
-          <svg viewBox="0 0 380 58" preserveAspectRatio="none" className="absolute inset-0 w-full h-full">
+        <div className="relative h-[60px] my-1 mb-4">
+          <svg viewBox="0 0 340 60" preserveAspectRatio="none" className="absolute inset-0 w-full h-full">
             <path
-              d="M18,40 C70,8 120,8 168,32 C210,52 250,52 300,22 C330,6 350,10 364,16"
-              fill="none" stroke="#C5D8C5" strokeWidth="2.4" strokeDasharray="2 7" strokeLinecap="round"
+              d="M12,44 C50,14 90,10 120,30 C150,50 180,50 220,28 C250,10 280,8 328,18"
+              fill="none" stroke="#C5D8C5" strokeWidth="2.2" strokeDasharray="3 8" strokeLinecap="round"
             />
           </svg>
-          <span className="absolute left-2 top-[30px] w-[22px] h-[22px] rounded-full bg-[#4A7A4E] text-white text-[11px] font-extrabold flex items-center justify-center">✓</span>
-          <span className="absolute left-[152px] top-[22px] w-[22px] h-[22px] rounded-full bg-[#4A7A4E] text-white text-[11px] font-extrabold flex items-center justify-center">✓</span>
-          <span className="absolute left-[288px] top-3 w-6 h-6 rounded-full bg-white border-[2.5px] border-[#5A8C5E] shadow-[0_0_0_4px_rgba(90,140,94,0.16)]" />
-          <span className="absolute left-[352px] top-1.5 w-[18px] h-[18px] rounded-full bg-[#EAF2EA] border-2 border-dashed border-[#C5D8C5]" />
+          {/* step 1 — done */}
+          <span className="absolute left-[4px] top-[34px] w-[22px] h-[22px] rounded-full bg-[#4A7A4E] text-white text-[10px] font-extrabold flex items-center justify-center">✓</span>
+          {/* step 2 — done */}
+          <span className="absolute left-[108px] top-[20px] w-[22px] h-[22px] rounded-full bg-[#4A7A4E] text-white text-[10px] font-extrabold flex items-center justify-center">✓</span>
+          {/* step 3 — current */}
+          <span className="absolute left-[212px] top-[17px] w-[24px] h-[24px] rounded-full bg-white border-[2.5px] border-[#5A8C5E] shadow-[0_0_0_4px_rgba(90,140,94,0.15)]" />
+          {/* step 4 — upcoming */}
+          <span className="absolute right-[4px] top-3 w-[18px] h-[18px] rounded-full bg-[#EAF2EA] border-[2px] border-dashed border-[#C5D8C5]" />
         </div>
 
         {/* Course rows */}
@@ -150,14 +154,6 @@ export default function HomePage() {
         <div className="relative flex gap-14 items-center flex-wrap">
           {/* Left */}
           <div className="flex-1 min-w-[320px]" style={{ flexBasis: "440px" }}>
-            {/* Eyebrow pill */}
-            <div className="inline-flex items-center gap-2 bg-white border border-[#DDE8DA] rounded-full px-3.5 py-[7px] mb-6">
-              <span className="w-2 h-2 rounded-full bg-[#4A7A4E] shrink-0" />
-              <span className="text-xs font-bold tracking-[0.06em] text-[#4A6650]">
-                PRACTICAL TRAINING FOR PEOPLE WHO RUN THINGS
-              </span>
-            </div>
-
             {/* Headline */}
             <h1 className="font-head font-extrabold text-[clamp(36px,5.1vw,62px)] leading-[1.04] tracking-[-0.018em] mb-6 text-[#2A5230]">
               Learn the{" "}
@@ -231,8 +227,7 @@ export default function HomePage() {
       {/* ── How it works ── */}
       <section className="bg-[#EEE8DC] border-t border-[#DDD5C4] px-7 py-[88px]">
         <div className="max-w-[960px] mx-auto">
-          <div className="flex items-center gap-2 mb-[18px]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#5A8C5E] shrink-0" />
+          <div className="mb-[18px]">
             <span className="text-xs font-medium tracking-[0.1em] uppercase text-[#5A8C5E]">How it works</span>
           </div>
           <h2 className="font-display font-bold text-3xl text-[#2A5230] mb-11 leading-[1.2]">
@@ -257,7 +252,7 @@ export default function HomePage() {
               },
             ].map(({ n, title, body }) => (
               <div key={n} className="bg-white border border-[#DDE8DA] rounded-xl p-7">
-                <div className="font-mono text-[36px] text-[#4A7A4E] leading-none mb-3">{n}</div>
+                <div className="font-head font-bold text-[38px] text-[#4A7A4E] leading-none mb-3">{n}</div>
                 <h3 className="font-display font-bold text-lg text-[#2A5230] mb-2.5 leading-[1.3]">{title}</h3>
                 <p className="text-sm leading-[1.65] text-[#4A6650]">{body}</p>
               </div>
@@ -269,8 +264,7 @@ export default function HomePage() {
       {/* ── Courses ── */}
       <section className="bg-[#F5F0E8] border-t border-[#E5DDD0] px-7 py-[88px]">
         <div className="max-w-[960px] mx-auto text-center">
-          <div className="inline-flex items-center gap-2 mb-[18px]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#5A8C5E] shrink-0" />
+          <div className="mb-[18px]">
             <span className="text-xs font-medium tracking-[0.1em] uppercase text-[#5A8C5E]">Courses</span>
           </div>
           <h2 className="font-display font-bold text-3xl text-[#2A5230] mb-4 leading-[1.2]">
