@@ -102,6 +102,18 @@ const NAV_SECTIONS = [
           </svg>
         ),
       },
+      {
+        label: "Bundles",
+        href: "/admin/bundles",
+        icon: (
+          <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="2" width="7" height="7" rx="1.5" fill="currentColor" opacity=".2" stroke="none" />
+            <rect x="11" y="2" width="7" height="7" rx="1.5" fill="currentColor" opacity=".4" stroke="none" />
+            <rect x="2" y="11" width="7" height="7" rx="1.5" fill="currentColor" opacity=".4" stroke="none" />
+            <rect x="11" y="11" width="7" height="7" rx="1.5" fill="currentColor" opacity=".6" stroke="none" />
+          </svg>
+        ),
+      },
     ],
   },
   {
@@ -234,6 +246,7 @@ const BREADCRUMB: Record<string, string> = {
   "/admin/resources": "Resources",
   "/admin/certificates": "Certificates",
   "/admin/tags": "Tags",
+  "/admin/bundles": "Bundles",
   "/admin/users": "Users",
   "/admin/enrollments": "Enrollments",
   "/admin/organizations": "Organizations",

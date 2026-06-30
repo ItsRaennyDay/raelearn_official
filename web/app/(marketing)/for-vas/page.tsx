@@ -1,37 +1,7 @@
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
 
-const TRACKS = [
-  {
-    title: "General VA Foundations",
-    desc: "Inbox, calendar, communication, and weekly reporting basics every VA needs.",
-    meta: "5 courses · ~4 hrs",
-  },
-  {
-    title: "Founder Support VA",
-    desc: "Support startup founders with systems, scheduling, and light operations.",
-    meta: "6 courses · ~5 hrs",
-  },
-  {
-    title: "Nonprofit Operations VA",
-    desc: "Donor records, board admin, and compliance-aware support for nonprofits.",
-    meta: "7 courses · ~6 hrs",
-  },
-  {
-    title: "Website Maintenance VA",
-    desc: "Backups, updates, uptime checks, and content edits for client sites.",
-    meta: "5 courses · ~4 hrs",
-  },
-  {
-    title: "Operations VA",
-    desc: "SOPs, workflow mapping, and process documentation for growing teams.",
-    meta: "6 courses · ~5 hrs",
-  },
-  {
-    title: "Automation Support VA",
-    desc: "Connect the tools clients already use and remove repetitive busywork.",
-    meta: "4 courses · ~3 hrs",
-  },
-];
+export const revalidate = 60;
 
 const SUPPORT_AREAS = [
   {
@@ -43,7 +13,7 @@ const SUPPORT_AREAS = [
     bg: "#DDE8DA",
     title: "Nonprofit VA support",
     desc: "Donors, boards, grants, and compliance calendars.",
-    href: "/courses?cat=nonprofit",
+    href: "/courses",
   },
   {
     icon: (
@@ -54,7 +24,7 @@ const SUPPORT_AREAS = [
     bg: "#EEE8DC",
     title: "Business VA support",
     desc: "Client workflows, SOPs, and backend setup.",
-    href: "/courses?cat=business",
+    href: "/courses",
   },
   {
     icon: (
@@ -81,19 +51,45 @@ const SUPPORT_AREAS = [
   },
 ];
 
-const VA_COURSES = [
-  { title: "Website Maintenance Basics",                        tag: "VA · Website",   access: "FREE",    accessColor: "#2D8BFF", accessBg: "#E4F0FF", cta: "Enroll Free" },
-  { title: "What VAs Need to Know Before Supporting a Nonprofit", tag: "VA · Onboarding", access: "FREE",  accessColor: "#2D8BFF", accessBg: "#E4F0FF", cta: "Enroll Free" },
-  { title: "Website Maintenance for VAs",                       tag: "VA · Website",   access: "PAID",    accessColor: "#4A6650", accessBg: "#DDE8DA", cta: "View Course" },
-  { title: "Board Admin Support for Nonprofit VAs",             tag: "VA · Board",     access: "PAID",    accessColor: "#4A6650", accessBg: "#DDE8DA", cta: "View Course" },
-];
+export default async function ForVAsPage() {
+  const supabase = await createClient();
 
-const CERTS = [
-  { title: "Nonprofit Operations VA Certificate", meta: "~9 hrs · intermediate" },
-  { title: "Founder Support VA Certificate",      meta: "~8 hrs · intermediate" },
-];
+  // Fetch published VA bundles (tracks)
+  const { data: bundles } = await supabase
+    .from("bundles")
+    .select(`
+      id, title, description, slug, sort_order,
+      bundle_courses ( course_id )
+    `)
+    .eq("audience", "va")
+    .eq("is_published", true)
+    .order("sort_order");
 
-export default function ForVAsPage() {
+  // Fetch published VA courses (tagged audience=va)
+  const { data: vaCourses } = await supabase
+    .from("courses")
+    .select(`
+      id, title, slug, level, price_type, certificate_eligible,
+      course_tags ( tags ( slug, group ) )
+    `)
+    .eq("status", "published")
+    .limit(50);
+
+  // Filter to those with audience tag "va"
+  type CourseRaw = typeof vaCourses extends (infer T)[] | null ? T : never;
+  function hasVATag(c: CourseRaw): boolean {
+    const ct = (c as Record<string, unknown>).course_tags as { tags: { slug: string; group: string } | null }[] | null;
+    return (ct ?? []).some((row) => row.tags?.group === "audience" && row.tags?.slug === "va");
+  }
+  const vaTaggedCourses = (vaCourses ?? []).filter(hasVATag);
+  const popularVA = vaTaggedCourses.slice(0, 4);
+  const vaCerts = vaTaggedCourses.filter((c) => c.certificate_eligible);
+
+  const ACC_META: Record<string, { label: string; color: string; bg: string; cta: string }> = {
+    free: { label: "FREE", color: "#2D8BFF", bg: "#E4F0FF", cta: "Enroll Free" },
+    paid: { label: "PAID", color: "#4A6650", bg: "#DDE8DA", cta: "View Course" },
+  };
+
   return (
     <div className="bg-rl-bg" style={{ fontFamily: "var(--font-sans)" }}>
       {/* Header */}
@@ -146,10 +142,7 @@ export default function ForVAsPage() {
                   <div key={label} className="flex items-center gap-2.5 text-[13.5px]" style={{ color: done ? "#2A5230" : "#7A9878" }}>
                     <span
                       className="w-[18px] h-[18px] rounded-[5px] flex-shrink-0 flex items-center justify-center"
-                      style={{
-                        background: done ? "#2A5230" : "#fff",
-                        border: done ? "none" : "1.6px solid #B8D4B5",
-                      }}
+                      style={{ background: done ? "#2A5230" : "#fff", border: done ? "none" : "1.6px solid #B8D4B5" }}
                     >
                       {done && (
                         <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#fff" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
@@ -172,33 +165,42 @@ export default function ForVAsPage() {
         </div>
       </section>
 
-      {/* Tracks */}
-      <section className="max-w-[1240px] mx-auto px-7 pt-16 pb-9">
-        <div className="mb-8">
-          <div className="text-[12.5px] font-extrabold tracking-[0.16em] uppercase text-rl-dim mb-3">Pick a track</div>
-          <h2 className="font-head font-extrabold text-[clamp(26px,3.4vw,40px)] leading-[1.1] tracking-[-0.015em] mb-2.5 text-rl-forest">
-            VA learning tracks
-          </h2>
-          <p className="text-[15.5px] leading-relaxed text-rl-muted max-w-[560px]">
-            Each track bundles the courses for one kind of support work, in a recommended order.
-          </p>
-        </div>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
-          {TRACKS.map((track) => (
-            <Link
-              key={track.title}
-              href="/courses"
-              className="bg-white border border-rl-border border-l-4 border-l-rl-forest rounded-[13px] p-5 block shadow-[0_10px_24px_-22px_rgba(42,82,48,0.35)] hover:-translate-y-[3px] transition-transform"
-            >
-              <h3 className="font-head font-bold text-[18px] mb-[7px] text-rl-forest">{track.title}</h3>
-              <p className="text-[13.5px] leading-[1.5] text-rl-muted mb-3">{track.desc}</p>
-              <span className="text-[12.5px] font-bold text-rl-forest">{track.meta} →</span>
-            </Link>
-          ))}
-        </div>
-      </section>
+      {/* Learning Tracks — from DB */}
+      {bundles && bundles.length > 0 && (
+        <section className="max-w-[1240px] mx-auto px-7 pt-16 pb-9">
+          <div className="mb-8">
+            <div className="text-[12.5px] font-extrabold tracking-[0.16em] uppercase text-rl-dim mb-3">Pick a track</div>
+            <h2 className="font-head font-extrabold text-[clamp(26px,3.4vw,40px)] leading-[1.1] tracking-[-0.015em] mb-2.5 text-rl-forest">
+              VA learning tracks
+            </h2>
+            <p className="text-[15.5px] leading-relaxed text-rl-muted max-w-[560px]">
+              Each track bundles the courses for one kind of support work, in a recommended order.
+            </p>
+          </div>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
+            {bundles.map((bundle) => {
+              const count = (bundle.bundle_courses as { course_id: string }[] | null)?.length ?? 0;
+              return (
+                <Link
+                  key={bundle.id}
+                  href="/courses"
+                  className="bg-white border border-rl-border border-l-4 border-l-rl-forest rounded-[13px] p-5 block shadow-[0_10px_24px_-22px_rgba(42,82,48,0.35)] hover:-translate-y-[3px] transition-transform"
+                >
+                  <h3 className="font-head font-bold text-[18px] mb-[7px] text-rl-forest">{bundle.title}</h3>
+                  {bundle.description && (
+                    <p className="text-[13.5px] leading-[1.5] text-rl-muted mb-3">{bundle.description}</p>
+                  )}
+                  <span className="text-[12.5px] font-bold text-rl-forest">
+                    {count} course{count !== 1 ? "s" : ""} →
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
-      {/* Support areas */}
+      {/* Support areas — static (these are structural, not filler) */}
       <section className="max-w-[1240px] mx-auto px-7 py-9">
         <div className="bg-[#F0F5F1] border border-rl-border rounded-[22px] p-[38px_30px]">
           <div className="text-center max-w-[600px] mx-auto mb-7">
@@ -216,10 +218,7 @@ export default function ForVAsPage() {
                 href={area.href}
                 className="bg-white border border-rl-border rounded-[13px] p-5 block hover:-translate-y-[2px] transition-transform"
               >
-                <div
-                  className="w-[42px] h-[42px] rounded-[11px] flex items-center justify-center mb-3.5"
-                  style={{ background: area.bg }}
-                >
+                <div className="w-[42px] h-[42px] rounded-[11px] flex items-center justify-center mb-3.5" style={{ background: area.bg }}>
                   {area.icon}
                 </div>
                 <h3 className="font-head font-bold text-[16.5px] mb-1.5 text-rl-forest">{area.title}</h3>
@@ -230,82 +229,87 @@ export default function ForVAsPage() {
         </div>
       </section>
 
-      {/* Popular VA courses */}
-      <section className="max-w-[1240px] mx-auto px-7 pt-11 pb-5">
-        <div className="flex items-end justify-between gap-5 flex-wrap mb-6">
-          <h2 className="font-head font-extrabold text-[clamp(24px,3vw,34px)] text-rl-forest">Popular VA courses</h2>
-          <Link
-            href="/courses"
-            className="text-[14px] font-bold text-rl-forest border-[1.5px] border-rl-forest px-4 py-2.5 rounded-[10px] whitespace-nowrap hover:bg-rl-forest hover:text-white transition-colors"
-          >
-            See all VA courses →
-          </Link>
-        </div>
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(248px,1fr))] gap-4">
-          {VA_COURSES.map((c) => (
+      {/* Popular VA courses — from DB */}
+      {popularVA.length > 0 && (
+        <section className="max-w-[1240px] mx-auto px-7 pt-11 pb-5">
+          <div className="flex items-end justify-between gap-5 flex-wrap mb-6">
+            <h2 className="font-head font-extrabold text-[clamp(24px,3vw,34px)] text-rl-forest">Popular VA courses</h2>
             <Link
-              key={c.title}
               href="/courses"
-              className="bg-white border border-rl-border rounded-[14px] overflow-hidden shadow-[0_12px_28px_-24px_rgba(42,82,48,0.3)] flex flex-col hover:-translate-y-[3px] transition-transform"
+              className="text-[14px] font-bold text-rl-forest border-[1.5px] border-rl-forest px-4 py-2.5 rounded-[10px] whitespace-nowrap hover:bg-rl-forest hover:text-white transition-colors"
             >
-              <div className="h-[5px] bg-rl-forest" />
-              <div className="p-[18px] flex flex-col flex-1">
-                <div className="flex justify-between mb-[11px]">
-                  <span className="text-[11px] font-extrabold text-rl-forest bg-[#DDE8DA] px-[9px] py-1 rounded-[7px]">
-                    {c.tag}
-                  </span>
-                  <span
-                    className="text-[10.5px] font-extrabold px-[9px] py-1 rounded-[7px]"
-                    style={{ color: c.accessColor, background: c.accessBg }}
-                  >
-                    {c.access}
-                  </span>
-                </div>
-                <h3 className="font-head font-bold text-[17px] leading-[1.25] mb-3 flex-1 text-rl-forest">{c.title}</h3>
-                <span className="text-center text-[13.5px] font-bold text-rl-forest border-[1.5px] border-rl-border py-2.5 rounded-[9px]">
-                  {c.cta}
-                </span>
-              </div>
+              See all VA courses →
             </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Certificates + Suggested path */}
-      <section className="max-w-[1240px] mx-auto px-7 pt-9 pb-5 grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
-        <div>
-          <h2 className="font-head font-extrabold text-[clamp(22px,2.6vw,30px)] mb-4 text-rl-forest">VA certificates</h2>
-          <div className="flex flex-col gap-3">
-            {CERTS.map((cert) => (
-              <Link
-                key={cert.title}
-                href="/courses"
-                className="flex items-center gap-3.5 bg-white border border-rl-border rounded-[13px] p-4 hover:-translate-y-[2px] transition-transform"
-              >
-                <div className="w-[42px] h-[42px] rounded-full bg-[#DDE8DA] flex items-center justify-center flex-shrink-0">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#2A5230" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="9" r="5" />
-                    <path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-head font-bold text-[16px] mb-0.5 text-rl-forest">{cert.title}</h3>
-                  <div className="text-[12.5px] text-rl-dim">{cert.meta}</div>
-                </div>
-                <span className="text-[18px] text-rl-forest">→</span>
-              </Link>
-            ))}
           </div>
-        </div>
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(248px,1fr))] gap-4">
+            {popularVA.map((c) => {
+              const accKey = c.certificate_eligible ? "paid" : c.price_type;
+              const acc = ACC_META[accKey] ?? ACC_META.free;
+              return (
+                <Link
+                  key={c.id}
+                  href={`/courses/${c.slug}`}
+                  className="bg-white border border-rl-border rounded-[14px] overflow-hidden shadow-[0_12px_28px_-24px_rgba(42,82,48,0.3)] flex flex-col hover:-translate-y-[3px] transition-transform"
+                >
+                  <div className="h-[5px] bg-rl-forest" />
+                  <div className="p-[18px] flex flex-col flex-1">
+                    <div className="flex justify-between mb-[11px]">
+                      <span className="text-[11px] font-extrabold text-rl-forest bg-[#DDE8DA] px-[9px] py-1 rounded-[7px]">
+                        VA
+                      </span>
+                      <span className="text-[10.5px] font-extrabold px-[9px] py-1 rounded-[7px]" style={{ color: acc.color, background: acc.bg }}>
+                        {acc.label}
+                      </span>
+                    </div>
+                    <h3 className="font-head font-bold text-[17px] leading-[1.25] mb-3 flex-1 text-rl-forest">{c.title}</h3>
+                    <span className="text-center text-[13.5px] font-bold text-rl-forest border-[1.5px] border-rl-border py-2.5 rounded-[9px]">
+                      {acc.cta}
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* VA Certificates + Suggested path */}
+      <section className="max-w-[1240px] mx-auto px-7 pt-9 pb-5 grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
+        {vaCerts.length > 0 && (
+          <div>
+            <h2 className="font-head font-extrabold text-[clamp(22px,2.6vw,30px)] mb-4 text-rl-forest">VA certificates</h2>
+            <div className="flex flex-col gap-3">
+              {vaCerts.map((cert) => (
+                <Link
+                  key={cert.id}
+                  href={`/courses/${cert.slug}`}
+                  className="flex items-center gap-3.5 bg-white border border-rl-border rounded-[13px] p-4 hover:-translate-y-[2px] transition-transform"
+                >
+                  <div className="w-[42px] h-[42px] rounded-full bg-[#DDE8DA] flex items-center justify-center flex-shrink-0">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#2A5230" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="9" r="5" />
+                      <path d="M8.5 13.5L7 21l5-2.5L17 21l-1.5-7.5" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-head font-bold text-[16px] mb-0.5 text-rl-forest">{cert.title}</h3>
+                    <div className="text-[12.5px] text-rl-dim capitalize">{cert.level}</div>
+                  </div>
+                  <span className="text-[18px] text-rl-forest">→</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div>
           <h2 className="font-head font-extrabold text-[clamp(22px,2.6vw,30px)] mb-4 text-rl-forest">Suggested by skill level</h2>
           <div className="bg-white border border-rl-border rounded-2xl p-[22px]">
             <div className="flex flex-col gap-0">
               {[
-                { level: "Beginner", color: "#3E9A52", title: "General VA Foundations", sub: "Inbox, calendar, client communication" },
-                { level: "Intermediate", color: "#2A5230", title: "Nonprofit or Website Maintenance VA", sub: "Specialize in a client type" },
-                { level: "Advanced", color: "#C48A3A", title: "Earn a VA Certificate", sub: "Prove the full system, raise your rate" },
+                { level: "Beginner",     color: "#3E9A52", title: "General VA Foundations",          sub: "Inbox, calendar, client communication" },
+                { level: "Intermediate", color: "#2A5230", title: "Nonprofit or Website Maintenance", sub: "Specialize in a client type" },
+                { level: "Advanced",     color: "#C48A3A", title: "Earn a VA Certificate",            sub: "Prove the full system, raise your rate" },
               ].map((step, i, arr) => (
                 <div key={step.level} className="flex gap-3.5">
                   <div className="flex flex-col items-center">
@@ -313,9 +317,7 @@ export default function ForVAsPage() {
                     {i < arr.length - 1 && <span className="w-0.5 flex-1 bg-rl-border my-0.5" />}
                   </div>
                   <div className={i < arr.length - 1 ? "pb-[18px]" : ""}>
-                    <div className="text-[11px] font-extrabold tracking-[0.08em] uppercase mb-0.5" style={{ color: step.color }}>
-                      {step.level}
-                    </div>
+                    <div className="text-[11px] font-extrabold tracking-[0.08em] uppercase mb-0.5" style={{ color: step.color }}>{step.level}</div>
                     <div className="text-[14.5px] font-bold text-rl-forest">{step.title}</div>
                     <div className="text-[13px] text-rl-muted">{step.sub}</div>
                   </div>
