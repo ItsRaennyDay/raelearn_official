@@ -16,15 +16,40 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
   const { id } = await params;
   const db = createAdminClient();
 
-  const { data: enrollments, error } = await db
+  // 1. Fetch enrollments (no join)
+  const { data: enrollments, error: enrollErr } = await db
     .from("enrollments")
-    .select(`id, user_id, status, enrolled_at, source, profiles:user_id(full_name, email, role)`)
+    .select("id, user_id, status, enrolled_at, source")
     .eq("course_id", id)
     .order("enrolled_at", { ascending: false });
 
-  if (error) return NextResponse.json({ error: "Failed to load enrollments." }, { status: 500 });
+  if (enrollErr) {
+    return NextResponse.json({ error: enrollErr.message }, { status: 500 });
+  }
 
   const userIds = (enrollments ?? []).map((e) => e.user_id);
+
+  // 2. Fetch profiles separately
+  const { data: profiles } = userIds.length
+    ? await db.from("profiles").select("id, full_name, email, role").in("id", userIds)
+    : { data: [] };
+
+  const profileMap = new Map((profiles ?? []).map((p) => [p.id, p]));
+
+  // 3. Get emails from auth.users for any profiles that don't have email
+  const missingEmailIds = userIds.filter((uid) => !profileMap.get(uid)?.email);
+  let authEmailMap: Map<string, string> = new Map();
+  if (missingEmailIds.length > 0) {
+    // fetch auth users one by one (small list in practice)
+    const emails = await Promise.all(
+      missingEmailIds.map((uid) =>
+        db.auth.admin.getUserById(uid).then((r) => [uid, r.data.user?.email ?? ""] as [string, string])
+      )
+    );
+    authEmailMap = new Map(emails);
+  }
+
+  // 4. Count completed lessons per user for this course
   const { data: progress } = userIds.length
     ? await db
         .from("lesson_progress")
@@ -39,8 +64,10 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
     completedByUser[p.user_id] = (completedByUser[p.user_id] ?? 0) + 1;
   }
 
+  // 5. Merge
   const result = (enrollments ?? []).map((e) => {
-    const profile = e.profiles as unknown as { full_name?: string; email?: string; role?: string } | null;
+    const profile = profileMap.get(e.user_id);
+    const email = profile?.email ?? authEmailMap.get(e.user_id) ?? null;
     return {
       id: e.id,
       user_id: e.user_id,
@@ -48,7 +75,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
       enrolled_at: e.enrolled_at,
       source: e.source,
       full_name: profile?.full_name ?? null,
-      email: profile?.email ?? null,
+      email,
       role: profile?.role ?? "learner",
       completed_lessons: completedByUser[e.user_id] ?? 0,
     };
@@ -74,21 +101,33 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
   const db = createAdminClient();
 
-  const { data: profile } = await db.from("profiles").select("id").eq("email", email).single();
-  if (!profile) return NextResponse.json({ error: "No registered user found with that email." }, { status: 404 });
+  // Look up user by email — check profiles first, then auth
+  let userId: string | null = null;
+
+  const { data: profileByEmail } = await db.from("profiles").select("id").eq("email", email).single();
+  if (profileByEmail) {
+    userId = profileByEmail.id;
+  } else {
+    // Fall back to auth.admin.listUsers and search by email
+    const { data: { users } } = await db.auth.admin.listUsers({ page: 1, perPage: 1000 });
+    const authUser = (users ?? []).find((u) => u.email?.toLowerCase() === email);
+    userId = authUser?.id ?? null;
+  }
+
+  if (!userId) return NextResponse.json({ error: "No registered user found with that email." }, { status: 404 });
 
   const { data: existing } = await db
-    .from("enrollments").select("id").eq("user_id", profile.id).eq("course_id", id).eq("status", "active").single();
+    .from("enrollments").select("id").eq("user_id", userId).eq("course_id", id).eq("status", "active").single();
   if (existing) return NextResponse.json({ error: "This user is already enrolled in this course." }, { status: 409 });
 
   const { error: insertError } = await db.from("enrollments").insert({
-    user_id: profile.id,
+    user_id: userId,
     course_id: id,
     status: "active",
     source: "admin",
     enrolled_at: new Date().toISOString(),
   });
 
-  if (insertError) return NextResponse.json({ error: "Failed to create enrollment." }, { status: 500 });
+  if (insertError) return NextResponse.json({ error: insertError.message }, { status: 500 });
   return NextResponse.json({ ok: true });
 }
