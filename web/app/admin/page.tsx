@@ -37,7 +37,7 @@ export default async function AdminOverviewPage() {
     {
       label: "Enrollments",
       value: enrollmentCount ?? 0,
-      href: "/admin/courses",
+      href: "/admin/enrollments",
       accent: "#6B4FBB",
       bg: "#F0ECFF",
       icon: (
@@ -51,7 +51,7 @@ export default async function AdminOverviewPage() {
     {
       label: "Total Learners",
       value: userCount ?? 0,
-      href: "/admin/courses",
+      href: "/admin/users",
       accent: "#B86B4A",
       bg: "#FFF3EE",
       icon: (
@@ -95,21 +95,13 @@ export default async function AdminOverviewPage() {
             className="font-extrabold text-3xl leading-tight"
             style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}
           >
-            Welcome back, Rae.
+            Dashboard
           </h1>
           <p className="text-sm mt-1.5" style={{ color: "#7A9878" }}>
             Here&apos;s a snapshot of your learning platform today.
           </p>
         </div>
 
-        {/* Sketch accent */}
-        <div className="hidden md:block relative w-20 h-14 opacity-40">
-          <svg viewBox="0 0 80 56" fill="none">
-            <path d="M10 45 Q25 10 45 28 Q60 42 72 12" stroke="#2A5230" strokeWidth="2" strokeLinecap="round" fill="none" />
-            <circle cx="72" cy="12" r="3" fill="#C48A3A" />
-            <circle cx="10" cy="45" r="2.5" fill="#2A5230" />
-          </svg>
-        </div>
       </div>
 
       {/* Stats row */}
@@ -319,63 +311,7 @@ export default async function AdminOverviewPage() {
             </div>
           </Link>
 
-          {/* Site preview */}
-          <Link
-            href="/"
-            target="_blank"
-            className="group rounded-2xl p-5 transition-all hover:-translate-y-0.5"
-            style={{
-              background: "#FFF8E8",
-              border: "1.5px solid #EAD9B5",
-              boxShadow: "0 2px 12px rgba(196,138,58,0.08)",
-            }}
-          >
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center mb-3"
-              style={{ background: "rgba(196,138,58,0.12)" }}
-            >
-              <svg viewBox="0 0 18 18" width="18" height="18" fill="none" stroke="#C48A3A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 3.75a5.25 5.25 0 1 0 0 10.5A5.25 5.25 0 0 0 9 3.75Z" />
-                <path d="M9 3.75c-1.5 0-2.625 2.318-2.625 5.25S7.5 14.25 9 14.25s2.625-2.318 2.625-5.25S10.5 3.75 9 3.75Z" />
-                <path d="M3.75 9h10.5" />
-              </svg>
-            </div>
-            <div className="text-sm font-bold mb-1" style={{ color: "#8A6020" }}>Preview Live Site</div>
-            <div className="text-xs" style={{ color: "#B8965A" }}>
-              Open the learner-facing site in a new tab
-            </div>
-            <div className="text-xs font-bold mt-3" style={{ color: "#C48A3A" }}>
-              Open RaeLearn ↗
-            </div>
-          </Link>
         </div>
-      </div>
-
-      {/* Bottom sketch decoration */}
-      <div className="mt-10 flex items-center gap-3 opacity-25">
-        <svg viewBox="0 0 200 12" width="200" height="12" fill="none">
-          <path
-            d="M2 7 Q50 2 100 6 Q150 10 198 5"
-            stroke="#2A5230"
-            strokeWidth="1.5"
-            fill="none"
-            strokeLinecap="round"
-            strokeDasharray="4 3"
-          />
-        </svg>
-        <span className="text-xs" style={{ fontFamily: "var(--font-hand)", color: "#2A5230" }}>
-          RaeLearn Creator Studio
-        </span>
-        <svg viewBox="0 0 200 12" width="200" height="12" fill="none">
-          <path
-            d="M2 5 Q50 10 100 6 Q150 2 198 7"
-            stroke="#2A5230"
-            strokeWidth="1.5"
-            fill="none"
-            strokeLinecap="round"
-            strokeDasharray="4 3"
-          />
-        </svg>
       </div>
     </div>
   );
