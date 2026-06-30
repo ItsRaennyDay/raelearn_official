@@ -125,8 +125,7 @@ export default function CourseEditor({ course, modules: initModules, categories,
     role: string; completed_lessons: number;
   };
   const [enrollments, setEnrollments] = useState<EnrollmentRow[]>([]);
-  const [enrollmentsLoaded, setEnrollmentsLoaded] = useState(false);
-  const [enrollmentsLoading, setEnrollmentsLoading] = useState(false);
+  const [enrollStatus, setEnrollStatus] = useState<"idle" | "loading" | "loaded" | "error">("idle");
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviting, setInviting] = useState(false);
   const [enrollError, setEnrollError] = useState<string | null>(null);
@@ -134,24 +133,26 @@ export default function CourseEditor({ course, modules: initModules, categories,
   const [revoking, setRevoking] = useState<string | null>(null);
 
   const loadEnrollments = useCallback(async () => {
-    setEnrollmentsLoading(true);
+    setEnrollStatus("loading");
     try {
       const res = await fetch(`/api/admin/courses/${course.id}/enrollments`);
       if (res.ok) {
         const d = await res.json();
         setEnrollments(d.enrollments ?? []);
-        setEnrollmentsLoaded(true);
+        setEnrollStatus("loaded");
+      } else {
+        setEnrollStatus("error");
       }
-    } finally {
-      setEnrollmentsLoading(false);
+    } catch {
+      setEnrollStatus("error");
     }
   }, [course.id]);
 
   useEffect(() => {
-    if (tab === "enrollments" && !enrollmentsLoaded && !enrollmentsLoading) {
+    if (tab === "enrollments" && enrollStatus === "idle") {
       loadEnrollments();
     }
-  }, [tab, enrollmentsLoaded, enrollmentsLoading, loadEnrollments]);
+  }, [tab, enrollStatus, loadEnrollments]);
 
   async function inviteLearner(e: React.FormEvent) {
     e.preventDefault();
@@ -172,7 +173,7 @@ export default function CourseEditor({ course, modules: initModules, categories,
     } else {
       setInviteEmail("");
       setEnrollSuccess("Learner enrolled successfully.");
-      await loadEnrollments();
+      setEnrollStatus("idle");
     }
   }
 
@@ -490,21 +491,23 @@ export default function CourseEditor({ course, modules: initModules, categories,
               {/* Table header */}
               <div className="flex items-center justify-between px-5 py-3 bg-[#FAFCFA] border-b border-[#F0F7F0]">
                 <span className="text-xs font-bold uppercase tracking-wide text-[#7A9878]">
-                  {enrollmentsLoaded
+                  {enrollStatus === "loaded"
                     ? `${enrollments.filter((e) => e.status === "active").length} active · ${enrollments.length} total`
                     : "Enrolled Learners"}
                 </span>
                 <button
-                  onClick={loadEnrollments}
-                  disabled={enrollmentsLoading}
+                  onClick={() => setEnrollStatus("idle")}
+                  disabled={enrollStatus === "loading"}
                   className="text-xs text-[#7A9878] hover:text-[#2A5230] transition-colors disabled:opacity-40"
                 >
-                  {enrollmentsLoading ? "Loading…" : "↻ Refresh"}
+                  {enrollStatus === "loading" ? "Loading…" : "↻ Refresh"}
                 </button>
               </div>
 
-              {enrollmentsLoading && !enrollmentsLoaded ? (
+              {enrollStatus === "loading" ? (
                 <div className="px-5 py-12 text-center text-sm text-[#9AB89E]">Loading…</div>
+              ) : enrollStatus === "error" ? (
+                <div className="px-5 py-12 text-center text-sm text-red-400">Failed to load enrollments. <button onClick={() => setEnrollStatus("idle")} className="underline">Retry</button></div>
               ) : enrollments.length === 0 ? (
                 <div className="px-5 py-12 text-center text-sm text-[#9AB89E]">No enrollments yet</div>
               ) : (
