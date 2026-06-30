@@ -172,59 +172,196 @@ function RenderBlock({ block, isDark }: { block: ContentBlock; isDark: boolean }
     return <div className="flex items-center gap-3 py-1"><div className="flex-1 h-px" style={{ background: isDark ? "rgba(255,255,255,0.12)" : "#E5E7EB" }} /><span style={{ color: isDark ? "rgba(255,255,255,0.2)" : "#D1D5DB", fontSize: 12 }}>§</span><div className="flex-1 h-px" style={{ background: isDark ? "rgba(255,255,255,0.12)" : "#E5E7EB" }} /></div>;
   }
 
+  if (block.type === "bulletlist") {
+    const items = (block.items as string[] | undefined) ?? [];
+    const style = String(block.style ?? "disc");
+    const CHARS: Record<string, string> = { disc: "•", circle: "○", square: "▪", arrow: "→", check: "✓", dash: "—", star: "★", number: "" };
+    const char = CHARS[style] ?? "•";
+    return (
+      <ul className="space-y-1.5">
+        {items.map((item, i) => (
+          <li key={i} className="flex items-start gap-2.5 text-[15px] leading-relaxed" style={{ color: isDark ? "#C8DCC8" : "#374151" }}>
+            <span className="shrink-0 font-bold mt-0.5" style={{ color: "#2A5230", fontFamily: "monospace", minWidth: 18, textAlign: "center" }}>
+              {style === "number" ? `${i + 1}.` : char}
+            </span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  if (block.type === "table") {
+    const headers = (block.headers as string[] | undefined) ?? [];
+    const rows = (block.rows as string[][] | undefined) ?? [];
+    return (
+      <div className="overflow-x-auto rounded-xl border" style={{ borderColor: isDark ? "rgba(255,255,255,0.12)" : "#DDE8DA" }}>
+        <table className="w-full text-sm border-collapse">
+          <thead>
+            <tr style={{ background: isDark ? "rgba(42,82,48,0.4)" : "#EEF5EE" }}>
+              {headers.map((h, c) => (
+                <th key={c} className="px-4 py-2.5 text-left text-xs font-bold" style={{ color: "#2A5230", borderBottom: `1px solid ${isDark ? "rgba(255,255,255,0.1)" : "#DDE8DA"}`, borderRight: c < headers.length - 1 ? `1px solid ${isDark ? "rgba(255,255,255,0.1)" : "#DDE8DA"}` : undefined }}>
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, r) => (
+              <tr key={r} style={{ background: r % 2 === 0 ? (isDark ? "rgba(255,255,255,0.03)" : "#FAFCFA") : "transparent" }}>
+                {row.map((cell, c) => (
+                  <td key={c} className="px-4 py-2.5" style={{ color: isDark ? "#C8DCC8" : "#374151", borderBottom: r < rows.length - 1 ? `1px solid ${isDark ? "rgba(255,255,255,0.06)" : "#F0F7F0"}` : undefined, borderRight: c < row.length - 1 ? `1px solid ${isDark ? "rgba(255,255,255,0.06)" : "#F0F7F0"}` : undefined }}>
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
   return null;
 }
 
 function InlineQuiz({ block, isDark }: { block: ContentBlock; isDark: boolean }) {
-  const [selected, setSelected] = useState<number | null>(null);
-  const [submitted, setSubmitted] = useState(false);
+  const qtype = String(block.quizType ?? "multiple_choice");
   const opts = (block.options as string[] | undefined) ?? [];
   const correct = Number(block.correct ?? 0);
-  const isCorrect = submitted && selected === correct;
+  const correctMulti = (block.correctMulti as number[] | undefined) ?? [];
+  const pairs = (block.pairs as { a: string; b: string }[] | undefined) ?? [];
+  const cards = (block.cards as { text: string; correct: boolean }[] | undefined) ?? [];
+  const graded = Boolean(block.graded);
+
+  const [selectedSingle, setSelectedSingle] = useState<number | null>(null);
+  const [selectedMulti, setSelectedMulti] = useState<number[]>([]);
+  const [matchSel, setMatchSel] = useState<{ side: "a" | "b"; idx: number } | null>(null);
+  const [matched, setMatched] = useState<Record<number, number>>({});
+  const [pickedCard, setPickedCard] = useState<number | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+
+  const bdr = isDark ? "rgba(42,82,48,0.5)" : "#DDE8DA";
+  const headBg = isDark ? "rgba(42,82,48,0.4)" : "#EEF5EE";
+
+  function handleMatchClick(side: "a" | "b", idx: number) {
+    if (submitted) return;
+    if (!matchSel) { setMatchSel({ side, idx }); return; }
+    if (matchSel.side === side) { setMatchSel({ side, idx }); return; }
+    const aIdx = matchSel.side === "a" ? matchSel.idx : idx;
+    const bIdx = matchSel.side === "b" ? matchSel.idx : idx;
+    setMatched((m) => ({ ...m, [aIdx]: bIdx }));
+    setMatchSel(null);
+  }
+
+  const isCheckboxes = qtype === "checkboxes";
+  const canSubmit = qtype === "match"
+    ? Object.keys(matched).length >= pairs.length
+    : isCheckboxes ? selectedMulti.length > 0 : selectedSingle !== null;
+
+  function checkCorrect(): boolean {
+    if (isCheckboxes) return [...selectedMulti].sort().join(",") === [...correctMulti].sort().join(",");
+    return selectedSingle === correct;
+  }
+  const isCorrect = submitted && (qtype === "match" || qtype === "pickacard" ? true : checkCorrect());
+
   return (
-    <div className="rounded-2xl overflow-hidden" style={{ border: `1.5px solid ${isDark ? "rgba(42,82,48,0.5)" : "#DDE8DA"}`, background: isDark ? "rgba(42,82,48,0.2)" : "#FAFCFA" }}>
-      <div className="px-5 py-3 flex items-center gap-2" style={{ background: isDark ? "rgba(42,82,48,0.4)" : "#EEF5EE", borderBottom: `1px solid ${isDark ? "rgba(42,82,48,0.4)" : "#DDE8DA"}` }}>
-        <span className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-extrabold" style={{ background: "#2A5230", color: "#fff" }}>Q</span>
-        <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#2A5230" }}>Knowledge Check</span>
+    <div className="rounded-2xl overflow-hidden" style={{ border: `1.5px solid ${bdr}`, background: isDark ? "rgba(42,82,48,0.2)" : "#FAFCFA" }}>
+      <div className="px-5 py-3 flex items-center justify-between" style={{ background: headBg, borderBottom: `1px solid ${bdr}` }}>
+        <div className="flex items-center gap-2">
+          <span className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-extrabold" style={{ background: "#2A5230", color: "#fff" }}>Q</span>
+          <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#2A5230" }}>Knowledge Check</span>
+        </div>
+        {graded && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: "#FEF3C7", color: "#92400E" }}>Graded</span>}
       </div>
       <div className="px-5 py-4">
         <p className="font-semibold text-[15px] mb-4 leading-snug" style={{ color: isDark ? "#E8F5E9" : "#1A2E1C" }}>{String(block.question ?? "")}</p>
-        <div className="space-y-2">
-          {opts.map((opt, i) => {
-            const isSelected = selected === i;
-            const isRight = i === correct;
-            let bg = isDark ? "rgba(255,255,255,0.06)" : "#fff";
-            let border = isDark ? "rgba(255,255,255,0.1)" : "#DDE8DA";
-            let color = isDark ? "#C8DCC8" : "#1A2E1C";
-            if (submitted) {
-              if (isRight)           { bg = "#F0FDF4"; border = "#86EFAC"; color = "#166534"; }
-              else if (isSelected)   { bg = "#FEF2F2"; border = "#FECACA"; color = "#DC2626"; }
-            } else if (isSelected)  { bg = "#EEF5EE"; border = "#2A5230"; color = "#1A2E1C"; }
-            return (
-              <button key={i} onClick={() => !submitted && setSelected(i)} disabled={submitted}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl border-2 text-left text-sm font-medium transition-all"
-                style={{ background: bg, borderColor: border, color }}>
-                <span className="w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center text-[10px]"
-                  style={{ borderColor: (isSelected || (submitted && isRight)) ? "#2A5230" : "#DDE8DA", background: (isSelected || (submitted && isRight)) ? "#2A5230" : "transparent", color: "#fff" }}>
-                  {submitted && isRight && "✓"}{submitted && isSelected && !isRight && "✗"}
-                </span>
-                {opt}
-              </button>
-            );
-          })}
-        </div>
-        {!submitted ? (
-          <button onClick={() => selected !== null && setSubmitted(true)} disabled={selected === null}
-            className="mt-4 px-5 py-2 rounded-xl text-sm font-bold disabled:opacity-40"
-            style={{ background: "#2A5230", color: "#fff" }}>Check Answer</button>
-        ) : (
-          <div className="mt-4">
-            <div className="px-4 py-3 rounded-xl text-sm mb-3"
-              style={{ background: isCorrect ? "#F0FDF4" : "#FEF2F2", border: `1px solid ${isCorrect ? "#86EFAC" : "#FECACA"}`, color: isCorrect ? "#166534" : "#DC2626" }}>
-              <span className="font-bold">{isCorrect ? "Correct!" : "Not quite."}</span>
-              {!!block.explanation && <span className="ml-2">{String(block.explanation)}</span>}
+
+        {/* Match */}
+        {qtype === "match" && (
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <div className="space-y-2">
+              <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: "#7A9878" }}>Column A</div>
+              {pairs.map((p, i) => (
+                <button key={i} onClick={() => handleMatchClick("a", i)} className="w-full text-left px-3 py-2 rounded-xl text-sm border-2 transition-all"
+                  style={{ borderColor: matchSel?.side === "a" && matchSel.idx === i ? "#2A5230" : (i in matched) ? "#86EFAC" : "#DDE8DA", background: matchSel?.side === "a" && matchSel.idx === i ? "#EEF5EE" : (i in matched) ? "#F0FDF4" : "#fff", color: "#1A2E1C" }}>
+                  {p.a}
+                </button>
+              ))}
             </div>
-            <button onClick={() => { setSelected(null); setSubmitted(false); }} className="text-xs font-bold underline" style={{ color: "#7A9878" }}>Try again</button>
+            <div className="space-y-2">
+              <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: "#B8965A" }}>Column B</div>
+              {pairs.map((p, i) => (
+                <button key={i} onClick={() => handleMatchClick("b", i)} className="w-full text-left px-3 py-2 rounded-xl text-sm border-2 transition-all"
+                  style={{ borderColor: matchSel?.side === "b" && matchSel.idx === i ? "#C48A3A" : Object.values(matched).includes(i) ? "#86EFAC" : "#DDE8DA", background: matchSel?.side === "b" && matchSel.idx === i ? "#FFF8E8" : Object.values(matched).includes(i) ? "#F0FDF4" : "#fff", color: "#1A2E1C" }}>
+                  {p.b}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Pick a card */}
+        {qtype === "pickacard" && (
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            {cards.map((card, i) => (
+              <button key={i} onClick={() => { if (!submitted) { setPickedCard(i); setSubmitted(true); } }}
+                className="rounded-xl p-4 text-center border-2 min-h-[70px] flex items-center justify-center transition-all"
+                style={{ borderColor: pickedCard === i ? (card.correct ? "#86EFAC" : "#FECACA") : "#DDE8DA", background: pickedCard === i ? (card.correct ? "#F0FDF4" : "#FEF2F2") : "#fff", color: pickedCard === i ? (card.correct ? "#166534" : "#DC2626") : "#1A2E1C" }}>
+                {pickedCard === i ? <span className="font-bold text-sm">{card.text}</span> : <span className="text-2xl">?</span>}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Multiple choice / Radio / Checkboxes */}
+        {(qtype === "multiple_choice" || qtype === "radio" || qtype === "checkboxes") && (
+          <div className="space-y-2 mb-4">
+            {opts.map((opt, i) => {
+              const isSel = isCheckboxes ? selectedMulti.includes(i) : selectedSingle === i;
+              const isRight = isCheckboxes ? correctMulti.includes(i) : i === correct;
+              let bg = isDark ? "rgba(255,255,255,0.06)" : "#fff";
+              let border = isDark ? "rgba(255,255,255,0.1)" : "#DDE8DA";
+              let color = isDark ? "#C8DCC8" : "#1A2E1C";
+              if (submitted) {
+                if (isRight)      { bg = "#F0FDF4"; border = "#86EFAC"; color = "#166534"; }
+                else if (isSel)   { bg = "#FEF2F2"; border = "#FECACA"; color = "#DC2626"; }
+              } else if (isSel) { bg = "#EEF5EE"; border = "#2A5230"; color = "#1A2E1C"; }
+              return (
+                <button key={i} onClick={() => {
+                  if (submitted) return;
+                  if (isCheckboxes) setSelectedMulti((s) => s.includes(i) ? s.filter((x) => x !== i) : [...s, i]);
+                  else setSelectedSingle(i);
+                }} disabled={submitted}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl border-2 text-left text-sm font-medium transition-all"
+                  style={{ background: bg, borderColor: border, color }}>
+                  <span className={`w-5 h-5 border-2 shrink-0 flex items-center justify-center text-[10px] ${isCheckboxes ? "rounded" : "rounded-full"}`}
+                    style={{ borderColor: (isSel || (submitted && isRight)) ? "#2A5230" : "#DDE8DA", background: (isSel || (submitted && isRight)) ? "#2A5230" : "transparent", color: "#fff" }}>
+                    {submitted && isRight && "✓"}{submitted && isSel && !isRight && "✗"}
+                  </span>
+                  {opt}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {!submitted && qtype !== "pickacard" && (
+          <button onClick={() => canSubmit && setSubmitted(true)} disabled={!canSubmit}
+            className="px-5 py-2 rounded-xl text-sm font-bold disabled:opacity-40"
+            style={{ background: "#2A5230", color: "#fff" }}>Check Answer</button>
+        )}
+        {submitted && qtype !== "pickacard" && (
+          <div className="px-4 py-3 rounded-xl text-sm mt-2"
+            style={{ background: isCorrect ? "#F0FDF4" : "#FEF2F2", border: `1px solid ${isCorrect ? "#86EFAC" : "#FECACA"}`, color: isCorrect ? "#166534" : "#DC2626" }}>
+            <span className="font-bold">{isCorrect ? "Correct!" : "Not quite."}</span>
+            {!!block.explanation && <span className="ml-2">{String(block.explanation)}</span>}
+          </div>
+        )}
+        {submitted && qtype === "pickacard" && pickedCard !== null && (
+          <div className="px-4 py-3 rounded-xl text-sm mt-2 font-semibold"
+            style={{ background: cards[pickedCard]?.correct ? "#F0FDF4" : "#FEF2F2", color: cards[pickedCard]?.correct ? "#166534" : "#DC2626" }}>
+            {cards[pickedCard]?.correct ? "Correct pick!" : "Wrong card."}
           </div>
         )}
       </div>

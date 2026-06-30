@@ -16,11 +16,18 @@ export default async function AdminLessonEditorPage({ params }: Props) {
 
   if (!lesson) notFound();
 
-  const { data: course } = await supabase
-    .from("courses")
-    .select("id, title")
-    .eq("id", courseId)
-    .single();
+  const [{ data: course }, { data: module_ }] = await Promise.all([
+    supabase.from("courses").select("id, title").eq("id", courseId).single(),
+    supabase.from("modules").select("id, title").eq("id", lesson.module_id).single(),
+  ]);
 
-  return <LessonEditor lesson={lesson} courseId={courseId} courseTitle={course?.title ?? ""} />;
+  return (
+    <LessonEditor
+      lesson={lesson}
+      courseId={courseId}
+      courseTitle={course?.title ?? ""}
+      moduleId={module_?.id ?? lesson.module_id}
+      moduleTitle={module_?.title ?? ""}
+    />
+  );
 }

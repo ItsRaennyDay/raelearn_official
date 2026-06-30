@@ -13,7 +13,22 @@ interface HeadingBlock   { type: "heading";   text: string; level: HeadingLevel 
 interface QuoteBlock     { type: "quote";     text: string; attribution?: string }
 interface CalloutBlock   { type: "callout";   variant: CalloutVariant; title?: string; text: string }
 interface VideoBlock     { type: "video";     url: string; title?: string; caption?: string }
-interface QuizBlock      { type: "quiz";      question: string; options: string[]; correct: number; explanation?: string }
+type QuizType = "multiple_choice" | "radio" | "checkboxes" | "match" | "pickacard";
+interface QuizBlock {
+  type: "quiz";
+  quizType?: QuizType;
+  graded?: boolean;
+  question: string;
+  options: string[];
+  correct: number;
+  correctMulti?: number[];
+  explanation?: string;
+  pairs?: { a: string; b: string }[];
+  cards?: { text: string; correct: boolean }[];
+}
+type BulletStyle = "disc" | "circle" | "square" | "arrow" | "check" | "dash" | "star" | "number";
+interface BulletListBlock { type: "bulletlist"; items: string[]; style: BulletStyle }
+interface TableBlock { type: "table"; headers: string[]; rows: string[][] }
 interface FlashcardCard  { front: string; back: string; hint?: string }
 interface FlashcardBlock { type: "flashcard"; cards: FlashcardCard[]; columns: 1 | 2 | 3 | 4; front?: string; back?: string; hint?: string }
 interface ChecklistBlock { type: "checklist"; items: { text: string; checked: boolean }[] }
@@ -24,7 +39,8 @@ interface DividerBlock   { type: "divider" }
 type Block =
   | ParagraphBlock | HeadingBlock | QuoteBlock | CalloutBlock
   | VideoBlock | QuizBlock | FlashcardBlock | ChecklistBlock
-  | CodeBlock | ResourceBlock | DividerBlock;
+  | CodeBlock | ResourceBlock | DividerBlock
+  | BulletListBlock | TableBlock;
 
 type BlockType = Block["type"];
 
@@ -187,21 +203,47 @@ const Ico = {
       <path d="M8 4v8M4 8l4 4 4-4" />
     </svg>
   ),
+  BulletList: () => (
+    <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+      <circle cx="4" cy="6" r="1.2" fill="currentColor" stroke="none" />
+      <circle cx="4" cy="10" r="1.2" fill="currentColor" stroke="none" />
+      <circle cx="4" cy="14" r="1.2" fill="currentColor" stroke="none" />
+      <path d="M7 6h10M7 10h10M7 14h10" />
+    </svg>
+  ),
+  TableIcon: () => (
+    <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3" width="16" height="14" rx="2" />
+      <path d="M2 7h16M8 7v10M14 7v10" />
+    </svg>
+  ),
+  PlusSmall: () => (
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <path d="M8 3v10M3 8h10" />
+    </svg>
+  ),
+  Minus: () => (
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <path d="M3 8h10" />
+    </svg>
+  ),
 };
 
 /* ─────────────────────────── Defaults ─────────────────────────── */
 const makeBlock: Record<BlockType, () => Block> = {
-  paragraph: () => ({ type: "paragraph", text: "" }),
-  heading:   () => ({ type: "heading",   text: "", level: 2 }),
-  quote:     () => ({ type: "quote",     text: "", attribution: "" }),
-  callout:   () => ({ type: "callout",   variant: "tip", title: "", text: "" }),
-  video:     () => ({ type: "video",     url: "", title: "", caption: "" }),
-  quiz:      () => ({ type: "quiz",      question: "", options: ["", "", "", ""], correct: 0, explanation: "" }),
-  flashcard: () => ({ type: "flashcard" as const, cards: [{ front: "", back: "", hint: "" }], columns: 1 as const }),
-  checklist: () => ({ type: "checklist", items: [{ text: "", checked: false }] }),
-  code:      () => ({ type: "code",      code: "", language: "text" }),
-  resource:  () => ({ type: "resource",  url: "", title: "", description: "", fileType: "link" }),
-  divider:   () => ({ type: "divider" }),
+  paragraph:  () => ({ type: "paragraph", text: "" }),
+  heading:    () => ({ type: "heading",   text: "", level: 2 }),
+  quote:      () => ({ type: "quote",     text: "", attribution: "" }),
+  callout:    () => ({ type: "callout",   variant: "tip", title: "", text: "" }),
+  video:      () => ({ type: "video",     url: "", title: "", caption: "" }),
+  quiz:       () => ({ type: "quiz", quizType: "multiple_choice", graded: false, question: "", options: ["", "", "", ""], correct: 0, correctMulti: [], explanation: "", pairs: [{ a: "", b: "" }], cards: [{ text: "", correct: false }] }),
+  flashcard:  () => ({ type: "flashcard" as const, cards: [{ front: "", back: "", hint: "" }], columns: 1 as const }),
+  checklist:  () => ({ type: "checklist", items: [{ text: "", checked: false }] }),
+  code:       () => ({ type: "code",      code: "", language: "text" }),
+  resource:   () => ({ type: "resource",  url: "", title: "", description: "", fileType: "link" }),
+  divider:    () => ({ type: "divider" }),
+  bulletlist: () => ({ type: "bulletlist" as const, items: [""], style: "disc" as const }),
+  table:      () => ({ type: "table" as const, headers: ["Column 1", "Column 2"], rows: [["", ""]] }),
 };
 
 /* ─────────────────────────── Palette ─────────────────────────── */
@@ -209,23 +251,25 @@ const PALETTE_GROUPS: { label: string; items: { type: BlockType; label: string; 
   {
     label: "Text",
     items: [
-      { type: "paragraph", label: "Paragraph", icon: <Ico.Paragraph />, desc: "Body text" },
-      { type: "heading",   label: "Heading",   icon: <Ico.Heading />,   desc: "H1 – H4 title" },
-      { type: "quote",     label: "Quote",     icon: <Ico.Quote />,     desc: "Pull quote" },
-      { type: "callout",   label: "Callout",   icon: <Ico.Bell />,      desc: "Tip / warning" },
+      { type: "paragraph",  label: "Paragraph",   icon: <Ico.Paragraph />,  desc: "Body text" },
+      { type: "heading",    label: "Heading",     icon: <Ico.Heading />,    desc: "H1 – H4 title" },
+      { type: "bulletlist", label: "Bullet List", icon: <Ico.BulletList />, desc: "Bulleted items" },
+      { type: "quote",      label: "Quote",       icon: <Ico.Quote />,      desc: "Pull quote" },
+      { type: "callout",    label: "Callout",     icon: <Ico.Bell />,       desc: "Tip / warning" },
     ],
   },
   {
     label: "Media",
     items: [
-      { type: "video",     label: "Video",     icon: <Ico.Play />,      desc: "YouTube / Vimeo" },
-      { type: "code",      label: "Code",      icon: <Ico.Code />,      desc: "Code snippet" },
+      { type: "video",  label: "Video", icon: <Ico.Play />,      desc: "YouTube / Vimeo" },
+      { type: "code",   label: "Code",  icon: <Ico.Code />,      desc: "Code snippet" },
+      { type: "table",  label: "Table", icon: <Ico.TableIcon />, desc: "Data grid" },
     ],
   },
   {
     label: "Interactive",
     items: [
-      { type: "quiz",      label: "Quiz",      icon: <Ico.QuizIcon />,  desc: "Multiple choice" },
+      { type: "quiz",      label: "Quiz",      icon: <Ico.QuizIcon />,  desc: "5 quiz types" },
       { type: "flashcard", label: "Flashcard", icon: <Ico.Flashcard />, desc: "Flip card" },
       { type: "checklist", label: "Checklist", icon: <Ico.Checklist />, desc: "Action list" },
     ],
@@ -233,8 +277,8 @@ const PALETTE_GROUPS: { label: string; items: { type: BlockType; label: string; 
   {
     label: "Utility",
     items: [
-      { type: "resource",  label: "Resource",  icon: <Ico.Download />,  desc: "Download / link" },
-      { type: "divider",   label: "Divider",   icon: <Ico.Divider />,   desc: "Section break" },
+      { type: "resource", label: "Resource", icon: <Ico.Download />, desc: "Download / link" },
+      { type: "divider",  label: "Divider",  icon: <Ico.Divider />,  desc: "Section break" },
     ],
   },
 ];
@@ -447,77 +491,295 @@ function VideoEditor({ block, onChange }: { block: VideoBlock; onChange: (b: Vid
   );
 }
 
+const QUIZ_TYPES: { id: QuizType; label: string; desc: string }[] = [
+  { id: "multiple_choice", label: "Multiple Choice", desc: "Pick one (A/B/C/D)" },
+  { id: "radio",           label: "Radio",           desc: "Single select" },
+  { id: "checkboxes",      label: "Checkboxes",      desc: "Pick all correct" },
+  { id: "match",           label: "Match A & B",     desc: "Pair two lists" },
+  { id: "pickacard",       label: "Pick a Card",     desc: "Card game style" },
+];
+
 function QuizEditor({ block, onChange }: { block: QuizBlock; onChange: (b: QuizBlock) => void }) {
-  function setOpt(i: number, v: string) {
-    const o = [...block.options]; o[i] = v; onChange({ ...block, options: o });
-  }
+  const qtype = block.quizType ?? "multiple_choice";
+  const graded = block.graded ?? false;
+
+  function setOpt(i: number, v: string) { const o = [...block.options]; o[i] = v; onChange({ ...block, options: o }); }
   function addOpt() { onChange({ ...block, options: [...block.options, ""] }); }
   function removeOpt(i: number) {
     const o = block.options.filter((_, x) => x !== i);
-    onChange({ ...block, options: o, correct: Math.min(block.correct, o.length - 1) });
+    const cm = (block.correctMulti ?? []).filter((c) => c !== i).map((c) => c > i ? c - 1 : c);
+    onChange({ ...block, options: o, correct: Math.min(block.correct, o.length - 1), correctMulti: cm });
   }
+  function toggleMulti(i: number) {
+    const cm = block.correctMulti ?? [];
+    onChange({ ...block, correctMulti: cm.includes(i) ? cm.filter((x) => x !== i) : [...cm, i] });
+  }
+  function setPair(i: number, side: "a" | "b", v: string) {
+    const pairs = (block.pairs ?? [{ a: "", b: "" }]).map((p, x) => x === i ? { ...p, [side]: v } : p);
+    onChange({ ...block, pairs });
+  }
+  function addPair() { onChange({ ...block, pairs: [...(block.pairs ?? []), { a: "", b: "" }] }); }
+  function removePair(i: number) { onChange({ ...block, pairs: (block.pairs ?? []).filter((_, x) => x !== i) }); }
+  function setCard(i: number, text: string) {
+    const cards = (block.cards ?? []).map((c, x) => x === i ? { ...c, text } : c);
+    onChange({ ...block, cards });
+  }
+  function toggleCardCorrect(i: number) {
+    const cards = (block.cards ?? []).map((c, x) => x === i ? { ...c, correct: !c.correct } : c);
+    onChange({ ...block, cards });
+  }
+  function addCard() { onChange({ ...block, cards: [...(block.cards ?? []), { text: "", correct: false }] }); }
+  function removeCard(i: number) { onChange({ ...block, cards: (block.cards ?? []).filter((_, x) => x !== i) }); }
+
+  return (
+    <div className="space-y-4">
+      {/* Quiz type picker */}
+      <div>
+        <div className={label}>Quiz Type</div>
+        <div className="flex flex-wrap gap-1.5 mt-1">
+          {QUIZ_TYPES.map((qt) => (
+            <button key={qt.id} onClick={() => onChange({ ...block, quizType: qt.id })}
+              className="flex flex-col px-3 py-1.5 rounded-xl text-xs font-bold border-2 transition-all"
+              style={{ borderColor: qtype === qt.id ? "#2A5230" : "#E5E7EB", background: qtype === qt.id ? "#EEF5EE" : "#fff", color: qtype === qt.id ? "#2A5230" : "#9CA3AF" }}
+            >
+              {qt.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Graded toggle */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => onChange({ ...block, graded: !graded })}
+          className="relative w-9 h-5 rounded-full transition-all"
+          style={{ background: graded ? "#2A5230" : "#DDE8DA" }}
+        >
+          <span className="absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all" style={{ left: graded ? "18px" : "2px" }} />
+        </button>
+        <span className="text-xs font-bold" style={{ color: graded ? "#2A5230" : "#9CA3AF" }}>
+          {graded ? "Graded" : "Not graded (practice)"}
+        </span>
+      </div>
+
+      {/* Question */}
+      <div>
+        <div className={label}>Question</div>
+        <AutoTextarea value={block.question} onChange={(v) => onChange({ ...block, question: v })} placeholder="What is the question?" className={textarea} minRows={2} />
+      </div>
+
+      {/* Multiple choice / Radio — single correct */}
+      {(qtype === "multiple_choice" || qtype === "radio") && (
+        <div>
+          <div className={label}>Options — {qtype === "radio" ? "circle" : "mark"} to set correct answer</div>
+          <div className="space-y-2">
+            {block.options.map((opt, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <button onClick={() => onChange({ ...block, correct: i })}
+                  className="shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all"
+                  style={{ borderColor: block.correct === i ? "#2A5230" : "#DDE8DA", background: block.correct === i ? "#2A5230" : "white" }}
+                >
+                  {block.correct === i && <svg viewBox="0 0 10 10" width="9" height="9" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M2 5l2 2 4-4" /></svg>}
+                </button>
+                <input className={`${input} flex-1`} style={{ borderColor: block.correct === i ? "#2A5230" : undefined }}
+                  value={opt} onChange={(e) => setOpt(i, e.target.value)} placeholder={`Option ${String.fromCharCode(65 + i)}`} />
+                {block.options.length > 2 && <button onClick={() => removeOpt(i)} className="text-red-400 hover:text-red-600 shrink-0 transition-colors"><Ico.Close /></button>}
+              </div>
+            ))}
+          </div>
+          {block.options.length < 6 && <button onClick={addOpt} className="mt-2 text-xs font-bold text-[#2A5230] hover:underline">+ Add option</button>}
+        </div>
+      )}
+
+      {/* Checkboxes — multiple correct */}
+      {qtype === "checkboxes" && (
+        <div>
+          <div className={label}>Options — check all correct answers</div>
+          <div className="space-y-2">
+            {block.options.map((opt, i) => {
+              const isCorrect = (block.correctMulti ?? []).includes(i);
+              return (
+                <div key={i} className="flex items-center gap-2">
+                  <button onClick={() => toggleMulti(i)}
+                    className="shrink-0 w-6 h-6 rounded border-2 flex items-center justify-center transition-all"
+                    style={{ borderColor: isCorrect ? "#2A5230" : "#DDE8DA", background: isCorrect ? "#2A5230" : "white" }}
+                  >
+                    {isCorrect && <svg viewBox="0 0 10 10" width="9" height="9" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M2 5l2 2 4-4" /></svg>}
+                  </button>
+                  <input className={`${input} flex-1`} style={{ borderColor: isCorrect ? "#2A5230" : undefined }}
+                    value={opt} onChange={(e) => setOpt(i, e.target.value)} placeholder={`Option ${String.fromCharCode(65 + i)}`} />
+                  {block.options.length > 2 && <button onClick={() => removeOpt(i)} className="text-red-400 hover:text-red-600 shrink-0 transition-colors"><Ico.Close /></button>}
+                </div>
+              );
+            })}
+          </div>
+          {block.options.length < 8 && <button onClick={addOpt} className="mt-2 text-xs font-bold text-[#2A5230] hover:underline">+ Add option</button>}
+        </div>
+      )}
+
+      {/* Match A & B */}
+      {qtype === "match" && (
+        <div>
+          <div className={label}>Pairs — learner matches left to right</div>
+          <div className="space-y-2">
+            {(block.pairs ?? [{ a: "", b: "" }]).map((pair, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <input className={`${input} flex-1`} value={pair.a} onChange={(e) => setPair(i, "a", e.target.value)} placeholder={`A ${i + 1}`} />
+                <span className="text-[#B8D4B5] font-bold text-xs">↔</span>
+                <input className={`${input} flex-1`} value={pair.b} onChange={(e) => setPair(i, "b", e.target.value)} placeholder={`B ${i + 1}`} />
+                {(block.pairs ?? []).length > 2 && <button onClick={() => removePair(i)} className="text-red-400 hover:text-red-600 shrink-0 transition-colors"><Ico.Close /></button>}
+              </div>
+            ))}
+          </div>
+          {(block.pairs ?? []).length < 8 && <button onClick={addPair} className="mt-2 text-xs font-bold text-[#2A5230] hover:underline">+ Add pair</button>}
+        </div>
+      )}
+
+      {/* Pick a card */}
+      {qtype === "pickacard" && (
+        <div>
+          <div className={label}>Cards — toggle green to mark correct</div>
+          <div className="grid grid-cols-2 gap-2">
+            {(block.cards ?? []).map((card, i) => (
+              <div key={i} className="rounded-xl p-3 border-2 transition-all" style={{ borderColor: card.correct ? "#2A5230" : "#E5E7EB", background: card.correct ? "#EEF5EE" : "#fff" }}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "#9CA3AF" }}>Card {i + 1}</span>
+                  <div className="flex items-center gap-1">
+                    <button onClick={() => toggleCardCorrect(i)}
+                      className="text-[10px] font-bold px-2 py-0.5 rounded-full border transition-all"
+                      style={{ borderColor: card.correct ? "#2A5230" : "#DDE8DA", background: card.correct ? "#2A5230" : "#fff", color: card.correct ? "#fff" : "#9CA3AF" }}
+                    >
+                      {card.correct ? "Correct" : "Wrong"}
+                    </button>
+                    {(block.cards ?? []).length > 2 && <button onClick={() => removeCard(i)} className="text-red-400 hover:text-red-600 transition-colors"><Ico.Close /></button>}
+                  </div>
+                </div>
+                <input className={input} value={card.text} onChange={(e) => setCard(i, e.target.value)} placeholder="Card text…" />
+              </div>
+            ))}
+          </div>
+          {(block.cards ?? []).length < 8 && <button onClick={addCard} className="mt-3 text-xs font-bold text-[#2A5230] hover:underline">+ Add card</button>}
+        </div>
+      )}
+
+      {/* Explanation (not for match/pickacard) */}
+      {(qtype === "multiple_choice" || qtype === "radio" || qtype === "checkboxes") && (
+        <div>
+          <div className={label}>Explanation (shown after answer)</div>
+          <AutoTextarea value={block.explanation ?? ""} onChange={(v) => onChange({ ...block, explanation: v })} placeholder="Explain why the correct answer is right…" className={textarea} minRows={2} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── BulletList editor ─── */
+const BULLET_STYLES: { id: BulletStyle; label: string; char: string }[] = [
+  { id: "disc",   label: "Disc",   char: "•" },
+  { id: "circle", label: "Circle", char: "○" },
+  { id: "square", label: "Square", char: "▪" },
+  { id: "arrow",  label: "Arrow",  char: "→" },
+  { id: "check",  label: "Check",  char: "✓" },
+  { id: "dash",   label: "Dash",   char: "—" },
+  { id: "star",   label: "Star",   char: "★" },
+  { id: "number", label: "Number", char: "1." },
+];
+
+function BulletListEditor({ block, onChange }: { block: BulletListBlock; onChange: (b: BulletListBlock) => void }) {
+  function setItem(i: number, text: string) { onChange({ ...block, items: block.items.map((it, x) => x === i ? text : it) }); }
+  function addItem() { onChange({ ...block, items: [...block.items, ""] }); }
+  function removeItem(i: number) { onChange({ ...block, items: block.items.filter((_, x) => x !== i) }); }
 
   return (
     <div className="space-y-4">
       <div>
-        <div className={label}>Question</div>
-        <AutoTextarea
-          value={block.question}
-          onChange={(v) => onChange({ ...block, question: v })}
-          placeholder="What is the question learners need to answer?"
-          className={textarea}
-          minRows={2}
-        />
-      </div>
-
-      <div>
-        <div className={label}>Answer Options — click the circle to mark correct</div>
-        <div className="space-y-2">
-          {block.options.map((opt, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <button
-                onClick={() => onChange({ ...block, correct: i })}
-                className="shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all"
-                style={{
-                  borderColor: block.correct === i ? "#2A5230" : "#DDE8DA",
-                  background: block.correct === i ? "#2A5230" : "white",
-                }}
-                title="Mark as correct answer"
-              >
-                {block.correct === i && (
-                  <svg viewBox="0 0 10 10" width="10" height="10" fill="white">
-                    <path d="M2 5.5L4 7.5L8 3" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
-              </button>
-              <input
-                className={`${input} flex-1`}
-                style={{ borderColor: block.correct === i ? "#2A5230" : undefined }}
-                value={opt}
-                onChange={(e) => setOpt(i, e.target.value)}
-                placeholder={`Option ${String.fromCharCode(65 + i)}`}
-              />
-              {block.options.length > 2 && (
-                <button onClick={() => removeOpt(i)} className="text-red-400 hover:text-red-600 shrink-0 transition-colors"><Ico.Close /></button>
-              )}
-            </div>
+        <div className={label}>Bullet Style</div>
+        <div className="flex flex-wrap gap-1.5 mt-1">
+          {BULLET_STYLES.map((bs) => (
+            <button key={bs.id} onClick={() => onChange({ ...block, style: bs.id })}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border-2 transition-all"
+              style={{ borderColor: block.style === bs.id ? "#2A5230" : "#E5E7EB", background: block.style === bs.id ? "#EEF5EE" : "#fff", color: block.style === bs.id ? "#2A5230" : "#9CA3AF" }}
+            >
+              <span style={{ fontFamily: "monospace", fontSize: 14 }}>{bs.char}</span> {bs.label}
+            </button>
           ))}
         </div>
-        {block.options.length < 6 && (
-          <button onClick={addOpt} className="mt-2 text-xs font-bold text-[#2A5230] hover:underline">+ Add option</button>
-        )}
       </div>
+      <div className="space-y-2">
+        <div className={label}>Items</div>
+        {block.items.map((item, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <span className="w-6 text-center shrink-0 font-bold" style={{ color: "#9AB89E", fontFamily: "monospace" }}>
+              {block.style === "number" ? `${i + 1}.` : BULLET_STYLES.find((b) => b.id === block.style)?.char ?? "•"}
+            </span>
+            <input className={`${input} flex-1`} value={item} onChange={(e) => setItem(i, e.target.value)} placeholder={`Item ${i + 1}`} />
+            {block.items.length > 1 && <button onClick={() => removeItem(i)} className="text-red-400 hover:text-red-600 shrink-0 transition-colors"><Ico.Close /></button>}
+          </div>
+        ))}
+        <button onClick={addItem} className="text-xs font-bold text-[#2A5230] hover:underline">+ Add item</button>
+      </div>
+    </div>
+  );
+}
 
-      <div>
-        <div className={label}>Explanation (shown after answer)</div>
-        <AutoTextarea
-          value={block.explanation ?? ""}
-          onChange={(v) => onChange({ ...block, explanation: v })}
-          placeholder="Explain why the correct answer is right…"
-          className={textarea}
-          minRows={2}
-        />
+/* ─── Table editor ─── */
+function TableEditor({ block, onChange }: { block: TableBlock; onChange: (b: TableBlock) => void }) {
+  const cols = block.headers.length;
+
+  function setHeader(c: number, v: string) {
+    onChange({ ...block, headers: block.headers.map((h, x) => x === c ? v : h) });
+  }
+  function setCell(r: number, c: number, v: string) {
+    onChange({ ...block, rows: block.rows.map((row, x) => x === r ? row.map((cell, y) => y === c ? v : cell) : row) });
+  }
+  function addCol() {
+    onChange({ ...block, headers: [...block.headers, `Column ${cols + 1}`], rows: block.rows.map((r) => [...r, ""]) });
+  }
+  function removeCol() {
+    if (cols <= 1) return;
+    onChange({ ...block, headers: block.headers.slice(0, -1), rows: block.rows.map((r) => r.slice(0, -1)) });
+  }
+  function addRow() { onChange({ ...block, rows: [...block.rows, Array(cols).fill("")] }); }
+  function removeRow(r: number) { onChange({ ...block, rows: block.rows.filter((_, x) => x !== r) }); }
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <div className={label} style={{ marginBottom: 0 }}>Table — {cols} col{cols !== 1 ? "s" : ""} × {block.rows.length} row{block.rows.length !== 1 ? "s" : ""}</div>
+        <div className="flex items-center gap-1">
+          <button onClick={removeCol} disabled={cols <= 1} className="w-6 h-6 flex items-center justify-center rounded-lg border text-[#9CA3AF] hover:text-red-500 hover:border-red-200 disabled:opacity-30 transition-all" title="Remove column"><Ico.Minus /></button>
+          <button onClick={addCol} disabled={cols >= 8} className="w-6 h-6 flex items-center justify-center rounded-lg border text-[#9CA3AF] hover:text-[#2A5230] hover:border-[#2A5230] disabled:opacity-30 transition-all" title="Add column"><Ico.PlusSmall /></button>
+        </div>
       </div>
+      <div className="overflow-x-auto rounded-xl border border-[#DDE8DA]">
+        <table className="w-full text-sm border-collapse" style={{ minWidth: cols * 120 }}>
+          <thead>
+            <tr style={{ background: "#EEF5EE" }}>
+              {block.headers.map((h, c) => (
+                <th key={c} className="p-0 border-b border-[#DDE8DA]" style={{ borderRight: c < cols - 1 ? "1px solid #DDE8DA" : undefined }}>
+                  <input className="w-full px-3 py-2 text-xs font-bold bg-transparent focus:outline-none" style={{ color: "#2A5230" }} value={h} onChange={(e) => setHeader(c, e.target.value)} placeholder={`Col ${c + 1}`} />
+                </th>
+              ))}
+              <th className="w-8" />
+            </tr>
+          </thead>
+          <tbody>
+            {block.rows.map((row, r) => (
+              <tr key={r} style={{ background: r % 2 === 0 ? "#FAFCFA" : "#fff" }}>
+                {row.map((cell, c) => (
+                  <td key={c} className="p-0" style={{ borderRight: c < cols - 1 ? "1px solid #DDE8DA" : undefined, borderBottom: r < block.rows.length - 1 ? "1px solid #F0F7F0" : undefined }}>
+                    <input className="w-full px-3 py-2 text-xs bg-transparent focus:outline-none" style={{ color: "#374151" }} value={cell} onChange={(e) => setCell(r, c, e.target.value)} placeholder="…" />
+                  </td>
+                ))}
+                <td className="w-8 text-center">
+                  {block.rows.length > 1 && <button onClick={() => removeRow(r)} className="text-red-300 hover:text-red-500 transition-colors p-1"><Ico.Close size={9} /></button>}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <button onClick={addRow} disabled={block.rows.length >= 50} className="text-xs font-bold text-[#2A5230] hover:underline disabled:opacity-40">+ Add row</button>
     </div>
   );
 }
@@ -768,102 +1030,226 @@ function getEmbedUrl(url: string): string | null {
 }
 
 /* ─────────────────────────── Interactive Preview blocks ─────────────────────────── */
+function QuizHeader({ graded }: { graded?: boolean }) {
+  return (
+    <div className="px-5 py-3.5 flex items-center justify-between" style={{ background: "#EEF5EE", borderBottom: "1px solid #DDE8DA" }}>
+      <div className="flex items-center gap-2">
+        <span className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-extrabold" style={{ background: "#2A5230", color: "#fff" }}>Q</span>
+        <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#2A5230" }}>Knowledge Check</span>
+      </div>
+      {graded && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: "#FEF3C7", color: "#92400E" }}>Graded</span>}
+    </div>
+  );
+}
+
 function QuizPreview({ block }: { block: QuizBlock }) {
-  const [selected, setSelected] = useState<number | null>(null);
+  const qtype = block.quizType ?? "multiple_choice";
+  const [selectedSingle, setSelectedSingle] = useState<number | null>(null);
+  const [selectedMulti, setSelectedMulti] = useState<number[]>([]);
+  const [matchSel, setMatchSel] = useState<{ side: "a" | "b"; idx: number } | null>(null);
+  const [matched, setMatched] = useState<Record<number, number>>({});
+  const [pickedCard, setPickedCard] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
-  function submit() { if (selected !== null) setSubmitted(true); }
-  function reset() { setSelected(null); setSubmitted(false); }
+  const pairs = block.pairs ?? [];
+  const cards = block.cards ?? [];
 
-  const isCorrect = submitted && selected === block.correct;
+  function submit() { setSubmitted(true); }
+
+  function handleMatchClick(side: "a" | "b", idx: number) {
+    if (submitted) return;
+    if (!matchSel) { setMatchSel({ side, idx }); return; }
+    if (matchSel.side === side) { setMatchSel({ side, idx }); return; }
+    const aIdx = matchSel.side === "a" ? matchSel.idx : idx;
+    const bIdx = matchSel.side === "b" ? matchSel.idx : idx;
+    setMatched((m) => ({ ...m, [aIdx]: bIdx }));
+    setMatchSel(null);
+  }
+
+  if (qtype === "match") {
+    const shuffledB = [...pairs.map((_, i) => i)];
+    return (
+      <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid #DDE8DA", background: "#FAFCFA" }}>
+        <QuizHeader graded={block.graded} />
+        <div className="px-5 py-4">
+          <p className="font-semibold text-[15px] mb-4 leading-snug" style={{ color: "#1A2E1C" }}>{block.question || "Match the pairs"}</p>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: "#7A9878" }}>Column A</div>
+              {pairs.map((p, i) => {
+                const isMatched = i in matched;
+                const isSelected = matchSel?.side === "a" && matchSel.idx === i;
+                return (
+                  <button key={i} onClick={() => handleMatchClick("a", i)}
+                    className="w-full text-left px-3 py-2 rounded-xl text-sm border-2 transition-all"
+                    style={{ borderColor: isSelected ? "#2A5230" : isMatched ? "#86EFAC" : "#DDE8DA", background: isSelected ? "#EEF5EE" : isMatched ? "#F0FDF4" : "#fff", color: "#1A2E1C" }}
+                  >{p.a || `A ${i + 1}`}</button>
+                );
+              })}
+            </div>
+            <div className="space-y-2">
+              <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: "#B8965A" }}>Column B</div>
+              {shuffledB.map((bi) => {
+                const isMatched = Object.values(matched).includes(bi);
+                const isSelected = matchSel?.side === "b" && matchSel.idx === bi;
+                return (
+                  <button key={bi} onClick={() => handleMatchClick("b", bi)}
+                    className="w-full text-left px-3 py-2 rounded-xl text-sm border-2 transition-all"
+                    style={{ borderColor: isSelected ? "#C48A3A" : isMatched ? "#86EFAC" : "#DDE8DA", background: isSelected ? "#FFF8E8" : isMatched ? "#F0FDF4" : "#fff", color: "#1A2E1C" }}
+                  >{pairs[bi]?.b || `B ${bi + 1}`}</button>
+                );
+              })}
+            </div>
+          </div>
+          {!submitted && <button onClick={submit} disabled={Object.keys(matched).length < pairs.length} className="mt-4 px-5 py-2 rounded-xl text-sm font-bold disabled:opacity-40" style={{ background: "#2A5230", color: "#fff" }}>Check Matches</button>}
+          {submitted && <div className="mt-3 px-4 py-2 rounded-xl text-sm" style={{ background: "#EEF5EE", color: "#2A5230" }}>Submitted!</div>}
+        </div>
+      </div>
+    );
+  }
+
+  if (qtype === "pickacard") {
+    return (
+      <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid #DDE8DA", background: "#FAFCFA" }}>
+        <QuizHeader graded={block.graded} />
+        <div className="px-5 py-4">
+          <p className="font-semibold text-[15px] mb-4 leading-snug" style={{ color: "#1A2E1C" }}>{block.question || "Pick the correct card"}</p>
+          <div className="grid grid-cols-2 gap-3">
+            {cards.map((card, i) => {
+              const isPicked = pickedCard === i;
+              const revealed = isPicked;
+              return (
+                <button key={i} onClick={() => { if (!submitted) { setPickedCard(i); setSubmitted(true); } }}
+                  className="rounded-xl p-4 text-center border-2 transition-all min-h-[80px] flex items-center justify-center"
+                  style={{
+                    borderColor: revealed ? (card.correct ? "#86EFAC" : "#FECACA") : "#DDE8DA",
+                    background: revealed ? (card.correct ? "#F0FDF4" : "#FEF2F2") : "#fff",
+                    color: revealed ? (card.correct ? "#166534" : "#DC2626") : "#1A2E1C",
+                  }}
+                >
+                  {revealed
+                    ? <span className="font-bold text-sm">{card.text || `Card ${i + 1}`}</span>
+                    : <span className="text-2xl">?</span>}
+                </button>
+              );
+            })}
+          </div>
+          {submitted && pickedCard !== null && (
+            <div className="mt-3 px-4 py-2 rounded-xl text-sm font-semibold" style={{ background: cards[pickedCard]?.correct ? "#F0FDF4" : "#FEF2F2", color: cards[pickedCard]?.correct ? "#166534" : "#DC2626" }}>
+              {cards[pickedCard]?.correct ? "Correct pick!" : "Wrong card."}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  /* Multiple choice / Radio / Checkboxes */
+  const isCheckboxes = qtype === "checkboxes";
+  const correctMulti = block.correctMulti ?? [];
+
+  function checkCorrect(): boolean {
+    if (isCheckboxes) {
+      const sorted = (a: number[]) => [...a].sort().join(",");
+      return sorted(selectedMulti) === sorted(correctMulti);
+    }
+    return selectedSingle === block.correct;
+  }
+
+  const isCorrect = submitted && checkCorrect();
+  const canSubmit = isCheckboxes ? selectedMulti.length > 0 : selectedSingle !== null;
 
   return (
-    <div
-      className="rounded-2xl overflow-hidden"
-      style={{ border: "1.5px solid #DDE8DA", background: "#FAFCFA" }}
-    >
-      {/* Question header */}
-      <div
-        className="px-5 py-3.5 flex items-center gap-2"
-        style={{ background: "#EEF5EE", borderBottom: "1px solid #DDE8DA" }}
-      >
-        <span
-          className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-extrabold"
-          style={{ background: "#2A5230", color: "#fff", fontFamily: "var(--font-head)" }}
-        >
-          Q
-        </span>
-        <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#2A5230" }}>
-          Knowledge Check
-        </span>
-      </div>
-
+    <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid #DDE8DA", background: "#FAFCFA" }}>
+      <QuizHeader graded={block.graded} />
       <div className="px-5 py-4">
-        <p className="font-semibold text-[15px] mb-4 leading-snug" style={{ color: "#1A2E1C" }}>
-          {block.question || "Question goes here"}
-        </p>
-
+        <p className="font-semibold text-[15px] mb-4 leading-snug" style={{ color: "#1A2E1C" }}>{block.question || "Question goes here"}</p>
         <div className="space-y-2.5">
           {block.options.map((opt, i) => {
-            const isSelected = selected === i;
-            const isRight = i === block.correct;
+            const isSel = isCheckboxes ? selectedMulti.includes(i) : selectedSingle === i;
+            const isRight = isCheckboxes ? correctMulti.includes(i) : i === block.correct;
             let bg = "#fff", border = "#DDE8DA", color = "#1A2E1C", dotBg = "#DDE8DA";
             if (submitted) {
-              if (isRight)  { bg = "#F0FDF4"; border = "#86EFAC"; color = "#166534"; dotBg = "#22C55E"; }
-              else if (isSelected) { bg = "#FEF2F2"; border = "#FECACA"; color = "#DC2626"; dotBg = "#EF4444"; }
-            } else if (isSelected) {
-              bg = "#EEF5EE"; border = "#2A5230"; color = "#1A2E1C"; dotBg = "#2A5230";
-            }
+              if (isRight)       { bg = "#F0FDF4"; border = "#86EFAC"; color = "#166534"; dotBg = "#22C55E"; }
+              else if (isSel) { bg = "#FEF2F2"; border = "#FECACA"; color = "#DC2626"; dotBg = "#EF4444"; }
+            } else if (isSel) { bg = "#EEF5EE"; border = "#2A5230"; color = "#1A2E1C"; dotBg = "#2A5230"; }
 
             return (
-              <button
-                key={i}
-                onClick={() => !submitted && setSelected(i)}
+              <button key={i} onClick={() => {
+                if (submitted) return;
+                if (isCheckboxes) setSelectedMulti((s) => s.includes(i) ? s.filter((x) => x !== i) : [...s, i]);
+                else setSelectedSingle(i);
+              }}
                 disabled={submitted}
                 className="w-full flex items-center gap-3 px-4 py-3 rounded-xl border-2 text-left transition-all"
                 style={{ background: bg, borderColor: border, color }}
               >
-                <span
-                  className="w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center text-[10px] font-extrabold"
-                  style={{ borderColor: dotBg, background: (isSelected || (submitted && isRight)) ? dotBg : "transparent", color: "#fff" }}
-                >
+                <span className={`w-5 h-5 border-2 shrink-0 flex items-center justify-center ${isCheckboxes ? "rounded" : "rounded-full"}`}
+                  style={{ borderColor: dotBg, background: (isSel || (submitted && isRight)) ? dotBg : "transparent", color: "#fff" }}>
                   {submitted && isRight && <Ico.CheckMark size={9} />}
-                  {submitted && isSelected && !isRight && <Ico.XMark size={9} />}
+                  {submitted && isSel && !isRight && <Ico.XMark size={9} />}
                 </span>
                 <span className="text-sm font-medium">{opt || `Option ${String.fromCharCode(65 + i)}`}</span>
               </button>
             );
           })}
         </div>
-
         {!submitted ? (
-          <button
-            onClick={submit}
-            disabled={selected === null}
-            className="mt-4 px-5 py-2 rounded-xl text-sm font-bold transition-all disabled:opacity-40"
-            style={{ background: "#2A5230", color: "#fff" }}
-          >
+          <button onClick={submit} disabled={!canSubmit} className="mt-4 px-5 py-2 rounded-xl text-sm font-bold transition-all disabled:opacity-40" style={{ background: "#2A5230", color: "#fff" }}>
             Check Answer
           </button>
         ) : (
-          <div className="mt-4">
-            <div
-              className="px-4 py-3 rounded-xl text-sm mb-3"
-              style={{
-                background: isCorrect ? "#F0FDF4" : "#FEF2F2",
-                border: `1px solid ${isCorrect ? "#86EFAC" : "#FECACA"}`,
-                color: isCorrect ? "#166534" : "#DC2626",
-              }}
-            >
-              <span className="font-bold">{isCorrect ? "Correct!" : "Not quite."}</span>
-              {block.explanation && <span className="ml-2">{block.explanation}</span>}
-            </div>
-            <button onClick={reset} className="text-xs font-bold underline" style={{ color: "#7A9878" }}>
-              Try again
-            </button>
+          <div className="mt-4 px-4 py-3 rounded-xl text-sm" style={{ background: isCorrect ? "#F0FDF4" : "#FEF2F2", border: `1px solid ${isCorrect ? "#86EFAC" : "#FECACA"}`, color: isCorrect ? "#166534" : "#DC2626" }}>
+            <span className="font-bold">{isCorrect ? "Correct!" : "Not quite."}</span>
+            {block.explanation && <span className="ml-2">{block.explanation}</span>}
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function BulletListPreview({ block }: { block: BulletListBlock }) {
+  const bs = BULLET_STYLES.find((b) => b.id === block.style) ?? BULLET_STYLES[0];
+  return (
+    <ul className="space-y-1.5">
+      {block.items.map((item, i) => (
+        <li key={i} className="flex items-start gap-2.5 text-[15px] leading-relaxed" style={{ color: "#374151" }}>
+          <span className="shrink-0 font-bold mt-0.5" style={{ color: "#2A5230", fontFamily: "monospace", minWidth: 18, textAlign: "center" }}>
+            {block.style === "number" ? `${i + 1}.` : bs.char}
+          </span>
+          <span>{item || <span className="italic" style={{ color: "#C0D4C0" }}>Item {i + 1}</span>}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function TablePreview({ block }: { block: TableBlock }) {
+  return (
+    <div className="overflow-x-auto rounded-xl border border-[#DDE8DA]">
+      <table className="w-full text-sm border-collapse">
+        <thead>
+          <tr style={{ background: "#EEF5EE" }}>
+            {block.headers.map((h, c) => (
+              <th key={c} className="px-4 py-2.5 text-left text-xs font-bold" style={{ color: "#2A5230", borderBottom: "1px solid #DDE8DA", borderRight: c < block.headers.length - 1 ? "1px solid #DDE8DA" : undefined }}>
+                {h || `Column ${c + 1}`}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {block.rows.map((row, r) => (
+            <tr key={r} style={{ background: r % 2 === 0 ? "#FAFCFA" : "#fff" }}>
+              {row.map((cell, c) => (
+                <td key={c} className="px-4 py-2.5 text-sm" style={{ color: "#374151", borderBottom: r < block.rows.length - 1 ? "1px solid #F0F7F0" : undefined, borderRight: c < row.length - 1 ? "1px solid #F0F7F0" : undefined }}>
+                  {cell || <span style={{ color: "#D1D5DB" }}>—</span>}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -1022,8 +1408,10 @@ function BlockPreview({ block }: { block: Block }) {
     );
   }
 
-  if (block.type === "quiz") return <QuizPreview block={block} />;
-  if (block.type === "flashcard") return <FlashcardPreview block={block} />;
+  if (block.type === "quiz")       return <QuizPreview block={block} />;
+  if (block.type === "flashcard")  return <FlashcardPreview block={block} />;
+  if (block.type === "bulletlist") return <BulletListPreview block={block} />;
+  if (block.type === "table")      return <TablePreview block={block} />;
 
   if (block.type === "checklist") {
     return (
@@ -1190,17 +1578,19 @@ const BG_OPTIONS: BgOption[] = [
 
 /* ─────────────────────────── Block label map ─────────────────────────── */
 const blockMeta: Record<BlockType, { label: string; icon: React.ReactNode; color: string }> = {
-  paragraph: { label: "Paragraph", icon: <Ico.Paragraph />, color: "#2A5230" },
-  heading:   { label: "Heading",   icon: <Ico.Heading />,   color: "#1E40AF" },
-  quote:     { label: "Quote",     icon: <Ico.Quote />,     color: "#059669" },
-  callout:   { label: "Callout",   icon: <Ico.Bell />,      color: "#D97706" },
-  video:     { label: "Video",     icon: <Ico.Play />,      color: "#7C3AED" },
-  quiz:      { label: "Quiz",      icon: <Ico.QuizIcon />,  color: "#2A5230" },
-  flashcard: { label: "Flashcard", icon: <Ico.Flashcard />, color: "#B45309" },
-  checklist: { label: "Checklist", icon: <Ico.Checklist />, color: "#0369A1" },
-  code:      { label: "Code",      icon: <Ico.Code />,      color: "#0F172A" },
-  resource:  { label: "Resource",  icon: <Ico.Download />,  color: "#7C3AED" },
-  divider:   { label: "Divider",   icon: <Ico.Divider />,   color: "#9CA3AF" },
+  paragraph:  { label: "Paragraph",   icon: <Ico.Paragraph />,  color: "#2A5230" },
+  heading:    { label: "Heading",     icon: <Ico.Heading />,    color: "#1E40AF" },
+  quote:      { label: "Quote",       icon: <Ico.Quote />,      color: "#059669" },
+  callout:    { label: "Callout",     icon: <Ico.Bell />,       color: "#D97706" },
+  video:      { label: "Video",       icon: <Ico.Play />,       color: "#7C3AED" },
+  quiz:       { label: "Quiz",        icon: <Ico.QuizIcon />,   color: "#2A5230" },
+  flashcard:  { label: "Flashcard",   icon: <Ico.Flashcard />,  color: "#B45309" },
+  checklist:  { label: "Checklist",   icon: <Ico.Checklist />,  color: "#0369A1" },
+  code:       { label: "Code",        icon: <Ico.Code />,       color: "#0F172A" },
+  resource:   { label: "Resource",    icon: <Ico.Download />,   color: "#7C3AED" },
+  divider:    { label: "Divider",     icon: <Ico.Divider />,    color: "#9CA3AF" },
+  bulletlist: { label: "Bullet List", icon: <Ico.BulletList />, color: "#059669" },
+  table:      { label: "Table",       icon: <Ico.TableIcon />,  color: "#0369A1" },
 };
 
 /* ─────────────────────────── Block wrapper ─────────────────────────── */
@@ -1288,6 +1678,8 @@ function BlockItem({
           {block.type === "checklist"  && <ChecklistEditor  block={block} onChange={onChange as (b: ChecklistBlock)  => void} />}
           {block.type === "code"       && <CodeEditor       block={block} onChange={onChange as (b: CodeBlock)       => void} />}
           {block.type === "resource"   && <ResourceEditor   block={block} onChange={onChange as (b: ResourceBlock)   => void} />}
+          {block.type === "bulletlist" && <BulletListEditor block={block} onChange={onChange as (b: BulletListBlock) => void} />}
+          {block.type === "table"      && <TableEditor      block={block} onChange={onChange as (b: TableBlock)      => void} />}
           {block.type === "divider"    && (
             <div className="h-px mx-2 rounded" style={{ background: "#DDE8DA" }} />
           )}
@@ -1370,11 +1762,13 @@ function BlockPalette({ onSelect, onClose }: { onSelect: (t: BlockType) => void;
 
 /* ─────────────────────────── Main editor ─────────────────────────── */
 export default function LessonEditor({
-  lesson, courseId, courseTitle,
+  lesson, courseId, courseTitle, moduleId, moduleTitle: initialModuleTitle,
 }: {
   lesson: Record<string, unknown>;
   courseId: string;
   courseTitle: string;
+  moduleId: string;
+  moduleTitle: string;
 }) {
   const initContent = (() => {
     const raw = lesson.content;
@@ -1391,6 +1785,8 @@ export default function LessonEditor({
   const [duration, setDuration]     = useState(Number(lesson.duration_mins ?? 0));
   const [status, setStatus]         = useState(String(lesson.status ?? "draft") as typeof STATUSES[number]);
   const [isRequired, setIsRequired] = useState(Boolean(lesson.is_required ?? true));
+
+  const [moduleName, setModuleName] = useState(initialModuleTitle);
 
   const [saving, setSaving]         = useState(false);
   const [saved, setSaved]           = useState(false);
@@ -1428,23 +1824,29 @@ export default function LessonEditor({
 
   const save = useCallback(async () => {
     setSaving(true); setError(null); setSaved(false);
-    const res = await fetch(`/api/admin/lessons/${lesson.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title,
-        lesson_type: lessonType,
-        video_url: videoUrl || null,
-        duration_mins: duration || null,
-        status,
-        is_required: isRequired,
-        content: { blocks, background: bgId },
+    const [lessonRes, moduleRes] = await Promise.all([
+      fetch(`/api/admin/lessons/${lesson.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          lesson_type: lessonType,
+          video_url: videoUrl || null,
+          duration_mins: duration || null,
+          status,
+          is_required: isRequired,
+          content: { blocks, background: bgId },
+        }),
       }),
-    });
+      moduleName !== initialModuleTitle
+        ? fetch(`/api/admin/modules/${moduleId}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title: moduleName }) })
+        : Promise.resolve({ ok: true } as Response),
+    ]);
     setSaving(false);
-    if (res.ok) { setSaved(true); }
-    else { const d = await res.json(); setError(d.error ?? "Save failed."); }
-  }, [lesson.id, title, lessonType, videoUrl, duration, status, isRequired, blocks, bgId]);
+    if (lessonRes.ok && moduleRes.ok) { setSaved(true); }
+    else if (!lessonRes.ok) { const d = await lessonRes.json(); setError(d.error ?? "Save failed."); }
+    else { setError("Save failed."); }
+  }, [lesson.id, title, lessonType, videoUrl, duration, status, isRequired, blocks, bgId, moduleName, moduleId, initialModuleTitle]);
 
   return (
     <div className="flex-1 flex flex-col min-h-0" style={{ fontFamily: "var(--font-sans)" }}>
@@ -1467,7 +1869,16 @@ export default function LessonEditor({
           </Link>
           <span style={{ color: "#DDE8DA" }}>/</span>
           <input
-            className="font-bold text-sm bg-transparent focus:outline-none border-b-2 border-transparent focus:border-[#2A5230] transition-colors min-w-0 w-56"
+            className="text-sm bg-transparent focus:outline-none border-b-2 border-transparent focus:border-[#4A8A52] transition-colors min-w-0 w-32"
+            style={{ color: "#7A9878", fontFamily: "var(--font-head)" }}
+            value={moduleName}
+            onChange={(e) => { setModuleName(e.target.value); setSaved(false); }}
+            placeholder="Module name"
+            title="Click to rename module"
+          />
+          <span style={{ color: "#DDE8DA" }}>/</span>
+          <input
+            className="font-bold text-sm bg-transparent focus:outline-none border-b-2 border-transparent focus:border-[#2A5230] transition-colors min-w-0 w-48"
             style={{ color: "#1A2E1C", fontFamily: "var(--font-head)" }}
             value={title}
             onChange={(e) => { setTitle(e.target.value); setSaved(false); }}
