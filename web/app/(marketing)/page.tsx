@@ -180,21 +180,6 @@ function CourseCard({
   );
 }
 
-/* ─── Testimonial card ─── */
-function TestimonialCard({ quote, name, role }: { quote: string; name: string; role: string }) {
-  return (
-    <div className="bg-white border border-[#DDE8DA] rounded-xl p-6">
-      <div className="font-display font-black text-5xl text-[#4A7A4E] leading-[0.5] mb-5">"</div>
-      <p className="text-[15px] leading-[1.65] text-[#2A5230]">{quote}</p>
-      <div className="mt-4">
-        <div className="text-sm text-[#C48A3A] mb-1.5">★★★★★</div>
-        <div className="text-sm font-semibold text-[#2A5230] leading-[1.3]">{name}</div>
-        <div className="text-xs text-[#6A8A6E] mt-0.5">{role}</div>
-      </div>
-    </div>
-  );
-}
-
 /* ─── Page ─── */
 export default function HomePage() {
   return (
@@ -383,32 +368,28 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Testimonials ── */}
-      <section className="bg-[#EEE8DC] border-t border-[#DDD5C4] px-7 py-[88px] pb-[104px]">
-        <div className="max-w-[960px] mx-auto">
-          <div className="flex items-center gap-2 mb-[18px]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#5A8C5E] shrink-0" />
-            <span className="text-xs font-medium tracking-[0.1em] uppercase text-[#5A8C5E]">What learners say</span>
-          </div>
-          <h2 className="font-display font-bold text-3xl text-[#2A5230] mb-10 leading-[1.2]">
-            Real people. Real results.
+      {/* ── CTA banner ── */}
+      <section className="bg-[#2A5230] px-7 py-[72px]">
+        <div className="max-w-[720px] mx-auto text-center">
+          <h2 className="font-head font-extrabold text-[clamp(26px,4vw,42px)] text-white mb-4 leading-[1.1]">
+            Ready to build the skills that run the show?
           </h2>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
-            <TestimonialCard
-              quote="I landed my first VA client 3 weeks after finishing VA Foundations. The proposal template alone was worth it."
-              name="Maria S."
-              role="Aspiring VA, Philippines"
-            />
-            <TestimonialCard
-              quote="I had zero experience with admin work. After this course I had a full SOP ready for my first client. Completely changed how I showed up."
-              name="Angela C."
-              role="Freelance admin VA"
-            />
-            <TestimonialCard
-              quote="The lessons are short enough to actually finish. I learned more in 2 hours than I did watching 10-hour YouTube tutorials."
-              name="Priya M."
-              role="VA, now earning full-time"
-            />
+          <p className="text-[#A8C4A4] text-lg mb-8 leading-[1.6]">
+            Start with a free course today. No credit card required.
+          </p>
+          <div className="flex gap-3.5 flex-wrap items-center justify-center">
+            <Link
+              href="/signup"
+              className="inline-flex items-center gap-2 text-base font-bold text-[#2A5230] bg-white px-7 py-[15px] rounded-xl whitespace-nowrap hover:bg-[#F5F0E8] transition-colors"
+            >
+              Start Learning Free →
+            </Link>
+            <Link
+              href="/courses"
+              className="inline-flex items-center text-base font-semibold text-white border border-white/30 px-7 py-[15px] rounded-xl whitespace-nowrap hover:border-white/60 transition-colors"
+            >
+              Browse Courses
+            </Link>
           </div>
         </div>
       </section>

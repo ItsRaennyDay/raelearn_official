@@ -1,25 +1,24 @@
 import Link from "next/link";
 
 const LEARN_LINKS = [
-  { href: "/",          label: "Home" },
-  { href: "/courses",   label: "Courses" },
-  { href: "/free-courses", label: "Free Courses" },
-  { href: "/pricing",   label: "Pricing" },
+  { href: "/",                      label: "Home" },
+  { href: "/courses",               label: "All Courses" },
+  { href: "/courses?access=free",   label: "Free Courses" },
+  { href: "/pricing",               label: "Pricing" },
 ];
 
 const FOR_YOU_LINKS = [
-  { href: "/for-vas",        label: "For VAs" },
-  { href: "/courses?cat=nonprofit", label: "Nonprofit Courses" },
-  { href: "/courses?cat=business",  label: "Business Courses" },
+  { href: "/for-vas",               label: "For VAs" },
+  { href: "/courses?aud=nonprofit", label: "Nonprofit Courses" },
+  { href: "/courses?aud=business",  label: "Business Courses" },
   { href: "/signup?type=group",     label: "Group Account Signup" },
 ];
 
 const LEGAL_LINKS = [
-  { href: "/help",            label: "Help Center" },
-  { href: "/legal/terms",     label: "Terms of Use" },
-  { href: "/legal/privacy",   label: "Privacy Policy" },
-  { href: "/legal/refund",    label: "Refund Policy" },
-  { href: "/legal/disclaimers", label: "Education Disclaimer" },
+  { href: "/legal/terms",           label: "Terms of Use" },
+  { href: "/legal/privacy",         label: "Privacy Policy" },
+  { href: "/legal/refund",          label: "Refund Policy" },
+  { href: "/legal/disclaimers",     label: "Education Disclaimer" },
 ];
 
 export default function SiteFooter() {
@@ -76,7 +75,7 @@ export default function SiteFooter() {
         {/* Support & legal col */}
         <div>
           <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase text-[#7DAA82] mb-4">
-            Support &amp; legal
+            Legal
           </div>
           <div className="flex flex-col gap-3 text-sm">
             {LEGAL_LINKS.map(({ href, label }) => (
