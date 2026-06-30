@@ -39,7 +39,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   const pathname = usePathname();
 
   return (
-    <div className="min-h-screen flex" style={{ background: "#F5F0E8", fontFamily: "var(--font-sans)" }}>
+    <div className="h-screen flex overflow-hidden" style={{ background: "#F5F0E8", fontFamily: "var(--font-sans)" }}>
       {/* Sidebar */}
       <aside
         className="w-60 shrink-0 flex flex-col"
@@ -195,7 +195,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto flex flex-col min-h-0">
           {children}
         </main>
       </div>

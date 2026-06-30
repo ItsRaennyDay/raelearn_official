@@ -93,12 +93,15 @@ function AutoTextarea({
   minRows?: number;
 }) {
   const ref = useRef<HTMLTextAreaElement>(null);
+
   useEffect(() => {
-    if (ref.current) {
-      ref.current.style.height = "auto";
-      ref.current.style.height = ref.current.scrollHeight + "px";
-    }
-  }, [value]);
+    const el = ref.current;
+    if (!el) return;
+    // Reset to minRows height first so shrinking works
+    el.style.height = `${minRows * 1.6}em`;
+    const scrollH = el.scrollHeight;
+    el.style.height = scrollH + "px";
+  }, [value, minRows]);
 
   return (
     <textarea
@@ -106,9 +109,12 @@ function AutoTextarea({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      rows={minRows}
       className={className}
-      style={{ resize: "none", overflow: "hidden" }}
+      style={{
+        resize: "none",
+        overflow: "hidden",
+        minHeight: `${minRows * 1.6}em`,
+      }}
     />
   );
 }
@@ -1151,7 +1157,7 @@ export default function LessonEditor({
   }, [lesson.id, title, lessonType, videoUrl, duration, status, isRequired, blocks]);
 
   return (
-    <div className="flex flex-col h-screen" style={{ fontFamily: "var(--font-sans)" }}>
+    <div className="flex-1 flex flex-col min-h-0" style={{ fontFamily: "var(--font-sans)" }}>
 
       {/* ── Top bar ── */}
       <div
@@ -1277,16 +1283,13 @@ export default function LessonEditor({
       </div>
 
       {/* ── Main content area ── */}
-      <div
-        className="flex flex-1 min-h-0"
-        style={{ borderTop: "none" }}
-      >
+      <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* ── EDITOR ── */}
         <div
           className="flex flex-col overflow-y-auto"
-          style={{ width: preview ? "50%" : "100%", borderRight: preview ? "1.5px solid #DDE8DA" : "none" }}
+          style={{ width: preview ? "50%" : "100%", borderRight: preview ? "1.5px solid #DDE8DA" : "none", flex: "1 1 0" }}
         >
-          <div className="p-6 space-y-3 flex-1">
+          <div className="p-6 space-y-3 min-h-full pb-10">
             {blocks.length === 0 ? (
               <div
                 className="rounded-2xl flex flex-col items-center justify-center p-16 text-center"
@@ -1354,7 +1357,7 @@ export default function LessonEditor({
         {preview && (
           <div
             className="flex flex-col overflow-y-auto"
-            style={{ width: "50%", background: "#F5F0E8" }}
+            style={{ width: "50%", background: "#F5F0E8", flex: "0 0 50%" }}
           >
             <div
               className="px-4 py-2.5 flex items-center gap-2 shrink-0 sticky top-0 z-10"
