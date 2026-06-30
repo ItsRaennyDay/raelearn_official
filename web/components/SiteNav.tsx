@@ -1,14 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 const NAV_LINKS = [
-  { href: "/courses",    label: "Courses" },
-  { href: "/for-vas",   label: "For VAs" },
-  { href: "/pricing",   label: "Pricing" },
+  { href: "/courses",  label: "Courses" },
+  { href: "/for-vas",  label: "For VAs" },
+  { href: "/pricing",  label: "Pricing" },
 ] as const;
+
+type NavUser = { id: string; email: string; full_name: string | null };
 
 function ComingSoonModal({ onClose }: { onClose: () => void }) {
   return (
@@ -61,7 +64,93 @@ function ComingSoonModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-export default function SiteNav() {
+function UserMenu({ user }: { user: NavUser }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  async function signOut() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/");
+    router.refresh();
+  }
+
+  const displayName = user.full_name ?? user.email.split("@")[0];
+  const initial = (user.full_name ?? user.email).charAt(0).toUpperCase();
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-full border border-[#DDE8DA] hover:border-[#2A5230] transition-colors bg-white"
+      >
+        <span className="w-7 h-7 rounded-full bg-[#2A5230] text-white text-xs font-extrabold flex items-center justify-center shrink-0">
+          {initial}
+        </span>
+        <span className="text-sm font-semibold text-[#2A5230] max-w-[120px] truncate">{displayName}</span>
+        <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="#7A9878" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M2 4l4 4 4-4" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-[calc(100%+8px)] w-52 bg-white border border-[#DDE8DA] rounded-2xl shadow-[0_12px_32px_-8px_rgba(42,82,48,0.18)] overflow-hidden z-50">
+          <div className="px-4 py-3 border-b border-[#F0F7F0]">
+            <div className="text-xs font-bold text-[#1A2E1C] truncate">{displayName}</div>
+            <div className="text-[11px] text-[#9AB89E] truncate mt-0.5">{user.email}</div>
+          </div>
+          <div className="py-1.5">
+            <Link
+              href="/dashboard"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-[#2A5230] hover:bg-[#F5FAF5] transition-colors"
+            >
+              <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="1" y="1" width="6" height="6" rx="1.5" />
+                <rect x="9" y="1" width="6" height="6" rx="1.5" />
+                <rect x="1" y="9" width="6" height="6" rx="1.5" />
+                <rect x="9" y="9" width="6" height="6" rx="1.5" />
+              </svg>
+              Dashboard
+            </Link>
+            <Link
+              href="/learn"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-[#2A5230] hover:bg-[#F5FAF5] transition-colors"
+            >
+              <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 3h12M2 7h12M2 11h8" />
+              </svg>
+              My Courses
+            </Link>
+          </div>
+          <div className="border-t border-[#F0F7F0] py-1.5">
+            <button
+              onClick={signOut}
+              className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-semibold text-[#7A4A4A] hover:bg-[#FFF5F5] transition-colors"
+            >
+              <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 14H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h3M11 11l3-3-3-3M14 8H6" />
+              </svg>
+              Sign Out
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function SiteNav({ user }: { user?: NavUser | null }) {
   const pathname = usePathname();
   const [showGroupModal, setShowGroupModal] = useState(false);
 
@@ -100,26 +189,32 @@ export default function SiteNav() {
             })}
           </div>
 
-          {/* CTA buttons */}
+          {/* Right side — auth-aware */}
           <div className="flex items-center gap-3 ml-auto">
-            <Link
-              href="/signin"
-              className="text-sm font-semibold text-[#4A6650] px-1 py-2 whitespace-nowrap hover:text-[#2A5230] transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/signup"
-              className="text-sm font-bold text-white bg-[#2A5230] px-[17px] py-[11px] rounded-[10px] whitespace-nowrap hover:bg-[#1e3d24] transition-colors"
-            >
-              Start Learning
-            </Link>
-            <button
-              onClick={() => setShowGroupModal(true)}
-              className="text-sm font-bold text-[#2A5230] bg-transparent border-[1.5px] border-[#2A5230] px-[15px] py-[9.5px] rounded-[10px] whitespace-nowrap hover:bg-[#2A5230] hover:text-white transition-colors"
-            >
-              Create Group Account
-            </button>
+            {user ? (
+              <UserMenu user={user} />
+            ) : (
+              <>
+                <Link
+                  href="/signin"
+                  className="text-sm font-semibold text-[#4A6650] px-1 py-2 whitespace-nowrap hover:text-[#2A5230] transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/signup"
+                  className="text-sm font-bold text-white bg-[#2A5230] px-[17px] py-[11px] rounded-[10px] whitespace-nowrap hover:bg-[#1e3d24] transition-colors"
+                >
+                  Start Learning
+                </Link>
+                <button
+                  onClick={() => setShowGroupModal(true)}
+                  className="text-sm font-bold text-[#2A5230] bg-transparent border-[1.5px] border-[#2A5230] px-[15px] py-[9.5px] rounded-[10px] whitespace-nowrap hover:bg-[#2A5230] hover:text-white transition-colors"
+                >
+                  Create Group Account
+                </button>
+              </>
+            )}
           </div>
         </nav>
       </header>

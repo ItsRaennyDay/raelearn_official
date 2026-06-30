@@ -1,14 +1,32 @@
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
+import { createClient } from "@/lib/supabase/server";
 
-export default function MarketingLayout({
+export default async function MarketingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  let navUser: { id: string; email: string; full_name: string | null } | null = null;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("full_name")
+      .eq("id", user.id)
+      .single();
+    navUser = {
+      id: user.id,
+      email: user.email ?? "",
+      full_name: profile?.full_name ?? (user.user_metadata?.full_name as string | undefined) ?? null,
+    };
+  }
+
   return (
     <>
-      <SiteNav />
+      <SiteNav user={navUser} />
       <main className="flex-1">{children}</main>
       <SiteFooter />
     </>
