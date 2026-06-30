@@ -4,10 +4,9 @@ import { createServerClient } from "@supabase/ssr";
 const PROTECTED_PREFIXES = ["/dashboard", "/group-dashboard", "/admin"];
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Only run auth checks on protected routes
   const isProtected = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
   if (!isProtected) return NextResponse.next();
 
@@ -31,7 +30,6 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // Refresh session — required to keep tokens current
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -41,7 +39,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(signinUrl);
   }
 
-  // Admin routes: restrict to the single admin email
   if (pathname.startsWith("/admin")) {
     if (user.email?.toLowerCase() !== ADMIN_EMAIL) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
