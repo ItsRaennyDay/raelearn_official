@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { markLessonComplete, saveVideoProgress } from "./actions";
@@ -83,13 +83,23 @@ function toEmbed(url: string): string | null {
   return null;
 }
 
+function renderRich(text: string): React.ReactNode {
+  if (!text) return text;
+  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**") && part.length > 4) return <strong key={i}>{part.slice(2, -2)}</strong>;
+    if (part.startsWith("*")  && part.endsWith("*")  && part.length > 2)  return <em key={i}>{part.slice(1, -1)}</em>;
+    return part;
+  });
+}
+
 /* ─── Block renderer ─── */
 function RenderBlock({ block, isDark }: { block: ContentBlock; isDark: boolean }) {
   const textColor = isDark ? "#E8F5E9" : "#1A2E1C";
   const mutedColor = isDark ? "#7DAA82" : "#6B7280";
 
   if (block.type === "paragraph") {
-    return <p className="text-[15px] leading-[1.85] whitespace-pre-wrap" style={{ color: isDark ? "#C8DCC8" : "#374151" }}>{String(block.text ?? "")}</p>;
+    return <p className="text-[15px] leading-[1.85] whitespace-pre-wrap" style={{ color: isDark ? "#C8DCC8" : "#374151" }}>{renderRich(String(block.text ?? ""))}</p>;
   }
 
   if (block.type === "heading") {
@@ -121,7 +131,7 @@ function RenderBlock({ block, isDark }: { block: ContentBlock; isDark: boolean }
         <span>{m.icon}</span>
         <div>
           {!!block.title && <p className="font-bold text-sm mb-1" style={{ color: m.color }}>{String(block.title)}</p>}
-          <p className="text-sm leading-relaxed" style={{ color: m.color }}>{String(block.text ?? "")}</p>
+          <p className="text-sm leading-relaxed" style={{ color: m.color }}>{renderRich(String(block.text ?? ""))}</p>
         </div>
       </div>
     );
@@ -184,7 +194,7 @@ function RenderBlock({ block, isDark }: { block: ContentBlock; isDark: boolean }
             <span className="shrink-0 font-bold mt-0.5" style={{ color: "#2A5230", fontFamily: "monospace", minWidth: 18, textAlign: "center" }}>
               {style === "number" ? `${i + 1}.` : char}
             </span>
-            <span>{item}</span>
+            <span>{renderRich(item)}</span>
           </li>
         ))}
       </ul>
@@ -428,7 +438,7 @@ function InlineChecklist({ items }: { items: string[] }) {
             {checked[i] && <svg viewBox="0 0 10 10" width="9" height="9" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><path d="M2 5l2 2 4-4" /></svg>}
           </div>
           <input type="checkbox" className="sr-only" checked={!!checked[i]} onChange={() => setChecked(p => ({ ...p, [i]: !p[i] }))} />
-          <span className="text-sm leading-relaxed" style={{ color: checked[i] ? "#9AB89E" : "#374151", textDecoration: checked[i] ? "line-through" : "none" }}>{item}</span>
+          <span className="text-sm leading-relaxed" style={{ color: checked[i] ? "#9AB89E" : "#374151", textDecoration: checked[i] ? "line-through" : "none" }}>{renderRich(item)}</span>
         </label>
       ))}
     </div>

@@ -320,6 +320,96 @@ function AutoTextarea({
   );
 }
 
+/* ─────────────────────────── Rich text helpers ─────────────────────────── */
+function applyMark(val: string, start: number, end: number, marker: string) {
+  const sel = val.slice(start, end);
+  const m = marker.length;
+  if (start >= m && val.slice(start - m, start) === marker && val.slice(end, end + m) === marker) {
+    return { val: val.slice(0, start - m) + sel + val.slice(end + m), next: end - m };
+  }
+  return { val: val.slice(0, start) + marker + sel + marker + val.slice(end), next: end + m * 2 };
+}
+
+function MarkButtons({ onFmt }: { onFmt: (marker: string) => void }) {
+  const btn = "px-2 py-0.5 text-[11px] rounded border border-[#DDE8DA] bg-white text-[#2A5230] hover:bg-[#EEF5EE] transition-colors select-none";
+  return (
+    <div className="flex items-center gap-1">
+      <button type="button" onMouseDown={(e) => { e.preventDefault(); onFmt("**"); }} className={`${btn} font-bold`} title="Bold — select text then click">B</button>
+      <button type="button" onMouseDown={(e) => { e.preventDefault(); onFmt("*"); }}  className={`${btn} italic`}    title="Italic — select text then click">I</button>
+      <span className="text-[9px] text-[#C0D4C0] ml-0.5">select text → B or I</span>
+    </div>
+  );
+}
+
+function RichTextarea({ value, onChange, placeholder, className, minRows = 3 }: {
+  value: string; onChange: (v: string) => void; placeholder?: string; className?: string; minRows?: number;
+}) {
+  const ref = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.height = `${minRows * 1.6}em`;
+    el.style.height = el.scrollHeight + "px";
+  }, [value, minRows]);
+
+  function fmt(marker: string) {
+    const el = ref.current;
+    if (!el) return;
+    const { val, next } = applyMark(value, el.selectionStart, el.selectionEnd, marker);
+    onChange(val);
+    requestAnimationFrame(() => { el.focus(); el.setSelectionRange(next, next); });
+  }
+
+  return (
+    <div>
+      <MarkButtons onFmt={fmt} />
+      <textarea ref={ref} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className={className}
+        style={{ resize: "none", overflow: "hidden", minHeight: `${minRows * 1.6}em`, marginTop: 6 }} />
+    </div>
+  );
+}
+
+function RichInput({ value, onChange, placeholder, className }: {
+  value: string; onChange: (v: string) => void; placeholder?: string; className?: string;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  const [focused, setFocused] = useState(false);
+
+  function fmt(marker: string) {
+    const el = ref.current;
+    if (!el) return;
+    const { val, next } = applyMark(value, el.selectionStart ?? 0, el.selectionEnd ?? 0, marker);
+    onChange(val);
+    requestAnimationFrame(() => { el.focus(); el.setSelectionRange(next, next); });
+  }
+
+  return (
+    <div className="flex-1 flex flex-col gap-0.5 min-w-0">
+      {focused && (
+        <div className="flex items-center gap-1">
+          <button type="button" onMouseDown={(e) => { e.preventDefault(); fmt("**"); }}
+            className="px-1.5 py-0.5 text-[10px] font-bold rounded border border-[#DDE8DA] bg-white text-[#2A5230] hover:bg-[#EEF5EE] transition-colors select-none" title="Bold">B</button>
+          <button type="button" onMouseDown={(e) => { e.preventDefault(); fmt("*"); }}
+            className="px-1.5 py-0.5 text-[10px] italic rounded border border-[#DDE8DA] bg-white text-[#2A5230] hover:bg-[#EEF5EE] transition-colors select-none" title="Italic">I</button>
+        </div>
+      )}
+      <input ref={ref} className={className} value={value} onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} />
+    </div>
+  );
+}
+
+function renderRich(text: string): React.ReactNode {
+  if (!text) return text;
+  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**") && part.length > 4) return <strong key={i}>{part.slice(2, -2)}</strong>;
+    if (part.startsWith("*")  && part.endsWith("*")  && part.length > 2)  return <em key={i}>{part.slice(1, -1)}</em>;
+    return part;
+  });
+}
+
 /* ─────────────────────────── Block editors ─────────────────────────── */
 const input = "w-full px-3 py-2 rounded-lg border border-[#DDE8DA] bg-white text-[#1A2E1C] text-sm focus:outline-none focus:ring-2 focus:ring-[#2A5230]/30 focus:border-[#2A5230] transition";
 const textarea = "w-full px-3 py-2 rounded-lg border border-[#DDE8DA] bg-white text-[#1A2E1C] text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#2A5230]/30 focus:border-[#2A5230] transition";
@@ -329,7 +419,7 @@ function ParagraphEditor({ block, onChange }: { block: ParagraphBlock; onChange:
   return (
     <div>
       <div className={label}>Content</div>
-      <AutoTextarea
+      <RichTextarea
         value={block.text}
         onChange={(v) => onChange({ ...block, text: v })}
         placeholder="Write your lesson content here…"
@@ -453,7 +543,7 @@ function CalloutEditor({ block, onChange }: { block: CalloutBlock; onChange: (b:
       </div>
       <div>
         <div className={label}>Content</div>
-        <AutoTextarea
+        <RichTextarea
           value={block.text}
           onChange={(v) => onChange({ ...block, text: v })}
           placeholder="Callout body text…"
@@ -708,12 +798,12 @@ function BulletListEditor({ block, onChange }: { block: BulletListBlock; onChang
       <div className="space-y-2">
         <div className={label}>Items</div>
         {block.items.map((item, i) => (
-          <div key={i} className="flex items-center gap-2">
-            <span className="w-6 text-center shrink-0 font-bold" style={{ color: "#9AB89E", fontFamily: "monospace" }}>
+          <div key={i} className="flex items-start gap-2">
+            <span className="w-6 text-center shrink-0 font-bold mt-2" style={{ color: "#9AB89E", fontFamily: "monospace" }}>
               {block.style === "number" ? `${i + 1}.` : BULLET_STYLES.find((b) => b.id === block.style)?.char ?? "•"}
             </span>
-            <input className={`${input} flex-1`} value={item} onChange={(e) => setItem(i, e.target.value)} placeholder={`Item ${i + 1}`} />
-            {block.items.length > 1 && <button onClick={() => removeItem(i)} className="text-red-400 hover:text-red-600 shrink-0 transition-colors"><Ico.Close /></button>}
+            <RichInput className={input} value={item} onChange={(v) => setItem(i, v)} placeholder={`Item ${i + 1}`} />
+            {block.items.length > 1 && <button onClick={() => removeItem(i)} className="text-red-400 hover:text-red-600 shrink-0 transition-colors mt-2"><Ico.Close /></button>}
           </div>
         ))}
         <button onClick={addItem} className="text-xs font-bold text-[#2A5230] hover:underline">+ Add item</button>
@@ -897,16 +987,16 @@ function ChecklistEditor({ block, onChange }: { block: ChecklistBlock; onChange:
     <div className="space-y-2">
       <div className={label}>Checklist Items</div>
       {block.items.map((item, i) => (
-        <div key={i} className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded border-2 border-[#B8D4B5] shrink-0" />
-          <input
-            className={`${input} flex-1`}
+        <div key={i} className="flex items-start gap-2">
+          <div className="w-5 h-5 rounded border-2 border-[#B8D4B5] shrink-0 mt-2" />
+          <RichInput
+            className={input}
             value={item.text}
-            onChange={(e) => setItem(i, e.target.value)}
+            onChange={(v) => setItem(i, v)}
             placeholder={`Action item ${i + 1}`}
           />
           {block.items.length > 1 && (
-            <button onClick={() => removeItem(i)} className="text-red-400 hover:text-red-600 shrink-0 transition-colors"><Ico.Close /></button>
+            <button onClick={() => removeItem(i)} className="text-red-400 hover:text-red-600 shrink-0 transition-colors mt-2"><Ico.Close /></button>
           )}
         </div>
       ))}
@@ -1218,7 +1308,7 @@ function BulletListPreview({ block }: { block: BulletListBlock }) {
           <span className="shrink-0 font-bold mt-0.5" style={{ color: "#2A5230", fontFamily: "monospace", minWidth: 18, textAlign: "center" }}>
             {block.style === "number" ? `${i + 1}.` : bs.char}
           </span>
-          <span>{item || <span className="italic" style={{ color: "#C0D4C0" }}>Item {i + 1}</span>}</span>
+          <span>{item ? renderRich(item) : <span className="italic" style={{ color: "#C0D4C0" }}>Item {i + 1}</span>}</span>
         </li>
       ))}
     </ul>
@@ -1329,7 +1419,7 @@ function BlockPreview({ block }: { block: Block }) {
   if (block.type === "paragraph") {
     return (
       <p className="text-[15px] leading-[1.8] whitespace-pre-wrap" style={{ color: "#374151" }}>
-        {block.text || <span className="italic" style={{ color: "#C0D4C0" }}>Empty paragraph</span>}
+        {block.text ? renderRich(block.text) : <span className="italic" style={{ color: "#C0D4C0" }}>Empty paragraph</span>}
       </p>
     );
   }
@@ -1374,7 +1464,7 @@ function BlockPreview({ block }: { block: Block }) {
         <div>
           {block.title && <p className="font-bold text-sm mb-1" style={{ color: m.color }}>{block.title}</p>}
           <p className="text-sm leading-relaxed" style={{ color: m.color }}>
-            {block.text || "Callout text"}
+            {block.text ? renderRich(block.text) : "Callout text"}
           </p>
         </div>
       </div>
@@ -1423,7 +1513,7 @@ function BlockPreview({ block }: { block: Block }) {
               style={{ borderColor: "#B8D4B5" }}
             />
             <span className="text-sm leading-relaxed" style={{ color: "#374151" }}>
-              {item.text || `Item ${i + 1}`}
+              {item.text ? renderRich(item.text) : `Item ${i + 1}`}
             </span>
           </div>
         ))}
