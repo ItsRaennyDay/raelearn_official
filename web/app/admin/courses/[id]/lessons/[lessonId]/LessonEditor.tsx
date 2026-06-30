@@ -1408,7 +1408,7 @@ export default function LessonEditor({
     setSaving(false);
     if (res.ok) { setSaved(true); }
     else { const d = await res.json(); setError(d.error ?? "Save failed."); }
-  }, [lesson.id, title, lessonType, videoUrl, duration, status, isRequired, blocks]);
+  }, [lesson.id, title, lessonType, videoUrl, duration, status, isRequired, blocks, bgId]);
 
   return (
     <div className="flex-1 flex flex-col min-h-0" style={{ fontFamily: "var(--font-sans)" }}>
