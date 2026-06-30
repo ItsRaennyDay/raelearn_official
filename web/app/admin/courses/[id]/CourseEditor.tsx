@@ -530,8 +530,8 @@ export default function CourseEditor({ course, modules: initModules, categories,
                       return (
                         <tr key={e.id} className="border-b border-[#F5FAF5] hover:bg-[#FAFCFA] transition-colors last:border-0">
                           <td className="px-5 py-3">
-                            <div className="font-medium text-[#1A2E1C]">{e.full_name ?? <span className="text-[#9AB89E]">No name</span>}</div>
-                            <div className="text-xs text-[#9AB89E] mt-0.5">{e.email ?? "—"}</div>
+                            <div className="font-medium text-[#1A2E1C]">{e.full_name ?? e.email ?? <span className="text-[#9AB89E]">Unknown</span>}</div>
+                            {e.full_name && <div className="text-xs text-[#9AB89E] mt-0.5">{e.email ?? "—"}</div>}
                           </td>
                           <td className="px-5 py-3">
                             <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${isGroup ? "bg-blue-50 text-blue-700" : "bg-[#EEF5EE] text-[#2A5230]"}`}>

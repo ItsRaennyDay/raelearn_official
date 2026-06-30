@@ -109,12 +109,15 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     userId = profileByEmail.id;
   } else {
     // Fall back to auth.admin.listUsers and search by email
-    const { data: { users } } = await db.auth.admin.listUsers({ page: 1, perPage: 1000 });
-    const authUser = (users ?? []).find((u) => u.email?.toLowerCase() === email);
+    const listResult = await db.auth.admin.listUsers({ page: 1, perPage: 1000 });
+    if (listResult.error) {
+      return NextResponse.json({ error: `Auth lookup failed: ${listResult.error.message}` }, { status: 500 });
+    }
+    const authUser = (listResult.data?.users ?? []).find((u) => u.email?.toLowerCase() === email);
     userId = authUser?.id ?? null;
   }
 
-  if (!userId) return NextResponse.json({ error: "No registered user found with that email." }, { status: 404 });
+  if (!userId) return NextResponse.json({ error: `No registered user found with email: ${email}` }, { status: 404 });
 
   const { data: existing } = await db
     .from("enrollments").select("id").eq("user_id", userId).eq("course_id", id).eq("status", "active").single();
