@@ -1,12 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function SignInPage() {
+function safeNext(raw: string | null): string {
+  if (!raw) return "/dashboard";
+  // Must start with / but not // (protocol-relative) and contain no ://
+  if (raw.startsWith("/") && !raw.startsWith("//") && !raw.includes("://")) {
+    return raw;
+  }
+  return "/dashboard";
+}
+
+function SignInForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextPath = safeNext(searchParams.get("next"));
+
   const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading]   = useState(false);
@@ -29,7 +41,7 @@ export default function SignInPage() {
       return;
     }
 
-    router.push("/dashboard");
+    router.push(nextPath);
     router.refresh();
   }
 
@@ -52,6 +64,7 @@ export default function SignInPage() {
   return (
     <main className="min-h-[calc(100vh-80px)] flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
+
 
         {/* Card */}
         <div className="bg-white rounded-2xl border border-[var(--color-rl-border)] shadow-sm p-8 md:p-10">
@@ -171,5 +184,13 @@ export default function SignInPage() {
         </p>
       </div>
     </main>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense>
+      <SignInForm />
+    </Suspense>
   );
 }
