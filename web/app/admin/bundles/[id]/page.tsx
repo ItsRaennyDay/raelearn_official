@@ -28,7 +28,7 @@ export default async function BundleEditPage({ params }: { params: Promise<{ id:
 
   const { data: bundle } = await db
     .from("bundles")
-    .select("id, title, description, audience, is_published, sort_order")
+    .select("id, title, slug, description, audience, is_published, sort_order")
     .eq("id", id)
     .single();
 
@@ -150,13 +150,25 @@ export default async function BundleEditPage({ params }: { params: Promise<{ id:
 
   return (
     <div className="max-w-2xl p-8">
-      {/* Back */}
-      <Link href="/admin/bundles" className="inline-flex items-center gap-1.5 text-sm mb-6" style={{ color: "#7A9878" }}>
-        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
-          <path fillRule="evenodd" d="M14 8a.75.75 0 0 1-.75.75H4.56l3.22 3.22a.75.75 0 1 1-1.06 1.06l-4.5-4.5a.75.75 0 0 1 0-1.06l4.5-4.5a.75.75 0 0 1 1.06 1.06L4.56 7.25h8.69A.75.75 0 0 1 14 8Z" clipRule="evenodd" />
-        </svg>
-        All Bundles
-      </Link>
+      {/* Back + preview */}
+      <div className="flex items-center justify-between mb-6">
+        <Link href="/admin/bundles" className="inline-flex items-center gap-1.5 text-sm" style={{ color: "#7A9878" }}>
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
+            <path fillRule="evenodd" d="M14 8a.75.75 0 0 1-.75.75H4.56l3.22 3.22a.75.75 0 1 1-1.06 1.06l-4.5-4.5a.75.75 0 0 1 0-1.06l4.5-4.5a.75.75 0 0 1 1.06 1.06L4.56 7.25h8.69A.75.75 0 0 1 14 8Z" clipRule="evenodd" />
+          </svg>
+          All Bundles
+        </Link>
+        {bundle.is_published && (
+          <Link
+            href={`/bundles/${bundle.slug}`}
+            target="_blank"
+            className="text-xs font-bold px-3 py-1.5 rounded-lg"
+            style={{ background: "#EEF5EE", color: "#2A5230" }}
+          >
+            Preview ↗
+          </Link>
+        )}
+      </div>
 
       {/* Bundle settings */}
       <div className="rounded-2xl overflow-hidden mb-6" style={{ border: "1.5px solid #E8EDE6", background: "#fff" }}>

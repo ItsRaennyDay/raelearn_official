@@ -182,7 +182,7 @@ export default async function ForVAsPage() {
               return (
                 <Link
                   key={bundle.id}
-                  href="/courses"
+                  href={`/bundles/${bundle.slug}`}
                   className="bg-white border border-rl-border border-l-4 border-l-rl-forest rounded-[13px] p-5 block shadow-[0_10px_24px_-22px_rgba(42,82,48,0.35)] hover:-translate-y-[3px] transition-transform"
                 >
                   <h3 className="font-head font-bold text-[18px] mb-[7px] text-rl-forest">{bundle.title}</h3>
