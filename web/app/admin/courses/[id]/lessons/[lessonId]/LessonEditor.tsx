@@ -929,6 +929,73 @@ function BlockPreview({ block }: { block: Block }) {
   return null;
 }
 
+/* ─────────────────────────── Preview background options ─────────────────────────── */
+interface BgOption {
+  id: string;
+  label: string;
+  swatch: string;
+  style: React.CSSProperties;
+}
+
+const BG_OPTIONS: BgOption[] = [
+  {
+    id: "warm",
+    label: "Warm Paper",
+    swatch: "#F5F0E8",
+    style: { background: "#F5F0E8" },
+  },
+  {
+    id: "white",
+    label: "White",
+    swatch: "#FFFFFF",
+    style: { background: "#FFFFFF" },
+  },
+  {
+    id: "graph",
+    label: "Graph Paper",
+    swatch: "#FAFAFA",
+    style: {
+      backgroundColor: "#FAFAFA",
+      backgroundImage:
+        "linear-gradient(rgba(100,150,100,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(100,150,100,0.18) 1px, transparent 1px)",
+      backgroundSize: "24px 24px",
+    },
+  },
+  {
+    id: "lined",
+    label: "Lined",
+    swatch: "#FEFEF9",
+    style: {
+      backgroundColor: "#FEFEF9",
+      backgroundImage: "linear-gradient(rgba(80,130,90,0.15) 1px, transparent 1px)",
+      backgroundSize: "100% 36px",
+      backgroundPosition: "0 35px",
+    },
+  },
+  {
+    id: "dots",
+    label: "Dot Grid",
+    swatch: "#F8F8F5",
+    style: {
+      backgroundColor: "#F8F8F5",
+      backgroundImage: "radial-gradient(circle, rgba(80,110,80,0.25) 1px, transparent 1px)",
+      backgroundSize: "20px 20px",
+    },
+  },
+  {
+    id: "sage",
+    label: "Sage",
+    swatch: "#EEF5EE",
+    style: { background: "#EEF5EE" },
+  },
+  {
+    id: "forest",
+    label: "Dark Forest",
+    swatch: "#1A2E1C",
+    style: { background: "#1A2E1C" },
+  },
+];
+
 /* ─────────────────────────── Block label map ─────────────────────────── */
 const blockMeta: Record<BlockType, { label: string; icon: string; color: string }> = {
   paragraph: { label: "Paragraph", icon: "¶",   color: "#2A5230" },
@@ -1043,22 +1110,45 @@ function BlockPalette({ onSelect, onClose }: { onSelect: (t: BlockType) => void;
   return (
     <>
       {/* Backdrop */}
+      <div className="fixed inset-0 z-40" onClick={onClose} />
+
+      {/* Centered modal — always fully visible regardless of trigger position */}
       <div
-        className="fixed inset-0 z-30"
-        onClick={onClose}
-      />
-      <div
-        className="absolute bottom-full mb-2 left-0 right-0 z-40 rounded-2xl overflow-hidden"
+        className="fixed z-50 rounded-2xl overflow-hidden"
         style={{
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "520px",
+          maxHeight: "72vh",
+          overflowY: "auto",
           background: "#fff",
           border: "1.5px solid #DDE8DA",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+          boxShadow: "0 16px 48px rgba(0,0,0,0.16)",
         }}
       >
+        {/* Modal header */}
+        <div
+          className="flex items-center justify-between px-5 py-3 sticky top-0 z-10"
+          style={{ background: "#FAFCFA", borderBottom: "1px solid #EEF5EE" }}
+        >
+          <span className="text-xs font-extrabold uppercase tracking-widest" style={{ color: "#7A9878" }}>
+            Add a Block
+          </span>
+          <button
+            onClick={onClose}
+            className="w-6 h-6 flex items-center justify-center rounded-lg text-sm transition-colors hover:bg-[#F0F7F0]"
+            style={{ color: "#9AB89E" }}
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Groups */}
         {PALETTE_GROUPS.map((group) => (
           <div key={group.label} style={{ borderBottom: "1px solid #F0F7F0" }}>
             <div
-              className="px-4 py-2 text-[10px] font-extrabold uppercase tracking-widest"
+              className="px-4 pt-3 pb-1.5 text-[10px] font-extrabold uppercase tracking-widest"
               style={{ color: "#B8D4B5" }}
             >
               {group.label}
@@ -1110,7 +1200,10 @@ export default function LessonEditor({
   const [error, setError]           = useState<string | null>(null);
   const [showPalette, setShowPalette] = useState(false);
   const [preview, setPreview]       = useState(false);
+  const [bgId, setBgId]             = useState<string>("warm");
   const paletteRef                  = useRef<HTMLDivElement>(null);
+
+  const activeBg = BG_OPTIONS.find((b) => b.id === bgId) ?? BG_OPTIONS[0];
 
   function addBlock(type: BlockType) {
     setBlocks((bs) => [...bs, makeBlock[type]()]);
@@ -1365,19 +1458,42 @@ export default function LessonEditor({
         {preview && (
           <div
             className="flex flex-col overflow-y-auto"
-            style={{ width: "50%", background: "#F5F0E8", flex: "0 0 50%" }}
+            style={{ width: "50%", flex: "0 0 50%", ...activeBg.style }}
           >
+            {/* Preview header with bg picker */}
             <div
-              className="px-4 py-2.5 flex items-center gap-2 shrink-0 sticky top-0 z-10"
-              style={{ background: "#EDE8DF", borderBottom: "1px solid #D8D0C5" }}
+              className="px-4 py-2.5 shrink-0 sticky top-0 z-10"
+              style={{ background: "rgba(255,255,255,0.88)", backdropFilter: "blur(8px)", borderBottom: "1px solid rgba(0,0,0,0.07)" }}
             >
-              <span
-                className="w-2 h-2 rounded-full"
-                style={{ background: "#4A8A52" }}
-              />
-              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#7A9878" }}>
-                Learner Preview
-              </span>
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full shrink-0" style={{ background: "#4A8A52" }} />
+                  <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#7A9878" }}>
+                    Learner Preview
+                  </span>
+                </div>
+
+                {/* Background picker */}
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[10px] font-bold uppercase tracking-widest mr-1" style={{ color: "#B8D4B5" }}>
+                    BG
+                  </span>
+                  {BG_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.id}
+                      title={opt.label}
+                      onClick={() => setBgId(opt.id)}
+                      className="w-5 h-5 rounded-full border-2 transition-all shrink-0"
+                      style={{
+                        background: opt.swatch,
+                        borderColor: bgId === opt.id ? "#2A5230" : "rgba(0,0,0,0.12)",
+                        transform: bgId === opt.id ? "scale(1.25)" : "scale(1)",
+                        boxShadow: bgId === opt.id ? "0 0 0 2px #fff, 0 0 0 3.5px #2A5230" : "none",
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
 
             <div className="max-w-[660px] mx-auto w-full px-8 py-8">
@@ -1385,20 +1501,26 @@ export default function LessonEditor({
               <div className="mb-8">
                 <h1
                   className="font-extrabold text-2xl leading-tight mb-2"
-                  style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}
+                  style={{
+                    fontFamily: "var(--font-head)",
+                    color: bgId === "forest" ? "#E8F5E9" : "#1A2E1C",
+                  }}
                 >
                   {title || "Untitled Lesson"}
                 </h1>
                 <div className="flex items-center gap-3">
                   {duration > 0 && (
-                    <span className="text-xs font-medium" style={{ color: "#9AB89E" }}>
+                    <span className="text-xs font-medium" style={{ color: bgId === "forest" ? "#7DAA82" : "#9AB89E" }}>
                       ~{duration} min
                     </span>
                   )}
                   {isRequired && (
                     <span
                       className="text-xs font-bold px-2 py-0.5 rounded-full"
-                      style={{ background: "#EEF5EE", color: "#2A5230" }}
+                      style={{
+                        background: bgId === "forest" ? "rgba(74,138,82,0.3)" : "#EEF5EE",
+                        color: bgId === "forest" ? "#A8D4AC" : "#2A5230",
+                      }}
                     >
                       Required
                     </span>
@@ -1409,7 +1531,7 @@ export default function LessonEditor({
               {/* Blocks */}
               <div className="space-y-5">
                 {blocks.length === 0 ? (
-                  <p className="text-sm italic" style={{ color: "#C0D4C0" }}>
+                  <p className="text-sm italic" style={{ color: bgId === "forest" ? "#4A6A4E" : "#C0D4C0" }}>
                     No content — add blocks in the editor panel.
                   </p>
                 ) : (

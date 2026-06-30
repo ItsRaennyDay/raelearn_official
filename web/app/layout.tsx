@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Plus_Jakarta_Sans, JetBrains_Mono, Caveat, Poppins } from "next/font/google";
+import { Fraunces, Outfit, JetBrains_Mono, Caveat } from "next/font/google";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -9,10 +9,11 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
-const jakarta = Plus_Jakarta_Sans({
+// Outfit = closest free substitute for Gilroy (same clean geometric proportions)
+const outfit = Outfit({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-jakarta",
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-outfit",
   display: "swap",
 });
 
@@ -27,13 +28,6 @@ const caveat = Caveat({
   subsets: ["latin"],
   weight: ["600", "700"],
   variable: "--font-caveat",
-  display: "swap",
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-  variable: "--font-poppins",
   display: "swap",
 });
 
@@ -52,10 +46,9 @@ export default function RootLayout({
       lang="en"
       className={[
         fraunces.variable,
-        jakarta.variable,
+        outfit.variable,
         jetbrains.variable,
         caveat.variable,
-        poppins.variable,
       ].join(" ")}
     >
       <body className="min-h-screen flex flex-col">{children}</body>
