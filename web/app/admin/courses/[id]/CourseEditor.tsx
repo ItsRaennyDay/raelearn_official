@@ -183,7 +183,7 @@ export default function CourseEditor({ course, modules: initModules, categories,
     const res = await fetch(`/api/admin/enrollments/${enrollmentId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: "cancelled" }),
+      body: JSON.stringify({ status: "revoked" }),
     });
     setRevoking(null);
     if (res.ok) {
@@ -253,9 +253,13 @@ export default function CourseEditor({ course, modules: initModules, categories,
   }
 
   const statusColor: Record<string, string> = {
-    published: "text-green-700 bg-green-50 border-green-200",
-    draft:     "text-yellow-700 bg-yellow-50 border-yellow-200",
-    archived:  "text-gray-600 bg-gray-50 border-gray-200",
+    published:  "text-green-700 bg-green-50 border-green-200",
+    active:     "text-green-700 bg-green-50 border-green-200",
+    draft:      "text-yellow-700 bg-yellow-50 border-yellow-200",
+    archived:   "text-gray-600 bg-gray-50 border-gray-200",
+    revoked:    "text-gray-500 bg-gray-50 border-gray-200",
+    expired:    "text-gray-500 bg-gray-50 border-gray-200",
+    completed:  "text-blue-700 bg-blue-50 border-blue-200",
   };
 
   return (

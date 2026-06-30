@@ -20,7 +20,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   if (typeof body !== "object" || body === null) return NextResponse.json({ error: "Invalid request." }, { status: 400 });
 
   const b = body as Record<string, unknown>;
-  const allowed = ["active", "cancelled", "completed", "expired"];
+  const allowed = ["active", "revoked", "completed", "expired"];
   if (!allowed.includes(String(b.status))) {
     return NextResponse.json({ error: "Invalid status." }, { status: 400 });
   }
@@ -28,6 +28,6 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   const db = createAdminClient();
   const { error } = await db.from("enrollments").update({ status: b.status }).eq("id", enrollmentId);
 
-  if (error) return NextResponse.json({ error: "Failed to update enrollment." }, { status: 500 });
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });
 }

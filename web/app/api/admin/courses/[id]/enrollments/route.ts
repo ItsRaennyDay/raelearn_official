@@ -36,17 +36,22 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
 
   const profileMap = new Map((profiles ?? []).map((p) => [p.id, p]));
 
-  // 3. Get emails from auth.users for any profiles that don't have email
-  const missingEmailIds = userIds.filter((uid) => !profileMap.get(uid)?.email);
-  let authEmailMap: Map<string, string> = new Map();
-  if (missingEmailIds.length > 0) {
-    // fetch auth users one by one (small list in practice)
-    const emails = await Promise.all(
-      missingEmailIds.map((uid) =>
-        db.auth.admin.getUserById(uid).then((r) => [uid, r.data.user?.email ?? ""] as [string, string])
+  // 3. Get auth data for any profiles missing email or full_name
+  const missingDataIds = userIds.filter(
+    (uid) => !profileMap.get(uid)?.email || !profileMap.get(uid)?.full_name
+  );
+  type AuthData = { email: string; full_name: string };
+  let authDataMap: Map<string, AuthData> = new Map();
+  if (missingDataIds.length > 0) {
+    const results = await Promise.all(
+      missingDataIds.map((uid) =>
+        db.auth.admin.getUserById(uid).then((r) => [uid, {
+          email: r.data.user?.email ?? "",
+          full_name: r.data.user?.user_metadata?.full_name ?? r.data.user?.user_metadata?.name ?? "",
+        }] as [string, AuthData])
       )
     );
-    authEmailMap = new Map(emails);
+    authDataMap = new Map(results);
   }
 
   // 4. Count completed lessons per user for this course
@@ -67,15 +72,15 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
   // 5. Merge
   const result = (enrollments ?? []).map((e) => {
     const profile = profileMap.get(e.user_id);
-    const email = profile?.email ?? authEmailMap.get(e.user_id) ?? null;
+    const auth = authDataMap.get(e.user_id);
     return {
       id: e.id,
       user_id: e.user_id,
       status: e.status,
       enrolled_at: e.enrolled_at,
       source: e.source,
-      full_name: profile?.full_name ?? null,
-      email,
+      full_name: profile?.full_name || auth?.full_name || null,
+      email: profile?.email || auth?.email || null,
       role: profile?.role ?? "learner",
       completed_lessons: completedByUser[e.user_id] ?? 0,
     };
@@ -127,7 +132,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     user_id: userId,
     course_id: id,
     status: "active",
-    source: "admin",
+    source: "admin_grant",
     enrolled_at: new Date().toISOString(),
   });
 
