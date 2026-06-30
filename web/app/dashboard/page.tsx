@@ -45,6 +45,7 @@ export default async function DashboardPage() {
   }
 
   const firstName = profile?.full_name?.split(" ")[0] ?? "there";
+  const isAdmin = user.email?.toLowerCase() === (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
   return (
     <div className="min-h-screen bg-[var(--color-rl-bg)]">
@@ -56,6 +57,14 @@ export default async function DashboardPage() {
             <span className="text-[8.5px] font-bold tracking-[0.22em] uppercase text-[#8AA080] mt-0.5">by RAEFORM</span>
           </Link>
           <div className="flex items-center gap-4">
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className="text-xs font-bold text-white bg-[#2A5230] px-3 py-1.5 rounded-lg hover:bg-[#1e3d24] transition-colors hidden sm:block"
+              >
+                Admin Panel →
+              </Link>
+            )}
             <Link href="/courses" className="text-sm font-medium text-[#4A6650] hover:text-[#2A5230] transition-colors hidden sm:block">
               Browse Courses
             </Link>
