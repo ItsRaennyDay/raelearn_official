@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import DeleteUserButton from "./DeleteUserButton";
 
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
@@ -298,23 +299,12 @@ export default async function UsersPage({
                       )}
                     </td>
                     <td className="px-5 py-3">
-                      {/* Never allow deleting yourself */}
                       {!isMe && (
-                        <form
+                        <DeleteUserButton
+                          userId={u.id}
+                          email={u.email}
                           action={deleteUser}
-                          onSubmit={(e) => {
-                            if (!confirm(`Delete ${u.email}? This cannot be undone.`)) e.preventDefault();
-                          }}
-                        >
-                          <input type="hidden" name="userId" value={u.id} />
-                          <button
-                            type="submit"
-                            className="text-xs font-bold px-3 py-1 rounded-lg"
-                            style={{ background: "#FFF0F0", color: "#AA2222" }}
-                          >
-                            Delete
-                          </button>
-                        </form>
+                        />
                       )}
                     </td>
                   </tr>
