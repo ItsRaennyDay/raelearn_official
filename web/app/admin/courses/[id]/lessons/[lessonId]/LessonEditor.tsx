@@ -1300,30 +1300,31 @@ function QuizPreview({ block }: { block: QuizBlock }) {
   );
 }
 
-function BulletListPreview({ block }: { block: BulletListBlock }) {
+function BulletListPreview({ block, isDark }: { block: BulletListBlock; isDark?: boolean }) {
   const bs = BULLET_STYLES.find((b) => b.id === block.style) ?? BULLET_STYLES[0];
   return (
     <ul className="space-y-1.5">
       {block.items.map((item, i) => (
-        <li key={i} className="flex items-start gap-2.5 text-[15px] leading-relaxed" style={{ color: "#374151" }}>
-          <span className="shrink-0 font-bold mt-0.5" style={{ color: "#2A5230", fontFamily: "monospace", minWidth: 18, textAlign: "center" }}>
+        <li key={i} className="flex items-start gap-2.5 text-[15px] leading-relaxed" style={{ color: isDark ? "#C8DCC8" : "#374151" }}>
+          <span className="shrink-0 font-bold mt-0.5" style={{ color: isDark ? "#7DAA82" : "#2A5230", fontFamily: "monospace", minWidth: 18, textAlign: "center" }}>
             {block.style === "number" ? `${i + 1}.` : bs.char}
           </span>
-          <span>{item ? renderRich(item) : <span className="italic" style={{ color: "#C0D4C0" }}>Item {i + 1}</span>}</span>
+          <span>{item ? renderRich(item) : <span className="italic" style={{ color: isDark ? "#5A7A5E" : "#C0D4C0" }}>Item {i + 1}</span>}</span>
         </li>
       ))}
     </ul>
   );
 }
 
-function TablePreview({ block }: { block: TableBlock }) {
+function TablePreview({ block, isDark }: { block: TableBlock; isDark?: boolean }) {
+  const bdr = isDark ? "rgba(255,255,255,0.1)" : "#DDE8DA";
   return (
-    <div className="overflow-x-auto rounded-xl border border-[#DDE8DA]">
+    <div className="overflow-x-auto rounded-xl border" style={{ borderColor: bdr }}>
       <table className="w-full text-sm border-collapse">
         <thead>
-          <tr style={{ background: "#EEF5EE" }}>
+          <tr style={{ background: isDark ? "rgba(42,82,48,0.4)" : "#EEF5EE" }}>
             {block.headers.map((h, c) => (
-              <th key={c} className="px-4 py-2.5 text-left text-xs font-bold" style={{ color: "#2A5230", borderBottom: "1px solid #DDE8DA", borderRight: c < block.headers.length - 1 ? "1px solid #DDE8DA" : undefined }}>
+              <th key={c} className="px-4 py-2.5 text-left text-xs font-bold" style={{ color: isDark ? "#A8D4AC" : "#2A5230", borderBottom: `1px solid ${bdr}`, borderRight: c < block.headers.length - 1 ? `1px solid ${bdr}` : undefined }}>
                 {h || `Column ${c + 1}`}
               </th>
             ))}
@@ -1331,10 +1332,10 @@ function TablePreview({ block }: { block: TableBlock }) {
         </thead>
         <tbody>
           {block.rows.map((row, r) => (
-            <tr key={r} style={{ background: r % 2 === 0 ? "#FAFCFA" : "#fff" }}>
+            <tr key={r} style={{ background: r % 2 === 0 ? (isDark ? "rgba(255,255,255,0.04)" : "#FAFCFA") : "transparent" }}>
               {row.map((cell, c) => (
-                <td key={c} className="px-4 py-2.5 text-sm" style={{ color: "#374151", borderBottom: r < block.rows.length - 1 ? "1px solid #F0F7F0" : undefined, borderRight: c < row.length - 1 ? "1px solid #F0F7F0" : undefined }}>
-                  {cell || <span style={{ color: "#D1D5DB" }}>—</span>}
+                <td key={c} className="px-4 py-2.5 text-sm" style={{ color: isDark ? "#C8DCC8" : "#374151", borderBottom: r < block.rows.length - 1 ? `1px solid ${isDark ? "rgba(255,255,255,0.06)" : "#F0F7F0"}` : undefined, borderRight: c < row.length - 1 ? `1px solid ${isDark ? "rgba(255,255,255,0.06)" : "#F0F7F0"}` : undefined }}>
+                  {cell || <span style={{ color: isDark ? "#4A6A4E" : "#D1D5DB" }}>—</span>}
                 </td>
               ))}
             </tr>
@@ -1483,11 +1484,16 @@ function DividerEditor({ block, onChange }: { block: DividerBlock; onChange: (b:
 }
 
 /* ─────────────────────────── Preview renderer ─────────────────────────── */
-function BlockPreview({ block }: { block: Block }) {
+function BlockPreview({ block, isDark }: { block: Block; isDark?: boolean }) {
+  const tc  = isDark ? "#C8DCC8" : "#374151";   // body text
+  const hc  = isDark ? "#E8F5E9" : "#1A2E1C";   // heading
+  const mc  = isDark ? "#7DAA82" : "#2A5230";   // accent / bullet marker
+  const qc  = isDark ? "#A8D4AC" : "#2A5230";   // quote text
+
   if (block.type === "paragraph") {
     return (
-      <p className="text-[15px] leading-[1.8] whitespace-pre-wrap" style={{ color: "#374151" }}>
-        {block.text ? renderRich(block.text) : <span className="italic" style={{ color: "#C0D4C0" }}>Empty paragraph</span>}
+      <p className="text-[15px] leading-[1.8] whitespace-pre-wrap" style={{ color: tc }}>
+        {block.text ? renderRich(block.text) : <span className="italic" style={{ color: isDark ? "#5A7A5E" : "#C0D4C0" }}>Empty paragraph</span>}
       </p>
     );
   }
@@ -1497,7 +1503,7 @@ function BlockPreview({ block }: { block: Block }) {
     const size = block.level === 1 ? "text-3xl" : block.level === 2 ? "text-2xl" : block.level === 3 ? "text-xl" : "text-lg";
     const weight = block.level <= 2 ? "font-extrabold" : "font-bold";
     return (
-      <Tag className={`${size} ${weight}`} style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>
+      <Tag className={`${size} ${weight}`} style={{ fontFamily: "var(--font-head)", color: hc }}>
         {block.text || <span className="opacity-30">Heading {block.level}</span>}
       </Tag>
     );
@@ -1505,17 +1511,13 @@ function BlockPreview({ block }: { block: Block }) {
 
   if (block.type === "quote") {
     return (
-      <blockquote
-        className="px-5 py-4 rounded-r-2xl"
-        style={{ borderLeft: "4px solid #2A5230", background: "#F5FAF5" }}
-      >
-        <p className="text-[15px] leading-relaxed italic" style={{ color: "#2A5230" }}>
+      <blockquote className="px-5 py-4 rounded-r-2xl"
+        style={{ borderLeft: "4px solid #2A5230", background: isDark ? "rgba(42,82,48,0.3)" : "#F5FAF5" }}>
+        <p className="text-[15px] leading-relaxed italic" style={{ color: qc }}>
           {block.text || "Quote text"}
         </p>
         {block.attribution && (
-          <p className="text-xs font-semibold mt-2" style={{ color: "#7A9878" }}>
-            {block.attribution}
-          </p>
+          <p className="text-xs font-semibold mt-2" style={{ color: mc }}>{block.attribution}</p>
         )}
       </blockquote>
     );
@@ -1524,10 +1526,7 @@ function BlockPreview({ block }: { block: Block }) {
   if (block.type === "callout") {
     const m = calloutMeta[block.variant];
     return (
-      <div
-        className="flex gap-3 px-4 py-4 rounded-xl"
-        style={{ background: m.bg, borderLeft: `4px solid ${m.border}` }}
-      >
+      <div className="flex gap-3 px-4 py-4 rounded-xl" style={{ background: m.bg, borderLeft: `4px solid ${m.border}` }}>
         <span className="text-xl shrink-0">{m.icon}</span>
         <div>
           {block.title && <p className="font-bold text-sm mb-1" style={{ color: m.color }}>{block.title}</p>}
@@ -1543,21 +1542,14 @@ function BlockPreview({ block }: { block: Block }) {
     const embed = getEmbedUrl(block.url);
     return (
       <div>
-        {block.title && <p className="font-semibold text-sm mb-2" style={{ color: "#1A2E1C" }}>{block.title}</p>}
+        {block.title && <p className="font-semibold text-sm mb-2" style={{ color: hc }}>{block.title}</p>}
         {embed ? (
           <div className="relative w-full rounded-2xl overflow-hidden" style={{ paddingBottom: "56.25%" }}>
-            <iframe
-              src={embed}
-              className="absolute inset-0 w-full h-full"
-              allow="autoplay; fullscreen"
-              allowFullScreen
-            />
+            <iframe src={embed} className="absolute inset-0 w-full h-full" allow="autoplay; fullscreen" allowFullScreen />
           </div>
         ) : (
-          <div
-            className="rounded-2xl flex items-center justify-center p-12 text-sm"
-            style={{ background: "#F0F7F0", border: "2px dashed #B8D4B5", color: "#9AB89E" }}
-          >
+          <div className="rounded-2xl flex items-center justify-center p-12 text-sm"
+            style={{ background: isDark ? "rgba(42,82,48,0.2)" : "#F0F7F0", border: "2px dashed #B8D4B5", color: "#9AB89E" }}>
             {block.url ? "Invalid video URL" : "Paste a YouTube or Vimeo URL to preview"}
           </div>
         )}
@@ -1568,19 +1560,16 @@ function BlockPreview({ block }: { block: Block }) {
 
   if (block.type === "quiz")       return <QuizPreview block={block} />;
   if (block.type === "flashcard")  return <FlashcardPreview block={block} />;
-  if (block.type === "bulletlist") return <BulletListPreview block={block} />;
-  if (block.type === "table")      return <TablePreview block={block} />;
+  if (block.type === "bulletlist") return <BulletListPreview block={block} isDark={isDark} />;
+  if (block.type === "table")      return <TablePreview block={block} isDark={isDark} />;
 
   if (block.type === "checklist") {
     return (
       <div className="space-y-2">
         {block.items.map((item, i) => (
           <div key={i} className="flex items-start gap-3">
-            <span
-              className="w-5 h-5 rounded border-2 shrink-0 mt-0.5"
-              style={{ borderColor: "#B8D4B5" }}
-            />
-            <span className="text-sm leading-relaxed" style={{ color: "#374151" }}>
+            <span className="w-5 h-5 rounded border-2 shrink-0 mt-0.5" style={{ borderColor: isDark ? "#5A7A5E" : "#B8D4B5" }} />
+            <span className="text-sm leading-relaxed" style={{ color: tc }}>
               {item.text ? renderRich(item.text) : `Item ${i + 1}`}
             </span>
           </div>
@@ -1721,8 +1710,8 @@ const BG_OPTIONS: BgOption[] = [
   {
     id: "forest",
     label: "Dark Forest",
-    swatch: "#1A2E1C",
-    style: { background: "#1A2E1C" },
+    swatch: "#3D5C40",
+    style: { background: "#3D5C40" },
   },
 ];
 
@@ -2292,7 +2281,7 @@ export default function LessonEditor({
                   </p>
                 ) : (
                   blocks.map((block, i) => (
-                    <BlockPreview key={blockKeys[i]} block={block} />
+                    <BlockPreview key={blockKeys[i]} block={block} isDark={bgId === "forest"} />
                   ))
                 )}
               </div>

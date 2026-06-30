@@ -46,7 +46,7 @@ const BG_STYLES: Record<string, React.CSSProperties> = {
   lined:  { backgroundColor: "#FEFEF9", backgroundImage: "linear-gradient(rgba(80,130,90,0.13) 1px,transparent 1px)", backgroundSize: "100% 36px", backgroundPosition: "0 35px" },
   dots:   { backgroundColor: "#F8F8F5", backgroundImage: "radial-gradient(circle,rgba(80,110,80,0.22) 1px,transparent 1px)", backgroundSize: "20px 20px" },
   sage:   { background: "#EEF5EE" },
-  forest: { background: "#1A2E1C" },
+  forest: { background: "#3D5C40" },
 };
 
 /* ─── File type icons / colors ─── */
