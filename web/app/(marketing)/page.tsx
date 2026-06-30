@@ -139,46 +139,6 @@ function DashboardMockup() {
   );
 }
 
-/* ─── Course card ─── */
-function CourseCard({
-  badge,
-  badgeBg,
-  title,
-  desc,
-  meta,
-  cta,
-  href,
-}: {
-  badge: string;
-  badgeBg: string;
-  title: string;
-  desc: string;
-  meta: string;
-  cta: string;
-  href: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="bg-white border border-[#DDE8DA] rounded-xl p-6 flex flex-col hover:border-[#B8D4B5] transition-colors group"
-    >
-      <div className="mb-3.5">
-        <span
-          className="text-[11px] font-bold tracking-[0.06em] uppercase text-white px-3 py-1 rounded-full"
-          style={{ background: badgeBg }}
-        >
-          {badge}
-        </span>
-      </div>
-      <h3 className="font-display font-bold text-[18px] text-[#2A5230] mb-2 leading-[1.3]">{title}</h3>
-      <p className="text-sm leading-relaxed text-[#4A6650] mb-4 flex-1">{desc}</p>
-      <div className="flex items-center justify-between">
-        <span className="font-mono text-xs text-[#8AA080]">{meta}</span>
-        <span className="text-[13px] font-medium text-[#5A8C5E] group-hover:underline">{cta}</span>
-      </div>
-    </Link>
-  );
-}
 
 /* ─── Page ─── */
 export default function HomePage() {
@@ -318,53 +278,25 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Start here ── */}
+      {/* ── Courses ── */}
       <section className="bg-[#F5F0E8] border-t border-[#E5DDD0] px-7 py-[88px]">
-        <div className="max-w-[960px] mx-auto">
-          <div className="flex items-center gap-2 mb-[18px]">
+        <div className="max-w-[960px] mx-auto text-center">
+          <div className="inline-flex items-center gap-2 mb-[18px]">
             <span className="w-1.5 h-1.5 rounded-full bg-[#5A8C5E] shrink-0" />
-            <span className="text-xs font-medium tracking-[0.1em] uppercase text-[#5A8C5E]">Start here</span>
+            <span className="text-xs font-medium tracking-[0.1em] uppercase text-[#5A8C5E]">Courses</span>
           </div>
-          <h2 className="font-display font-bold text-3xl text-[#2A5230] mb-10 leading-[1.2]">
-            Courses built for your first 90 days as a VA.
+          <h2 className="font-display font-bold text-3xl text-[#2A5230] mb-4 leading-[1.2]">
+            Practical training for VAs, founders &amp; nonprofits.
           </h2>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
-            <CourseCard
-              badge="FREE"
-              badgeBg="#5A8C5E"
-              title="VA Foundations: Your First 30 Days"
-              desc="The complete beginner guide. Tools, clients, pricing, proposals, and your first contract."
-              meta="8 lessons · 2.5 hrs"
-              cta="Start for free →"
-              href="/courses"
-            />
-            <CourseCard
-              badge="$49"
-              badgeBg="#B86B4A"
-              title="Admin Support Essentials"
-              desc="Inbox management, calendars, SOPs, and everything that makes you an indispensable admin VA."
-              meta="12 lessons · 4 hrs"
-              cta="Enroll now →"
-              href="/courses"
-            />
-            <CourseCard
-              badge="$37"
-              badgeBg="#B86B4A"
-              title="Client Communication That Actually Works"
-              desc="Templates, tone, difficult client scripts, and follow-up systems that build long-term trust."
-              meta="10 lessons · 3 hrs"
-              cta="Enroll now →"
-              href="/courses"
-            />
-          </div>
-          <div className="text-center mt-6">
-            <Link
-              href="/courses"
-              className="inline-flex items-center text-sm font-semibold text-[#2A5230] border border-[#A8C4A4] px-6 py-3 rounded-[10px] hover:border-[#2A5230] transition-colors"
-            >
-              See all courses →
-            </Link>
-          </div>
+          <p className="text-[#4A6650] text-base leading-relaxed mb-8 max-w-[520px] mx-auto">
+            Courses covering operations, admin systems, websites, nonprofit admin, workflow setup, and more — launching soon.
+          </p>
+          <Link
+            href="/courses"
+            className="inline-flex items-center text-sm font-semibold text-[#2A5230] border border-[#A8C4A4] px-6 py-3 rounded-[10px] hover:border-[#2A5230] transition-colors"
+          >
+            Browse Courses →
+          </Link>
         </div>
       </section>
 
