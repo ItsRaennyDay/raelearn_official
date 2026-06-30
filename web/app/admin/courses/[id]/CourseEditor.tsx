@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -62,8 +62,9 @@ export default function CourseEditor({ course, modules: initModules, categories,
   const router = useRouter();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
-  const [tab, setTab] = useState<"settings" | "curriculum">(
-    searchParams.get("tab") === "curriculum" ? "curriculum" : "settings"
+  const [tab, setTab] = useState<"settings" | "curriculum" | "enrollments">(
+    searchParams.get("tab") === "curriculum" ? "curriculum" :
+    searchParams.get("tab") === "enrollments" ? "enrollments" : "settings"
   );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -114,6 +115,78 @@ export default function CourseEditor({ course, modules: initModules, categories,
     } else {
       setSuccess(true);
       startTransition(() => router.refresh());
+    }
+  }
+
+  // Enrollment state
+  type EnrollmentRow = {
+    id: string; user_id: string; status: string; enrolled_at: string | null;
+    source: string | null; full_name: string | null; email: string | null;
+    role: string; completed_lessons: number;
+  };
+  const [enrollments, setEnrollments] = useState<EnrollmentRow[]>([]);
+  const [enrollmentsLoaded, setEnrollmentsLoaded] = useState(false);
+  const [enrollmentsLoading, setEnrollmentsLoading] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviting, setInviting] = useState(false);
+  const [enrollError, setEnrollError] = useState<string | null>(null);
+  const [enrollSuccess, setEnrollSuccess] = useState<string | null>(null);
+  const [revoking, setRevoking] = useState<string | null>(null);
+
+  const loadEnrollments = useCallback(async () => {
+    setEnrollmentsLoading(true);
+    try {
+      const res = await fetch(`/api/admin/courses/${course.id}/enrollments`);
+      if (res.ok) {
+        const d = await res.json();
+        setEnrollments(d.enrollments ?? []);
+        setEnrollmentsLoaded(true);
+      }
+    } finally {
+      setEnrollmentsLoading(false);
+    }
+  }, [course.id]);
+
+  useEffect(() => {
+    if (tab === "enrollments" && !enrollmentsLoaded && !enrollmentsLoading) {
+      loadEnrollments();
+    }
+  }, [tab, enrollmentsLoaded, enrollmentsLoading, loadEnrollments]);
+
+  async function inviteLearner(e: React.FormEvent) {
+    e.preventDefault();
+    setEnrollError(null);
+    setEnrollSuccess(null);
+    const email = inviteEmail.trim().toLowerCase();
+    if (!email) return;
+    setInviting(true);
+    const res = await fetch(`/api/admin/courses/${course.id}/enrollments`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    setInviting(false);
+    if (!res.ok) {
+      const d = await res.json();
+      setEnrollError(d.error ?? "Failed to enroll.");
+    } else {
+      setInviteEmail("");
+      setEnrollSuccess("Learner enrolled successfully.");
+      await loadEnrollments();
+    }
+  }
+
+  async function revokeEnrollment(enrollmentId: string) {
+    if (!confirm("Remove this learner from the course?")) return;
+    setRevoking(enrollmentId);
+    const res = await fetch(`/api/admin/enrollments/${enrollmentId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "cancelled" }),
+    });
+    setRevoking(null);
+    if (res.ok) {
+      setEnrollments((prev) => prev.map((e) => e.id === enrollmentId ? { ...e, status: "cancelled" } : e));
     }
   }
 
@@ -215,7 +288,7 @@ export default function CourseEditor({ course, modules: initModules, categories,
 
       {/* Tabs */}
       <div className="flex border-b border-[#DDE8DA] bg-white px-8">
-        {(["settings", "curriculum"] as const).map((t) => (
+        {(["settings", "curriculum", "enrollments"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -382,6 +455,123 @@ export default function CourseEditor({ course, modules: initModules, categories,
               {saving ? "Saving…" : "Save Changes"}
             </button>
           </form>
+        )}
+
+        {/* ── ENROLLMENTS TAB ── */}
+        {tab === "enrollments" && (
+          <div className="max-w-4xl">
+            {/* Invite form */}
+            <div className="bg-white border border-[#DDE8DA] rounded-2xl p-5 mb-5">
+              <p className="text-xs font-bold uppercase tracking-wide text-[#7A9878] mb-3">Enroll a Learner</p>
+              {enrollError && <div className="mb-3 px-3 py-2 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700">{enrollError}</div>}
+              {enrollSuccess && <div className="mb-3 px-3 py-2 bg-green-50 border border-green-200 rounded-lg text-xs text-green-700">{enrollSuccess}</div>}
+              <form onSubmit={inviteLearner} className="flex gap-2 items-center">
+                <input
+                  type="email"
+                  required
+                  value={inviteEmail}
+                  onChange={(e) => { setInviteEmail(e.target.value); setEnrollError(null); setEnrollSuccess(null); }}
+                  placeholder="learner@example.com"
+                  className={inputCls + " flex-1 max-w-sm"}
+                />
+                <button
+                  type="submit"
+                  disabled={inviting}
+                  className="px-5 py-2.5 bg-[#2A5230] text-white text-sm font-bold rounded-xl hover:bg-[#1e3d24] disabled:opacity-50 transition-colors whitespace-nowrap"
+                >
+                  {inviting ? "Enrolling…" : "+ Enroll"}
+                </button>
+              </form>
+              <p className="text-xs mt-2 text-[#9AB89E]">User must already be registered. Enrollment will be marked as source: admin.</p>
+            </div>
+
+            {/* Enrollment table */}
+            <div className="bg-white border border-[#DDE8DA] rounded-2xl overflow-hidden">
+              {/* Table header */}
+              <div className="flex items-center justify-between px-5 py-3 bg-[#FAFCFA] border-b border-[#F0F7F0]">
+                <span className="text-xs font-bold uppercase tracking-wide text-[#7A9878]">
+                  {enrollmentsLoaded
+                    ? `${enrollments.filter((e) => e.status === "active").length} active · ${enrollments.length} total`
+                    : "Enrolled Learners"}
+                </span>
+                <button
+                  onClick={loadEnrollments}
+                  disabled={enrollmentsLoading}
+                  className="text-xs text-[#7A9878] hover:text-[#2A5230] transition-colors disabled:opacity-40"
+                >
+                  {enrollmentsLoading ? "Loading…" : "↻ Refresh"}
+                </button>
+              </div>
+
+              {enrollmentsLoading && !enrollmentsLoaded ? (
+                <div className="px-5 py-12 text-center text-sm text-[#9AB89E]">Loading…</div>
+              ) : enrollments.length === 0 ? (
+                <div className="px-5 py-12 text-center text-sm text-[#9AB89E]">No enrollments yet</div>
+              ) : (
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[#F0F7F0]">
+                      <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Learner</th>
+                      <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Account</th>
+                      <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Progress</th>
+                      <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Status</th>
+                      <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Enrolled</th>
+                      <th className="px-5 py-3" />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {enrollments.map((e) => {
+                      const totalLessons = modules.reduce((s, m) => s + m.lessons.length, 0);
+                      const pct = totalLessons > 0 ? Math.round((e.completed_lessons / totalLessons) * 100) : 0;
+                      const isGroup = e.role === "group_learner" || e.role === "group_admin";
+                      return (
+                        <tr key={e.id} className="border-b border-[#F5FAF5] hover:bg-[#FAFCFA] transition-colors last:border-0">
+                          <td className="px-5 py-3">
+                            <div className="font-medium text-[#1A2E1C]">{e.full_name ?? <span className="text-[#9AB89E]">No name</span>}</div>
+                            <div className="text-xs text-[#9AB89E] mt-0.5">{e.email ?? "—"}</div>
+                          </td>
+                          <td className="px-5 py-3">
+                            <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${isGroup ? "bg-blue-50 text-blue-700" : "bg-[#EEF5EE] text-[#2A5230]"}`}>
+                              {isGroup ? "Group" : "Individual"}
+                            </span>
+                          </td>
+                          <td className="px-5 py-3 min-w-[140px]">
+                            <div className="flex items-center gap-2">
+                              <div className="flex-1 h-1.5 bg-[#EEF5EE] rounded-full overflow-hidden">
+                                <div className="h-full bg-[#2A5230] rounded-full transition-all" style={{ width: `${pct}%` }} />
+                              </div>
+                              <span className="text-xs font-semibold text-[#4A6650] shrink-0 w-8 text-right">{pct}%</span>
+                            </div>
+                            <div className="text-[10px] text-[#9AB89E] mt-0.5">{e.completed_lessons}/{totalLessons} lessons</div>
+                          </td>
+                          <td className="px-5 py-3">
+                            <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border capitalize ${statusColor[e.status] ?? statusColor.draft}`}>
+                              {e.status}
+                            </span>
+                          </td>
+                          <td className="px-5 py-3 text-xs text-[#9AB89E]">
+                            {e.enrolled_at ? new Date(e.enrolled_at).toLocaleDateString() : "—"}
+                            {e.source && <div className="text-[10px] text-[#C8DEC8] mt-0.5 capitalize">{e.source}</div>}
+                          </td>
+                          <td className="px-5 py-3">
+                            {e.status === "active" && (
+                              <button
+                                onClick={() => revokeEnrollment(e.id)}
+                                disabled={revoking === e.id}
+                                className="text-xs font-bold px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-50 transition-colors"
+                              >
+                                {revoking === e.id ? "…" : "Remove"}
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
         )}
 
         {/* ── CURRICULUM TAB ── */}
