@@ -7,9 +7,8 @@ const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const isProtected = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
-  if (!isProtected) return NextResponse.next();
-
+  // Always refresh the session on every request so the 1-hour activity
+  // window resets regardless of which page the user is on.
   const response = NextResponse.next();
 
   const supabase = createServerClient(
@@ -32,15 +31,17 @@ export async function proxy(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) {
+  const isProtected = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
+
+  if (isProtected && !user) {
     const signinUrl = request.nextUrl.clone();
     signinUrl.pathname = "/signin";
     signinUrl.searchParams.set("next", pathname);
     return NextResponse.redirect(signinUrl);
   }
 
-  if (pathname.startsWith("/admin")) {
-    if (user.email?.toLowerCase() !== ADMIN_EMAIL) {
+  if (isProtected && pathname.startsWith("/admin")) {
+    if (user!.email?.toLowerCase() !== ADMIN_EMAIL) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }

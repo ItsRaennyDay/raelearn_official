@@ -54,16 +54,22 @@ export default function EnrollButton({
 
   async function handleEnroll() {
     if (!isFree) {
-      // Paid: will route to Stripe (not yet implemented)
       router.push("/pricing");
       return;
     }
     setLoading(true);
     setError(null);
     const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      router.push("/signin");
+      return;
+    }
     const { error: err } = await supabase.from("enrollments").insert({
+      user_id: user.id,
       course_id: courseId,
       source: "free",
+      status: "active",
     });
     setLoading(false);
     if (err) {
