@@ -36,7 +36,7 @@ interface Props {
   background: string;
 }
 
-type Tab = "resources" | "notes" | "checklist";
+type Tab = "resources" | "checklist";
 
 /* ─── Background styles ─── */
 const BG_STYLES: Record<string, React.CSSProperties> = {
@@ -456,7 +456,6 @@ export default function LessonPlayer({
   const [tab, setTab] = useState<Tab>("resources");
   const [completed, setCompleted] = useState(initialCompleted);
   const [markingDone, setMarkingDone] = useState(false);
-  const [notes, setNotes] = useState("");
   const [checklistDone, setChecklistDone] = useState<Record<number, boolean>>({});
   const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>(() => {
     const init: Record<string, boolean> = {};
@@ -501,7 +500,7 @@ export default function LessonPlayer({
   const adminChecklist = checklistItems;
 
   return (
-    <div className="flex flex-col" style={{ minHeight: "100vh", fontFamily: "var(--font-sans)", background: "#F0F4F0" }}>
+    <div className="flex flex-col" style={{ height: "100vh", overflow: "hidden", fontFamily: "var(--font-sans)", background: "#F0F4F0" }}>
 
       {/* ─── Top bar ─── */}
       <header className="sticky top-0 z-40 flex items-center gap-3 px-5 h-14" style={{ background: "#fff", borderBottom: "1px solid #DDE8DA", boxShadow: "0 1px 6px rgba(42,82,48,0.07)" }}>
@@ -524,7 +523,7 @@ export default function LessonPlayer({
       </header>
 
       {/* ─── Body ─── */}
-      <div className="flex flex-1 min-h-0" style={{ position: "relative" }}>
+      <div className="flex flex-1 min-h-0 overflow-hidden" style={{ position: "relative" }}>
 
         {/* ─── Left sidebar ─── */}
         <aside className="shrink-0 flex flex-col overflow-hidden transition-all duration-300"
@@ -698,7 +697,7 @@ export default function LessonPlayer({
 
           {/* Tabs */}
           <div className="flex" style={{ borderBottom: "1px solid #EEF5EE" }}>
-            {(["resources", "notes", "checklist"] as Tab[]).map(t => (
+            {(["resources", "checklist"] as Tab[]).map(t => (
               <button key={t} onClick={() => setTab(t)}
                 className="flex-1 py-2.5 text-xs font-bold capitalize transition-colors"
                 style={{ color: tab === t ? "#2A5230" : "#9AB89E", borderBottom: tab === t ? "2px solid #2A5230" : "2px solid transparent" }}>
@@ -747,18 +746,6 @@ export default function LessonPlayer({
                     </Link>
                   </div>
                 )}
-              </div>
-            )}
-
-            {/* Notes */}
-            {tab === "notes" && (
-              <div>
-                <div className="text-xs font-semibold mb-2" style={{ color: "#9AB89E" }}>Your personal notes</div>
-                <textarea value={notes} onChange={e => setNotes(e.target.value)}
-                  placeholder="Type your notes here…" rows={12}
-                  className="w-full text-sm rounded-xl p-3 resize-none outline-none"
-                  style={{ background: "#FAFCFA", border: "1px solid #EEF5EE", color: "#1A2E1C", fontFamily: "var(--font-sans)" }} />
-                <p className="text-[10px] mt-1" style={{ color: "#C8DEC8" }}>Notes are saved locally in your browser.</p>
               </div>
             )}
 
