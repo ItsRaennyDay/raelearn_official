@@ -459,123 +459,192 @@ export default function CourseEditor({ course, modules: initModules, categories,
         )}
 
         {/* ── ENROLLMENTS TAB ── */}
-        {tab === "enrollments" && (
-          <div className="max-w-4xl">
-            {/* Invite form */}
-            <div className="bg-white border border-[#DDE8DA] rounded-2xl p-5 mb-5">
-              <p className="text-xs font-bold uppercase tracking-wide text-[#7A9878] mb-3">Enroll a Learner</p>
-              {enrollError && <div className="mb-3 px-3 py-2 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700">{enrollError}</div>}
-              {enrollSuccess && <div className="mb-3 px-3 py-2 bg-green-50 border border-green-200 rounded-lg text-xs text-green-700">{enrollSuccess}</div>}
-              <form onSubmit={inviteLearner} className="flex gap-2 items-center">
-                <input
-                  type="email"
-                  required
-                  value={inviteEmail}
-                  onChange={(e) => { setInviteEmail(e.target.value); setEnrollError(null); setEnrollSuccess(null); }}
-                  placeholder="learner@example.com"
-                  className={inputCls + " flex-1 max-w-sm"}
-                />
-                <button
-                  type="submit"
-                  disabled={inviting}
-                  className="px-5 py-2.5 bg-[#2A5230] text-white text-sm font-bold rounded-xl hover:bg-[#1e3d24] disabled:opacity-50 transition-colors whitespace-nowrap"
-                >
-                  {inviting ? "Enrolling…" : "+ Enroll"}
-                </button>
-              </form>
-              <p className="text-xs mt-2 text-[#9AB89E]">User must already be registered. Enrollment will be marked as source: admin.</p>
-            </div>
+        {tab === "enrollments" && (() => {
+          const totalLessons = modules.reduce((s, m) => s + m.lessons.length, 0);
+          const active = enrollments.filter((e) => e.status === "active");
+          const completed = enrollments.filter((e) => e.status === "completed");
+          const avgPct = active.length > 0 && totalLessons > 0
+            ? Math.round(active.reduce((s, e) => s + e.completed_lessons, 0) / active.length / totalLessons * 100)
+            : 0;
+          const groupCount = enrollments.filter((e) => e.role === "group_learner" || e.role === "group_admin").length;
+          const adminCount = enrollments.filter((e) => e.source === "admin").length;
 
-            {/* Enrollment table */}
-            <div className="bg-white border border-[#DDE8DA] rounded-2xl overflow-hidden">
-              {/* Table header */}
-              <div className="flex items-center justify-between px-5 py-3 bg-[#FAFCFA] border-b border-[#F0F7F0]">
-                <span className="text-xs font-bold uppercase tracking-wide text-[#7A9878]">
-                  {enrollStatus === "loaded"
-                    ? `${enrollments.filter((e) => e.status === "active").length} active · ${enrollments.length} total`
-                    : "Enrolled Learners"}
-                </span>
-                <button
-                  onClick={() => setEnrollStatus("idle")}
-                  disabled={enrollStatus === "loading"}
-                  className="text-xs text-[#7A9878] hover:text-[#2A5230] transition-colors disabled:opacity-40"
-                >
-                  {enrollStatus === "loading" ? "Loading…" : "↻ Refresh"}
-                </button>
+          return (
+            <div className="flex gap-6 items-start">
+
+              {/* ── Left: form + table ── */}
+              <div className="flex-1 min-w-0">
+                {/* Invite form */}
+                <div className="bg-white border border-[#DDE8DA] rounded-2xl p-5 mb-5">
+                  <p className="text-xs font-bold uppercase tracking-wide text-[#7A9878] mb-3">Enroll a Learner</p>
+                  {enrollError && <div className="mb-3 px-3 py-2 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700">{enrollError}</div>}
+                  {enrollSuccess && <div className="mb-3 px-3 py-2 bg-green-50 border border-green-200 rounded-lg text-xs text-green-700">{enrollSuccess}</div>}
+                  <form onSubmit={inviteLearner} className="flex gap-2 items-center">
+                    <input
+                      type="email"
+                      required
+                      value={inviteEmail}
+                      onChange={(e) => { setInviteEmail(e.target.value); setEnrollError(null); setEnrollSuccess(null); }}
+                      placeholder="learner@example.com"
+                      className={inputCls + " flex-1"}
+                    />
+                    <button
+                      type="submit"
+                      disabled={inviting}
+                      className="px-5 py-2.5 bg-[#2A5230] text-white text-sm font-bold rounded-xl hover:bg-[#1e3d24] disabled:opacity-50 transition-colors whitespace-nowrap"
+                    >
+                      {inviting ? "Enrolling…" : "+ Enroll"}
+                    </button>
+                  </form>
+                  <p className="text-xs mt-2 text-[#9AB89E]">User must already be registered. Enrollment will be marked as source: admin.</p>
+                </div>
+
+                {/* Enrollment table */}
+                <div className="bg-white border border-[#DDE8DA] rounded-2xl overflow-hidden">
+                  <div className="flex items-center justify-between px-5 py-3 bg-[#FAFCFA] border-b border-[#F0F7F0]">
+                    <span className="text-xs font-bold uppercase tracking-wide text-[#7A9878]">
+                      {enrollStatus === "loaded"
+                        ? `${active.length} active · ${enrollments.length} total`
+                        : "Enrolled Learners"}
+                    </span>
+                    <button
+                      onClick={() => setEnrollStatus("idle")}
+                      disabled={enrollStatus === "loading"}
+                      className="text-xs text-[#7A9878] hover:text-[#2A5230] transition-colors disabled:opacity-40"
+                    >
+                      {enrollStatus === "loading" ? "Loading…" : "↻ Refresh"}
+                    </button>
+                  </div>
+
+                  {enrollStatus === "loading" ? (
+                    <div className="px-5 py-12 text-center text-sm text-[#9AB89E]">Loading…</div>
+                  ) : enrollStatus === "error" ? (
+                    <div className="px-5 py-12 text-center text-sm text-red-400">
+                      Failed to load enrollments.{" "}
+                      <button onClick={() => setEnrollStatus("idle")} className="underline">Retry</button>
+                    </div>
+                  ) : enrollments.length === 0 ? (
+                    <div className="px-5 py-12 text-center text-sm text-[#9AB89E]">No enrollments yet</div>
+                  ) : (
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-[#F0F7F0]">
+                          <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Name</th>
+                          <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Email</th>
+                          <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Account</th>
+                          <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Progress</th>
+                          <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Status</th>
+                          <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Enrolled</th>
+                          <th className="px-5 py-3" />
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {enrollments.map((e) => {
+                          const pct = totalLessons > 0 ? Math.round((e.completed_lessons / totalLessons) * 100) : 0;
+                          const isGroup = e.role === "group_learner" || e.role === "group_admin";
+                          return (
+                            <tr key={e.id} className="border-b border-[#F5FAF5] hover:bg-[#FAFCFA] transition-colors last:border-0">
+                              <td className="px-5 py-3 font-medium text-[#1A2E1C] whitespace-nowrap">
+                                {e.full_name ?? <span className="text-[#9AB89E]">—</span>}
+                              </td>
+                              <td className="px-5 py-3 text-xs text-[#4A6650]">
+                                {e.email ?? <span className="text-[#9AB89E]">—</span>}
+                              </td>
+                              <td className="px-5 py-3">
+                                <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${isGroup ? "bg-blue-50 text-blue-700" : "bg-[#EEF5EE] text-[#2A5230]"}`}>
+                                  {isGroup ? "Group" : "Individual"}
+                                </span>
+                              </td>
+                              <td className="px-5 py-3 min-w-[130px]">
+                                <div className="flex items-center gap-2">
+                                  <div className="flex-1 h-1.5 bg-[#EEF5EE] rounded-full overflow-hidden">
+                                    <div className="h-full bg-[#2A5230] rounded-full transition-all" style={{ width: `${pct}%` }} />
+                                  </div>
+                                  <span className="text-xs font-semibold text-[#4A6650] shrink-0 w-8 text-right">{pct}%</span>
+                                </div>
+                                <div className="text-[10px] text-[#9AB89E] mt-0.5">{e.completed_lessons}/{totalLessons} lessons</div>
+                              </td>
+                              <td className="px-5 py-3">
+                                <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border capitalize ${statusColor[e.status] ?? statusColor.draft}`}>
+                                  {e.status}
+                                </span>
+                              </td>
+                              <td className="px-5 py-3 text-xs text-[#9AB89E] whitespace-nowrap">
+                                {e.enrolled_at ? new Date(e.enrolled_at).toLocaleDateString() : "—"}
+                                {e.source && <div className="text-[10px] text-[#C8DEC8] mt-0.5 capitalize">{e.source}</div>}
+                              </td>
+                              <td className="px-5 py-3">
+                                {e.status === "active" && (
+                                  <button
+                                    onClick={() => revokeEnrollment(e.id)}
+                                    disabled={revoking === e.id}
+                                    className="text-xs font-bold px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-50 transition-colors"
+                                  >
+                                    {revoking === e.id ? "…" : "Remove"}
+                                  </button>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
               </div>
 
-              {enrollStatus === "loading" ? (
-                <div className="px-5 py-12 text-center text-sm text-[#9AB89E]">Loading…</div>
-              ) : enrollStatus === "error" ? (
-                <div className="px-5 py-12 text-center text-sm text-red-400">Failed to load enrollments. <button onClick={() => setEnrollStatus("idle")} className="underline">Retry</button></div>
-              ) : enrollments.length === 0 ? (
-                <div className="px-5 py-12 text-center text-sm text-[#9AB89E]">No enrollments yet</div>
-              ) : (
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-[#F0F7F0]">
-                      <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Learner</th>
-                      <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Account</th>
-                      <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Progress</th>
-                      <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Status</th>
-                      <th className="text-left px-5 py-3 text-xs font-bold uppercase tracking-wide text-[#7A9878]">Enrolled</th>
-                      <th className="px-5 py-3" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {enrollments.map((e) => {
-                      const totalLessons = modules.reduce((s, m) => s + m.lessons.length, 0);
-                      const pct = totalLessons > 0 ? Math.round((e.completed_lessons / totalLessons) * 100) : 0;
-                      const isGroup = e.role === "group_learner" || e.role === "group_admin";
-                      return (
-                        <tr key={e.id} className="border-b border-[#F5FAF5] hover:bg-[#FAFCFA] transition-colors last:border-0">
-                          <td className="px-5 py-3">
-                            <div className="font-medium text-[#1A2E1C]">{e.full_name ?? e.email ?? <span className="text-[#9AB89E]">Unknown</span>}</div>
-                            {e.full_name && <div className="text-xs text-[#9AB89E] mt-0.5">{e.email ?? "—"}</div>}
-                          </td>
-                          <td className="px-5 py-3">
-                            <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${isGroup ? "bg-blue-50 text-blue-700" : "bg-[#EEF5EE] text-[#2A5230]"}`}>
-                              {isGroup ? "Group" : "Individual"}
-                            </span>
-                          </td>
-                          <td className="px-5 py-3 min-w-[140px]">
-                            <div className="flex items-center gap-2">
-                              <div className="flex-1 h-1.5 bg-[#EEF5EE] rounded-full overflow-hidden">
-                                <div className="h-full bg-[#2A5230] rounded-full transition-all" style={{ width: `${pct}%` }} />
-                              </div>
-                              <span className="text-xs font-semibold text-[#4A6650] shrink-0 w-8 text-right">{pct}%</span>
-                            </div>
-                            <div className="text-[10px] text-[#9AB89E] mt-0.5">{e.completed_lessons}/{totalLessons} lessons</div>
-                          </td>
-                          <td className="px-5 py-3">
-                            <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border capitalize ${statusColor[e.status] ?? statusColor.draft}`}>
-                              {e.status}
-                            </span>
-                          </td>
-                          <td className="px-5 py-3 text-xs text-[#9AB89E]">
-                            {e.enrolled_at ? new Date(e.enrolled_at).toLocaleDateString() : "—"}
-                            {e.source && <div className="text-[10px] text-[#C8DEC8] mt-0.5 capitalize">{e.source}</div>}
-                          </td>
-                          <td className="px-5 py-3">
-                            {e.status === "active" && (
-                              <button
-                                onClick={() => revokeEnrollment(e.id)}
-                                disabled={revoking === e.id}
-                                className="text-xs font-bold px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-50 transition-colors"
-                              >
-                                {revoking === e.id ? "…" : "Remove"}
-                              </button>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              )}
+              {/* ── Right: Insights panel ── */}
+              <div className="w-64 shrink-0 space-y-4">
+                <div className="bg-white border border-[#DDE8DA] rounded-2xl p-5">
+                  <p className="text-xs font-bold uppercase tracking-wide text-[#7A9878] mb-4">Enrollment Insights</p>
+                  <div className="space-y-4">
+                    <div>
+                      <div className="text-3xl font-head font-bold text-[#2A5230]">{enrollments.length}</div>
+                      <div className="text-xs text-[#9AB89E] mt-0.5">Total enrolled</div>
+                    </div>
+                    <div className="h-px bg-[#F0F7F0]" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <div className="text-xl font-bold text-[#2A5230]">{active.length}</div>
+                        <div className="text-[10px] text-[#9AB89E] mt-0.5 uppercase tracking-wide">Active</div>
+                      </div>
+                      <div>
+                        <div className="text-xl font-bold text-[#2A5230]">{completed.length}</div>
+                        <div className="text-[10px] text-[#9AB89E] mt-0.5 uppercase tracking-wide">Completed</div>
+                      </div>
+                    </div>
+                    <div className="h-px bg-[#F0F7F0]" />
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[10px] uppercase tracking-wide font-bold text-[#9AB89E]">Avg Progress</span>
+                        <span className="text-sm font-bold text-[#2A5230]">{avgPct}%</span>
+                      </div>
+                      <div className="h-2 bg-[#EEF5EE] rounded-full overflow-hidden">
+                        <div className="h-full bg-[#2A5230] rounded-full transition-all" style={{ width: `${avgPct}%` }} />
+                      </div>
+                    </div>
+                    <div className="h-px bg-[#F0F7F0]" />
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-[#7A9878]">Individual</span>
+                        <span className="text-xs font-bold text-[#2A5230]">{enrollments.length - groupCount}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-[#7A9878]">Group</span>
+                        <span className="text-xs font-bold text-blue-600">{groupCount}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-[#7A9878]">Admin-added</span>
+                        <span className="text-xs font-bold text-[#2A5230]">{adminCount}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* ── CURRICULUM TAB ── */}
         {tab === "curriculum" && (
