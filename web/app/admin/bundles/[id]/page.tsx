@@ -43,10 +43,9 @@ export default async function BundleEditPage({ params }: { params: Promise<{ id:
   const { data: allCourses } = await db
     .from("courses")
     .select("id, title, slug, level, price_type, certificate_eligible, status")
-    .eq("status", "published")
     .order("title");
 
-  type CourseRow = { id: string; title: string; slug: string; level: string; price_type: string; certificate_eligible: boolean };
+  type CourseRow = { id: string; title: string; slug: string; level: string; price_type: string; certificate_eligible: boolean; status: string };
   const bundleCourses = (bundleCourseRows ?? []).map((r) => ({
     course_id: r.course_id,
     sort_order: r.sort_order,
@@ -310,6 +309,7 @@ export default async function BundleEditPage({ params }: { params: Promise<{ id:
               {available.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.title}
+                  {c.status !== "published" ? ` [${c.status}]` : ""}
                   {c.certificate_eligible ? " [Cert]" : ""}
                   {" — "}{c.price_type === "free" ? "Free" : "Paid"}
                   {" · "}{c.level}
