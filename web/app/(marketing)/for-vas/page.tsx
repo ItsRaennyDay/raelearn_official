@@ -54,14 +54,14 @@ const SUPPORT_AREAS = [
 export default async function ForVAsPage() {
   const supabase = await createClient();
 
-  // Fetch published VA bundles (tracks)
+  // Fetch published bundles for VAs (va-specific + general)
   const { data: bundles } = await supabase
     .from("bundles")
     .select(`
       id, title, description, slug, sort_order,
       bundle_courses ( course_id )
     `)
-    .eq("audience", "va")
+    .in("audience", ["va", "general"])
     .eq("is_published", true)
     .order("sort_order");
 
@@ -101,8 +101,7 @@ export default async function ForVAsPage() {
               <span className="mx-1.5">/</span>
               For VAs
             </div>
-            <div className="inline-flex items-center gap-2 bg-white border border-rl-border-mid rounded-full px-[13px] py-1.5 mb-4">
-              <span className="w-2 h-2 rounded-full bg-rl-forest" />
+            <div className="inline-flex items-center bg-white border border-rl-border-mid rounded-full px-[13px] py-1.5 mb-4">
               <span className="text-[11.5px] font-extrabold tracking-[0.08em] uppercase text-rl-forest">Support &amp; Operations track</span>
             </div>
             <h1 className="font-head font-extrabold text-[clamp(32px,4.6vw,54px)] leading-[1.04] tracking-[-0.02em] mb-4 text-rl-forest">

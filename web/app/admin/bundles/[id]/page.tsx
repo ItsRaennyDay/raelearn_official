@@ -63,9 +63,11 @@ export default async function BundleEditPage({ params }: { params: Promise<{ id:
     const description = (formData.get("description") as string ?? "").trim().slice(0, 500);
     const audience    = (formData.get("audience") as string ?? "general").trim();
     const is_published = formData.get("is_published") === "true";
+    // Keep status in sync so RLS policy (status = 'published') also passes
+    const status = is_published ? "published" : "draft";
     if (!title) return;
     const db2 = createAdminClient();
-    await db2.from("bundles").update({ title, description, audience, is_published, updated_at: new Date().toISOString() }).eq("id", id);
+    await db2.from("bundles").update({ title, description, audience, is_published, status, updated_at: new Date().toISOString() }).eq("id", id);
     revalidatePath(`/admin/bundles/${id}`);
     revalidatePath("/admin/bundles");
   }
