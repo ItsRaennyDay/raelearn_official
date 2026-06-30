@@ -109,18 +109,8 @@ CREATE POLICY "Admins can view all lessons"
     WHERE id = auth.uid()
     AND role IN ('content_admin','platform_admin')
   ));
-CREATE POLICY "Enrolled learners can view published lessons"
-  ON public.lessons FOR SELECT
-  USING (
-    status = 'published'
-    AND EXISTS (
-      SELECT 1 FROM public.enrollments e
-      JOIN public.modules m ON m.id = lessons.module_id
-      WHERE e.course_id = m.course_id
-        AND e.user_id = auth.uid()
-        AND e.status = 'active'
-    )
-  );
+-- NOTE: "Enrolled learners can view published lessons" policy is added in 004
+-- after the enrollments table exists.
 CREATE POLICY "Admins manage lessons"
   ON public.lessons FOR ALL
   USING (EXISTS (
@@ -147,17 +137,8 @@ CREATE TABLE public.resources (
 ALTER TABLE public.resources ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public resources visible to all"
   ON public.resources FOR SELECT USING (access_level = 'public');
-CREATE POLICY "Enrolled learners can view enrolled/paid resources"
-  ON public.resources FOR SELECT
-  USING (
-    access_level IN ('enrolled','paid')
-    AND EXISTS (
-      SELECT 1 FROM public.enrollments e
-      WHERE e.course_id = resources.course_id
-        AND e.user_id = auth.uid()
-        AND e.status = 'active'
-    )
-  );
+-- NOTE: "Enrolled learners can view enrolled/paid resources" policy is added in 004
+-- after the enrollments table exists.
 CREATE POLICY "Admins manage resources"
   ON public.resources FOR ALL
   USING (EXISTS (

@@ -1,6 +1,8 @@
 -- ============================================================
 -- 005 — Organizations, memberships, invites, course assignments
 -- Requires: 002, 004
+-- Note: organization_memberships is created before the org membership
+-- policy so that policy can reference the table safely.
 -- ============================================================
 
 CREATE TABLE public.organizations (
@@ -16,26 +18,13 @@ CREATE TABLE public.organizations (
   updated_at      timestamptz NOT NULL DEFAULT now()
 );
 ALTER TABLE public.organizations ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Org members can view their org"
-  ON public.organizations FOR SELECT
-  USING (
-    owner_id = auth.uid()
-    OR EXISTS (
-      SELECT 1 FROM public.organization_memberships
-      WHERE organization_id = organizations.id
-        AND user_id = auth.uid()
-        AND status = 'active'
-    )
-  );
+CREATE POLICY "Org owners can view their org"
+  ON public.organizations FOR SELECT USING (owner_id = auth.uid());
 CREATE POLICY "Org owners can update their org"
   ON public.organizations FOR UPDATE USING (owner_id = auth.uid());
 CREATE POLICY "Admins manage all orgs"
   ON public.organizations FOR ALL
-  USING (EXISTS (
-    SELECT 1 FROM public.profiles
-    WHERE id = auth.uid()
-    AND role IN ('platform_admin')
-  ));
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'platform_admin'));
 
 CREATE TABLE public.organization_memberships (
   id              uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -71,9 +60,16 @@ CREATE POLICY "Org admins can manage memberships"
   ));
 CREATE POLICY "Platform admins manage all memberships"
   ON public.organization_memberships FOR ALL
+  USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'platform_admin'));
+
+-- Added after organization_memberships exists so the subquery is valid
+CREATE POLICY "Org members can view their org"
+  ON public.organizations FOR SELECT
   USING (EXISTS (
-    SELECT 1 FROM public.profiles
-    WHERE id = auth.uid() AND role = 'platform_admin'
+    SELECT 1 FROM public.organization_memberships
+    WHERE organization_id = organizations.id
+      AND user_id = auth.uid()
+      AND status = 'active'
   ));
 
 CREATE TABLE public.organization_invites (
@@ -128,7 +124,6 @@ CREATE POLICY "Org admins can manage course assignments"
       AND om.status = 'active'
   ));
 
--- Add FK constraints deferred from 004
 ALTER TABLE public.enrollments
   ADD CONSTRAINT enrollments_organization_id_fkey
   FOREIGN KEY (organization_id) REFERENCES public.organizations(id) ON DELETE SET NULL;

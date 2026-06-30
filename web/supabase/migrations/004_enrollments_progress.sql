@@ -102,6 +102,32 @@ CREATE POLICY "Admins manage certificates"
     AND role IN ('content_admin','platform_admin')
   ));
 
+-- Enrollment-dependent policies deferred from 002
+CREATE POLICY "Enrolled learners can view published lessons"
+  ON public.lessons FOR SELECT
+  USING (
+    status = 'published'
+    AND EXISTS (
+      SELECT 1 FROM public.enrollments e
+      JOIN public.modules m ON m.id = lessons.module_id
+      WHERE e.course_id = m.course_id
+        AND e.user_id = auth.uid()
+        AND e.status = 'active'
+    )
+  );
+
+CREATE POLICY "Enrolled learners can view enrolled/paid resources"
+  ON public.resources FOR SELECT
+  USING (
+    access_level IN ('enrolled','paid')
+    AND EXISTS (
+      SELECT 1 FROM public.enrollments e
+      WHERE e.course_id = resources.course_id
+        AND e.user_id = auth.uid()
+        AND e.status = 'active'
+    )
+  );
+
 -- Generate unique certificate numbers
 CREATE OR REPLACE FUNCTION public.generate_certificate_number()
 RETURNS text LANGUAGE plpgsql AS $$
