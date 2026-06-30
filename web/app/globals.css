@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+/* ── RaeLearn Design Tokens ── */
+@theme inline {
+  /* Palette */
+  --color-rl-bg:        #F5F0E8;
+  --color-rl-alt:       #EEE8DC;
+  --color-rl-card:      #FFFFFF;
+  --color-rl-forest:    #2A5230;
+  --color-rl-muted:     #4A6650;
+  --color-rl-dim:       #7A9878;
+  --color-rl-accent:    #4A7A4E;
+  --color-rl-sage:      #5A8C5E;
+  --color-rl-border:    #DDE8DA;
+  --color-rl-border-mid:#B8D4B5;
+  --color-rl-footer:    #1A2E1C;
+  --color-rl-earth:     #C48A3A;
+  --color-rl-clay:      #B86B4A;
+  --color-rl-moss:      #4A7A4E;
+
+  /* Fonts */
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans:    var(--font-jakarta), system-ui, sans-serif;
+  --font-mono:    var(--font-jetbrains), 'Courier New', monospace;
+  --font-hand:    var(--font-caveat), cursive;
+  --font-head:    var(--font-poppins), system-ui, sans-serif;
+}
+
+/* ── Global resets ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+body {
+  background-color: var(--color-rl-bg);
+  color: var(--color-rl-forest);
+  font-family: var(--font-sans);
+}
+
+a { color: inherit; text-decoration: none; }
+
+h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+
+/* ── Animations ── */
+@keyframes rl-draw {
+  from { stroke-dashoffset: var(--len, 400); }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes rl-float {
+  0%, 100% { transform: translateY(0)   rotate(var(--rot, 0deg)); }
+  50%       { transform: translateY(-7px) rotate(var(--rot, 0deg)); }
+}
+
+@keyframes rl-grow {
+  from { width: 0; }
+}
+
+@keyframes rl-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Utility classes ── */
+.font-display  { font-family: var(--font-display); }
+.font-head     { font-family: var(--font-head); }
+.font-hand     { font-family: var(--font-hand); }
+.font-mono     { font-family: var(--font-mono); }
+
+.animate-float { animation: rl-float 5s ease-in-out infinite; }
+.animate-draw  { stroke-dasharray: var(--len, 400); animation: rl-draw 1.1s .35s ease forwards; }
+.animate-grow  { animation: rl-grow 1.2s .5s ease both; }
+.animate-fade-up { animation: rl-fade-up .5s ease both; }
+
+::selection { background: rgba(74, 122, 78, 0.28); }
