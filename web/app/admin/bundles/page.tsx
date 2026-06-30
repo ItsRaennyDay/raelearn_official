@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import DeleteBundleButton from "./DeleteBundleButton";
 
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
@@ -196,22 +197,11 @@ export default async function BundlesPage() {
                       </Link>
 
                       {/* Delete */}
-                      <form
-                        action={deleteBundle}
-                        onSubmit={(e) => {
-                          if (!confirm(`Delete "${bundle.title}"?`)) e.preventDefault();
-                        }}
-                        className="shrink-0"
-                      >
-                        <input type="hidden" name="id" value={bundle.id} />
-                        <button
-                          type="submit"
-                          className="text-xs font-bold px-2.5 py-1.5 rounded-lg"
-                          style={{ color: "#AA2222", background: "#FFF0F0" }}
-                        >
-                          Delete
-                        </button>
-                      </form>
+                      <DeleteBundleButton
+                        id={bundle.id}
+                        title={bundle.title}
+                        deleteAction={deleteBundle}
+                      />
                     </div>
                   );
                 })}
