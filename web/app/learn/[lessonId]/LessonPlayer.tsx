@@ -392,25 +392,35 @@ function InlineQuiz({ block, isDark }: { block: ContentBlock; isDark: boolean })
 function FlipCardPlayer({ front, back, hint }: { front: string; back: string; hint?: string }) {
   const [flipped, setFlipped] = useState(false);
   return (
-    <div className="flex flex-col gap-2">
-      {/* Fixed height container — prevents face collision during 3D flip */}
-      <div
-        className="cursor-pointer select-none"
-        style={{ perspective: "1000px", height: 180 }}
-        onClick={() => setFlipped(f => !f)}
-      >
-        <div style={{ position: "relative", width: "100%", height: "100%", transformStyle: "preserve-3d", transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1)", transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}>
-          <div className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center p-6 text-center overflow-auto" style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", background: "linear-gradient(135deg,#EEF5EE,#E0EEE0)", border: "2px solid #B8D4B5" }}>
-            <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#7A9878" }}>Question</div>
-            <p className="font-semibold text-base leading-snug" style={{ color: "#1A2E1C" }}>{front}</p>
-            {!!hint && <p className="mt-2 text-xs italic" style={{ color: "#9AB89E" }}>Hint: {hint}</p>}
-            <div className="mt-3 text-xs" style={{ color: "#B8D4B5" }}>Click to flip →</div>
-          </div>
-          <div className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center p-6 text-center overflow-auto" style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)", background: "linear-gradient(135deg,#FFF8E8,#F5EED8)", border: "2px solid #E8D8B0" }}>
-            <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#B8965A" }}>Answer</div>
-            <p className="text-base leading-relaxed" style={{ color: "#1A2E1C" }}>{back}</p>
-            <div className="mt-3 text-xs" style={{ color: "#E8D8B0" }}>← Click to flip back</div>
-          </div>
+    <div className="cursor-pointer select-none relative" style={{ perspective: "1000px" }} onClick={() => setFlipped(f => !f)}>
+      {/* Phantom spacer: both faces stacked in same grid cell so container auto-heights to max(front, back) */}
+      <div aria-hidden="true" className="grid" style={{ pointerEvents: "none" }}>
+        <div className="rounded-2xl p-6 flex flex-col items-center text-center" style={{ gridArea: "1/1", visibility: "hidden", background: "linear-gradient(135deg,#EEF5EE,#E0EEE0)", border: "2px solid #B8D4B5" }}>
+          <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#7A9878" }}>Question</div>
+          <p className="font-semibold text-base leading-snug" style={{ color: "#1A2E1C" }}>{front}</p>
+          {!!hint && <p className="mt-2 text-xs italic" style={{ color: "#9AB89E" }}>Hint: {hint}</p>}
+          <div className="mt-3 text-xs" style={{ color: "#B8D4B5" }}>Click to flip →</div>
+        </div>
+        <div className="rounded-2xl p-6 flex flex-col items-center text-center" style={{ gridArea: "1/1", visibility: "hidden", background: "linear-gradient(135deg,#FFF8E8,#F5EED8)", border: "2px solid #E8D8B0" }}>
+          <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#B8965A" }}>Answer</div>
+          <p className="text-base leading-relaxed" style={{ color: "#1A2E1C" }}>{back}</p>
+          <div className="mt-3 text-xs" style={{ color: "#E8D8B0" }}>← Click to flip back</div>
+        </div>
+      </div>
+      {/* Real flip card, absolutely overlaid on phantom to fill its dimensions */}
+      <div style={{ position: "absolute", inset: 0, transformStyle: "preserve-3d", transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1)", transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}>
+        <div className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center p-6 text-center"
+          style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", background: "linear-gradient(135deg,#EEF5EE,#E0EEE0)", border: "2px solid #B8D4B5" }}>
+          <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#7A9878" }}>Question</div>
+          <p className="font-semibold text-base leading-snug" style={{ color: "#1A2E1C" }}>{front}</p>
+          {!!hint && <p className="mt-2 text-xs italic" style={{ color: "#9AB89E" }}>Hint: {hint}</p>}
+          <div className="mt-3 text-xs" style={{ color: "#B8D4B5" }}>Click to flip →</div>
+        </div>
+        <div className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center p-6 text-center"
+          style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)", background: "linear-gradient(135deg,#FFF8E8,#F5EED8)", border: "2px solid #E8D8B0" }}>
+          <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#B8965A" }}>Answer</div>
+          <p className="text-base leading-relaxed" style={{ color: "#1A2E1C" }}>{back}</p>
+          <div className="mt-3 text-xs" style={{ color: "#E8D8B0" }}>← Click to flip back</div>
         </div>
       </div>
     </div>
@@ -442,12 +452,18 @@ function InlineChecklist({ items }: { items: string[] }) {
     <div className="space-y-2">
       {items.map((item, i) => (
         <label key={i} className="flex items-start gap-3 cursor-pointer group">
-          <div className="w-5 h-5 rounded border-2 mt-0.5 flex items-center justify-center shrink-0 transition-colors"
+          <input
+            type="checkbox"
+            className="sr-only"
+            checked={!!checked[i]}
+            onChange={() => setChecked(p => ({ ...p, [i]: !p[i] }))}
+          />
+          <span
+            className="w-5 h-5 rounded border-2 mt-0.5 flex items-center justify-center shrink-0 transition-colors pointer-events-none"
             style={{ borderColor: checked[i] ? "#2A5230" : "#B8D4B5", background: checked[i] ? "#2A5230" : "white" }}
-            onClick={() => setChecked(p => ({ ...p, [i]: !p[i] }))}>
+          >
             {checked[i] && <svg viewBox="0 0 10 10" width="9" height="9" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><path d="M2 5l2 2 4-4" /></svg>}
-          </div>
-          <input type="checkbox" className="sr-only" checked={!!checked[i]} onChange={() => setChecked(p => ({ ...p, [i]: !p[i] }))} />
+          </span>
           <span className="text-sm leading-relaxed" style={{ color: checked[i] ? "#9AB89E" : "#374151", textDecoration: checked[i] ? "line-through" : "none" }}>{renderRich(item)}</span>
         </label>
       ))}
