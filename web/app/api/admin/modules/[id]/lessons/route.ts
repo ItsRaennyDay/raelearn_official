@@ -1,18 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
-async function checkAdmin() {
+async function verifyAdmin() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email?.toLowerCase() !== ADMIN_EMAIL) return null;
-  return supabase;
+  return user?.email?.toLowerCase() === ADMIN_EMAIL ? user : null;
 }
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const supabase = await checkAdmin();
-  if (!supabase) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  if (!await verifyAdmin()) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
   const { id: moduleId } = await params;
 
@@ -25,7 +24,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
   const safeType = ["text","video","quiz","assignment"].includes(String(lesson_type)) ? lesson_type : "text";
 
-  const { data, error } = await supabase.from("lessons").insert({
+  const db = createAdminClient();
+  const { data, error } = await db.from("lessons").insert({
     module_id:   moduleId,
     title:       title.trim().slice(0, 200),
     lesson_type: safeType,
