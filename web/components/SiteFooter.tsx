@@ -40,7 +40,7 @@ export default function SiteFooter() {
             href="https://byraeform.com"
             className="inline-flex items-center gap-2 text-sm font-bold text-[#F5F0E8] border border-white/25 px-4 py-3 rounded-[10px] hover:border-[#7DAA82] hover:text-[#7DAA82] transition-colors"
           >
-            Main RAEFORM Website →
+            Visit RAEFORM →
           </a>
         </div>
 

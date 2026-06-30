@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
 const PROTECTED_PREFIXES = ["/dashboard", "/group-dashboard", "/admin"];
+const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -38,6 +39,13 @@ export async function middleware(request: NextRequest) {
     signinUrl.pathname = "/signin";
     signinUrl.searchParams.set("next", pathname);
     return NextResponse.redirect(signinUrl);
+  }
+
+  // Admin routes: restrict to the single admin email
+  if (pathname.startsWith("/admin")) {
+    if (user.email?.toLowerCase() !== ADMIN_EMAIL) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
   }
 
   return response;

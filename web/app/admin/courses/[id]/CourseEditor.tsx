@@ -1,0 +1,413 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+type LessonRow = { id: string; title: string; lesson_type: string; duration_mins: number | null; sort_order: number; status: string };
+type ModuleRow = { id: string; title: string; description: string | null; sort_order: number; status: string; lessons: LessonRow[] };
+type Category = { id: string; name: string };
+
+interface Props {
+  course: Record<string, unknown>;
+  modules: ModuleRow[];
+  categories: Category[];
+}
+
+const LEVELS = ["beginner", "intermediate", "advanced"] as const;
+const STATUSES = ["draft", "published", "archived"] as const;
+
+const inputCls = "w-full px-3.5 py-2.5 rounded-xl border border-[#DDE8DA] bg-white text-[#2A5230] text-sm focus:outline-none focus:ring-2 focus:ring-[#2A5230] focus:border-transparent transition";
+
+function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <label className="block text-xs font-bold uppercase tracking-wide text-[#7A9878] mb-1.5">
+        {label}{hint && <span className="normal-case font-normal ml-1">— {hint}</span>}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+function LessonTypeIcon({ type }: { type: string }) {
+  if (type === "video") return <span title="Video">▶</span>;
+  if (type === "quiz")  return <span title="Quiz">✓</span>;
+  if (type === "assignment") return <span title="Assignment">✏</span>;
+  return <span title="Text">📄</span>;
+}
+
+export default function CourseEditor({ course, modules: initModules, categories }: Props) {
+  const router = useRouter();
+  const [, startTransition] = useTransition();
+  const [tab, setTab] = useState<"settings" | "curriculum">("settings");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [modules, setModules] = useState<ModuleRow[]>(initModules);
+
+  // Course settings form state
+  const [form, setForm] = useState({
+    title: String(course.title ?? ""),
+    slug: String(course.slug ?? ""),
+    description: String(course.description ?? ""),
+    level: String(course.level ?? "beginner") as typeof LEVELS[number],
+    price_type: String(course.price_type ?? "free"),
+    price_cents: Number(course.price_cents ?? 0),
+    status: String(course.status ?? "draft") as typeof STATUSES[number],
+    certificate_eligible: Boolean(course.certificate_eligible),
+    category_id: String(course.category_id ?? ""),
+    thumbnail_url: String(course.thumbnail_url ?? ""),
+    preview_video_url: String(course.preview_video_url ?? ""),
+    legal_disclaimer: String(course.legal_disclaimer ?? ""),
+    outcomes: (course.outcomes as string[] | null) ?? [],
+    requirements: (course.requirements as string[] | null) ?? [],
+  });
+
+  function set<K extends keyof typeof form>(key: K, val: typeof form[K]) {
+    setForm((f) => ({ ...f, [key]: val }));
+    setSuccess(false);
+  }
+
+  function setListField(key: "outcomes" | "requirements", raw: string) {
+    set(key, raw.split("\n").map((l) => l.trim()).filter(Boolean));
+  }
+
+  async function saveSettings(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setSaving(true);
+    const res = await fetch(`/api/admin/courses/${course.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...form, price_cents: form.price_type === "free" ? 0 : form.price_cents }),
+    });
+    setSaving(false);
+    if (!res.ok) {
+      const d = await res.json();
+      setError(d.error ?? "Save failed.");
+    } else {
+      setSuccess(true);
+      startTransition(() => router.refresh());
+    }
+  }
+
+  // Module management
+  const [newModTitle, setNewModTitle] = useState("");
+  const [addingMod, setAddingMod] = useState(false);
+
+  async function addModule() {
+    if (!newModTitle.trim()) return;
+    setAddingMod(true);
+    const res = await fetch(`/api/admin/courses/${course.id}/modules`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: newModTitle.trim(), sort_order: modules.length }),
+    });
+    setAddingMod(false);
+    if (res.ok) {
+      const data = await res.json();
+      setModules((m) => [...m, { ...data, lessons: [] }]);
+      setNewModTitle("");
+    }
+  }
+
+  async function deleteModule(modId: string) {
+    if (!confirm("Delete this module and all its lessons?")) return;
+    await fetch(`/api/admin/modules/${modId}`, { method: "DELETE" });
+    setModules((m) => m.filter((x) => x.id !== modId));
+  }
+
+  // Lesson management
+  const [newLessonTitles, setNewLessonTitles] = useState<Record<string, string>>({});
+  const [addingLesson, setAddingLesson] = useState<string | null>(null);
+
+  async function addLesson(modId: string) {
+    const title = newLessonTitles[modId]?.trim();
+    if (!title) return;
+    setAddingLesson(modId);
+    const mod = modules.find((m) => m.id === modId)!;
+    const res = await fetch(`/api/admin/modules/${modId}/lessons`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, sort_order: mod.lessons.length }),
+    });
+    setAddingLesson(null);
+    if (res.ok) {
+      const data = await res.json();
+      setModules((mods) =>
+        mods.map((m) => m.id === modId ? { ...m, lessons: [...m.lessons, data] } : m)
+      );
+      setNewLessonTitles((t) => ({ ...t, [modId]: "" }));
+    }
+  }
+
+  async function deleteLesson(modId: string, lessonId: string) {
+    if (!confirm("Delete this lesson?")) return;
+    await fetch(`/api/admin/lessons/${lessonId}`, { method: "DELETE" });
+    setModules((mods) =>
+      mods.map((m) => m.id === modId
+        ? { ...m, lessons: m.lessons.filter((l) => l.id !== lessonId) }
+        : m
+      )
+    );
+  }
+
+  const statusColor: Record<string, string> = {
+    published: "text-green-700 bg-green-50 border-green-200",
+    draft:     "text-yellow-700 bg-yellow-50 border-yellow-200",
+    archived:  "text-gray-600 bg-gray-50 border-gray-200",
+  };
+
+  return (
+    <div className="flex flex-col flex-1 min-h-0">
+      {/* Top bar */}
+      <div className="flex items-center justify-between px-8 py-4 bg-white border-b border-[#DDE8DA]">
+        <div className="flex items-center gap-3">
+          <Link href="/admin/courses" className="text-[#7A9878] hover:text-[#2A5230] transition-colors text-sm">
+            ← Courses
+          </Link>
+          <span className="text-[#DDE8DA]">/</span>
+          <h1 className="font-head font-bold text-base text-[#2A5230] truncate max-w-[360px]">
+            {form.title || "Untitled Course"}
+          </h1>
+          <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border capitalize ${statusColor[form.status] ?? statusColor.draft}`}>
+            {form.status}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          {form.status === "published" && (
+            <Link
+              href={`/courses/${form.slug}`}
+              target="_blank"
+              className="text-xs font-bold text-[#4A6650] border border-[#DDE8DA] px-3 py-1.5 rounded-lg hover:border-[#2A5230] transition-colors"
+            >
+              Preview ↗
+            </Link>
+          )}
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex border-b border-[#DDE8DA] bg-white px-8">
+        {(["settings", "curriculum"] as const).map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={[
+              "px-4 py-3 text-sm font-semibold capitalize border-b-2 -mb-px transition-colors",
+              tab === t
+                ? "text-[#2A5230] border-[#2A5230]"
+                : "text-[#7A9878] border-transparent hover:text-[#2A5230]",
+            ].join(" ")}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto p-8">
+
+        {/* ── SETTINGS TAB ── */}
+        {tab === "settings" && (
+          <form onSubmit={saveSettings} className="max-w-2xl space-y-6">
+            {error && <div className="px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">{error}</div>}
+            {success && <div className="px-4 py-3 bg-green-50 border border-green-200 rounded-xl text-sm text-green-700">Saved ✓</div>}
+
+            <div className="grid grid-cols-2 gap-4">
+              <Field label="Status">
+                <select value={form.status} onChange={(e) => set("status", e.target.value as typeof STATUSES[number])} className={inputCls}>
+                  {STATUSES.map((s) => <option key={s} value={s} className="capitalize">{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
+                </select>
+              </Field>
+              <Field label="Level">
+                <select value={form.level} onChange={(e) => set("level", e.target.value as typeof LEVELS[number])} className={inputCls}>
+                  {LEVELS.map((l) => <option key={l} value={l} className="capitalize">{l.charAt(0).toUpperCase() + l.slice(1)}</option>)}
+                </select>
+              </Field>
+            </div>
+
+            <Field label="Title">
+              <input required value={form.title} onChange={(e) => set("title", e.target.value)} className={inputCls} />
+            </Field>
+
+            <Field label="Slug" hint="URL identifier">
+              <input required pattern="[a-z0-9-]+" value={form.slug} onChange={(e) => set("slug", e.target.value)} className={inputCls} />
+            </Field>
+
+            <Field label="Description">
+              <textarea rows={3} value={form.description} onChange={(e) => set("description", e.target.value)} className={inputCls} />
+            </Field>
+
+            <div className="grid grid-cols-2 gap-4">
+              <Field label="Price type">
+                <select value={form.price_type} onChange={(e) => set("price_type", e.target.value)} className={inputCls}>
+                  <option value="free">Free</option>
+                  <option value="paid">Paid</option>
+                </select>
+              </Field>
+              {form.price_type === "paid" && (
+                <Field label="Price (cents)" hint="e.g. 4900 = $49">
+                  <input
+                    type="number" min={0}
+                    value={form.price_cents}
+                    onChange={(e) => set("price_cents", Number(e.target.value))}
+                    className={inputCls}
+                  />
+                </Field>
+              )}
+            </div>
+
+            {categories.length > 0 && (
+              <Field label="Category">
+                <select value={form.category_id} onChange={(e) => set("category_id", e.target.value)} className={inputCls}>
+                  <option value="">— none —</option>
+                  {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                </select>
+              </Field>
+            )}
+
+            <Field label="Thumbnail URL">
+              <input value={form.thumbnail_url} onChange={(e) => set("thumbnail_url", e.target.value)} className={inputCls} placeholder="https://..." />
+            </Field>
+
+            <Field label="Preview video URL">
+              <input value={form.preview_video_url} onChange={(e) => set("preview_video_url", e.target.value)} className={inputCls} placeholder="https://youtube.com/..." />
+            </Field>
+
+            <Field label="What you'll learn" hint="one per line">
+              <textarea
+                rows={4}
+                value={form.outcomes.join("\n")}
+                onChange={(e) => setListField("outcomes", e.target.value)}
+                className={inputCls}
+                placeholder={"How to organize a client inbox\nHow to create SOPs"}
+              />
+            </Field>
+
+            <Field label="Requirements" hint="one per line">
+              <textarea
+                rows={3}
+                value={form.requirements.join("\n")}
+                onChange={(e) => setListField("requirements", e.target.value)}
+                className={inputCls}
+                placeholder="No prior experience needed"
+              />
+            </Field>
+
+            <Field label="Legal disclaimer">
+              <textarea rows={2} value={form.legal_disclaimer} onChange={(e) => set("legal_disclaimer", e.target.value)} className={inputCls} />
+            </Field>
+
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" checked={form.certificate_eligible} onChange={(e) => set("certificate_eligible", e.target.checked)} className="w-4 h-4 rounded accent-[#2A5230]" />
+              <span className="text-sm font-medium text-[#2A5230]">Certificate eligible</span>
+            </label>
+
+            <button
+              type="submit"
+              disabled={saving}
+              className="px-6 py-3 bg-[#2A5230] text-white font-bold text-sm rounded-xl hover:bg-[#1e3d24] disabled:opacity-50 transition-colors"
+            >
+              {saving ? "Saving…" : "Save Changes"}
+            </button>
+          </form>
+        )}
+
+        {/* ── CURRICULUM TAB ── */}
+        {tab === "curriculum" && (
+          <div className="max-w-2xl space-y-4">
+            {modules.map((mod, mi) => (
+              <div key={mod.id} className="bg-white border border-[#DDE8DA] rounded-2xl overflow-hidden">
+                {/* Module header */}
+                <div className="flex items-center justify-between px-5 py-4 bg-[#F5F0E8] border-b border-[#DDE8DA]">
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs font-extrabold text-[#7A9878] w-6 text-center">{mi + 1}</span>
+                    <span className="font-head font-bold text-[#2A5230] text-sm">{mod.title}</span>
+                    <span className="text-xs text-[#7A9878]">{mod.lessons.length} lessons</span>
+                  </div>
+                  <button
+                    onClick={() => deleteModule(mod.id)}
+                    className="text-xs text-red-400 hover:text-red-600 transition-colors"
+                  >
+                    Delete
+                  </button>
+                </div>
+
+                {/* Lessons */}
+                <div className="divide-y divide-[#F0F7F0]">
+                  {[...mod.lessons].sort((a, b) => a.sort_order - b.sort_order).map((lesson) => (
+                    <div key={lesson.id} className="flex items-center gap-3 px-5 py-3 group">
+                      <span className="text-[#7A9878] text-xs shrink-0">
+                        <LessonTypeIcon type={lesson.lesson_type} />
+                      </span>
+                      <span className="flex-1 text-sm text-[#2A5230]">{lesson.title}</span>
+                      {lesson.duration_mins && (
+                        <span className="text-xs text-[#A0B8A0] shrink-0">{lesson.duration_mins}m</span>
+                      )}
+                      <span className={`text-xs px-2 py-0.5 rounded-full border capitalize shrink-0 ${statusColor[lesson.status] ?? statusColor.draft}`}>
+                        {lesson.status}
+                      </span>
+                      <Link
+                        href={`/admin/courses/${course.id}/lessons/${lesson.id}`}
+                        className="text-xs font-bold text-[#2A5230] opacity-0 group-hover:opacity-100 transition-opacity hover:underline shrink-0"
+                      >
+                        Edit →
+                      </Link>
+                      <button
+                        onClick={() => deleteLesson(mod.id, lesson.id)}
+                        className="text-xs text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-all shrink-0"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Add lesson */}
+                <div className="px-5 py-3 bg-[#FAFCFA] border-t border-[#F0F7F0] flex gap-2">
+                  <input
+                    value={newLessonTitles[mod.id] ?? ""}
+                    onChange={(e) => setNewLessonTitles((t) => ({ ...t, [mod.id]: e.target.value }))}
+                    onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addLesson(mod.id); } }}
+                    placeholder="New lesson title…"
+                    className="flex-1 text-sm px-3 py-2 rounded-lg border border-[#DDE8DA] bg-white text-[#2A5230] focus:outline-none focus:ring-1 focus:ring-[#2A5230] transition"
+                  />
+                  <button
+                    onClick={() => addLesson(mod.id)}
+                    disabled={addingLesson === mod.id}
+                    className="px-4 py-2 bg-[#2A5230] text-white text-xs font-bold rounded-lg hover:bg-[#1e3d24] disabled:opacity-50 transition-colors"
+                  >
+                    {addingLesson === mod.id ? "…" : "+ Add"}
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            {/* Add module */}
+            <div className="bg-white border border-dashed border-[#B8D4B5] rounded-2xl p-5">
+              <p className="text-xs font-bold text-[#7A9878] uppercase tracking-wide mb-3">Add Module</p>
+              <div className="flex gap-2">
+                <input
+                  value={newModTitle}
+                  onChange={(e) => setNewModTitle(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addModule(); } }}
+                  placeholder="Module title…"
+                  className="flex-1 text-sm px-3.5 py-2.5 rounded-xl border border-[#DDE8DA] bg-white text-[#2A5230] focus:outline-none focus:ring-2 focus:ring-[#2A5230] transition"
+                />
+                <button
+                  onClick={addModule}
+                  disabled={addingMod}
+                  className="px-5 py-2.5 bg-[#2A5230] text-white text-sm font-bold rounded-xl hover:bg-[#1e3d24] disabled:opacity-50 transition-colors"
+                >
+                  {addingMod ? "…" : "+ Module"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
