@@ -49,7 +49,7 @@ export default function SiteNav() {
         {/* CTA buttons */}
         <div className="flex items-center gap-3 ml-auto">
           <Link
-            href="/signup"
+            href="/signin"
             className="text-sm font-semibold text-[#4A6650] px-1 py-2 whitespace-nowrap hover:text-[#2A5230] transition-colors"
           >
             Sign In
