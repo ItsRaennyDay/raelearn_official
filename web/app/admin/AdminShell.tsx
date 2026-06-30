@@ -92,6 +92,16 @@ const NAV_SECTIONS = [
           </svg>
         ),
       },
+      {
+        label: "Tags",
+        href: "/admin/tags",
+        icon: (
+          <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9.5 2.5H4a1.5 1.5 0 0 0-1.5 1.5v5.5l8 8a1.5 1.5 0 0 0 2.1 0l5-5a1.5 1.5 0 0 0 0-2.1l-8-8Z" />
+            <circle cx="7" cy="7" r="1" fill="currentColor" stroke="none" />
+          </svg>
+        ),
+      },
     ],
   },
   {
@@ -223,6 +233,7 @@ const BREADCRUMB: Record<string, string> = {
   "/admin/assignments": "Assignments",
   "/admin/resources": "Resources",
   "/admin/certificates": "Certificates",
+  "/admin/tags": "Tags",
   "/admin/users": "Users",
   "/admin/enrollments": "Enrollments",
   "/admin/organizations": "Organizations",

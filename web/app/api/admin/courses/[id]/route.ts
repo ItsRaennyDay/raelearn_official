@@ -48,6 +48,18 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     return NextResponse.json({ error: "Failed to update course." }, { status: 500 });
   }
 
+  // Sync tags if provided
+  if (Array.isArray(b.tag_ids)) {
+    const tagIds = (b.tag_ids as unknown[])
+      .filter((t): t is string => typeof t === "string" && /^[0-9a-f-]{36}$/.test(t))
+      .slice(0, 50);
+
+    await db.from("course_tags").delete().eq("course_id", id);
+    if (tagIds.length > 0) {
+      await db.from("course_tags").insert(tagIds.map((tag_id) => ({ course_id: id, tag_id })));
+    }
+  }
+
   return NextResponse.json({ ok: true });
 }
 

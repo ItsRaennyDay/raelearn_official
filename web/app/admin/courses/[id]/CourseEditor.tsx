@@ -7,11 +7,14 @@ import { useRouter } from "next/navigation";
 type LessonRow = { id: string; title: string; lesson_type: string; duration_mins: number | null; sort_order: number; status: string };
 type ModuleRow = { id: string; title: string; description: string | null; sort_order: number; status: string; lessons: LessonRow[] };
 type Category = { id: string; name: string };
+type Tag = { id: string; name: string; slug: string; group: string; sort_order: number };
 
 interface Props {
   course: Record<string, unknown>;
   modules: ModuleRow[];
   categories: Category[];
+  allTags: Tag[];
+  selectedTagIds: string[];
 }
 
 const LEVELS = ["beginner", "intermediate", "advanced"] as const;
@@ -55,7 +58,7 @@ function LessonTypeIcon({ type }: { type: string }) {
   );
 }
 
-export default function CourseEditor({ course, modules: initModules, categories }: Props) {
+export default function CourseEditor({ course, modules: initModules, categories, allTags, selectedTagIds: initTagIds }: Props) {
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [tab, setTab] = useState<"settings" | "curriculum">("settings");
@@ -63,6 +66,7 @@ export default function CourseEditor({ course, modules: initModules, categories 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [modules, setModules] = useState<ModuleRow[]>(initModules);
+  const [selectedTagIds, setSelectedTagIds] = useState<Set<string>>(new Set(initTagIds));
 
   // Course settings form state
   const [form, setForm] = useState({
@@ -98,7 +102,7 @@ export default function CourseEditor({ course, modules: initModules, categories 
     const res = await fetch(`/api/admin/courses/${course.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, price_cents: form.price_type === "free" ? 0 : form.price_cents }),
+      body: JSON.stringify({ ...form, price_cents: form.price_type === "free" ? 0 : form.price_cents, tag_ids: [...selectedTagIds] }),
     });
     setSaving(false);
     if (!res.ok) {
@@ -285,6 +289,50 @@ export default function CourseEditor({ course, modules: initModules, categories 
                 </select>
               </Field>
             )}
+
+            {allTags.length > 0 && (() => {
+              const groups = [...new Map(allTags.map((t) => [t.group, t.group])).keys()];
+              return (
+                <div className="space-y-3">
+                  <label className="block text-xs font-bold uppercase tracking-wide text-[#7A9878] mb-1.5">
+                    Tags <span className="normal-case font-normal">— select all that apply</span>
+                  </label>
+                  {groups.map((group) => (
+                    <div key={group}>
+                      <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#9AB89E] mb-1.5 capitalize">{group}</div>
+                      <div className="flex flex-wrap gap-2">
+                        {allTags.filter((t) => t.group === group).map((tag) => {
+                          const active = selectedTagIds.has(tag.id);
+                          return (
+                            <button
+                              key={tag.id}
+                              type="button"
+                              onClick={() => {
+                                setSelectedTagIds((prev) => {
+                                  const next = new Set(prev);
+                                  if (next.has(tag.id)) next.delete(tag.id);
+                                  else next.add(tag.id);
+                                  return next;
+                                });
+                                setSuccess(false);
+                              }}
+                              className={[
+                                "text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all",
+                                active
+                                  ? "bg-[#2A5230] text-white border-[#2A5230]"
+                                  : "bg-white text-[#2A5230] border-[#DDE8DA] hover:border-[#2A5230]",
+                              ].join(" ")}
+                            >
+                              {tag.name}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
 
             <Field label="Thumbnail URL">
               <input value={form.thumbnail_url} onChange={(e) => set("thumbnail_url", e.target.value)} className={inputCls} placeholder="https://..." />

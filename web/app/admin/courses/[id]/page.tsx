@@ -27,11 +27,26 @@ export default async function AdminCourseEditorPage({ params }: Props) {
     .select("id, name")
     .order("name");
 
+  const { data: allTags } = await supabase
+    .from("tags")
+    .select("id, name, slug, group, sort_order")
+    .order("group")
+    .order("sort_order");
+
+  const { data: courseTagRows } = await supabase
+    .from("course_tags")
+    .select("tag_id")
+    .eq("course_id", id);
+
+  const selectedTagIds = (courseTagRows ?? []).map((r) => r.tag_id);
+
   return (
     <CourseEditor
       course={course}
       modules={modules ?? []}
       categories={categories ?? []}
+      allTags={allTags ?? []}
+      selectedTagIds={selectedTagIds}
     />
   );
 }
