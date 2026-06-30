@@ -1305,13 +1305,21 @@ export default function LessonEditor({
                 </div>
                 <p className="font-semibold mb-1" style={{ color: "#2A5230" }}>No content yet</p>
                 <p className="text-sm mb-5" style={{ color: "#9AB89E" }}>Start building your lesson with content blocks</p>
-                <button
-                  onClick={() => setShowPalette(true)}
-                  className="px-6 py-2.5 rounded-xl text-sm font-bold transition-all hover:-translate-y-0.5"
-                  style={{ background: "linear-gradient(135deg,#2A5230,#1A3820)", color: "#fff", boxShadow: "0 4px 14px rgba(42,82,48,0.25)" }}
-                >
-                  + Add First Block
-                </button>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowPalette(true)}
+                    className="px-6 py-2.5 rounded-xl text-sm font-bold transition-all hover:-translate-y-0.5"
+                    style={{ background: "linear-gradient(135deg,#2A5230,#1A3820)", color: "#fff", boxShadow: "0 4px 14px rgba(42,82,48,0.25)" }}
+                  >
+                    + Add First Block
+                  </button>
+                  {showPalette && (
+                    <BlockPalette
+                      onSelect={(t) => { addBlock(t); setSaved(false); }}
+                      onClose={() => setShowPalette(false)}
+                    />
+                  )}
+                </div>
               </div>
             ) : (
               <>
