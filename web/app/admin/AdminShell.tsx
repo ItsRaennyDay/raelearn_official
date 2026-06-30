@@ -264,6 +264,7 @@ function getPageTitle(pathname: string): string {
   if (pathname.startsWith("/admin/courses/new")) return "New Course";
   if (pathname.includes("/lessons/")) return "Lesson Editor";
   if (/^\/admin\/courses\/[^/]+$/.test(pathname)) return "Course Editor";
+  if (/^\/admin\/bundles\/[^/]+$/.test(pathname)) return "Edit Bundle";
   const match = Object.entries(BREADCRUMB).find(([k]) => pathname.startsWith(k) && k !== "/admin");
   return match ? match[1] : "Admin";
 }

@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import BundleManager from "./BundleManager";
 
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
@@ -13,11 +13,11 @@ async function verifyAdmin() {
   return user;
 }
 
-export async function createBundle(formData: FormData) {
+async function createBundle(formData: FormData) {
   "use server";
   await verifyAdmin();
   const title    = (formData.get("title") as string ?? "").trim().slice(0, 200);
-  const audience = (formData.get("audience") as string ?? "general").trim().slice(0, 40);
+  const audience = (formData.get("audience") as string ?? "general").trim();
   const description = (formData.get("description") as string ?? "").trim().slice(0, 500);
   if (!title) return;
   const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -26,7 +26,7 @@ export async function createBundle(formData: FormData) {
   revalidatePath("/admin/bundles");
 }
 
-export async function deleteBundle(formData: FormData) {
+async function deleteBundle(formData: FormData) {
   "use server";
   await verifyAdmin();
   const id = (formData.get("id") as string ?? "").trim();
@@ -36,46 +36,17 @@ export async function deleteBundle(formData: FormData) {
   revalidatePath("/admin/bundles");
 }
 
-export async function togglePublish(formData: FormData) {
-  "use server";
-  await verifyAdmin();
-  const id      = (formData.get("id") as string ?? "").trim();
-  const current = formData.get("current") === "true";
-  if (!id) return;
-  const db = createAdminClient();
-  await db.from("bundles").update({ is_published: !current }).eq("id", id);
-  revalidatePath("/admin/bundles");
-}
+const AUDIENCE_OPTIONS = [
+  { value: "va",        label: "Virtual Assistants (VA)" },
+  { value: "nonprofit", label: "Nonprofits" },
+  { value: "business",  label: "Business" },
+  { value: "founder",   label: "Founders" },
+  { value: "general",   label: "General / All" },
+];
 
-export async function addCourseToBundle(formData: FormData) {
-  "use server";
-  await verifyAdmin();
-  const bundle_id = (formData.get("bundle_id") as string ?? "").trim();
-  const course_id = (formData.get("course_id") as string ?? "").trim();
-  if (!bundle_id || !course_id) return;
-  const db = createAdminClient();
-  // get current max sort_order
-  const { data: existing } = await db
-    .from("bundle_courses")
-    .select("sort_order")
-    .eq("bundle_id", bundle_id)
-    .order("sort_order", { ascending: false })
-    .limit(1);
-  const sort_order = existing && existing.length > 0 ? (existing[0].sort_order + 1) : 0;
-  await db.from("bundle_courses").upsert({ bundle_id, course_id, sort_order });
-  revalidatePath("/admin/bundles");
-}
-
-export async function removeCourseFromBundle(formData: FormData) {
-  "use server";
-  await verifyAdmin();
-  const bundle_id = (formData.get("bundle_id") as string ?? "").trim();
-  const course_id = (formData.get("course_id") as string ?? "").trim();
-  if (!bundle_id || !course_id) return;
-  const db = createAdminClient();
-  await db.from("bundle_courses").delete().eq("bundle_id", bundle_id).eq("course_id", course_id);
-  revalidatePath("/admin/bundles");
-}
+const AUDIENCE_LABELS: Record<string, string> = Object.fromEntries(
+  AUDIENCE_OPTIONS.map((o) => [o.value, o.label])
+);
 
 export default async function BundlesPage() {
   await verifyAdmin();
@@ -83,43 +54,172 @@ export default async function BundlesPage() {
 
   const { data: bundles } = await db
     .from("bundles")
-    .select("id, title, slug, description, audience, is_published, sort_order, created_at")
+    .select("id, title, description, audience, is_published, sort_order, created_at")
+    .order("audience")
     .order("sort_order")
     .order("created_at");
 
-  const { data: bundleCourseRows } = await db
+  const { data: countRows } = await db
     .from("bundle_courses")
-    .select("bundle_id, course_id, sort_order, courses(id, title, slug, level, price_type, certificate_eligible)")
-    .order("sort_order");
+    .select("bundle_id");
 
-  const { data: allCourses } = await db
-    .from("courses")
-    .select("id, title, slug, level, price_type, certificate_eligible, status")
-    .order("title");
-
-  // Group bundle_courses by bundle_id
-  type CourseRow = { id: string; title: string; slug: string; level: string; price_type: string; certificate_eligible: boolean };
-  const coursesByBundle: Record<string, { course_id: string; sort_order: number; course: CourseRow }[]> = {};
-  for (const row of bundleCourseRows ?? []) {
-    const course = row.courses as unknown as CourseRow | null;
-    if (!course) continue;
-    if (!coursesByBundle[row.bundle_id]) coursesByBundle[row.bundle_id] = [];
-    coursesByBundle[row.bundle_id].push({ course_id: row.course_id, sort_order: row.sort_order, course });
+  const countByBundle: Record<string, number> = {};
+  for (const row of countRows ?? []) {
+    countByBundle[row.bundle_id] = (countByBundle[row.bundle_id] ?? 0) + 1;
   }
-  for (const list of Object.values(coursesByBundle)) {
-    list.sort((a, b) => a.sort_order - b.sort_order);
+
+  // Group by audience
+  const grouped = new Map<string, typeof bundles>();
+  for (const bundle of bundles ?? []) {
+    if (!grouped.has(bundle.audience)) grouped.set(bundle.audience, []);
+    grouped.get(bundle.audience)!.push(bundle);
   }
 
   return (
-    <BundleManager
-      bundles={bundles ?? []}
-      coursesByBundle={coursesByBundle}
-      allCourses={(allCourses ?? []).filter((c) => c.status === "published")}
-      createBundle={createBundle}
-      deleteBundle={deleteBundle}
-      togglePublish={togglePublish}
-      addCourseToBundle={addCourseToBundle}
-      removeCourseFromBundle={removeCourseFromBundle}
-    />
+    <div className="max-w-2xl p-8">
+      <div className="mb-6">
+        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>Bundles</h1>
+        <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>
+          Group courses into learning tracks shown on audience pages. Click a bundle to edit it.
+        </p>
+      </div>
+
+      {/* Create bundle form */}
+      <form
+        action={createBundle}
+        className="rounded-xl p-5 mb-8 space-y-3"
+        style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}
+      >
+        <h2 className="text-sm font-bold" style={{ color: "#1A2E1C" }}>New Bundle</h2>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: "#9AB89E" }}>Title</label>
+            <input
+              name="title"
+              required
+              placeholder="e.g. General VA Foundations"
+              className="w-full text-sm px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#2A5230]"
+              style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: "#9AB89E" }}>Audience</label>
+            <select
+              name="audience"
+              className="w-full text-sm px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#2A5230] bg-white"
+              style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+            >
+              {AUDIENCE_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: "#9AB89E" }}>Description</label>
+          <input
+            name="description"
+            placeholder="Short description shown on the page"
+            className="w-full text-sm px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#2A5230]"
+            style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+          />
+        </div>
+        <button
+          type="submit"
+          className="text-sm font-bold px-5 py-2.5 rounded-xl"
+          style={{ background: "#2A5230", color: "#fff" }}
+        >
+          Create Bundle
+        </button>
+      </form>
+
+      {/* Bundle list */}
+      {(!bundles || bundles.length === 0) ? (
+        <div className="rounded-xl p-10 text-center" style={{ background: "#fff", border: "1.5px dashed #C8DEC8" }}>
+          <p className="text-sm" style={{ color: "#9AB89E" }}>No bundles yet. Create one above.</p>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {[...grouped.entries()].map(([audience, audienceBundles]) => (
+            <section key={audience}>
+              <h2 className="text-xs font-extrabold uppercase tracking-widest mb-2" style={{ color: "#9AB89E" }}>
+                {AUDIENCE_LABELS[audience] ?? audience}
+              </h2>
+              <div className="rounded-xl overflow-hidden" style={{ border: "1.5px solid #E8EDE6" }}>
+                {(audienceBundles ?? []).map((bundle, i) => {
+                  const courseCount = countByBundle[bundle.id] ?? 0;
+                  return (
+                    <div
+                      key={bundle.id}
+                      className="flex items-center gap-3 px-4 py-3.5"
+                      style={{
+                        background: "#fff",
+                        borderTop: i > 0 ? "1px solid #F5FAF5" : undefined,
+                      }}
+                    >
+                      {/* Click row to edit */}
+                      <Link
+                        href={`/admin/bundles/${bundle.id}`}
+                        className="flex-1 flex items-center gap-3 min-w-0 group"
+                      >
+                        <div className="min-w-0">
+                          <div className="font-semibold text-sm group-hover:underline truncate" style={{ color: "#1A2E1C" }}>
+                            {bundle.title}
+                          </div>
+                          {bundle.description && (
+                            <div className="text-xs truncate mt-0.5" style={{ color: "#9AB89E" }}>{bundle.description}</div>
+                          )}
+                        </div>
+                        <span className="text-xs shrink-0 ml-auto" style={{ color: "#9AB89E" }}>
+                          {courseCount} course{courseCount !== 1 ? "s" : ""}
+                        </span>
+                      </Link>
+
+                      {/* Status badge */}
+                      <span
+                        className="text-xs font-bold px-2.5 py-1 rounded-full shrink-0"
+                        style={{
+                          background: bundle.is_published ? "#EEF5EE" : "#F3F3F3",
+                          color: bundle.is_published ? "#2A5230" : "#999",
+                        }}
+                      >
+                        {bundle.is_published ? "Published" : "Draft"}
+                      </span>
+
+                      {/* Edit link */}
+                      <Link
+                        href={`/admin/bundles/${bundle.id}`}
+                        className="text-xs font-bold px-3 py-1.5 rounded-lg shrink-0"
+                        style={{ background: "#EEF5EE", color: "#2A5230" }}
+                      >
+                        Edit →
+                      </Link>
+
+                      {/* Delete */}
+                      <form
+                        action={deleteBundle}
+                        onSubmit={(e) => {
+                          if (!confirm(`Delete "${bundle.title}"?`)) e.preventDefault();
+                        }}
+                        className="shrink-0"
+                      >
+                        <input type="hidden" name="id" value={bundle.id} />
+                        <button
+                          type="submit"
+                          className="text-xs font-bold px-2.5 py-1.5 rounded-lg"
+                          style={{ color: "#AA2222", background: "#FFF0F0" }}
+                        >
+                          Delete
+                        </button>
+                      </form>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
