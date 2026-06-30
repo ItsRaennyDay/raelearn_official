@@ -1340,7 +1340,12 @@ export default function LessonEditor({
   courseId: string;
   courseTitle: string;
 }) {
-  const initContent = lesson.content as { blocks?: Block[] } | null;
+  const initContent = (() => {
+    const raw = lesson.content;
+    if (!raw) return null;
+    try { return typeof raw === "string" ? JSON.parse(raw) : raw as { blocks?: Block[]; background?: string }; }
+    catch { return null; }
+  })();
   const [blocks, setBlocks]     = useState<Block[]>(initContent?.blocks ?? []);
   const [blockKeys, setBlockKeys] = useState<string[]>(() => (initContent?.blocks ?? []).map(() => uid()));
 
@@ -1356,7 +1361,7 @@ export default function LessonEditor({
   const [error, setError]           = useState<string | null>(null);
   const [showPalette, setShowPalette] = useState(false);
   const [preview, setPreview]       = useState(false);
-  const [bgId, setBgId]             = useState<string>("warm");
+  const [bgId, setBgId]             = useState<string>(initContent?.background ?? "warm");
   const paletteRef                  = useRef<HTMLDivElement>(null);
 
   const activeBg = BG_OPTIONS.find((b) => b.id === bgId) ?? BG_OPTIONS[0];
@@ -1397,7 +1402,7 @@ export default function LessonEditor({
         duration_mins: duration || null,
         status,
         is_required: isRequired,
-        content: { blocks },
+        content: { blocks, background: bgId },
       }),
     });
     setSaving(false);

@@ -6,6 +6,20 @@ interface PageProps {
   params: Promise<{ lessonId: string }>;
 }
 
+interface RawBlock { type: string; [key: string]: unknown }
+
+function parseContent(raw: unknown): { blocks: RawBlock[]; background: string } {
+  if (!raw) return { blocks: [], background: "warm" };
+  try {
+    const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
+    if (parsed && typeof parsed === "object" && Array.isArray((parsed as Record<string, unknown>).blocks)) {
+      const p = parsed as { blocks: RawBlock[]; background?: string };
+      return { blocks: p.blocks, background: p.background ?? "warm" };
+    }
+  } catch { /* fall through */ }
+  return { blocks: [], background: "warm" };
+}
+
 export default async function LessonPage({ params }: PageProps) {
   const { lessonId } = await params;
   const supabase = await createClient();
@@ -13,7 +27,6 @@ export default async function LessonPage({ params }: PageProps) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/signin");
 
-  // Fetch the lesson and its module/course info
   const { data: lesson } = await supabase
     .from("lessons")
     .select(`
@@ -34,7 +47,7 @@ export default async function LessonPage({ params }: PageProps) {
   };
   const course = module_.courses;
 
-  // Verify enrollment — learner must be actively enrolled
+  // Verify enrollment
   const { data: enrollment } = await supabase
     .from("enrollments")
     .select("id")
@@ -45,13 +58,10 @@ export default async function LessonPage({ params }: PageProps) {
 
   if (!enrollment) redirect(`/courses/${course.slug}`);
 
-  // Fetch all published modules + lessons for the course (for sidebar + nav)
+  // Fetch all published modules + lessons for sidebar
   const { data: modules } = await supabase
     .from("modules")
-    .select(`
-      id, title, sort_order,
-      lessons ( id, title, lesson_type, duration_mins, sort_order, status, module_id )
-    `)
+    .select(`id, title, sort_order, lessons ( id, title, lesson_type, duration_mins, sort_order, status, module_id )`)
     .eq("course_id", course.id)
     .eq("status", "published")
     .order("sort_order")
@@ -65,17 +75,14 @@ export default async function LessonPage({ params }: PageProps) {
     lessons: m.lessons.filter((l) => l.status === "published").sort((a, b) => a.sort_order - b.sort_order),
   })).sort((a, b) => a.sort_order - b.sort_order);
 
-  // Build flat lesson list for prev/next navigation
   const allLessons = sortedModules.flatMap((m) => m.lessons);
   const currentIdx = allLessons.findIndex((l) => l.id === lessonId);
   const prevLesson = currentIdx > 0 ? allLessons[currentIdx - 1] : null;
   const nextLesson = currentIdx < allLessons.length - 1 ? allLessons[currentIdx + 1] : null;
 
-  // Module position
   const moduleIndex = sortedModules.findIndex((m) => m.id === module_.id);
   const lessonIndex = sortedModules[moduleIndex]?.lessons.findIndex((l) => l.id === lessonId) ?? 0;
 
-  // Fetch user progress for all lessons in this course
   const { data: progress } = await supabase
     .from("lesson_progress")
     .select("lesson_id, completed")
@@ -85,12 +92,19 @@ export default async function LessonPage({ params }: PageProps) {
   const completedLessonIds = (progress ?? []).filter((p) => p.completed).map((p) => p.lesson_id);
   const initialCompleted = completedLessonIds.includes(lessonId);
 
-  // Fetch resources for this lesson
-  const { data: resources } = await supabase
-    .from("resources")
-    .select("id, title, resource_type, external_url, file_path")
-    .eq("lesson_id", lessonId)
-    .order("created_at");
+  // Parse content blocks — separate resource+checklist blocks for the right panel
+  const { blocks: allBlocks, background } = parseContent(lesson.content);
+  const resourceBlocks = allBlocks.filter((b) => b.type === "resource") as Array<{
+    type: "resource"; title: string; url: string; description?: string; fileType: string;
+  }>;
+  const checklistItems: string[] = allBlocks
+    .filter((b) => b.type === "checklist")
+    .flatMap((b) => {
+      const items = (b as { items?: { text: string }[] }).items ?? [];
+      return items.map((i) => i.text).filter(Boolean);
+    });
+  // Content blocks = everything except resource blocks (checklist blocks remain in content too for now)
+  const contentBlocks = allBlocks.filter((b) => b.type !== "resource");
 
   return (
     <LessonPlayer
@@ -98,7 +112,6 @@ export default async function LessonPage({ params }: PageProps) {
         id: lesson.id,
         title: lesson.title,
         lesson_type: lesson.lesson_type,
-        content: lesson.content,
         video_url: lesson.video_url,
         duration_mins: lesson.duration_mins,
         sort_order: lesson.sort_order,
@@ -114,7 +127,10 @@ export default async function LessonPage({ params }: PageProps) {
       lessonIndex={lessonIndex}
       totalLessons={sortedModules[moduleIndex]?.lessons.length ?? 1}
       completedLessonIds={completedLessonIds}
-      resources={resources ?? []}
+      contentBlocks={contentBlocks}
+      resourceBlocks={resourceBlocks}
+      checklistItems={checklistItems}
+      background={background}
     />
   );
 }

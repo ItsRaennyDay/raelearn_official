@@ -36,7 +36,10 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const c = b.content as Record<string, unknown>;
     if (Array.isArray(c.blocks)) {
       if (c.blocks.length > 200) return NextResponse.json({ error: "Too many blocks." }, { status: 400 });
-      patch.content = { blocks: c.blocks.slice(0, 200) };
+      patch.content = {
+        blocks: c.blocks.slice(0, 200),
+        background: typeof c.background === "string" ? c.background : "warm",
+      };
     }
   }
 
