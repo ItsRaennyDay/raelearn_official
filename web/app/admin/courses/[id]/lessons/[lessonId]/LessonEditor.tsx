@@ -1858,7 +1858,7 @@ export default function LessonEditor({
       >
         <div className="flex items-center gap-2 min-w-0">
           <Link
-            href={`/admin/courses/${courseId}`}
+            href={`/admin/courses/${courseId}?tab=curriculum`}
             className="flex items-center gap-1.5 text-sm font-medium shrink-0 transition-colors"
             style={{ color: "#9AB89E" }}
           >

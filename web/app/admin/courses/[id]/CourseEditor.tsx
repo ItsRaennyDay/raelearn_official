@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type LessonRow = { id: string; title: string; lesson_type: string; duration_mins: number | null; sort_order: number; status: string };
 type ModuleRow = { id: string; title: string; description: string | null; sort_order: number; status: string; lessons: LessonRow[] };
@@ -60,8 +60,11 @@ function LessonTypeIcon({ type }: { type: string }) {
 
 export default function CourseEditor({ course, modules: initModules, categories, allTags, selectedTagIds: initTagIds }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
-  const [tab, setTab] = useState<"settings" | "curriculum">("settings");
+  const [tab, setTab] = useState<"settings" | "curriculum">(
+    searchParams.get("tab") === "curriculum" ? "curriculum" : "settings"
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
