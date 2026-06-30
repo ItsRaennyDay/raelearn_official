@@ -179,7 +179,17 @@ function RenderBlock({ block, isDark }: { block: ContentBlock; isDark: boolean }
   }
 
   if (block.type === "divider") {
-    return <div className="flex items-center gap-3 py-1"><div className="flex-1 h-px" style={{ background: isDark ? "rgba(255,255,255,0.12)" : "#E5E7EB" }} /><span style={{ color: isDark ? "rgba(255,255,255,0.2)" : "#D1D5DB", fontSize: 12 }}>§</span><div className="flex-1 h-px" style={{ background: isDark ? "rgba(255,255,255,0.12)" : "#E5E7EB" }} /></div>;
+    const ds = String(block.style ?? "line");
+    const lc = isDark ? "rgba(255,255,255,0.15)" : "#E5E7EB";
+    const ac = isDark ? "rgba(255,255,255,0.3)" : "#9CA3AF";
+    if (ds === "spacer") return <div style={{ height: 32 }} />;
+    const line = (extra?: React.CSSProperties) => <div className="flex-1 h-px" style={{ background: lc, ...extra }} />;
+    if (ds === "dashed") return <div className="py-3"><div style={{ height: 1, borderTop: `1px dashed ${lc}` }} /></div>;
+    if (ds === "dotted") return <div className="py-3"><div style={{ height: 1, borderTop: `1px dotted ${lc}` }} /></div>;
+    if (ds === "thick")  return <div className="py-3"><div style={{ height: 2, borderRadius: 2, background: isDark ? "rgba(74,120,54,0.5)" : "#B8D4B5" }} /></div>;
+    if (ds === "line")   return <div className="py-3">{line()}</div>;
+    const sym: Record<string, string> = { symbol: "§", dots: "···", ornament: "❖" };
+    return <div className="flex items-center gap-4 py-3">{line()}<span style={{ color: ac, fontSize: 13, flexShrink: 0 }}>{sym[ds] ?? "§"}</span>{line()}</div>;
   }
 
   if (block.type === "bulletlist") {

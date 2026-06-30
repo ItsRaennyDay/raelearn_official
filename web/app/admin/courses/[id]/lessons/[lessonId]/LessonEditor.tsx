@@ -34,7 +34,8 @@ interface FlashcardBlock { type: "flashcard"; cards: FlashcardCard[]; columns: 1
 interface ChecklistBlock { type: "checklist"; items: { text: string; checked: boolean }[] }
 interface CodeBlock      { type: "code";      code: string; language?: string }
 interface ResourceBlock  { type: "resource";  url: string; title: string; description?: string; fileType: ResourceFileType }
-interface DividerBlock   { type: "divider" }
+type DividerStyle = "line" | "dashed" | "dotted" | "thick" | "symbol" | "dots" | "ornament" | "spacer";
+interface DividerBlock   { type: "divider"; style?: DividerStyle }
 
 type Block =
   | ParagraphBlock | HeadingBlock | QuoteBlock | CalloutBlock
@@ -241,7 +242,7 @@ const makeBlock: Record<BlockType, () => Block> = {
   checklist:  () => ({ type: "checklist", items: [{ text: "", checked: false }] }),
   code:       () => ({ type: "code",      code: "", language: "text" }),
   resource:   () => ({ type: "resource",  url: "", title: "", description: "", fileType: "link" }),
-  divider:    () => ({ type: "divider" }),
+  divider:    () => ({ type: "divider" as const, style: "line" as DividerStyle }),
   bulletlist: () => ({ type: "bulletlist" as const, items: [""], style: "disc" as const }),
   table:      () => ({ type: "table" as const, headers: ["Column 1", "Column 2"], rows: [["", ""]] }),
 };
@@ -1414,6 +1415,73 @@ function FlashcardPreview({ block }: { block: FlashcardBlock }) {
   );
 }
 
+/* ─────────────────────────── Divider ─────────────────────────── */
+const DIVIDER_STYLES: { id: DividerStyle; label: string }[] = [
+  { id: "line",     label: "Line" },
+  { id: "dashed",   label: "Dashed" },
+  { id: "dotted",   label: "Dotted" },
+  { id: "thick",    label: "Thick" },
+  { id: "symbol",   label: "§" },
+  { id: "dots",     label: "···" },
+  { id: "ornament", label: "❖" },
+  { id: "spacer",   label: "Spacer" },
+];
+
+function DividerDisplay({ style, isDark }: { style?: DividerStyle; isDark?: boolean }) {
+  const s = style ?? "line";
+  const lineColor = isDark ? "rgba(255,255,255,0.15)" : "#E5E7EB";
+  const accentColor = isDark ? "rgba(255,255,255,0.25)" : "#9CA3AF";
+
+  if (s === "spacer") return <div style={{ height: 32 }} />;
+
+  const line = (extra?: React.CSSProperties) => (
+    <div className="flex-1 h-px" style={{ background: lineColor, ...extra }} />
+  );
+  const dashedLine = () => (
+    <div className="flex-1" style={{ height: 1, borderTop: `1px dashed ${lineColor}` }} />
+  );
+  const dottedLine = () => (
+    <div className="flex-1" style={{ height: 1, borderTop: `1px dotted ${lineColor}` }} />
+  );
+  const thickLine = () => (
+    <div className="flex-1" style={{ height: 2, borderRadius: 2, background: isDark ? "rgba(74,120,54,0.5)" : "#B8D4B5" }} />
+  );
+
+  if (s === "line")     return <div className="flex items-center py-3">{line()}</div>;
+  if (s === "dashed")   return <div className="flex items-center py-3">{dashedLine()}</div>;
+  if (s === "dotted")   return <div className="flex items-center py-3">{dottedLine()}</div>;
+  if (s === "thick")    return <div className="flex items-center py-3">{thickLine()}</div>;
+
+  const symbols: Record<string, string> = { symbol: "§", dots: "···", ornament: "❖" };
+  const sym = symbols[s] ?? "§";
+  return (
+    <div className="flex items-center gap-4 py-3">
+      {line()} <span style={{ color: accentColor, fontSize: 13, flexShrink: 0 }}>{sym}</span> {line()}
+    </div>
+  );
+}
+
+function DividerEditor({ block, onChange }: { block: DividerBlock; onChange: (b: DividerBlock) => void }) {
+  const current = block.style ?? "line";
+  return (
+    <div>
+      <div className={label}>Divider Style</div>
+      <div className="grid grid-cols-4 gap-2">
+        {DIVIDER_STYLES.map((ds) => (
+          <button key={ds.id} onClick={() => onChange({ ...block, style: ds.id })}
+            className="flex flex-col items-center gap-1.5 px-2 py-2.5 rounded-xl border-2 transition-all"
+            style={{ borderColor: current === ds.id ? "#2A5230" : "#E5E7EB", background: current === ds.id ? "#EEF5EE" : "#FAFCFA" }}>
+            <div className="w-full px-1">
+              <DividerDisplay style={ds.id} />
+            </div>
+            <span className="text-[10px] font-bold" style={{ color: current === ds.id ? "#2A5230" : "#9CA3AF" }}>{ds.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ─────────────────────────── Preview renderer ─────────────────────────── */
 function BlockPreview({ block }: { block: Block }) {
   if (block.type === "paragraph") {
@@ -1586,15 +1654,7 @@ function BlockPreview({ block }: { block: Block }) {
     );
   }
 
-  if (block.type === "divider") {
-    return (
-      <div className="flex items-center gap-4 py-2">
-        <div className="flex-1 h-px" style={{ background: "#E5E7EB" }} />
-        <span style={{ color: "#D1D5DB", fontSize: "12px" }}>§</span>
-        <div className="flex-1 h-px" style={{ background: "#E5E7EB" }} />
-      </div>
-    );
-  }
+  if (block.type === "divider") return <DividerDisplay style={block.style} />;
 
   return null;
 }
@@ -1770,9 +1830,7 @@ function BlockItem({
           {block.type === "resource"   && <ResourceEditor   block={block} onChange={onChange as (b: ResourceBlock)   => void} />}
           {block.type === "bulletlist" && <BulletListEditor block={block} onChange={onChange as (b: BulletListBlock) => void} />}
           {block.type === "table"      && <TableEditor      block={block} onChange={onChange as (b: TableBlock)      => void} />}
-          {block.type === "divider"    && (
-            <div className="h-px mx-2 rounded" style={{ background: "#DDE8DA" }} />
-          )}
+          {block.type === "divider"    && <DividerEditor block={block} onChange={onChange as (b: DividerBlock) => void} />}
         </div>
       )}
     </div>
