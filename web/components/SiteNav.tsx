@@ -123,7 +123,7 @@ function UserMenu({ user }: { user: NavUser }) {
               Dashboard
             </Link>
             <Link
-              href="/learn"
+              href="/dashboard/my-courses"
               onClick={() => setOpen(false)}
               className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-[#2A5230] hover:bg-[#F5FAF5] transition-colors"
             >
