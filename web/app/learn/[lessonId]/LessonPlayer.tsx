@@ -451,21 +451,18 @@ function InlineChecklist({ items }: { items: string[] }) {
   return (
     <div className="space-y-2">
       {items.map((item, i) => (
-        <label key={i} className="flex items-start gap-3 cursor-pointer group">
-          <input
-            type="checkbox"
-            className="sr-only"
-            checked={!!checked[i]}
-            onChange={() => setChecked(p => ({ ...p, [i]: !p[i] }))}
-          />
-          <span
-            className="w-5 h-5 rounded border-2 mt-0.5 flex items-center justify-center shrink-0 transition-colors pointer-events-none"
-            style={{ borderColor: checked[i] ? "#2A5230" : "#B8D4B5", background: checked[i] ? "#2A5230" : "white" }}
-          >
+        <button
+          key={i}
+          type="button"
+          className="flex items-start gap-3 w-full text-left"
+          onClick={() => setChecked(p => ({ ...p, [i]: !p[i] }))}
+        >
+          <span className="w-5 h-5 rounded border-2 mt-0.5 flex items-center justify-center shrink-0 transition-colors"
+            style={{ borderColor: checked[i] ? "#2A5230" : "#B8D4B5", background: checked[i] ? "#2A5230" : "white" }}>
             {checked[i] && <svg viewBox="0 0 10 10" width="9" height="9" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><path d="M2 5l2 2 4-4" /></svg>}
           </span>
           <span className="text-sm leading-relaxed" style={{ color: checked[i] ? "#9AB89E" : "#374151", textDecoration: checked[i] ? "line-through" : "none" }}>{renderRich(item)}</span>
-        </label>
+        </button>
       ))}
     </div>
   );
@@ -783,15 +780,16 @@ export default function LessonPlayer({
                   <p className="text-xs text-center py-8" style={{ color: "#C8DEC8" }}>No checklist for this lesson.</p>
                 ) : (
                   adminChecklist.map((item, i) => (
-                    <label key={i} className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-colors"
-                      style={{ background: checklistDone[i] ? "#EEF5EE" : "#FAFCFA", border: `1px solid ${checklistDone[i] ? "#B8D4B5" : "#EEF5EE"}` }}>
-                      <div className="w-4 h-4 rounded flex items-center justify-center shrink-0 mt-0.5 transition-colors"
+                    <button key={i} type="button"
+                      className="flex items-start gap-3 p-3 rounded-xl w-full text-left transition-colors"
+                      style={{ background: checklistDone[i] ? "#EEF5EE" : "#FAFCFA", border: `1px solid ${checklistDone[i] ? "#B8D4B5" : "#EEF5EE"}` }}
+                      onClick={() => setChecklistDone(p => ({ ...p, [i]: !p[i] }))}>
+                      <span className="w-4 h-4 rounded flex items-center justify-center shrink-0 mt-0.5 transition-colors"
                         style={{ background: checklistDone[i] ? "#2A5230" : "#fff", border: `1.5px solid ${checklistDone[i] ? "#2A5230" : "#C8DEC8"}` }}>
                         {checklistDone[i] && <svg viewBox="0 0 10 10" width="8" height="8" fill="none" stroke="#fff" strokeWidth="1.5" strokeLinecap="round"><path d="M2 5l2 2 4-4" /></svg>}
-                      </div>
-                      <input type="checkbox" className="sr-only" checked={!!checklistDone[i]} onChange={() => setChecklistDone(p => ({ ...p, [i]: !p[i] }))} />
+                      </span>
                       <span className="text-xs" style={{ color: checklistDone[i] ? "#7A9878" : "#1A2E1C" }}>{item}</span>
-                    </label>
+                    </button>
                   ))
                 )}
               </div>
