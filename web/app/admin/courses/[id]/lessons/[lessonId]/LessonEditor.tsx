@@ -32,6 +32,162 @@ const STATUSES     = ["draft", "published"] as const;
 
 function uid() { return Math.random().toString(36).slice(2, 9); }
 
+/* ─────────────────── SVG Icon library (zero emoji) ─────────────────── */
+const Ico = {
+  Paragraph: () => (
+    <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+      <path d="M3 5h14M3 9h14M3 13h9" />
+    </svg>
+  ),
+  Heading: () => (
+    <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+      <path d="M4 4v12M4 10h8M12 4v12" />
+    </svg>
+  ),
+  Quote: () => (
+    <svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor">
+      <path d="M3 8.5C3 6.57 4.57 5 6.5 5H7v1.5h-.5A1.5 1.5 0 0 0 5 8v.5h2V13H3V8.5Zm7.5 0C10.5 6.57 12.07 5 14 5h.5v1.5H14A1.5 1.5 0 0 0 12.5 8v.5h2.5V13H10.5V8.5Z" />
+    </svg>
+  ),
+  Bell: () => (
+    <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10 2.5A5.5 5.5 0 0 0 4.5 8v2.5L3 13h14l-1.5-2.5V8A5.5 5.5 0 0 0 10 2.5Z" />
+      <path d="M8 13a2 2 0 0 0 4 0" />
+    </svg>
+  ),
+  Play: () => (
+    <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3" width="16" height="14" rx="2.5" />
+      <path d="M8 7.5l5 2.5-5 2.5V7.5Z" fill="currentColor" stroke="none" />
+    </svg>
+  ),
+  Code: () => (
+    <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 7l-4 3 4 3M14 7l4 3-4 3M12 4l-4 12" />
+    </svg>
+  ),
+  QuizIcon: () => (
+    <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="10" cy="10" r="7.5" />
+      <path d="M7.5 8.5a2.5 2.5 0 1 1 4.33 1.25L10 11.5" />
+      <circle cx="10" cy="14" r=".75" fill="currentColor" stroke="none" />
+    </svg>
+  ),
+  Flashcard: () => (
+    <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2.5" y="6.5" width="13" height="9" rx="1.5" />
+      <path d="M5.5 6.5V5A1.5 1.5 0 0 1 7 3.5h9A1.5 1.5 0 0 1 17.5 5v7A1.5 1.5 0 0 1 16 13.5H15.5" />
+    </svg>
+  ),
+  Checklist: () => (
+    <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="4" width="4" height="4" rx=".75" />
+      <path d="M4 6l1 1 1.5-1.5M9 6h8M3 13h.01M9 13h8M3 17h.01M9 17h8" />
+    </svg>
+  ),
+  Download: () => (
+    <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10 3v10M6 9l4 4 4-4M3 16h14" />
+    </svg>
+  ),
+  Divider: () => (
+    <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+      <path d="M3 10h14" />
+      <circle cx="3" cy="10" r="1.2" fill="currentColor" stroke="none" />
+      <circle cx="17" cy="10" r="1.2" fill="currentColor" stroke="none" />
+    </svg>
+  ),
+  Lightbulb: ({ size = 18 }: { size?: number }) => (
+    <svg viewBox="0 0 20 20" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7 14h6M8.5 17h3M10 2a6 6 0 0 0-3.8 10.6c.5.4.8 1 .8 1.4H13c0-.4.3-1 .8-1.4A6 6 0 0 0 10 2Z" />
+    </svg>
+  ),
+  Warning: ({ size = 18 }: { size?: number }) => (
+    <svg viewBox="0 0 20 20" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8.57 3.23a1.64 1.64 0 0 1 2.86 0l5.97 10.35A1.64 1.64 0 0 1 16 16H4a1.64 1.64 0 0 1-1.4-2.42L8.57 3.23Z" />
+      <path d="M10 8v3M10 13.5v.5" />
+    </svg>
+  ),
+  InfoCircle: ({ size = 18 }: { size?: number }) => (
+    <svg viewBox="0 0 20 20" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="10" cy="10" r="7.5" />
+      <path d="M10 9v5M10 6.5v.5" />
+    </svg>
+  ),
+  Pin: ({ size = 18 }: { size?: number }) => (
+    <svg viewBox="0 0 20 20" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10 2v9M8 4h4M6 11h8l-1 2H7l-1-2ZM10 13v5" />
+    </svg>
+  ),
+  FilePDF: ({ size = 22 }: { size?: number }) => (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6ZM14 2v6h6" />
+      <path d="M8 15h1.5a1.5 1.5 0 0 0 0-3H8v5M16 12h-2v5M14 14.5h2" strokeWidth="1.3" />
+    </svg>
+  ),
+  FileDoc: ({ size = 22 }: { size?: number }) => (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6ZM14 2v6h6M8 13h8M8 17h5" />
+    </svg>
+  ),
+  FileSheet: ({ size = 22 }: { size?: number }) => (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6ZM14 2v6h6" />
+      <path d="M8 12h8v7H8zM12 12v7M8 15.5h8" />
+    </svg>
+  ),
+  ChainLink: ({ size = 22 }: { size?: number }) => (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+    </svg>
+  ),
+  FileZip: ({ size = 22 }: { size?: number }) => (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6ZM14 2v6h6M12 12v2M12 16v2M11 12h2M11 14h2M11 16h2" />
+    </svg>
+  ),
+  Folder: ({ size = 22 }: { size?: number }) => (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2v11Z" />
+    </svg>
+  ),
+  ChevronUp: () => (
+    <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 10l5-5 5 5" />
+    </svg>
+  ),
+  ChevronDown: () => (
+    <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 6l5 5 5-5" />
+    </svg>
+  ),
+  Close: ({ size = 11 }: { size?: number }) => (
+    <svg viewBox="0 0 16 16" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+      <path d="M3 3l10 10M13 3L3 13" />
+    </svg>
+  ),
+  CheckMark: ({ size = 10 }: { size?: number }) => (
+    <svg viewBox="0 0 16 16" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2.5 8l4 4 7-7" />
+    </svg>
+  ),
+  XMark: ({ size = 10 }: { size?: number }) => (
+    <svg viewBox="0 0 16 16" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+      <path d="M3 3l10 10M13 3L3 13" />
+    </svg>
+  ),
+  ArrowUp: () => (
+    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8 12V4M4 8l4-4 4 4" />
+    </svg>
+  ),
+  ArrowDown: () => (
+    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8 4v8M4 8l4 4 4-4" />
+    </svg>
+  ),
+};
+
 /* ─────────────────────────── Defaults ─────────────────────────── */
 const makeBlock: Record<BlockType, () => Block> = {
   paragraph: () => ({ type: "paragraph", text: "" }),
@@ -48,36 +204,36 @@ const makeBlock: Record<BlockType, () => Block> = {
 };
 
 /* ─────────────────────────── Palette ─────────────────────────── */
-const PALETTE_GROUPS = [
+const PALETTE_GROUPS: { label: string; items: { type: BlockType; label: string; icon: React.ReactNode; desc: string }[] }[] = [
   {
     label: "Text",
     items: [
-      { type: "paragraph" as BlockType, label: "Paragraph",  icon: "¶",   desc: "Body text" },
-      { type: "heading"   as BlockType, label: "Heading",    icon: "H",   desc: "H1 – H4 title" },
-      { type: "quote"     as BlockType, label: "Quote",      icon: "❝",   desc: "Pull quote" },
-      { type: "callout"   as BlockType, label: "Callout",    icon: "💡",  desc: "Tip / warning" },
+      { type: "paragraph", label: "Paragraph", icon: <Ico.Paragraph />, desc: "Body text" },
+      { type: "heading",   label: "Heading",   icon: <Ico.Heading />,   desc: "H1 – H4 title" },
+      { type: "quote",     label: "Quote",     icon: <Ico.Quote />,     desc: "Pull quote" },
+      { type: "callout",   label: "Callout",   icon: <Ico.Bell />,      desc: "Tip / warning" },
     ],
   },
   {
     label: "Media",
     items: [
-      { type: "video"     as BlockType, label: "Video",      icon: "▶",   desc: "YouTube / Vimeo" },
-      { type: "code"      as BlockType, label: "Code",       icon: "</>", desc: "Code snippet" },
+      { type: "video",     label: "Video",     icon: <Ico.Play />,      desc: "YouTube / Vimeo" },
+      { type: "code",      label: "Code",      icon: <Ico.Code />,      desc: "Code snippet" },
     ],
   },
   {
     label: "Interactive",
     items: [
-      { type: "quiz"      as BlockType, label: "Quiz",       icon: "✓",   desc: "Multiple choice" },
-      { type: "flashcard" as BlockType, label: "Flashcard",  icon: "🃏",  desc: "Flip card" },
-      { type: "checklist" as BlockType, label: "Checklist",  icon: "☑",   desc: "Action list" },
+      { type: "quiz",      label: "Quiz",      icon: <Ico.QuizIcon />,  desc: "Multiple choice" },
+      { type: "flashcard", label: "Flashcard", icon: <Ico.Flashcard />, desc: "Flip card" },
+      { type: "checklist", label: "Checklist", icon: <Ico.Checklist />, desc: "Action list" },
     ],
   },
   {
     label: "Utility",
     items: [
-      { type: "resource"  as BlockType, label: "Resource",   icon: "📥",  desc: "Download / link" },
-      { type: "divider"   as BlockType, label: "Divider",    icon: "—",   desc: "Section break" },
+      { type: "resource",  label: "Resource",  icon: <Ico.Download />,  desc: "Download / link" },
+      { type: "divider",   label: "Divider",   icon: <Ico.Divider />,   desc: "Section break" },
     ],
   },
 ];
@@ -208,11 +364,11 @@ function QuoteEditor({ block, onChange }: { block: QuoteBlock; onChange: (b: Quo
   );
 }
 
-const calloutMeta: Record<CalloutVariant, { icon: string; color: string; bg: string; border: string }> = {
-  tip:     { icon: "💡", color: "#166534", bg: "#F0FDF4", border: "#86EFAC" },
-  warning: { icon: "⚠️", color: "#92400E", bg: "#FFFBEB", border: "#FCD34D" },
-  info:    { icon: "ℹ️", color: "#1E40AF", bg: "#EFF6FF", border: "#93C5FD" },
-  note:    { icon: "📌", color: "#374151", bg: "#F9FAFB", border: "#D1D5DB" },
+const calloutMeta: Record<CalloutVariant, { icon: React.ReactNode; color: string; bg: string; border: string }> = {
+  tip:     { icon: <Ico.Lightbulb />, color: "#166534", bg: "#F0FDF4", border: "#86EFAC" },
+  warning: { icon: <Ico.Warning />,   color: "#92400E", bg: "#FFFBEB", border: "#FCD34D" },
+  info:    { icon: <Ico.InfoCircle />,color: "#1E40AF", bg: "#EFF6FF", border: "#93C5FD" },
+  note:    { icon: <Ico.Pin />,       color: "#374151", bg: "#F9FAFB", border: "#D1D5DB" },
 };
 
 function CalloutEditor({ block, onChange }: { block: CalloutBlock; onChange: (b: CalloutBlock) => void }) {
@@ -341,7 +497,7 @@ function QuizEditor({ block, onChange }: { block: QuizBlock; onChange: (b: QuizB
                 placeholder={`Option ${String.fromCharCode(65 + i)}`}
               />
               {block.options.length > 2 && (
-                <button onClick={() => removeOpt(i)} className="text-xs text-red-400 hover:text-red-600 shrink-0 transition-colors">✕</button>
+                <button onClick={() => removeOpt(i)} className="text-red-400 hover:text-red-600 shrink-0 transition-colors"><Ico.Close /></button>
               )}
             </div>
           ))}
@@ -430,7 +586,7 @@ function ChecklistEditor({ block, onChange }: { block: ChecklistBlock; onChange:
             placeholder={`Action item ${i + 1}`}
           />
           {block.items.length > 1 && (
-            <button onClick={() => removeItem(i)} className="text-xs text-red-400 hover:text-red-600 shrink-0 transition-colors">✕</button>
+            <button onClick={() => removeItem(i)} className="text-red-400 hover:text-red-600 shrink-0 transition-colors"><Ico.Close /></button>
           )}
         </div>
       ))}
@@ -468,13 +624,13 @@ function CodeEditor({ block, onChange }: { block: CodeBlock; onChange: (b: CodeB
   );
 }
 
-const fileTypeIcons: Record<ResourceFileType, { icon: string; bg: string; color: string; label: string }> = {
-  pdf:   { icon: "📄", bg: "#FEF2F2", color: "#DC2626", label: "PDF" },
-  doc:   { icon: "📝", bg: "#EFF6FF", color: "#2563EB", label: "Document" },
-  sheet: { icon: "📊", bg: "#F0FDF4", color: "#16A34A", label: "Spreadsheet" },
-  link:  { icon: "🔗", bg: "#F5F3FF", color: "#7C3AED", label: "Link" },
-  zip:   { icon: "📦", bg: "#FFF7ED", color: "#EA580C", label: "Archive" },
-  other: { icon: "📁", bg: "#F9FAFB", color: "#374151", label: "File" },
+const fileTypeIcons: Record<ResourceFileType, { icon: React.ReactNode; bg: string; color: string; label: string }> = {
+  pdf:   { icon: <Ico.FilePDF />,   bg: "#FEF2F2", color: "#DC2626", label: "PDF" },
+  doc:   { icon: <Ico.FileDoc />,   bg: "#EFF6FF", color: "#2563EB", label: "Document" },
+  sheet: { icon: <Ico.FileSheet />, bg: "#F0FDF4", color: "#16A34A", label: "Spreadsheet" },
+  link:  { icon: <Ico.ChainLink />, bg: "#F5F3FF", color: "#7C3AED", label: "Link" },
+  zip:   { icon: <Ico.FileZip />,   bg: "#FFF7ED", color: "#EA580C", label: "Archive" },
+  other: { icon: <Ico.Folder />,    bg: "#F9FAFB", color: "#374151", label: "File" },
 };
 
 function ResourceEditor({ block, onChange }: { block: ResourceBlock; onChange: (b: ResourceBlock) => void }) {
@@ -613,8 +769,8 @@ function QuizPreview({ block }: { block: QuizBlock }) {
                   className="w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center text-[10px] font-extrabold"
                   style={{ borderColor: dotBg, background: (isSelected || (submitted && isRight)) ? dotBg : "transparent", color: "#fff" }}
                 >
-                  {submitted && isRight && "✓"}
-                  {submitted && isSelected && !isRight && "✕"}
+                  {submitted && isRight && <Ico.CheckMark size={9} />}
+                  {submitted && isSelected && !isRight && <Ico.XMark size={9} />}
                 </span>
                 <span className="text-sm font-medium">{opt || `Option ${String.fromCharCode(65 + i)}`}</span>
               </button>
@@ -641,7 +797,7 @@ function QuizPreview({ block }: { block: QuizBlock }) {
                 color: isCorrect ? "#166534" : "#DC2626",
               }}
             >
-              <span className="font-bold">{isCorrect ? "Correct! 🎉" : "Not quite."}</span>
+              <span className="font-bold">{isCorrect ? "Correct!" : "Not quite."}</span>
               {block.explanation && <span className="ml-2">{block.explanation}</span>}
             </div>
             <button onClick={reset} className="text-xs font-bold underline" style={{ color: "#7A9878" }}>
@@ -910,7 +1066,7 @@ function BlockPreview({ block }: { block: Block }) {
           className="shrink-0 text-xs font-bold px-3 py-1.5 rounded-lg"
           style={{ background: m.bg, color: m.color }}
         >
-          Download ↓
+          Download
         </div>
       </a>
     );
@@ -997,18 +1153,18 @@ const BG_OPTIONS: BgOption[] = [
 ];
 
 /* ─────────────────────────── Block label map ─────────────────────────── */
-const blockMeta: Record<BlockType, { label: string; icon: string; color: string }> = {
-  paragraph: { label: "Paragraph", icon: "¶",   color: "#2A5230" },
-  heading:   { label: "Heading",   icon: "H",   color: "#1E40AF" },
-  quote:     { label: "Quote",     icon: "❝",   color: "#059669" },
-  callout:   { label: "Callout",   icon: "💡",  color: "#D97706" },
-  video:     { label: "Video",     icon: "▶",   color: "#7C3AED" },
-  quiz:      { label: "Quiz",      icon: "✓",   color: "#2A5230" },
-  flashcard: { label: "Flashcard", icon: "🃏",  color: "#B45309" },
-  checklist: { label: "Checklist", icon: "☑",   color: "#0369A1" },
-  code:      { label: "Code",      icon: "</>", color: "#0F172A" },
-  resource:  { label: "Resource",  icon: "📥",  color: "#7C3AED" },
-  divider:   { label: "Divider",   icon: "—",   color: "#9CA3AF" },
+const blockMeta: Record<BlockType, { label: string; icon: React.ReactNode; color: string }> = {
+  paragraph: { label: "Paragraph", icon: <Ico.Paragraph />, color: "#2A5230" },
+  heading:   { label: "Heading",   icon: <Ico.Heading />,   color: "#1E40AF" },
+  quote:     { label: "Quote",     icon: <Ico.Quote />,     color: "#059669" },
+  callout:   { label: "Callout",   icon: <Ico.Bell />,      color: "#D97706" },
+  video:     { label: "Video",     icon: <Ico.Play />,      color: "#7C3AED" },
+  quiz:      { label: "Quiz",      icon: <Ico.QuizIcon />,  color: "#2A5230" },
+  flashcard: { label: "Flashcard", icon: <Ico.Flashcard />, color: "#B45309" },
+  checklist: { label: "Checklist", icon: <Ico.Checklist />, color: "#0369A1" },
+  code:      { label: "Code",      icon: <Ico.Code />,      color: "#0F172A" },
+  resource:  { label: "Resource",  icon: <Ico.Download />,  color: "#7C3AED" },
+  divider:   { label: "Divider",   icon: <Ico.Divider />,   color: "#9CA3AF" },
 };
 
 /* ─────────────────────────── Block wrapper ─────────────────────────── */
@@ -1039,8 +1195,8 @@ function BlockItem({
       >
         <div className="flex items-center gap-2.5">
           <span
-            className="w-6 h-6 rounded-md flex items-center justify-center text-[11px] font-bold shrink-0"
-            style={{ background: "#EEF5EE", color: meta.color, fontFamily: "var(--font-head)" }}
+            className="w-6 h-6 rounded-md flex items-center justify-center shrink-0"
+            style={{ background: "#EEF5EE", color: meta.color }}
           >
             {meta.icon}
           </span>
@@ -1053,32 +1209,32 @@ function BlockItem({
           <button
             onClick={() => onMove(-1)}
             disabled={index === 0}
-            className="w-6 h-6 flex items-center justify-center rounded text-xs transition-colors disabled:opacity-25 hover:bg-[#F0F7F0]"
+            className="w-6 h-6 flex items-center justify-center rounded transition-colors disabled:opacity-25 hover:bg-[#F0F7F0]"
             style={{ color: "#9AB89E" }}
           >
-            ↑
+            <Ico.ArrowUp />
           </button>
           <button
             onClick={() => onMove(1)}
             disabled={index === total - 1}
-            className="w-6 h-6 flex items-center justify-center rounded text-xs transition-colors disabled:opacity-25 hover:bg-[#F0F7F0]"
+            className="w-6 h-6 flex items-center justify-center rounded transition-colors disabled:opacity-25 hover:bg-[#F0F7F0]"
             style={{ color: "#9AB89E" }}
           >
-            ↓
+            <Ico.ArrowDown />
           </button>
           <button
             onClick={() => setCollapsed((c) => !c)}
-            className="w-6 h-6 flex items-center justify-center rounded text-xs transition-colors hover:bg-[#F0F7F0]"
+            className="w-6 h-6 flex items-center justify-center rounded transition-colors hover:bg-[#F0F7F0]"
             style={{ color: "#9AB89E" }}
           >
-            {collapsed ? "▸" : "▾"}
+            {collapsed ? <Ico.ChevronDown /> : <Ico.ChevronUp />}
           </button>
           <button
             onClick={onDelete}
-            className="w-6 h-6 flex items-center justify-center rounded text-xs transition-colors hover:bg-red-50 ml-1"
+            className="w-6 h-6 flex items-center justify-center rounded transition-colors hover:bg-red-50 ml-1"
             style={{ color: "#FCA5A5" }}
           >
-            ✕
+            <Ico.Close />
           </button>
         </div>
       </div>
@@ -1137,10 +1293,10 @@ function BlockPalette({ onSelect, onClose }: { onSelect: (t: BlockType) => void;
           </span>
           <button
             onClick={onClose}
-            className="w-6 h-6 flex items-center justify-center rounded-lg text-sm transition-colors hover:bg-[#F0F7F0]"
+            className="w-6 h-6 flex items-center justify-center rounded-lg transition-colors hover:bg-[#F0F7F0]"
             style={{ color: "#9AB89E" }}
           >
-            ✕
+            <Ico.Close />
           </button>
         </div>
 
@@ -1297,7 +1453,7 @@ export default function LessonEditor({
               : { background: "#fff", color: "#7A9878", borderColor: "#DDE8DA" }
             }
           >
-            {preview ? "◀ Edit" : "Preview ▶"}
+            {preview ? "Edit" : "Preview"}
           </button>
 
           <select

@@ -192,9 +192,15 @@ export default async function CourseDetailPage({ params }: Props) {
                           {lessons.map((lesson) => (
                             <div key={lesson.id} className="px-5 py-3 flex items-center gap-3">
                               <span className="shrink-0 text-[#7A9878]">
-                                {lesson.lesson_type === "video" ? "▶" :
-                                 lesson.lesson_type === "quiz" ? "✓" :
-                                 lesson.lesson_type === "assignment" ? "✏" : "📄"}
+                                {lesson.lesson_type === "video" ? (
+                                  <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2h9A1.5 1.5 0 0 1 14 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 12.5v-9ZM6 5.5v5l4.5-2.5L6 5.5Z" /></svg>
+                                ) : lesson.lesson_type === "quiz" ? (
+                                  <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="8" r="6" /><path d="M6 7.5a2 2 0 1 1 3.46 1L8 10" /><circle cx="8" cy="12" r=".6" fill="currentColor" stroke="none" /></svg>
+                                ) : lesson.lesson_type === "assignment" ? (
+                                  <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><path d="M11 2l3 3-7 7H4V9l7-7Z" /></svg>
+                                ) : (
+                                  <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"><path d="M2 4h12M2 7h12M2 10h8" /></svg>
+                                )}
                               </span>
                               <span className="flex-1 text-sm text-[#4A6650]">{lesson.title}</span>
                               {lesson.duration_mins && (

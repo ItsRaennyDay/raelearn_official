@@ -31,10 +31,28 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
 }
 
 function LessonTypeIcon({ type }: { type: string }) {
-  if (type === "video") return <span title="Video">▶</span>;
-  if (type === "quiz")  return <span title="Quiz">✓</span>;
-  if (type === "assignment") return <span title="Assignment">✏</span>;
-  return <span title="Text">📄</span>;
+  if (type === "video") return (
+    <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" title="Video">
+      <path d="M2 3.5A1.5 1.5 0 0 1 3.5 2h9A1.5 1.5 0 0 1 14 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 12.5v-9ZM6 5.5v5l4.5-2.5L6 5.5Z" />
+    </svg>
+  );
+  if (type === "quiz") return (
+    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" title="Quiz">
+      <circle cx="8" cy="8" r="6" />
+      <path d="M6 7.5a2 2 0 1 1 3.46 1L8 10" />
+      <circle cx="8" cy="12" r=".6" fill="currentColor" stroke="none" />
+    </svg>
+  );
+  if (type === "assignment") return (
+    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" title="Assignment">
+      <path d="M11 2l3 3-7 7H4V9l7-7Z" />
+    </svg>
+  );
+  return (
+    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" title="Text">
+      <path d="M2 4h12M2 7h12M2 10h8" />
+    </svg>
+  );
 }
 
 export default function CourseEditor({ course, modules: initModules, categories }: Props) {
@@ -213,7 +231,7 @@ export default function CourseEditor({ course, modules: initModules, categories 
         {tab === "settings" && (
           <form onSubmit={saveSettings} className="max-w-2xl space-y-6">
             {error && <div className="px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">{error}</div>}
-            {success && <div className="px-4 py-3 bg-green-50 border border-green-200 rounded-xl text-sm text-green-700">Saved ✓</div>}
+            {success && <div className="px-4 py-3 bg-green-50 border border-green-200 rounded-xl text-sm text-green-700 flex items-center gap-2"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2.5 8l4 4 7-7"/></svg>Saved</div>}
 
             <div className="grid grid-cols-2 gap-4">
               <Field label="Status">
@@ -357,9 +375,11 @@ export default function CourseEditor({ course, modules: initModules, categories 
                       </Link>
                       <button
                         onClick={() => deleteLesson(mod.id, lesson.id)}
-                        className="text-xs text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-all shrink-0"
+                        className="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-all shrink-0"
                       >
-                        ✕
+                        <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                          <path d="M3 3l10 10M13 3L3 13" />
+                        </svg>
                       </button>
                     </div>
                   ))}
