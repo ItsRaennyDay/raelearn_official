@@ -87,7 +87,8 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
               >
                 {section.label}
               </div>
-              {section.items.map(({ label, href, icon, exact }) => {
+              {section.items.map(({ label, href, icon, ...rest }) => {
+                const exact = "exact" in rest ? rest.exact : false;
                 const active = exact ? pathname === href : pathname.startsWith(href);
                 return (
                   <Link
