@@ -55,20 +55,12 @@ export default async function AdminOverviewPage() {
     <div className="p-4 md:p-8 max-w-6xl space-y-6">
 
       {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#9AB89E" }}>{dateStr}</p>
-          <h1 className="font-extrabold text-2xl leading-tight" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>
-            {greeting}, Rae
-          </h1>
-          <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>Here&apos;s what needs your attention today.</p>
-        </div>
-        <Link href="/admin/courses/new"
-          className="hidden sm:flex items-center gap-2 px-4 py-2.5 text-sm font-bold rounded-xl"
-          style={{ background: "#2A5230", color: "#fff" }}>
-          <svg viewBox="0 0 12 12" width="11" height="11" fill="currentColor"><path d="M6 1v10M1 6h10" strokeWidth="2" stroke="currentColor" strokeLinecap="round" /></svg>
-          New Course
-        </Link>
+      <div>
+        <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "var(--admin-text-dim)" }}>{dateStr}</p>
+        <h1 className="font-extrabold text-2xl leading-tight" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>
+          {greeting}, Rae
+        </h1>
+        <p className="text-sm mt-0.5" style={{ color: "var(--admin-text-muted)" }}>Here&apos;s what needs your attention today.</p>
       </div>
 
       {/* At-a-glance tiles */}
