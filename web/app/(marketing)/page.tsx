@@ -133,7 +133,7 @@ function DashboardMockup() {
 
       {/* Certificate chip */}
       <div
-        className="absolute -bottom-7 -right-2 z-10 bg-white border border-[#DDE8DA] rounded-[13px] px-4 py-3.5 shadow-[0_14px_30px_-10px_rgba(42,82,48,0.18)] flex items-center gap-3"
+        className="absolute -bottom-7 right-4 z-10 bg-white border border-[#DDE8DA] rounded-[13px] px-4 py-3.5 shadow-[0_14px_30px_-10px_rgba(42,82,48,0.18)] flex items-center gap-3"
         style={{ transform: "rotate(-3deg)" }}
       >
         <div className="w-[34px] h-[34px] rounded-full bg-[#E4EFE4] flex items-center justify-center">
@@ -163,7 +163,7 @@ export default function HomePage() {
   return (
     <>
       {/* ── Hero ── */}
-      <section id="top" className="relative max-w-[1240px] mx-auto px-7 pt-16 pb-12">
+      <section id="top" className="relative max-w-[1240px] mx-auto px-7 pt-16 pb-12 overflow-x-clip">
         <div className="relative flex gap-14 items-center flex-wrap">
           {/* Left */}
           <div className="flex-1 min-w-[320px]" style={{ flexBasis: "440px" }}>
@@ -231,7 +231,7 @@ export default function HomePage() {
           </div>
 
           {/* Right — dashboard mockup */}
-          <div className="flex-1 min-w-[320px] relative" style={{ flexBasis: "440px" }}>
+          <div className="flex-1 min-w-[320px] relative pt-10 pb-10" style={{ flexBasis: "440px" }}>
             <DashboardMockup />
           </div>
         </div>
