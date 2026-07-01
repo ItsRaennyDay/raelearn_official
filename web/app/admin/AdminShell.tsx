@@ -246,6 +246,7 @@ const BREADCRUMB: Record<string, string> = {
   "/admin/assignments": "Assignments",
   "/admin/resources": "Resources",
   "/admin/certificates": "Certificates",
+  "/admin/certificates/templates": "Templates",
   "/admin/tags": "Tags",
   "/admin/bundles": "Bundles",
   "/admin/users": "Users",
@@ -266,6 +267,8 @@ function getPageTitle(pathname: string): string {
   if (pathname.includes("/lessons/")) return "Lesson Editor";
   if (/^\/admin\/courses\/[^/]+$/.test(pathname)) return "Course Editor";
   if (/^\/admin\/bundles\/[^/]+$/.test(pathname)) return "Edit Bundle";
+  if (pathname === "/admin/certificates/templates/new") return "New Template";
+  if (/^\/admin\/certificates\/templates\/[^/]+$/.test(pathname)) return "Edit Template";
   const match = Object.entries(BREADCRUMB).find(([k]) => pathname.startsWith(k) && k !== "/admin");
   return match ? match[1] : "Admin";
 }
