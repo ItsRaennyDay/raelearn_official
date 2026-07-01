@@ -475,7 +475,10 @@ export default function LessonPlayer({
   completedLessonIds, contentBlocks, resourceBlocks, checklistItems, background,
 }: Props) {
   const router = useRouter();
-  const [leftOpen, setLeftOpen] = useState(true);
+  const [leftOpen, setLeftOpen] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth >= 768 : true
+  );
+  const [rightOpen, setRightOpen] = useState(false);
   const [tab, setTab] = useState<Tab>("resources");
   const [completed, setCompleted] = useState(initialCompleted);
   const [markingDone, setMarkingDone] = useState(false);
@@ -527,7 +530,17 @@ export default function LessonPlayer({
 
       {/* ─── Top bar ─── */}
       <header className="sticky top-0 z-40 flex items-center gap-3 px-5 h-14" style={{ background: "#fff", borderBottom: "1px solid #DDE8DA", boxShadow: "0 1px 6px rgba(42,82,48,0.07)" }}>
-        <Link href={`/dashboard/my-courses/${course.slug}`} className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: "#2A5230" }}>
+        {/* Mobile: open course outline */}
+        <button
+          className="md:hidden flex items-center gap-1.5 text-xs font-semibold shrink-0"
+          style={{ color: "#2A5230" }}
+          onClick={() => setLeftOpen(true)}
+        >
+          <svg viewBox="0 0 14 14" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M9 11L5 7l4-4" /></svg>
+          Course
+        </button>
+        {/* Desktop: back link */}
+        <Link href={`/dashboard/my-courses/${course.slug}`} className="hidden md:flex items-center gap-1.5 text-xs font-semibold" style={{ color: "#2A5230" }}>
           <svg viewBox="0 0 14 14" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M9 11L5 7l4-4" /></svg>
           Course
         </Link>
@@ -542,15 +555,42 @@ export default function LessonPlayer({
           </div>
           <span className="text-xs font-bold" style={{ color: "#2A5230" }}>{progressPct}%</span>
         </div>
+        {/* Mobile: resources toggle */}
+        <button
+          className="sm:hidden flex items-center gap-1 text-xs font-semibold px-2.5 py-1.5 rounded-lg shrink-0"
+          style={{ background: "#EEF5EE", color: "#2A5230" }}
+          onClick={() => setRightOpen(true)}
+        >
+          <svg viewBox="0 0 14 14" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+            <path d="M4 4h8M4 7h8M4 10h5" /><circle cx="1.5" cy="4" r="1" fill="currentColor" /><circle cx="1.5" cy="7" r="1" fill="currentColor" /><circle cx="1.5" cy="10" r="1" fill="currentColor" />
+          </svg>
+          {progressPct}%
+        </button>
         <Link href="/dashboard" className="text-xs font-semibold px-3 py-1.5 rounded-lg shrink-0" style={{ background: "#EEF5EE", color: "#2A5230" }}>Exit</Link>
       </header>
 
       {/* ─── Body ─── */}
       <div className="flex flex-1 min-h-0 overflow-hidden" style={{ position: "relative" }}>
 
+        {/* Mobile backdrop for left sidebar */}
+        {leftOpen && (
+          <div className="fixed inset-0 z-40 bg-black/40 md:hidden" onClick={() => setLeftOpen(false)} />
+        )}
+
+        {/* Mobile backdrop for right panel */}
+        {rightOpen && (
+          <div className="fixed inset-0 z-40 bg-black/40 md:hidden" onClick={() => setRightOpen(false)} />
+        )}
+
         {/* ─── Left sidebar ─── */}
-        <aside className="shrink-0 flex flex-col overflow-hidden transition-all duration-300"
-          style={{ width: leftOpen ? 280 : 0, minWidth: leftOpen ? 280 : 0, background: "#fff", borderRight: "1px solid #DDE8DA" }}>
+        <aside
+          className={[
+            "flex flex-col overflow-hidden transition-all duration-300",
+            leftOpen
+              ? "fixed left-0 inset-y-0 z-50 md:relative md:sticky md:top-0 md:h-auto md:z-auto md:shrink-0"
+              : "hidden",
+          ].join(" ")}
+          style={{ width: 280, background: "#fff", borderRight: "1px solid #DDE8DA" }}>
           <div className="flex-1 overflow-y-auto min-w-[280px]">
             {/* Sidebar header */}
             <div className="flex items-center justify-between px-4 pt-4 pb-3" style={{ borderBottom: "1px solid #EEF5EE" }}>
@@ -697,7 +737,28 @@ export default function LessonPlayer({
         </main>
 
         {/* ─── Right panel ─── */}
-        <aside className="w-72 shrink-0 flex flex-col overflow-hidden" style={{ background: "#fff", borderLeft: "1px solid #DDE8DA" }}>
+        <aside
+          className={[
+            "flex-col overflow-hidden",
+            rightOpen
+              ? "fixed right-0 inset-y-0 z-50 flex w-80 md:relative md:w-72 md:z-auto md:shrink-0"
+              : "hidden md:flex md:w-72 md:shrink-0",
+          ].join(" ")}
+          style={{ background: "#fff", borderLeft: "1px solid #DDE8DA" }}>
+          {/* Mobile close button for right panel */}
+          <div className="md:hidden flex items-center justify-between px-4 pt-4 pb-2" style={{ borderBottom: "1px solid #EEF5EE" }}>
+            <span className="text-xs font-bold" style={{ color: "#2A5230" }}>Progress & Resources</span>
+            <button
+              onClick={() => setRightOpen(false)}
+              className="w-7 h-7 flex items-center justify-center rounded-lg"
+              style={{ background: "#EEF5EE", color: "#9AB89E" }}
+            >
+              <svg viewBox="0 0 14 14" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                <path d="M2 2l10 10M12 2L2 12" />
+              </svg>
+            </button>
+          </div>
+
           {/* Progress widget */}
           <div className="px-5 pt-5 pb-4" style={{ borderBottom: "1px solid #EEF5EE" }}>
             <div className="flex items-center gap-3">

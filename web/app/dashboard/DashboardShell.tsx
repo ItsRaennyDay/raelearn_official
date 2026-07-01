@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -156,16 +157,33 @@ export default function DashboardShell({
   children, firstName, email, role, isAdmin, enrolledCount, certCount,
 }: Props) {
   const pathname = usePathname();
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  useEffect(() => { setMobileNavOpen(false); }, [pathname]);
 
   return (
     <div className="min-h-screen flex" style={{ background: "#F5F0E8", fontFamily: "var(--font-sans)" }}>
+
+      {/* Mobile backdrop */}
+      {mobileNavOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 md:hidden"
+          onClick={() => setMobileNavOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside
-        className="w-56 shrink-0 sticky top-0 h-screen flex flex-col overflow-y-auto"
+        className={[
+          "w-56 h-screen flex flex-col overflow-y-auto",
+          "fixed top-0 left-0 z-50 transition-transform duration-300 ease-in-out",
+          "md:sticky md:shrink-0 md:z-auto md:translate-x-0",
+          mobileNavOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
+        ].join(" ")}
         style={{ background: "#fff", borderRight: "1px solid #E8EDE6" }}
       >
         {/* Brand */}
-        <div className="px-5 pt-5 pb-4" style={{ borderBottom: "1px solid #EEF5EE" }}>
+        <div className="px-5 pt-5 pb-4 flex items-center justify-between" style={{ borderBottom: "1px solid #EEF5EE" }}>
           <Link href="/" className="block">
             <div className="font-extrabold text-[17px] leading-none" style={{ fontFamily: "var(--font-head)", color: "#2A5230" }}>
               RaeLearn
@@ -174,6 +192,16 @@ export default function DashboardShell({
               by RAEFORM
             </div>
           </Link>
+          <button
+            className="md:hidden w-7 h-7 flex items-center justify-center rounded-lg"
+            onClick={() => setMobileNavOpen(false)}
+            style={{ color: "#9AB89E" }}
+            aria-label="Close menu"
+          >
+            <svg viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+              <path d="M2 2l10 10M12 2L2 12" />
+            </svg>
+          </button>
         </div>
 
         {/* User card */}
@@ -268,30 +296,42 @@ export default function DashboardShell({
       <div className="flex-1 min-w-0">
         {/* Top bar */}
         <header
-          className="h-13 flex items-center justify-between px-8 py-3 sticky top-0 z-30"
-          style={{ background: "#fff", borderBottom: "1px solid #E8EDE6" }}
+          className="flex items-center justify-between px-4 md:px-8 py-3 sticky top-0 z-30"
+          style={{ background: "#fff", borderBottom: "1px solid #E8EDE6", minHeight: 52 }}
         >
-          <nav className="flex items-center gap-1.5 text-xs" style={{ color: "#9AB89E" }}>
-            <span>Dashboard</span>
-            {pathname !== "/dashboard" && (
-              <>
-                <span>›</span>
-                <span style={{ color: "#2A5230", fontWeight: 600 }}>
-                  {pathname.split("/").pop()?.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
-                </span>
-              </>
-            )}
-          </nav>
+          <div className="flex items-center gap-3 min-w-0">
+            <button
+              className="md:hidden p-1.5 rounded-lg shrink-0"
+              onClick={() => setMobileNavOpen(true)}
+              aria-label="Open menu"
+              style={{ color: "#2A5230" }}
+            >
+              <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                <path d="M3 6h14M3 10h14M3 14h14" />
+              </svg>
+            </button>
+            <nav className="flex items-center gap-1.5 text-xs min-w-0" style={{ color: "#9AB89E" }}>
+              <span className="shrink-0">Dashboard</span>
+              {pathname !== "/dashboard" && (
+                <>
+                  <span className="shrink-0">›</span>
+                  <span className="truncate" style={{ color: "#2A5230", fontWeight: 600 }}>
+                    {pathname.split("/").pop()?.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+                  </span>
+                </>
+              )}
+            </nav>
+          </div>
           <Link
             href="/courses"
-            className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
+            className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors shrink-0 ml-3"
             style={{ background: "#EEF5EE", color: "#2A5230" }}
           >
             Browse Courses
           </Link>
         </header>
 
-        <main className="p-8">
+        <main className="p-4 md:p-8">
           {children}
         </main>
       </div>
