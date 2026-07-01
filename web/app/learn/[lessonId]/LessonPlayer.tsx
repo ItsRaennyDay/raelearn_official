@@ -3,7 +3,17 @@
 import React, { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { markLessonComplete, saveVideoProgress } from "./actions";
+import { markLessonComplete, saveVideoProgress, submitQuizAttempt } from "./actions";
+
+/* ─── Quiz types ─── */
+type QuizQuestion = {
+  id: string; question_text: string; question_type: string;
+  options: string[] | null; correct_answer: { index: number } | null; sort_order: number;
+};
+type QuizData = {
+  id: string; title: string; passing_score: number;
+  max_attempts: number | null; questions: QuizQuestion[];
+};
 
 /* ─── Types ─── */
 interface SidebarLesson {
@@ -34,6 +44,8 @@ interface Props {
   resourceBlocks: ResourceBlock[];
   checklistItems: string[];
   background: string;
+  quiz: QuizData | null;
+  initialQuizPassed: boolean;
 }
 
 type Tab = "resources" | "checklist";
@@ -473,6 +485,7 @@ export default function LessonPlayer({
   lesson, course, modules, initialCompleted,
   prevLesson, nextLesson, moduleTitle, moduleIndex, lessonIndex, totalLessons,
   completedLessonIds, contentBlocks, resourceBlocks, checklistItems, background,
+  quiz, initialQuizPassed,
 }: Props) {
   const router = useRouter();
   const [leftOpen, setLeftOpen] = useState(() =>
@@ -482,6 +495,7 @@ export default function LessonPlayer({
   const [tab, setTab] = useState<Tab>("resources");
   const [completed, setCompleted] = useState(initialCompleted);
   const [markingDone, setMarkingDone] = useState(false);
+  const [quizPassed, setQuizPassed] = useState(initialQuizPassed);
   const [checklistDone, setChecklistDone] = useState<Record<number, boolean>>({});
   const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>(() => {
     const init: Record<string, boolean> = {};
@@ -732,6 +746,24 @@ export default function LessonPlayer({
               {contentBlocks.map((block, i) => (
                 <RenderBlock key={i} block={block} isDark={isDark} />
               ))}
+
+              {/* Required quiz */}
+              {quiz && (
+                quizPassed ? (
+                  <div className="rounded-2xl px-5 py-4 flex items-center gap-3" style={{ background: "#EEF5EE", border: "1.5px solid #B8D4B5" }}>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ background: "#2A5230" }}>
+                      <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><path d="M2 6l3 3 5-5" /></svg>
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold" style={{ color: "#1A2E1C" }}>Quiz Passed</div>
+                      <div className="text-xs mt-0.5" style={{ color: "#7A9878" }}>{quiz.title}</div>
+                    </div>
+                    <span className="ml-auto text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: "#2A5230", color: "#fff" }}>✓</span>
+                  </div>
+                ) : (
+                  <RequiredQuizPlayer quiz={quiz} onPassed={() => setQuizPassed(true)} />
+                )
+              )}
             </div>
           </div>
         </main>
@@ -892,15 +924,156 @@ export default function LessonPlayer({
             </Link>
           )
         ) : (
-          <button onClick={handleMarkComplete} disabled={markingDone}
-            className="flex items-center gap-2 text-sm font-bold px-5 py-2.5 rounded-xl transition-all disabled:opacity-50"
-            style={{ background: "linear-gradient(135deg,#2A5230,#1A3820)", color: "#fff", boxShadow: "0 4px 14px rgba(42,82,48,0.3)" }}>
+          <button onClick={handleMarkComplete} disabled={markingDone || (!!quiz && !quizPassed)}
+            title={quiz && !quizPassed ? "Complete the required quiz first" : undefined}
+            className="flex items-center gap-2 text-sm font-bold px-5 py-2.5 rounded-xl transition-all disabled:opacity-60"
+            style={{ background: quiz && !quizPassed ? "#C8DEC8" : "linear-gradient(135deg,#2A5230,#1A3820)", color: "#fff", boxShadow: quiz && !quizPassed ? "none" : "0 4px 14px rgba(42,82,48,0.3)" }}>
             {markingDone ? (
               <><svg className="animate-spin" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="6" cy="6" r="4" strokeOpacity="0.3" /><path d="M6 2a4 4 0 0 1 4 4" /></svg> Saving…</>
             ) : (
               <><svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 6l3 3 5-5" /></svg> Mark as Complete</>
             )}
           </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const QUIZ_LETTER = ["A", "B", "C", "D"];
+
+function RequiredQuizPlayer({ quiz, onPassed }: { quiz: QuizData; onPassed: () => void }) {
+  const [answers, setAnswers] = useState<Record<string, number>>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [result, setResult] = useState<{ score: number; passed: boolean; passing_score: number } | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const answeredCount = Object.keys(answers).length;
+  const total = quiz.questions.length;
+  const allAnswered = answeredCount === total;
+
+  async function handleSubmit() {
+    if (!allAnswered || submitting) return;
+    setSubmitting(true);
+    setSubmitError(null);
+    const res = await submitQuizAttempt(quiz.id, answers);
+    setSubmitting(false);
+    if ("error" in res) { setSubmitError(res.error ?? null); return; }
+    setResult(res);
+    if (res.passed) onPassed();
+  }
+
+  function handleRetry() {
+    setAnswers({});
+    setResult(null);
+    setSubmitError(null);
+  }
+
+  const submitted = result !== null;
+
+  return (
+    <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid #2A5230" }}>
+      {/* Header */}
+      <div className="px-5 py-4 flex items-center gap-3" style={{ background: "#2A5230" }}>
+        <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ background: "rgba(255,255,255,0.15)" }}>
+          <svg viewBox="0 0 14 14" width="12" height="12" fill="none" stroke="#fff" strokeWidth="1.5" strokeLinecap="round"><circle cx="7" cy="7" r="5" /><path d="M7 9V7M7 5h.01" /></svg>
+        </div>
+        <div>
+          <div className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "rgba(255,255,255,0.65)" }}>Required Quiz</div>
+          <div className="text-sm font-bold text-white">{quiz.title}</div>
+        </div>
+        <div className="ml-auto text-xs font-semibold" style={{ color: "rgba(255,255,255,0.65)" }}>
+          Pass: {quiz.passing_score}%
+        </div>
+      </div>
+
+      {/* Questions */}
+      <div style={{ background: "#fff" }} className="px-5 py-5 space-y-7">
+        {quiz.questions.map((q, qi) => {
+          const isTF = q.question_type === "true_false";
+          const opts = isTF ? ["True", "False"] : (q.options ?? []);
+          const selected = answers[q.id];
+          const correctIdx = q.correct_answer?.index ?? 0;
+
+          return (
+            <div key={q.id}>
+              <div className="flex items-start gap-3 mb-3">
+                <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5"
+                  style={{ background: submitted ? (selected === correctIdx ? "#EEF5EE" : "#FFF0F0") : "#F0F5F1", color: "#2A5230" }}>
+                  {qi + 1}
+                </span>
+                <p className="text-[14px] font-semibold leading-snug" style={{ color: "#1A2E1C" }}>{q.question_text}</p>
+              </div>
+              <div className="ml-9 space-y-2">
+                {opts.map((opt, i) => {
+                  const isSelected = selected === i;
+                  const isCorrect  = i === correctIdx;
+                  let bg = "transparent", border = "#DDE8DA", textColor = "#374151";
+                  if (submitted) {
+                    if (isCorrect)             { bg = "#EEF5EE"; border = "#2A5230"; textColor = "#1A2E1C"; }
+                    else if (isSelected)       { bg = "#FFF0F0"; border = "#AA2222"; textColor = "#AA2222"; }
+                  } else if (isSelected)       { bg = "#EEF5EE"; border = "#2A5230"; }
+
+                  return (
+                    <button key={i} type="button" disabled={submitted}
+                      onClick={() => !submitted && setAnswers(p => ({ ...p, [q.id]: i }))}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left transition-colors"
+                      style={{ background: bg, border: `1.5px solid ${border}` }}>
+                      <span className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0"
+                        style={{ background: isSelected || (submitted && isCorrect) ? "#2A5230" : "#F0F5F1",
+                                 color:      isSelected || (submitted && isCorrect) ? "#fff"    : "#9AB89E" }}>
+                        {QUIZ_LETTER[i]}
+                      </span>
+                      <span className="text-[13.5px]" style={{ color: textColor }}>{opt}</span>
+                      {submitted && isCorrect  && <span className="ml-auto text-xs font-bold" style={{ color: "#2A5230" }}>✓</span>}
+                      {submitted && isSelected && !isCorrect && <span className="ml-auto text-xs font-bold" style={{ color: "#AA2222" }}>✗</span>}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+
+        {/* Result banner */}
+        {result && (
+          <div className="rounded-xl px-5 py-4 flex items-center gap-3"
+            style={{ background: result.passed ? "#EEF5EE" : "#FFF0F0", border: `1.5px solid ${result.passed ? "#B8D4B5" : "#FFCCCC"}` }}>
+            <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
+              style={{ background: result.passed ? "#2A5230" : "#AA2222" }}>
+              {result.passed
+                ? <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><path d="M2 6l3 3 5-5" /></svg>
+                : <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><path d="M2 2l8 8M10 2L2 10" /></svg>}
+            </div>
+            <div>
+              <div className="text-sm font-extrabold" style={{ color: result.passed ? "#1A2E1C" : "#AA2222" }}>
+                {result.passed ? "Quiz Passed!" : "Not quite — try again"}
+              </div>
+              <div className="text-xs mt-0.5" style={{ color: result.passed ? "#7A9878" : "#CC4444" }}>
+                Score: {result.score}% (need {result.passing_score}%)
+              </div>
+            </div>
+            {!result.passed && (
+              <button onClick={handleRetry}
+                className="ml-auto px-3 py-1.5 text-xs font-bold rounded-lg"
+                style={{ background: "#fff", color: "#AA2222", border: "1px solid #FFCCCC" }}>
+                Try Again
+              </button>
+            )}
+          </div>
+        )}
+
+        {submitError && <p className="text-xs font-medium" style={{ color: "#AA2222" }}>{submitError}</p>}
+
+        {!submitted && (
+          <div className="flex items-center gap-3 pt-1">
+            <button onClick={handleSubmit} disabled={!allAnswered || submitting}
+              className="px-5 py-2.5 text-sm font-bold rounded-xl disabled:opacity-50 transition-opacity"
+              style={{ background: "#2A5230", color: "#fff" }}>
+              {submitting ? "Submitting…" : "Submit Quiz"}
+            </button>
+            <span className="text-xs" style={{ color: "#9AB89E" }}>{answeredCount}/{total} answered</span>
+          </div>
         )}
       </div>
     </div>

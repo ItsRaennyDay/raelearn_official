@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import LessonPlayer from "./LessonPlayer";
 
 interface PageProps {
@@ -92,6 +93,59 @@ export default async function LessonPage({ params }: PageProps) {
   const completedLessonIds = (progress ?? []).filter((p) => p.completed).map((p) => p.lesson_id);
   const initialCompleted = completedLessonIds.includes(lessonId);
 
+  // Fetch quiz attached to this lesson (required quiz from Quiz Builder)
+  const adminDb = createAdminClient();
+  const { data: lessonQuiz } = await adminDb
+    .from("quizzes")
+    .select("id, title, passing_score, max_attempts")
+    .eq("lesson_id", lessonId)
+    .eq("status", "published")
+    .maybeSingle();
+
+  type QuizQuestion = {
+    id: string; question_text: string; question_type: string;
+    options: string[] | null; correct_answer: { index: number } | null; sort_order: number;
+  };
+  type QuizData = {
+    id: string; title: string; passing_score: number;
+    max_attempts: number | null; questions: QuizQuestion[];
+  };
+
+  let quiz: QuizData | null = null;
+  let initialQuizPassed = false;
+
+  if (lessonQuiz) {
+    const [{ data: rawQuestions }, { data: passedAttempt }] = await Promise.all([
+      adminDb
+        .from("quiz_questions")
+        .select("id, question_text, question_type, options, correct_answer, sort_order")
+        .eq("quiz_id", lessonQuiz.id)
+        .order("sort_order"),
+      supabase
+        .from("quiz_attempts")
+        .select("id")
+        .eq("quiz_id", lessonQuiz.id)
+        .eq("user_id", user.id)
+        .eq("status", "passed")
+        .limit(1),
+    ]);
+    initialQuizPassed = (passedAttempt?.length ?? 0) > 0;
+    quiz = {
+      id: lessonQuiz.id,
+      title: lessonQuiz.title,
+      passing_score: lessonQuiz.passing_score,
+      max_attempts: lessonQuiz.max_attempts,
+      questions: (rawQuestions ?? []).map((q) => ({
+        id: q.id,
+        question_text: q.question_text,
+        question_type: q.question_type,
+        options: q.options as string[] | null,
+        correct_answer: q.correct_answer as { index: number } | null,
+        sort_order: q.sort_order,
+      })),
+    };
+  }
+
   // Parse content blocks — separate resource+checklist blocks for the right panel
   const { blocks: allBlocks, background } = parseContent(lesson.content);
   const resourceBlocks = allBlocks.filter((b) => b.type === "resource") as Array<{
@@ -131,6 +185,8 @@ export default async function LessonPage({ params }: PageProps) {
       resourceBlocks={resourceBlocks}
       checklistItems={checklistItems}
       background={background}
+      quiz={quiz}
+      initialQuizPassed={initialQuizPassed}
     />
   );
 }
