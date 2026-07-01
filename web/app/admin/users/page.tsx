@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import DeleteUserButton from "./DeleteUserButton";
+import { logAction } from "@/lib/audit";
 
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
@@ -15,7 +16,7 @@ async function verifyAdmin() {
 
 async function inviteUser(formData: FormData) {
   "use server";
-  await verifyAdmin();
+  const actor = await verifyAdmin();
   const email = (formData.get("email") as string ?? "").trim().toLowerCase();
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     redirect("/admin/users?error=invalid-email");
@@ -23,29 +24,32 @@ async function inviteUser(formData: FormData) {
   const db = createAdminClient();
   const { error } = await db.auth.admin.inviteUserByEmail(email);
   if (error) redirect(`/admin/users?error=${encodeURIComponent(error.message)}`);
+  await logAction({ actorId: actor.id, action: "invite", tableName: "auth.users", newValues: { email } });
   redirect("/admin/users?invited=1");
 }
 
 async function updateRole(formData: FormData) {
   "use server";
-  await verifyAdmin();
+  const actor = await verifyAdmin();
   const userId = formData.get("userId") as string;
   const role = formData.get("role") as string;
   const allowed = ["learner", "group_learner", "group_admin", "content_admin", "platform_admin"];
   if (!userId || !allowed.includes(role)) redirect("/admin/users?error=invalid-role");
   const db = createAdminClient();
-  // Upsert so users without a profile row get one created
+  const { data: old } = await db.from("profiles").select("role").eq("id", userId).single();
   await db.from("profiles").upsert({ id: userId, role }, { onConflict: "id" });
+  await logAction({ actorId: actor.id, action: "role_change", tableName: "profiles", recordId: userId, oldValues: old ?? undefined, newValues: { role } });
   revalidatePath("/admin/users");
 }
 
 async function deleteUser(formData: FormData) {
   "use server";
-  await verifyAdmin();
+  const actor = await verifyAdmin();
   const userId = formData.get("userId") as string;
   if (!userId) return;
   const db = createAdminClient();
-  // Delete profile first (FK), then auth user
+  const { data: old } = await db.from("profiles").select("email, role, full_name").eq("id", userId).single();
+  await logAction({ actorId: actor.id, action: "delete", tableName: "auth.users", recordId: userId, oldValues: old ?? undefined });
   await db.from("profiles").delete().eq("id", userId);
   await db.auth.admin.deleteUser(userId);
   revalidatePath("/admin/users");

@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { logAction } from "@/lib/audit";
 
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
@@ -14,7 +15,7 @@ async function verifyAdmin() {
 
 async function createEnrollment(formData: FormData) {
   "use server";
-  await verifyAdmin();
+  const actor = await verifyAdmin();
   const email = (formData.get("email") as string ?? "").trim().toLowerCase();
   const courseId = formData.get("courseId") as string;
   if (!email || !courseId) redirect("/admin/enrollments?error=missing-fields");
@@ -41,25 +42,27 @@ async function createEnrollment(formData: FormData) {
 
   if (existing) redirect("/admin/enrollments?error=already-enrolled");
 
-  await db.from("enrollments").insert({
+  const { data: enrollment } = await db.from("enrollments").insert({
     user_id: profile.id,
     course_id: courseId,
     status: "active",
     source: "admin",
     enrolled_at: new Date().toISOString(),
-  });
+  }).select("id").single();
 
+  await logAction({ actorId: actor.id, action: "enroll", tableName: "enrollments", recordId: enrollment?.id, newValues: { user_id: profile.id, course_id: courseId, source: "admin" } });
   revalidatePath("/admin/enrollments");
   redirect("/admin/enrollments?created=1");
 }
 
 async function revokeEnrollment(formData: FormData) {
   "use server";
-  await verifyAdmin();
+  const actor = await verifyAdmin();
   const enrollmentId = formData.get("enrollmentId") as string;
   if (!enrollmentId) return;
   const db = createAdminClient();
   await db.from("enrollments").update({ status: "cancelled" }).eq("id", enrollmentId);
+  await logAction({ actorId: actor.id, action: "revoke", tableName: "enrollments", recordId: enrollmentId, newValues: { status: "cancelled" } });
   revalidatePath("/admin/enrollments");
 }
 

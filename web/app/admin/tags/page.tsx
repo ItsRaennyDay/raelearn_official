@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { logAction } from "@/lib/audit";
 
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
@@ -14,24 +15,26 @@ async function verifyAdmin() {
 
 async function createTag(formData: FormData) {
   "use server";
-  await verifyAdmin();
+  const actor = await verifyAdmin();
   const name  = (formData.get("name") as string ?? "").trim().slice(0, 80);
   const group = (formData.get("group") as string ?? "").trim().toLowerCase().slice(0, 40);
   if (!name || !group) return;
-  // generate slug from name
   const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   const db = createAdminClient();
-  await db.from("tags").insert({ name, slug, group });
+  const { data } = await db.from("tags").insert({ name, slug, group }).select("id").single();
+  await logAction({ actorId: actor.id, action: "create", tableName: "tags", recordId: data?.id, newValues: { name, slug, group } });
   revalidatePath("/admin/tags");
 }
 
 async function deleteTag(formData: FormData) {
   "use server";
-  await verifyAdmin();
+  const actor = await verifyAdmin();
   const id = (formData.get("id") as string ?? "").trim();
   if (!id) return;
   const db = createAdminClient();
+  const { data: old } = await db.from("tags").select("name, slug, group").eq("id", id).single();
   await db.from("tags").delete().eq("id", id);
+  await logAction({ actorId: actor.id, action: "delete", tableName: "tags", recordId: id, oldValues: old ?? undefined });
   revalidatePath("/admin/tags");
 }
 
