@@ -1,4 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Pricing",
+  description:
+    "RaeLearn pricing — start free or purchase individual courses. No subscription required. Pay once, keep access forever.",
+  openGraph: {
+    title: "Pricing · RaeLearn by RAEFORM",
+    description:
+      "Start free or buy individual courses. No subscription, no recurring fees.",
+    url: "https://raelearn.byraeform.com/pricing",
+  },
+};
 
 const PLANS = [
   {

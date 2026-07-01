@@ -1,7 +1,20 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "For Virtual Assistants",
+  description:
+    "RaeLearn courses built specifically for virtual assistants — learn nonprofit VA support, business admin, website maintenance, operations systems, and more.",
+  openGraph: {
+    title: "For Virtual Assistants · RaeLearn by RAEFORM",
+    description:
+      "Courses built for VAs — nonprofit support, business admin, website maintenance, and operations systems.",
+    url: "https://raelearn.byraeform.com/for-vas",
+  },
+};
 
 const SUPPORT_AREAS = [
   {

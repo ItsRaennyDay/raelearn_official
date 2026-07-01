@@ -1,5 +1,6 @@
 export const metadata = {
-  title: "Disclaimers · RaeLearn",
+  title: "Education Disclaimer",
+  description: "RaeLearn Education Disclaimer — course content is for educational purposes only, not legal, financial, or professional advice.",
 };
 
 export default function DisclaimersPage() {

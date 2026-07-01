@@ -1,5 +1,6 @@
 export const metadata = {
-  title: "Privacy Policy · RaeLearn",
+  title: "Privacy Policy",
+  description: "RaeLearn Privacy Policy — how we collect, use, and protect your personal information.",
 };
 
 export default function PrivacyPage() {

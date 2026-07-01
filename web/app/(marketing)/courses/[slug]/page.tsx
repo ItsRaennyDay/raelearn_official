@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
@@ -5,6 +6,28 @@ import EnrollButton from "./EnrollButton";
 
 interface Props {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  if (!/^[a-z0-9-]+$/.test(slug)) return {};
+  const supabase = await createClient();
+  const { data: course } = await supabase
+    .from("courses")
+    .select("title, description")
+    .eq("slug", slug)
+    .eq("status", "published")
+    .single();
+  if (!course) return {};
+  return {
+    title: course.title,
+    description: course.description ?? `Learn ${course.title} on RaeLearn by RAEFORM.`,
+    openGraph: {
+      title: `${course.title} · RaeLearn by RAEFORM`,
+      description: course.description ?? `Learn ${course.title} on RaeLearn.`,
+      url: `https://raelearn.byraeform.com/courses/${slug}`,
+    },
+  };
 }
 
 export default async function CourseDetailPage({ params }: Props) {

@@ -32,10 +32,32 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "RaeLearn — Practical training for VAs, founders & nonprofit leaders",
-  description:
-    "RaeLearn gives VAs, founders, nonprofit leaders, and small teams practical courses on operations, admin systems, websites, compliance awareness, donor support, and workflow setup.",
   metadataBase: new URL("https://raelearn.byraeform.com"),
+  title: {
+    default: "RaeLearn by RAEFORM — Practical training for VAs, founders & nonprofit leaders",
+    template: "%s · RaeLearn by RAEFORM",
+  },
+  description:
+    "RaeLearn by RAEFORM offers practical online courses for virtual assistants, nonprofit leaders, founders, and small teams — covering operations, admin systems, websites, compliance, and more.",
+  openGraph: {
+    type: "website",
+    siteName: "RaeLearn by RAEFORM",
+    title: "RaeLearn by RAEFORM — Practical training for VAs, founders & nonprofit leaders",
+    description:
+      "Practical online courses for VAs, nonprofit leaders, founders, and small teams. Learn operations, admin systems, websites, compliance, and more.",
+    url: "https://raelearn.byraeform.com",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "RaeLearn by RAEFORM",
+    description:
+      "Practical online courses for VAs, nonprofit leaders, founders, and small teams.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

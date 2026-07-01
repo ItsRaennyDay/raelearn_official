@@ -1,5 +1,18 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import HeroCTAs from "@/components/HeroCTAs";
+
+export const metadata: Metadata = {
+  title: "RaeLearn by RAEFORM — Practical training for VAs, founders & nonprofit leaders",
+  description:
+    "Practical online courses for virtual assistants, nonprofit leaders, founders, and small teams. Learn operations, admin systems, websites, compliance, and more — at your own pace.",
+  openGraph: {
+    title: "RaeLearn by RAEFORM — Practical training for VAs, founders & nonprofit leaders",
+    description:
+      "Practical online courses for VAs, nonprofit leaders, founders, and small teams. Learn at your pace.",
+    url: "https://raelearn.byraeform.com",
+  },
+};
 
 /* ─── Hero dashboard mockup ─── */
 function DashboardMockup() {

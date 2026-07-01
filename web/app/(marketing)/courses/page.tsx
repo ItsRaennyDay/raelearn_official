@@ -1,7 +1,20 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import CoursesClient, { type CourseWithTags, type TagGroup } from "./CoursesClient";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Courses",
+  description:
+    "Browse all RaeLearn courses — practical training on operations, admin systems, nonprofit compliance, websites, donor support, and more for VAs, founders, and small teams.",
+  openGraph: {
+    title: "Courses · RaeLearn by RAEFORM",
+    description:
+      "Practical courses for VAs, nonprofit leaders, founders, and small teams. Browse all topics.",
+    url: "https://raelearn.byraeform.com/courses",
+  },
+};
 
 export default async function CoursesPage() {
   const supabase = await createClient();

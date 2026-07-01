@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
@@ -6,6 +7,28 @@ export const revalidate = 60;
 
 interface Props {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  if (!/^[a-z0-9-]+$/.test(slug)) return {};
+  const supabase = await createClient();
+  const { data: bundle } = await supabase
+    .from("bundles")
+    .select("title, description")
+    .eq("slug", slug)
+    .eq("is_published", true)
+    .single();
+  if (!bundle) return {};
+  return {
+    title: bundle.title,
+    description: bundle.description ?? `${bundle.title} — a course bundle on RaeLearn by RAEFORM.`,
+    openGraph: {
+      title: `${bundle.title} · RaeLearn by RAEFORM`,
+      description: bundle.description ?? `${bundle.title} course bundle on RaeLearn.`,
+      url: `https://raelearn.byraeform.com/bundles/${slug}`,
+    },
+  };
 }
 
 const AUDIENCE_LABELS: Record<string, string> = {

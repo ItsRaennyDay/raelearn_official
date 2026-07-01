@@ -1,5 +1,6 @@
 export const metadata = {
-  title: "Terms of Use · RaeLearn",
+  title: "Terms of Use",
+  description: "RaeLearn Terms of Use — your rights and responsibilities when using the RaeLearn platform.",
 };
 
 export default function TermsPage() {
