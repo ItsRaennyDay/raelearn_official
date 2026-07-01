@@ -30,7 +30,7 @@ export default async function AdminCoursesPage() {
   const total          = courses?.length ?? 0;
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       {/* Page header */}
       <div className="flex items-start justify-between mb-6">
         <div>
@@ -121,12 +121,12 @@ export default async function AdminCoursesPage() {
           </Link>
         </div>
       ) : (
+        <div className="overflow-x-auto rounded-2xl" style={{ boxShadow: "0 2px 12px rgba(42,82,48,0.06)" }}>
         <div
-          className="rounded-2xl overflow-hidden"
+          className="min-w-[580px] rounded-2xl overflow-hidden"
           style={{
             background: "#fff",
             border: "1.5px solid #E8EDE6",
-            boxShadow: "0 2px 12px rgba(42,82,48,0.06)",
           }}
         >
           {/* Table header */}
@@ -250,6 +250,7 @@ export default async function AdminCoursesPage() {
               );
             })}
           </div>
+        </div>
         </div>
       )}
     </div>

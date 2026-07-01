@@ -60,7 +60,7 @@ export default async function TagsPage() {
   const existingGroups = [...grouped.keys()];
 
   return (
-    <div className="max-w-2xl">
+    <div className="p-4 md:p-8 max-w-2xl">
       <div className="mb-6">
         <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>Tags</h1>
         <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>

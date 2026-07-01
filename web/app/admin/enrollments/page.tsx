@@ -124,7 +124,7 @@ export default async function EnrollmentsPage({
   };
 
   return (
-    <div className="p-8 max-w-6xl">
+    <div className="p-4 md:p-8 max-w-6xl">
       <div className="mb-6">
         <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>Enrollments</h1>
         <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>{count ?? 0} total enrollments</p>
@@ -146,23 +146,23 @@ export default async function EnrollmentsPage({
       <div className="mb-6 rounded-2xl p-5" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
         <h2 className="font-bold text-sm mb-3" style={{ color: "#2A5230" }}>Enroll a User Manually</h2>
         <form action={createEnrollment} className="flex gap-3 flex-wrap items-end">
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 flex-1 min-w-[200px]">
             <label className="text-xs font-semibold" style={{ color: "#7A9878" }}>Learner email</label>
             <input
               name="email"
               type="email"
               required
               placeholder="learner@example.com"
-              className="px-4 py-2 text-sm rounded-xl border outline-none w-64"
+              className="w-full px-4 py-2 text-sm rounded-xl border outline-none"
               style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
             />
           </div>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 flex-1 min-w-[200px]">
             <label className="text-xs font-semibold" style={{ color: "#7A9878" }}>Course</label>
             <select
               name="courseId"
               required
-              className="px-3 py-2 text-sm rounded-xl border outline-none w-64"
+              className="w-full px-3 py-2 text-sm rounded-xl border outline-none"
               style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
             >
               <option value="">Select a course…</option>
@@ -185,7 +185,7 @@ export default async function EnrollmentsPage({
       </div>
 
       {/* Filters */}
-      <form method="GET" className="flex gap-3 mb-4">
+      <form method="GET" className="flex flex-wrap gap-3 mb-4">
         <input
           name="q"
           defaultValue={q}
@@ -211,7 +211,8 @@ export default async function EnrollmentsPage({
         )}
       </form>
 
-      <div className="rounded-2xl overflow-hidden" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
+      <div className="overflow-x-auto rounded-2xl" style={{ border: "1.5px solid #E8EDE6" }}>
+      <div style={{ background: "#fff", minWidth: "680px" }}>
         <table className="w-full text-sm">
           <thead>
             <tr style={{ borderBottom: "1px solid #F0F7F0", background: "#FAFCFA" }}>
@@ -274,6 +275,7 @@ export default async function EnrollmentsPage({
             )}
           </tbody>
         </table>
+      </div>
       </div>
 
       {totalPages > 1 && (

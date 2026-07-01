@@ -77,7 +77,7 @@ export default async function AdminOverviewPage() {
   };
 
   return (
-    <div className="p-8 max-w-5xl">
+    <div className="p-4 md:p-8 max-w-5xl">
       {/* Page header */}
       <div className="mb-8 flex items-start justify-between">
         <div>
@@ -105,7 +105,7 @@ export default async function AdminOverviewPage() {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         {stats.map(({ label, value, href, accent, bg, icon, description }) => (
           <Link
             key={label}
@@ -159,10 +159,10 @@ export default async function AdminOverviewPage() {
       </div>
 
       {/* Two-col: recent courses + quick actions */}
-      <div className="grid grid-cols-5 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-5">
         {/* Recent courses */}
         <div
-          className="col-span-3 rounded-2xl overflow-hidden"
+          className="md:col-span-3 rounded-2xl overflow-hidden"
           style={{ background: "#fff", border: "1.5px solid #E8EDE6", boxShadow: "0 2px 12px rgba(42,82,48,0.06)" }}
         >
           <div
@@ -254,7 +254,7 @@ export default async function AdminOverviewPage() {
         </div>
 
         {/* Quick actions */}
-        <div className="col-span-2 flex flex-col gap-4">
+        <div className="md:col-span-2 flex flex-col gap-4">
           {/* Create course card */}
           <Link
             href="/admin/courses/new"

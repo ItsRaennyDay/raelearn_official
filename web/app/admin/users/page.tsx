@@ -112,7 +112,7 @@ export default async function UsersPage({
   };
 
   return (
-    <div className="p-8 max-w-6xl">
+    <div className="p-4 md:p-8 max-w-6xl">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>Users</h1>
@@ -163,7 +163,7 @@ export default async function UsersPage({
       </div>
 
       {/* Filters */}
-      <form method="GET" className="flex gap-3 mb-4">
+      <form method="GET" className="flex flex-wrap gap-3 mb-4">
         <input
           name="q"
           defaultValue={q}
@@ -195,7 +195,8 @@ export default async function UsersPage({
       </form>
 
       {/* Table */}
-      <div className="rounded-2xl overflow-hidden" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
+      <div className="overflow-x-auto rounded-2xl" style={{ border: "1.5px solid #E8EDE6" }}>
+      <div style={{ background: "#fff", minWidth: "700px" }}>
         <table className="w-full text-sm">
           <thead>
             <tr style={{ borderBottom: "1px solid #F0F7F0", background: "#FAFCFA" }}>
@@ -313,6 +314,7 @@ export default async function UsersPage({
             )}
           </tbody>
         </table>
+      </div>
       </div>
 
       {/* Pagination — auth.admin.listUsers is paginated server-side */}
