@@ -297,8 +297,8 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           mobileNavOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         ].join(" ")}
         style={{
-          background: "linear-gradient(180deg, #4E6B46 0%, #3D5537 100%)",
-          boxShadow: "2px 0 16px rgba(0,0,0,0.10)",
+          background: "linear-gradient(180deg, #1E3320 0%, #162814 100%)",
+          boxShadow: "2px 0 16px rgba(0,0,0,0.18)",
         }}
       >
         {/* Brand header */}
