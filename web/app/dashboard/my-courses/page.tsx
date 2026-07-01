@@ -33,10 +33,28 @@ export default async function MyCoursesPage() {
   const progress = progressRes.data ?? [];
   const certsByCourse = new Set((certRes.data ?? []).map((c) => c.course_id));
 
-  const progressByCourse: Record<string, { total: number; done: number; timeSecs: number }> = {};
+  // Fetch real lesson counts for enrolled courses (not just touched lessons)
+  const courseIds = enrollments
+    .map((e) => (e.courses as unknown as { id: string } | null)?.id)
+    .filter(Boolean) as string[];
+
+  const { data: lessonRows } = courseIds.length > 0
+    ? await supabase
+        .from("lessons")
+        .select("id, course_id")
+        .in("course_id", courseIds)
+        .eq("status", "published")
+    : { data: [] };
+
+  const lessonCountByCourse: Record<string, number> = {};
+  for (const l of lessonRows ?? []) {
+    lessonCountByCourse[l.course_id] = (lessonCountByCourse[l.course_id] ?? 0) + 1;
+  }
+
+  // Track completed lessons and time per course from lesson_progress
+  const progressByCourse: Record<string, { done: number; timeSecs: number }> = {};
   for (const p of progress) {
-    if (!progressByCourse[p.course_id]) progressByCourse[p.course_id] = { total: 0, done: 0, timeSecs: 0 };
-    progressByCourse[p.course_id].total++;
+    if (!progressByCourse[p.course_id]) progressByCourse[p.course_id] = { done: 0, timeSecs: 0 };
     progressByCourse[p.course_id].timeSecs += p.time_spent_seconds ?? 0;
     if (p.completed) progressByCourse[p.course_id].done++;
   }
@@ -51,7 +69,8 @@ export default async function MyCoursesPage() {
           const c = e.courses as unknown as { id: string } | null;
           if (!c) return sum;
           const cp = progressByCourse[c.id];
-          return sum + (cp && cp.total > 0 ? (cp.done / cp.total) * 100 : 0);
+          const total = lessonCountByCourse[c.id] ?? 0;
+          return sum + (cp && total > 0 ? (cp.done / total) * 100 : 0);
         }, 0) / active.length
       )
     : 0;
@@ -72,7 +91,8 @@ export default async function MyCoursesPage() {
     if (!course) return null;
 
     const cp = progressByCourse[course.id];
-    const pct = cp && cp.total > 0 ? Math.round((cp.done / cp.total) * 100) : 0;
+    const totalLessons = lessonCountByCourse[course.id] ?? 0;
+    const pct = cp && totalLessons > 0 ? Math.round((cp.done / totalLessons) * 100) : 0;
     const lm = LEVEL_META[course.level?.toLowerCase()] ?? { color: "#7A9878", bg: "#F5FAF5" };
     const hasCert = certsByCourse.has(course.id);
     const isCompleted = enrollment.status === "completed";
@@ -150,7 +170,7 @@ export default async function MyCoursesPage() {
                   <div className="mt-3">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-[10px]" style={{ color: "#9AB89E" }}>
-                        {cp ? `${cp.done} of ${cp.total} lessons` : "No lessons started"}
+                        {totalLessons > 0 ? `${cp?.done ?? 0} of ${totalLessons} lessons` : "No lessons started"}
                       </span>
                       <span className="text-[10px] font-bold" style={{ color: pct === 100 ? "#4A8A52" : "#7A9878" }}>{pct}%</span>
                     </div>
