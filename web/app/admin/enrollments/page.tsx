@@ -11,6 +11,7 @@ async function verifyAdmin() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user || user.email?.toLowerCase() !== ADMIN_EMAIL) throw new Error("Unauthorized");
+  return user;
 }
 
 async function createEnrollment(formData: FormData) {
