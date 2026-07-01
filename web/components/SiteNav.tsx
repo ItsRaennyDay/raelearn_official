@@ -159,12 +159,6 @@ export default function SiteNav({ user }: { user?: NavUser | null }) {
   // Close mobile menu on route change
   useEffect(() => { setMenuOpen(false); }, [pathname]);
 
-  // Prevent body scroll when mobile menu open
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [menuOpen]);
-
   return (
     <>
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-[#DDE8DA]">
@@ -253,86 +247,87 @@ export default function SiteNav({ user }: { user?: NavUser | null }) {
           </div>
         </nav>
 
-        {/* Mobile menu panel */}
-        {menuOpen && (
-          <div className="md:hidden border-t border-[#DDE8DA] bg-white">
-            <div className="px-5 py-4 space-y-1">
-              {NAV_LINKS.map(({ href, label }) => {
-                const active = pathname === href || pathname.startsWith(href + "/");
-                return (
-                  <Link
-                    key={href}
-                    href={href}
-                    onClick={() => setMenuOpen(false)}
-                    className={[
-                      "flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-semibold transition-colors",
-                      active
-                        ? "text-[#2A5230] bg-[#F0F7F0] font-bold"
-                        : "text-[#4A6650] hover:text-[#2A5230] hover:bg-[#F5FAF5]",
-                    ].join(" ")}
-                  >
-                    {active && <span className="w-1.5 h-1.5 rounded-full bg-[#2A5230] shrink-0" />}
-                    {label}
-                  </Link>
-                );
-              })}
-            </div>
-
-            {!user && (
-              <div className="px-5 pb-5 pt-1 border-t border-[#F0F7F0] space-y-2.5">
-                <Link
-                  href="/signup"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center justify-center w-full py-3 rounded-xl bg-[#2A5230] text-white text-sm font-bold hover:bg-[#1e3d24] transition-colors"
-                >
-                  Start Learning
-                </Link>
-                <Link
-                  href="/signin"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center justify-center w-full py-3 rounded-xl border border-[#DDE8DA] text-[#4A6650] text-sm font-semibold hover:border-[#2A5230] hover:text-[#2A5230] transition-colors"
-                >
-                  Sign In
-                </Link>
-                <button
-                  onClick={() => { setMenuOpen(false); setShowGroupModal(true); }}
-                  className="flex items-center justify-center w-full py-3 rounded-xl text-sm font-semibold text-[#7A9878] hover:text-[#2A5230] transition-colors"
-                >
-                  Create Group Account
-                </button>
-              </div>
-            )}
-
-            {user && (
-              <div className="px-5 pb-5 pt-1 border-t border-[#F0F7F0] space-y-1">
-                <Link
-                  href="/dashboard"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-semibold text-[#2A5230] hover:bg-[#F5FAF5] transition-colors"
-                >
-                  <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="1" y="1" width="6" height="6" rx="1.5" />
-                    <rect x="9" y="1" width="6" height="6" rx="1.5" />
-                    <rect x="1" y="9" width="6" height="6" rx="1.5" />
-                    <rect x="9" y="9" width="6" height="6" rx="1.5" />
-                  </svg>
-                  Dashboard
-                </Link>
-                <Link
-                  href="/dashboard/my-courses"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-semibold text-[#2A5230] hover:bg-[#F5FAF5] transition-colors"
-                >
-                  <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M2 3h12M2 7h12M2 11h8" />
-                  </svg>
-                  My Courses
-                </Link>
-              </div>
-            )}
-          </div>
-        )}
       </header>
+
+      {/* Mobile menu — fixed overlay below the sticky header */}
+      {menuOpen && (
+        <div className="md:hidden fixed inset-x-0 top-[57px] z-40 bg-white border-b border-[#DDE8DA] shadow-[0_8px_24px_-4px_rgba(42,82,48,0.10)]">
+          <div className="px-5 py-4 space-y-1">
+            {NAV_LINKS.map(({ href, label }) => {
+              const active = pathname === href || pathname.startsWith(href + "/");
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setMenuOpen(false)}
+                  className={[
+                    "flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-semibold transition-colors",
+                    active
+                      ? "text-[#2A5230] bg-[#F0F7F0] font-bold"
+                      : "text-[#4A6650] hover:text-[#2A5230] hover:bg-[#F5FAF5]",
+                  ].join(" ")}
+                >
+                  {active && <span className="w-1.5 h-1.5 rounded-full bg-[#2A5230] shrink-0" />}
+                  {label}
+                </Link>
+              );
+            })}
+          </div>
+
+          {!user && (
+            <div className="px-5 pb-5 pt-1 border-t border-[#F0F7F0] space-y-2.5">
+              <Link
+                href="/signup"
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center justify-center w-full py-3 rounded-xl bg-[#2A5230] text-white text-sm font-bold hover:bg-[#1e3d24] transition-colors"
+              >
+                Start Learning
+              </Link>
+              <Link
+                href="/signin"
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center justify-center w-full py-3 rounded-xl border border-[#DDE8DA] text-[#4A6650] text-sm font-semibold hover:border-[#2A5230] hover:text-[#2A5230] transition-colors"
+              >
+                Sign In
+              </Link>
+              <button
+                onClick={() => { setMenuOpen(false); setShowGroupModal(true); }}
+                className="flex items-center justify-center w-full py-3 rounded-xl text-sm font-semibold text-[#7A9878] hover:text-[#2A5230] transition-colors"
+              >
+                Create Group Account
+              </button>
+            </div>
+          )}
+
+          {user && (
+            <div className="px-5 pb-5 pt-1 border-t border-[#F0F7F0] space-y-1">
+              <Link
+                href="/dashboard"
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-semibold text-[#2A5230] hover:bg-[#F5FAF5] transition-colors"
+              >
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="1" y="1" width="6" height="6" rx="1.5" />
+                  <rect x="9" y="1" width="6" height="6" rx="1.5" />
+                  <rect x="1" y="9" width="6" height="6" rx="1.5" />
+                  <rect x="9" y="9" width="6" height="6" rx="1.5" />
+                </svg>
+                Dashboard
+              </Link>
+              <Link
+                href="/dashboard/my-courses"
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-semibold text-[#2A5230] hover:bg-[#F5FAF5] transition-colors"
+              >
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2 3h12M2 7h12M2 11h8" />
+                </svg>
+                My Courses
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
 
       {showGroupModal && <ComingSoonModal onClose={() => setShowGroupModal(false)} />}
     </>
