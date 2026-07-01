@@ -274,35 +274,128 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Courses ── */}
-      <section className="bg-[#F5F0E8] border-t border-[#E5DDD0] px-7 py-[88px]">
-        <div className="max-w-[960px] mx-auto text-center">
-          <div className="mb-[18px]">
-            <span className="text-xs font-medium tracking-[0.1em] uppercase text-[#5A8C5E]">Courses</span>
+      {/* ── Testimonials ── */}
+      <section className="bg-[#F5F0E8] border-t border-[#E5DDD0] px-5 md:px-7 py-[88px]">
+        <div className="max-w-[1100px] mx-auto">
+          <div className="mb-3">
+            <span className="text-xs font-medium tracking-[0.1em] uppercase text-[#5A8C5E]">Learner stories</span>
           </div>
-          <h2 className="font-display font-bold text-3xl text-[#2A5230] mb-4 leading-[1.2]">
-            Practical training for VAs, founders &amp; nonprofits.
+          <h2 className="font-head font-extrabold text-[clamp(26px,3.5vw,38px)] text-[#2A5230] mb-10 leading-[1.15]">
+            Real results from real learners.
           </h2>
-          <p className="text-[#4A6650] text-base leading-relaxed mb-8 max-w-[520px] mx-auto">
-            Courses covering operations, admin systems, websites, nonprofit admin, workflow setup, and more — launching soon.
-          </p>
-          <Link
-            href="/courses"
-            className="inline-flex items-center text-sm font-semibold text-[#2A5230] border border-[#A8C4A4] px-6 py-3 rounded-[10px] hover:border-[#2A5230] transition-colors"
-          >
-            Browse Courses →
-          </Link>
+
+          {/* Masonry grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
+
+            {/* Card 1 — large, dark forest */}
+            <div
+              className="rounded-[18px] p-7 flex flex-col gap-5 sm:row-span-2"
+              style={{ background: "#2A5230" }}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-extrabold shrink-0" style={{ background: "#4A7A4E", color: "#C8E6CA" }}>MS</div>
+                <div>
+                  <div className="text-sm font-bold text-white leading-tight">Maria Santos</div>
+                  <div className="text-[11px] font-medium" style={{ color: "#7DAA82" }}>Verified Learner · VA</div>
+                </div>
+              </div>
+              <p className="font-head font-extrabold text-[22px] leading-[1.25] text-white">
+                I landed my first retainer client within two weeks of finishing the course.
+              </p>
+              <p className="text-[13.5px] leading-[1.65] italic" style={{ color: "#A8C4A4" }}>
+                "I had no idea what a VA 'system' even meant before this. Now I manage three clients' inboxes, handle their calendars, and built their SOPs from scratch. The Inbox &amp; Calendar module alone changed everything."
+              </p>
+            </div>
+
+            {/* Card 2 — white, medium */}
+            <div className="rounded-[18px] p-6 flex flex-col gap-4 bg-white border border-[#DDE8DA]">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-extrabold shrink-0" style={{ background: "#EEF5EE", color: "#2A5230" }}>JP</div>
+                <div>
+                  <div className="text-sm font-bold text-[#1A2E1C] leading-tight">Jennifer Park</div>
+                  <div className="text-[11px] font-medium text-[#7A9878]">Verified Learner · Founder</div>
+                </div>
+              </div>
+              <p className="font-head font-bold text-[18px] leading-[1.3] text-[#1A2E1C]">
+                Hired a VA, trained her in a weekend.
+              </p>
+              <p className="text-[13px] leading-[1.65] italic text-[#4A6650]">
+                "I pointed my new VA at the course on a Friday. By Monday she had our Google Drive cleaned up, our inbox at zero, and a weekly report template ready. Worth every cent."
+              </p>
+            </div>
+
+            {/* Card 3 — sage green */}
+            <div
+              className="rounded-[18px] p-6 flex flex-col gap-4"
+              style={{ background: "#4E6B46" }}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-extrabold shrink-0" style={{ background: "rgba(255,255,255,0.15)", color: "#fff" }}>RM</div>
+                <div>
+                  <div className="text-sm font-bold text-white leading-tight">Rachel Moore</div>
+                  <div className="text-[11px] font-medium" style={{ color: "#B8D8A8" }}>Verified Learner · Team member</div>
+                </div>
+              </div>
+              <p className="font-head font-bold text-[18px] leading-[1.3] text-white">
+                I use these systems every single week.
+              </p>
+              <p className="text-[13px] leading-[1.65] italic" style={{ color: "#C0D8B4" }}>
+                "The workflow and SOP modules changed how our whole team communicates. We wasted so much time before having documented processes."
+              </p>
+            </div>
+
+            {/* Card 4 — cream, large */}
+            <div
+              className="rounded-[18px] p-7 flex flex-col gap-5"
+              style={{ background: "#EEE8DC", border: "1.5px solid #DDD5C4" }}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-extrabold shrink-0" style={{ background: "#D8CFBE", color: "#2A5230" }}>TR</div>
+                <div>
+                  <div className="text-sm font-bold text-[#1A2E1C] leading-tight">Trina Reyes</div>
+                  <div className="text-[11px] font-medium text-[#7A9878]">Verified Learner · Nonprofit ED</div>
+                </div>
+              </div>
+              <p className="font-head font-extrabold text-[20px] leading-[1.3] text-[#1A2E1C]">
+                The nonprofit compliance module alone is worth it.
+              </p>
+              <p className="text-[13.5px] leading-[1.65] italic text-[#4A6650]">
+                "We were running our 501(c)(3) on sheer luck and spreadsheets. RaeLearn taught me exactly what our donors expect and what our board actually needed from us. Wish I had this when we filed for status."
+              </p>
+            </div>
+
+            {/* Card 5 — white */}
+            <div className="rounded-[18px] p-6 flex flex-col gap-4 bg-white border border-[#DDE8DA]">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-extrabold shrink-0" style={{ background: "#EEF5EE", color: "#2A5230" }}>CD</div>
+                <div>
+                  <div className="text-sm font-bold text-[#1A2E1C] leading-tight">Camille Dizon</div>
+                  <div className="text-[11px] font-medium text-[#7A9878]">Verified Learner · Freelancer → VA</div>
+                </div>
+              </div>
+              <p className="font-head font-bold text-[18px] leading-[1.3] text-[#1A2E1C]">
+                From graphic design to operations VA in 3 months.
+              </p>
+              <p className="text-[13px] leading-[1.65] italic text-[#4A6650]">
+                "This is the only course that actually showed me how the backend of a business runs. Not theory — real systems I could offer immediately as services."
+              </p>
+            </div>
+
+          </div>
         </div>
       </section>
 
-      {/* ── CTA banner ── */}
-      <section className="bg-[#2A5230] px-7 py-[72px]">
-        <div className="max-w-[720px] mx-auto text-center">
-          <h2 className="font-head font-extrabold text-[clamp(26px,4vw,42px)] text-white mb-4 leading-[1.1]">
+      {/* ── CTA banner (merged with courses teaser) ── */}
+      <section className="bg-[#2A5230] px-5 md:px-7 py-[80px]">
+        <div className="max-w-[760px] mx-auto text-center">
+          <div className="mb-3">
+            <span className="text-xs font-bold tracking-[0.12em] uppercase" style={{ color: "#7DAA82" }}>Courses · Operations · Systems</span>
+          </div>
+          <h2 className="font-head font-extrabold text-[clamp(26px,4vw,44px)] text-white mb-4 leading-[1.1]">
             Ready to build the skills that run the show?
           </h2>
-          <p className="text-[#A8C4A4] text-lg mb-8 leading-[1.6]">
-            Start with a free course today. No credit card required.
+          <p className="text-[#A8C4A4] text-base md:text-lg mb-8 leading-[1.6] max-w-[540px] mx-auto">
+            Practical courses for VAs, founders &amp; nonprofits — covering operations, admin systems, workflow setup, and more. Free to start, no card needed.
           </p>
           <div className="flex gap-3.5 flex-wrap items-center justify-center">
             <Link
