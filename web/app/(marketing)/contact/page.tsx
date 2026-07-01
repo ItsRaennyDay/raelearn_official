@@ -1,26 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Mail } from "lucide-react";
-
-function IgIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-      <circle cx="12" cy="12" r="4" />
-      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-
-function LinkedInIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect x="2" y="9" width="4" height="12" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  );
-}
+import { redirect } from "next/navigation";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -32,129 +13,261 @@ export const metadata: Metadata = {
   },
 };
 
-const CONTACT_ITEMS = [
-  {
-    Icon: ({ size }: { size: number }) => <Mail size={size} strokeWidth={1.8} />,
-    label: "Email",
-    value: "raeformtoday@gmail.com",
-    href: "mailto:raeformtoday@gmail.com",
-    note: "Best for course questions, enrollment help, and custom training inquiries.",
-  },
-  {
-    Icon: IgIcon,
-    label: "Instagram",
-    value: "@byraeform",
-    href: "https://www.instagram.com/byraeform",
-    note: "Updates, behind-the-scenes, and quick DMs welcome.",
-  },
-  {
-    Icon: LinkedInIcon,
-    label: "LinkedIn",
-    value: "RAEFORM",
-    href: "https://www.linkedin.com/company/raeform",
-    note: "Professional inquiries, partnerships, and org training requests.",
-  },
+async function submitTicket(formData: FormData) {
+  "use server";
+  const name     = (formData.get("name")     as string ?? "").trim();
+  const email    = (formData.get("email")    as string ?? "").trim().toLowerCase();
+  const category = (formData.get("category") as string ?? "general");
+  const subject  = (formData.get("subject")  as string ?? "").trim();
+  const body     = (formData.get("body")     as string ?? "").trim();
+
+  if (!name || !email || !subject || !body) {
+    redirect("/contact?error=missing-fields");
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    redirect("/contact?error=invalid-email");
+  }
+
+  const db = createAdminClient();
+  const { data } = await db
+    .from("support_tickets")
+    .insert({ submitter_name: name, email, category, subject, body, status: "open", priority: "normal" })
+    .select("ticket_id")
+    .single();
+
+  redirect(`/contact?submitted=${data?.ticket_id ?? "submitted"}`);
+}
+
+function IgIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function LinkedInIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  );
+}
+
+const CATEGORIES = [
+  { value: "general",         label: "General Question" },
+  { value: "course_help",     label: "Course Help" },
+  { value: "billing",         label: "Billing" },
+  { value: "group_account",   label: "Group Account" },
+  { value: "custom_training", label: "Custom Training" },
+  { value: "other",           label: "Other" },
 ];
 
-const FAQS = [
-  {
-    q: "How do I access a course I purchased?",
-    a: "Log in and head to your Learner Dashboard. All purchased and enrolled courses appear under My Courses.",
-  },
-  {
-    q: "Do you offer group or team pricing?",
-    a: "Yes. Group Accounts start at 3 seats (Starter), 10 seats (Team), or 25+ seats (Organization). Reach out for a custom quote.",
-  },
-  {
-    q: "Can you build a custom training for my organization?",
-    a: "Absolutely. Send us an email with your team size, goals, and timeline and we'll put together a scoped proposal.",
-  },
-  {
-    q: "What is your refund policy?",
-    a: "We offer refunds within 7 days of purchase if you haven't completed more than 20% of the course. See the full policy for details.",
-  },
-];
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ submitted?: string; error?: string }>;
+}) {
+  const { submitted, error } = await searchParams;
 
-export default function ContactPage() {
   return (
     <div className="bg-rl-bg" style={{ fontFamily: "var(--font-sans)" }}>
       {/* Header */}
-      <section className="relative bg-[#F5F0E8] border-b border-rl-border overflow-hidden">
-        <div className="relative max-w-[1240px] mx-auto px-7 pt-12 pb-10 text-center">
-          <div className="text-[12.5px] font-extrabold tracking-[0.16em] uppercase text-rl-dim mb-3.5">
-            Contact
-          </div>
-          <h1 className="font-head font-extrabold text-[clamp(32px,4.4vw,52px)] leading-[1.05] tracking-[-0.02em] mx-auto mb-3.5 text-rl-forest max-w-[680px]">
+      <section className="bg-[#F5F0E8] border-b border-rl-border">
+        <div className="max-w-[1240px] mx-auto px-7 pt-12 pb-10 text-center">
+          <div className="text-[12.5px] font-extrabold tracking-[0.16em] uppercase text-rl-dim mb-3.5">Contact</div>
+          <h1 className="font-head font-extrabold text-[clamp(28px,4vw,48px)] leading-[1.05] tracking-[-0.02em] mx-auto mb-3.5 text-rl-forest max-w-[640px]">
             We&rsquo;d love to hear from you.
           </h1>
-          <p className="text-[16.5px] leading-relaxed text-rl-muted max-w-[520px] mx-auto">
-            Questions about a course, group pricing, or custom training? Reach out and we&rsquo;ll get back to you.
+          <p className="text-[16px] leading-relaxed text-rl-muted max-w-[500px] mx-auto">
+            Questions about a course, group pricing, or custom training? Send us a message and we&rsquo;ll get back to you.
           </p>
         </div>
       </section>
 
-      {/* Contact cards */}
-      <section className="max-w-[860px] mx-auto px-7 pt-12 pb-4">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-          {CONTACT_ITEMS.map(({ Icon, label, value, href, note }) => (
-            <a
-              key={label}
-              href={href}
-              target={href.startsWith("mailto") ? undefined : "_blank"}
-              rel={href.startsWith("mailto") ? undefined : "noopener noreferrer"}
-              className="group flex flex-col gap-3 rounded-[18px] p-6 border transition-shadow hover:shadow-md"
-              style={{ background: "#fff", border: "1px solid #DDE8DA" }}
-            >
-              <div
-                className="w-10 h-10 rounded-[10px] flex items-center justify-center"
-                style={{ background: "#EEF5EE", color: "#2A5230" }}
-              >
-                <Icon size={20} />
-              </div>
-              <div>
-                <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase mb-1" style={{ color: "#7A9878" }}>
-                  {label}
-                </div>
-                <div className="font-bold text-[15px] group-hover:underline" style={{ color: "#2A5230" }}>
-                  {value}
-                </div>
-              </div>
-              <p className="text-[13px] leading-relaxed" style={{ color: "#7A9878" }}>
-                {note}
-              </p>
-            </a>
-          ))}
-        </div>
-      </section>
+      {/* Main content */}
+      <section className="max-w-[1020px] mx-auto px-7 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 items-start">
 
-      {/* FAQ */}
-      <section className="max-w-[860px] mx-auto px-7 py-12">
-        <div className="mb-7">
-          <div className="text-[12px] font-extrabold tracking-[0.12em] uppercase mb-2" style={{ color: "#7A9878" }}>
-            Common questions
+          {/* Form */}
+          <div className="rounded-[20px] p-7 md:p-9" style={{ background: "#fff", border: "1px solid #DDE8DA" }}>
+            {submitted ? (
+              <div className="text-center py-8">
+                <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-5" style={{ background: "#EEF5EE" }}>
+                  <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#2A5230" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </div>
+                <h2 className="font-head font-extrabold text-[22px] mb-2" style={{ color: "#1A2E1C" }}>
+                  Message received!
+                </h2>
+                <p className="text-[14.5px] mb-2" style={{ color: "#7A9878" }}>
+                  Your ticket has been submitted.
+                </p>
+                <div className="inline-block px-4 py-2 rounded-[10px] text-[13px] font-bold mb-6" style={{ background: "#EEF5EE", color: "#2A5230" }}>
+                  Ticket ID: {submitted}
+                </div>
+                <p className="text-[13.5px] mb-6" style={{ color: "#9AB89E" }}>
+                  We typically respond within 1–2 business days. Keep your ticket ID handy.
+                </p>
+                <Link
+                  href="/contact"
+                  className="text-[13.5px] font-bold"
+                  style={{ color: "#2A5230" }}
+                >
+                  Submit another message →
+                </Link>
+              </div>
+            ) : (
+              <>
+                <h2 className="font-head font-extrabold text-[20px] mb-6" style={{ color: "#1A2E1C" }}>
+                  Send a message
+                </h2>
+
+                {error && (
+                  <div className="mb-5 px-4 py-3 rounded-xl text-sm font-medium" style={{ background: "#FFF0F0", color: "#AA2222", border: "1px solid #FFCCCC" }}>
+                    {error === "missing-fields" ? "Please fill in all fields." : "Please enter a valid email address."}
+                  </div>
+                )}
+
+                <form action={submitTicket} className="flex flex-col gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "#7A9878" }}>Name</label>
+                      <input
+                        name="name"
+                        type="text"
+                        required
+                        placeholder="Your name"
+                        className="px-4 py-2.5 text-[14px] rounded-xl border outline-none"
+                        style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "#7A9878" }}>Email</label>
+                      <input
+                        name="email"
+                        type="email"
+                        required
+                        placeholder="you@example.com"
+                        className="px-4 py-2.5 text-[14px] rounded-xl border outline-none"
+                        style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "#7A9878" }}>Category</label>
+                    <select
+                      name="category"
+                      className="px-4 py-2.5 text-[14px] rounded-xl border outline-none"
+                      style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                    >
+                      {CATEGORIES.map((c) => (
+                        <option key={c.value} value={c.value}>{c.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "#7A9878" }}>Subject</label>
+                    <input
+                      name="subject"
+                      type="text"
+                      required
+                      placeholder="Brief description of your question"
+                      className="px-4 py-2.5 text-[14px] rounded-xl border outline-none"
+                      style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "#7A9878" }}>Message</label>
+                    <textarea
+                      name="body"
+                      required
+                      rows={6}
+                      placeholder="Tell us how we can help…"
+                      className="px-4 py-2.5 text-[14px] rounded-xl border outline-none resize-none"
+                      style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="mt-1 px-6 py-3 text-[14.5px] font-bold rounded-xl self-start"
+                    style={{ background: "#2A5230", color: "#fff" }}
+                  >
+                    Send Message
+                  </button>
+                </form>
+              </>
+            )}
           </div>
-          <h2 className="font-head font-extrabold text-[26px] leading-tight" style={{ color: "#1A2E1C" }}>
-            Before you reach out
-          </h2>
-        </div>
-        <div className="flex flex-col gap-4">
-          {FAQS.map(({ q, a }) => (
-            <div
-              key={q}
-              className="rounded-[14px] px-6 py-5"
-              style={{ background: "#fff", border: "1px solid #DDE8DA" }}
-            >
-              <div className="font-bold text-[14.5px] mb-2" style={{ color: "#1A2E1C" }}>{q}</div>
-              <p className="text-[13.5px] leading-relaxed" style={{ color: "#7A9878" }}>{a}</p>
-            </div>
-          ))}
-        </div>
 
-        <div className="mt-5 text-[12.5px]" style={{ color: "#9AB89E" }}>
-          More details in our{" "}
-          <Link href="/legal/refund" className="underline hover:text-[#2A5230]">Refund Policy</Link>
-          {" "}and{" "}
-          <Link href="/legal/terms" className="underline hover:text-[#2A5230]">Terms of Use</Link>.
+          {/* Sidebar */}
+          <div className="flex flex-col gap-5">
+            {/* Direct contact */}
+            <div className="rounded-[16px] p-6" style={{ background: "#fff", border: "1px solid #DDE8DA" }}>
+              <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase mb-4" style={{ color: "#7A9878" }}>
+                Direct contact
+              </div>
+              <div className="flex flex-col gap-4">
+                <a href="mailto:raeformtoday@gmail.com" className="flex items-center gap-3 text-[13.5px] font-medium hover:underline" style={{ color: "#2A5230" }}>
+                  <span className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: "#EEF5EE" }}>
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#2A5230" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="4" width="20" height="16" rx="2" />
+                      <polyline points="2,4 12,13 22,4" />
+                    </svg>
+                  </span>
+                  raeformtoday@gmail.com
+                </a>
+                <a href="https://www.instagram.com/byraeform" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[13.5px] font-medium hover:underline" style={{ color: "#2A5230" }}>
+                  <span className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: "#EEF5EE" }}>
+                    <IgIcon />
+                  </span>
+                  @byraeform
+                </a>
+                <a href="https://www.linkedin.com/company/raeform" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[13.5px] font-medium hover:underline" style={{ color: "#2A5230" }}>
+                  <span className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: "#EEF5EE" }}>
+                    <LinkedInIcon />
+                  </span>
+                  RAEFORM on LinkedIn
+                </a>
+              </div>
+            </div>
+
+            {/* Response time */}
+            <div className="rounded-[16px] px-5 py-4" style={{ background: "#F0F5F1", border: "1px solid #DDE8DA" }}>
+              <div className="text-[12.5px] font-bold mb-1" style={{ color: "#2A5230" }}>Response time</div>
+              <p className="text-[12.5px] leading-relaxed" style={{ color: "#7A9878" }}>
+                We typically reply within 1–2 business days. For urgent group or training inquiries, email directly for fastest response.
+              </p>
+            </div>
+
+            {/* Quick links */}
+            <div className="flex flex-col gap-2">
+              {[
+                { href: "/pricing",        label: "View Pricing" },
+                { href: "/courses",        label: "Browse Courses" },
+                { href: "/legal/refund",   label: "Refund Policy" },
+                { href: "/signup?type=group", label: "Group Account Signup" },
+              ].map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="text-[13px] font-medium hover:underline"
+                  style={{ color: "#7A9878" }}
+                >
+                  {label} →
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
     </div>
