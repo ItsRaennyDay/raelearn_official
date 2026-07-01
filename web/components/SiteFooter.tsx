@@ -43,7 +43,7 @@ function LinkedInIcon() {
 }
 
 const SOCIAL_LINKS = [
-  { href: "https://www.instagram.com/raeformtoday", label: "Instagram", Icon: IgIcon },
+  { href: "https://www.instagram.com/byraeform", label: "Instagram", Icon: IgIcon },
   { href: "https://www.linkedin.com/company/raeform", label: "LinkedIn", Icon: LinkedInIcon },
 ];
 

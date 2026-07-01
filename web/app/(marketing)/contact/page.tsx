@@ -43,8 +43,8 @@ const CONTACT_ITEMS = [
   {
     Icon: IgIcon,
     label: "Instagram",
-    value: "@raeformtoday",
-    href: "https://www.instagram.com/raeformtoday",
+    value: "@byraeform",
+    href: "https://www.instagram.com/byraeform",
     note: "Updates, behind-the-scenes, and quick DMs welcome.",
   },
   {
