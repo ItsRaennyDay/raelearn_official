@@ -114,9 +114,6 @@ export default async function ForVAsPage() {
               <span className="mx-1.5">/</span>
               For VAs
             </div>
-            <div className="inline-flex items-center bg-white border border-rl-border-mid rounded-full px-[13px] py-1.5 mb-4">
-              <span className="text-[11.5px] font-extrabold tracking-[0.08em] uppercase text-rl-forest">Support &amp; Operations track</span>
-            </div>
             <h1 className="font-head font-extrabold text-[clamp(32px,4.6vw,54px)] leading-[1.04] tracking-[-0.02em] mb-4 text-rl-forest">
               Become the VA founders and nonprofits actually rely on.
             </h1>
