@@ -2,7 +2,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GradeForm } from "./GradeForm";
-import { BlocksDisplay } from "./BlocksDisplay";
+import { BlocksDisplay } from "../../BlocksDisplay";
 
 const STATUS_META: Record<string, { label: string; bg: string; text: string; dot: string }> = {
   submitted:    { label: "Submitted",    bg: "#E8F2FF", text: "#1A4A8A", dot: "#3A7ABB" },
