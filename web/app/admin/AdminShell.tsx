@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -272,19 +273,36 @@ function getPageTitle(pathname: string): string {
 export default function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const pageTitle = getPageTitle(pathname);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  useEffect(() => { setMobileNavOpen(false); }, [pathname]);
 
   return (
     <div className="h-screen flex overflow-hidden" style={{ background: "#F5F0E8", fontFamily: "var(--font-sans)" }}>
+
+      {/* Mobile backdrop */}
+      {mobileNavOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
+          onClick={() => setMobileNavOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside
-        className="w-56 shrink-0 flex flex-col"
+        className={[
+          "w-56 flex flex-col h-screen",
+          "fixed top-0 left-0 z-50 transition-transform duration-300 ease-in-out",
+          "md:sticky md:shrink-0 md:z-auto md:translate-x-0",
+          mobileNavOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
+        ].join(" ")}
         style={{
           background: "linear-gradient(180deg, #1A2E1C 0%, #0F1F10 100%)",
           boxShadow: "2px 0 20px rgba(0,0,0,0.15)",
         }}
       >
         {/* Brand header */}
-        <div className="px-5 pt-5 pb-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+        <div className="px-5 pt-5 pb-4 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
           <Link href="/" className="block group">
             <div
               className="font-extrabold text-[17px] leading-none"
@@ -299,6 +317,16 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
               Creator Studio
             </div>
           </Link>
+          <button
+            className="md:hidden w-7 h-7 flex items-center justify-center rounded-lg"
+            onClick={() => setMobileNavOpen(false)}
+            aria-label="Close menu"
+            style={{ color: "#4A6A4E" }}
+          >
+            <svg viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+              <path d="M2 2l10 10M12 2L2 12" />
+            </svg>
+          </button>
         </div>
 
         {/* Nav */}
@@ -374,17 +402,29 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top header bar */}
         <header
-          className="h-14 shrink-0 flex items-center justify-between px-8"
+          className="h-14 shrink-0 flex items-center justify-between px-4 md:px-8"
           style={{
             background: "#fff",
             borderBottom: "1px solid #E8EDE6",
             boxShadow: "0 1px 4px rgba(42,82,48,0.06)",
           }}
         >
-          <div className="flex items-center gap-2 text-xs" style={{ color: "#7A9878" }}>
-            <span>Admin</span>
-            <span style={{ color: "#DDE8DA" }}>›</span>
-            <span style={{ color: "#2A5230", fontWeight: 600 }}>{pageTitle}</span>
+          <div className="flex items-center gap-3 min-w-0">
+            <button
+              className="md:hidden p-1.5 rounded-lg shrink-0"
+              onClick={() => setMobileNavOpen(true)}
+              aria-label="Open menu"
+              style={{ color: "#2A5230" }}
+            >
+              <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                <path d="M3 6h14M3 10h14M3 14h14" />
+              </svg>
+            </button>
+            <div className="flex items-center gap-2 text-xs min-w-0" style={{ color: "#7A9878" }}>
+              <span className="hidden sm:inline shrink-0">Admin</span>
+              <span className="hidden sm:inline shrink-0" style={{ color: "#DDE8DA" }}>›</span>
+              <span className="truncate font-semibold" style={{ color: "#2A5230" }}>{pageTitle}</span>
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
