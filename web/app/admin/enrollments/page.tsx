@@ -47,7 +47,7 @@ async function createEnrollment(formData: FormData) {
     user_id: profile.id,
     course_id: courseId,
     status: "active",
-    source: "admin",
+    source: "admin_grant",
     enrolled_at: new Date().toISOString(),
   }).select("id").single();
 
@@ -62,7 +62,7 @@ async function revokeEnrollment(formData: FormData) {
   const enrollmentId = formData.get("enrollmentId") as string;
   if (!enrollmentId) return;
   const db = createAdminClient();
-  await db.from("enrollments").update({ status: "cancelled" }).eq("id", enrollmentId);
+  await db.from("enrollments").update({ status: "revoked" }).eq("id", enrollmentId);
   await logAction({ actorId: actor.id, action: "revoke", tableName: "enrollments", recordId: enrollmentId, newValues: { status: "cancelled" } });
   revalidatePath("/admin/enrollments");
 }
@@ -70,7 +70,7 @@ async function revokeEnrollment(formData: FormData) {
 const STATUS_META: Record<string, { bg: string; text: string; dot: string }> = {
   active:    { bg: "#EEF5EE", text: "#2A5230", dot: "#4A8A52" },
   expired:   { bg: "#FFF3DC", text: "#8A6020", dot: "#C48A3A" },
-  cancelled: { bg: "#F3F3F3", text: "#666",    dot: "#999"    },
+  revoked:   { bg: "#F3F3F3", text: "#666",    dot: "#999"    },
   completed: { bg: "#E8F2FF", text: "#1A4A8A", dot: "#3A7AC8" },
 };
 
@@ -207,7 +207,7 @@ export default async function EnrollmentsPage({
           <option value="active">Active</option>
           <option value="completed">Completed</option>
           <option value="expired">Expired</option>
-          <option value="cancelled">Cancelled</option>
+          <option value="revoked">Revoked</option>
         </select>
         <button type="submit" className="px-4 py-2 text-sm font-bold rounded-xl" style={{ background: "#2A5230", color: "#fff" }}>Filter</button>
         {(q || status) && (
