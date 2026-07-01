@@ -51,9 +51,9 @@ const PLANS = [
     name: "Group Account",
     tagline: "For founders, nonprofit heads, owners, and team leads.",
     price: "Per seat",
-    priceNote: "plans from 3 seats up",
+    priceNote: "Starter · Team · Organization",
     dark: true,
-    featured: "FOR ORGANIZATIONS",
+    featured: "For Organizations",
     features: [
       "Buy & manage seats",
       "Assign courses & paths",
@@ -177,31 +177,72 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Individual vs Group */}
+      {/* Bundle tiers */}
+      <section className="max-w-[1020px] mx-auto px-7 pb-6">
+        <div className="bg-[#F0F5F1] border border-rl-border rounded-[20px] p-6 md:p-8">
+          <div className="flex items-center gap-2 mb-5">
+            <span className="text-[12px] font-extrabold tracking-[0.08em] uppercase text-[#2A5230]">Group Account</span>
+            <span className="text-[11px] font-bold text-[#7A9878] px-2 py-0.5 bg-[#DDE8DA] rounded-full">Seat bundles</span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
+            {[
+              { tier: "Starter", seats: "3 seats", note: "Small teams & founder + VAs" },
+              { tier: "Team",    seats: "10 seats", note: "Nonprofits & small biz staff" },
+              { tier: "Organization", seats: "25+ seats", note: "Mid-size orgs & agencies" },
+            ].map(({ tier, seats, note }) => (
+              <div key={tier} className="bg-white border border-[#DDE8DA] rounded-[14px] px-5 py-4">
+                <div className="font-head font-extrabold text-[16px] text-[#2A5230] mb-0.5">{tier}</div>
+                <div className="text-[14px] font-bold text-[#4A6650] mb-1">{seats}</div>
+                <div className="text-[12.5px] text-[#7A9878]">{note}</div>
+              </div>
+            ))}
+          </div>
+          <p className="text-[12.5px] text-[#7A9878] mt-3">Pricing is per seat. Contact us to get a quote for your team size.</p>
+        </div>
+      </section>
+
+      {/* Individual vs Group comparison */}
       <section className="max-w-[1020px] mx-auto px-7 py-6">
-        <div className="bg-[#F0F5F1] border border-rl-border rounded-[20px] p-8 grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-7">
-          <div>
-            <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase text-rl-forest mb-3">
-              Individual learner account
-            </div>
-            <p className="text-[14.5px] leading-relaxed text-rl-muted mb-3">
-              For VAs, freelancers, founders, nonprofit founders, business owners, and learners taking courses for themselves.
-            </p>
-            <div className="text-[13.5px] text-rl-muted leading-[1.9]">
-              Enroll in free courses · buy paid courses · complete certificates · download resources · track your own progress
-            </div>
-          </div>
-          <div>
-            <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase text-rl-sage mb-3">
-              Group account
-            </div>
-            <p className="text-[14.5px] leading-relaxed text-rl-muted mb-3">
-              For founders, executive directors, nonprofit heads, business owners, team leads, operations managers, and agency owners.
-            </p>
-            <div className="text-[13.5px] text-rl-muted leading-[1.9]">
-              Add learners · buy seats · assign courses &amp; paths · monitor progress · view completions · export reports · manage seats · request custom training
-            </div>
-          </div>
+        <div className="overflow-x-auto rounded-[20px] border border-rl-border">
+          <table className="w-full text-[13.5px] min-w-[480px]" style={{ borderCollapse: "collapse" }}>
+            <thead>
+              <tr style={{ background: "#F0F5F1" }}>
+                <th className="text-left px-6 py-4 text-[12px] font-extrabold tracking-[0.06em] uppercase text-[#7A9878] w-[44%]">Feature</th>
+                <th className="text-center px-6 py-4 text-[13px] font-extrabold text-[#2A5230] w-[28%]">Individual</th>
+                <th className="text-center px-6 py-4 text-[13px] font-extrabold text-[#2A5230] w-[28%]">Group</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { feature: "Free courses",            ind: true,  grp: true  },
+                { feature: "Paid courses",            ind: true,  grp: true  },
+                { feature: "Certificates",            ind: true,  grp: true  },
+                { feature: "Workbooks & resources",   ind: true,  grp: true  },
+                { feature: "Learner dashboard",       ind: true,  grp: true  },
+                { feature: "Personal progress tracking", ind: true, grp: true },
+                { feature: "Manage team seats",       ind: false, grp: true  },
+                { feature: "Assign courses & paths",  ind: false, grp: true  },
+                { feature: "Track team progress",     ind: false, grp: true  },
+                { feature: "Completions overview",    ind: false, grp: true  },
+                { feature: "Export reports",          ind: false, grp: true  },
+                { feature: "Group dashboard",         ind: false, grp: true  },
+              ].map(({ feature, ind, grp }, i) => (
+                <tr key={feature} style={{ borderTop: "1px solid #EEF5EE", background: i % 2 === 0 ? "#fff" : "#FAFCF8" }}>
+                  <td className="px-6 py-3.5 text-[#4A6650]">{feature}</td>
+                  <td className="px-6 py-3.5 text-center">
+                    {ind
+                      ? <span className="text-[#3E9A52] font-bold text-base">✓</span>
+                      : <span className="text-[#C8D8C8]">—</span>}
+                  </td>
+                  <td className="px-6 py-3.5 text-center">
+                    {grp
+                      ? <span className="text-[#3E9A52] font-bold text-base">✓</span>
+                      : <span className="text-[#C8D8C8]">—</span>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
 
