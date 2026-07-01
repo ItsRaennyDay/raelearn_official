@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { DarkModeToggle } from "./DarkModeToggle";
 
 const NAV_SECTIONS = [
   {
@@ -281,7 +282,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   useEffect(() => { setMobileNavOpen(false); }, [pathname]);
 
   return (
-    <div className="h-screen flex overflow-hidden" style={{ background: "#F5F0E8", fontFamily: "var(--font-sans)" }}>
+    <div className="admin-shell h-screen flex overflow-hidden" style={{ background: "var(--admin-shell-bg)", fontFamily: "var(--font-sans)" }}>
 
       {/* Mobile backdrop */}
       {mobileNavOpen && (
@@ -405,11 +406,11 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top header bar */}
         <header
-          className="h-14 shrink-0 flex items-center justify-between px-4 md:px-8"
+          className="admin-header h-14 shrink-0 flex items-center justify-between px-4 md:px-8"
           style={{
-            background: "#fff",
-            borderBottom: "1px solid #E8EDE6",
-            boxShadow: "0 1px 4px rgba(42,82,48,0.06)",
+            background: "var(--admin-header-bg)",
+            borderBottom: "1px solid var(--admin-header-border)",
+            boxShadow: "0 1px 4px var(--admin-header-shadow)",
           }}
         >
           <div className="flex items-center gap-3 min-w-0">
@@ -423,29 +424,20 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
                 <path d="M3 6h14M3 10h14M3 14h14" />
               </svg>
             </button>
-            <div className="flex items-center gap-2 text-xs min-w-0" style={{ color: "#7A9878" }}>
+            <div className="flex items-center gap-2 text-xs min-w-0" style={{ color: "var(--admin-text-muted)" }}>
               <span className="hidden sm:inline shrink-0">Admin</span>
-              <span className="hidden sm:inline shrink-0" style={{ color: "#DDE8DA" }}>›</span>
-              <span className="truncate font-semibold" style={{ color: "#2A5230" }}>{pageTitle}</span>
+              <span className="hidden sm:inline shrink-0" style={{ color: "var(--admin-border-mid)" }}>›</span>
+              <span className="truncate font-semibold" style={{ color: "var(--admin-text-primary)" }}>{pageTitle}</span>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <Link
-              href="/admin/courses/new"
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-lg transition-colors"
-              style={{ background: "#2A5230", color: "#fff" }}
-            >
-              <svg viewBox="0 0 14 14" width="11" height="11" fill="currentColor">
-                <path d="M7 1a6 6 0 1 0 0 12A6 6 0 0 0 7 1Zm.75 5.25V3.5h-1.5v2.75H3.5v1.5h2.75V10.5h1.5V7.75H10.5v-1.5H7.75Z" />
-              </svg>
-              New Course
-            </Link>
+            <DarkModeToggle />
           </div>
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto flex flex-col min-h-0">
+        <main className="admin-main flex-1 overflow-y-auto flex flex-col min-h-0">
           {children}
         </main>
       </div>

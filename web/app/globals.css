@@ -84,3 +84,65 @@
 .animate-fade-up { animation: rl-fade-up .5s ease both; }
 
 ::selection { background: rgba(74, 122, 78, 0.28); }
+
+/* ── Admin dark mode tokens ── */
+:root {
+  --admin-shell-bg:       #F5F0E8;
+  --admin-header-bg:      #ffffff;
+  --admin-header-border:  #E8EDE6;
+  --admin-header-shadow:  rgba(42,82,48,0.06);
+  --admin-content-bg:     #F5FAF5;
+  --admin-card-bg:        #ffffff;
+  --admin-card-bg-alt:    #FAFCFA;
+  --admin-border:         #E8EDE6;
+  --admin-border-mid:     #DDE8DA;
+  --admin-text-primary:   #1A2E1C;
+  --admin-text-muted:     #7A9878;
+  --admin-text-dim:       #9AB89E;
+  --admin-table-head-bg:  #FAFCFA;
+  --admin-table-row-border:#F5FAF5;
+}
+
+.dark {
+  --admin-shell-bg:       #0C1510;
+  --admin-header-bg:      #111C12;
+  --admin-header-border:  #1C2E1E;
+  --admin-header-shadow:  rgba(0,0,0,0.25);
+  --admin-content-bg:     #0C1510;
+  --admin-card-bg:        #131F14;
+  --admin-card-bg-alt:    #172018;
+  --admin-border:         #1E3020;
+  --admin-border-mid:     #264228;
+  --admin-text-primary:   #D8EDD8;
+  --admin-text-muted:     #7AAA7A;
+  --admin-text-dim:       #507850;
+  --admin-table-head-bg:  #172018;
+  --admin-table-row-border:#1A2A1C;
+}
+
+/* Admin shell structural overrides in dark mode */
+.dark .admin-shell    { background: var(--admin-shell-bg); }
+.dark .admin-header   { background: var(--admin-header-bg) !important; border-color: var(--admin-header-border) !important; }
+.dark .admin-main     { background: var(--admin-content-bg); }
+
+/* Admin card + table overrides via data attribute */
+.dark [data-admin-card] {
+  background: var(--admin-card-bg) !important;
+  border-color: var(--admin-border) !important;
+}
+.dark [data-admin-card-alt] {
+  background: var(--admin-card-bg-alt) !important;
+}
+.dark [data-admin-table] {
+  background: var(--admin-card-bg) !important;
+}
+.dark [data-admin-table] thead tr {
+  background: var(--admin-table-head-bg) !important;
+  border-color: var(--admin-border) !important;
+}
+.dark [data-admin-table] tbody tr {
+  border-color: var(--admin-table-row-border) !important;
+}
+.dark [data-admin-table] tbody tr:hover {
+  background: var(--admin-card-bg-alt) !important;
+}
