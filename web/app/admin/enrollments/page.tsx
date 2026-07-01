@@ -241,7 +241,9 @@ export default async function EnrollmentsPage({
                 return (
                   <tr key={e.id} className="transition-colors hover:bg-[#FAFCFA]" style={{ borderBottom: "1px solid #F5FAF5" }}>
                     <td className="px-5 py-3">
-                      <div className="font-medium" style={{ color: "#1A2E1C" }}>{profile?.full_name ?? "—"}</div>
+                      <div className="font-medium" style={{ color: "#1A2E1C" }}>
+                        {profile?.full_name || profile?.email?.split("@")[0] || "—"}
+                      </div>
                       <div className="text-xs mt-0.5" style={{ color: "#9AB89E" }}>{profile?.email ?? "—"}</div>
                     </td>
                     <td className="px-5 py-3" style={{ color: "#4A6650" }}>

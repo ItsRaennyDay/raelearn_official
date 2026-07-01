@@ -136,7 +136,9 @@ export default async function AdminOverviewPage() {
               {recentEnrolls.map((e) => {
                 const profile = e.profiles as { full_name?: string; email?: string } | null;
                 const course  = e.courses  as { title?: string } | null;
-                const initials = profile?.full_name?.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase() ?? "?";
+                const initials = profile?.full_name
+                  ? profile.full_name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase()
+                  : (profile?.email?.[0]?.toUpperCase() ?? "?");
                 const timeAgo  = e.enrolled_at ? timeAgoStr(e.enrolled_at) : "—";
                 return (
                   <div key={e.id} className="flex items-center gap-3 px-5 py-3 hover:bg-[#FAFCFA] transition-colors">
@@ -146,7 +148,7 @@ export default async function AdminOverviewPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-semibold truncate" style={{ color: "#1A2E1C" }}>
-                        {profile?.full_name ?? profile?.email ?? "Unknown"}
+                        {profile?.full_name || profile?.email?.split("@")[0] || "Unknown"}
                       </div>
                       <div className="text-xs truncate" style={{ color: "#9AB89E" }}>
                         enrolled in <span style={{ color: "#4A6650" }}>{course?.title ?? "—"}</span>
