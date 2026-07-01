@@ -159,14 +159,14 @@ export default function SignupClient({ bundles }: { bundles: BundleForSignup[] }
 
   return (
     <div className="bg-rl-bg" style={{ fontFamily: "var(--font-sans)" }}>
-      <section className="max-w-[1100px] mx-auto px-7 pt-10 pb-20">
+      <section className="max-w-[1100px] mx-auto px-5 md:px-7 pt-10 pb-20">
         <div className="text-[12.5px] font-bold text-rl-dim mb-5">
           <Link href="/" className="text-rl-dim hover:text-rl-forest transition-colors">Home</Link>
           <span className="mx-1.5">/</span>
           Create individual account
         </div>
 
-        <div className="grid gap-[30px] items-start" style={{ gridTemplateColumns: "1.55fr 1fr" }}>
+        <div className="grid grid-cols-1 lg:grid-cols-[1.55fr_1fr] gap-[30px] items-start">
           {/* Form */}
           <form onSubmit={handleSubmit}>
             <h1 className="font-head font-extrabold text-[clamp(28px,3.6vw,40px)] leading-[1.06] tracking-[-0.015em] mb-2.5 text-rl-forest">
@@ -228,7 +228,7 @@ export default function SignupClient({ bundles }: { bundles: BundleForSignup[] }
               <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase text-rl-forest mb-3.5">
                 Step 3 · Create account
               </div>
-              <div className="grid grid-cols-2 gap-3.5 mb-3.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-3.5">
                 <div>
                   <label className="block text-[12.5px] font-bold text-rl-muted mb-1.5">Full name</label>
                   <input
@@ -285,7 +285,7 @@ export default function SignupClient({ bundles }: { bundles: BundleForSignup[] }
           </form>
 
           {/* Recommendation sidebar */}
-          <div className="sticky top-[88px]">
+          <div className="lg:sticky lg:top-[88px]">
             <div className="bg-[#F0F5F1] border border-rl-border rounded-[18px] p-6">
               <div className="font-hand text-[21px] font-bold text-rl-forest mb-1">we recommend</div>
 
