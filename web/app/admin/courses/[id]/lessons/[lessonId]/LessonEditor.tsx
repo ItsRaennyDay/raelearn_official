@@ -1899,13 +1899,14 @@ function BlockPalette({ onSelect, onClose }: { onSelect: (t: BlockType) => void;
 
 /* ─────────────────────────── Main editor ─────────────────────────── */
 export default function LessonEditor({
-  lesson, courseId, courseTitle, moduleId, moduleTitle: initialModuleTitle,
+  lesson, courseId, courseTitle, moduleId, moduleTitle: initialModuleTitle, initialAssignment,
 }: {
   lesson: Record<string, unknown>;
   courseId: string;
   courseTitle: string;
   moduleId: string;
   moduleTitle: string;
+  initialAssignment?: { id?: string; instructions?: string; submission_type?: string } | null;
 }) {
   const initContent = (() => {
     const raw = lesson.content;
@@ -1922,6 +1923,10 @@ export default function LessonEditor({
   const [duration, setDuration]     = useState(Number(lesson.duration_mins ?? 0));
   const [status, setStatus]         = useState(String(lesson.status ?? "draft") as typeof STATUSES[number]);
   const [isRequired, setIsRequired] = useState(Boolean(lesson.is_required ?? true));
+  const [assignmentInstructions, setAssignmentInstructions] = useState(initialAssignment?.instructions ?? "");
+  const [assignmentSubmissionType, setAssignmentSubmissionType] = useState<"text" | "file" | "both">(
+    (initialAssignment?.submission_type as "text" | "file" | "both") ?? "text"
+  );
 
   const [moduleName, setModuleName] = useState(initialModuleTitle);
 
@@ -1973,6 +1978,11 @@ export default function LessonEditor({
           status,
           is_required: isRequired,
           content: { blocks, background: bgId },
+          ...(lessonType === "assignment" ? {
+            course_id: courseId,
+            assignment_instructions: assignmentInstructions,
+            assignment_submission_type: assignmentSubmissionType,
+          } : {}),
         }),
       }),
       moduleName !== initialModuleTitle
@@ -1983,7 +1993,7 @@ export default function LessonEditor({
     if (lessonRes.ok && moduleRes.ok) { setSaved(true); }
     else if (!lessonRes.ok) { const d = await lessonRes.json(); setError(d.error ?? "Save failed."); }
     else { setError("Save failed."); }
-  }, [lesson.id, title, lessonType, videoUrl, duration, status, isRequired, blocks, bgId, moduleName, moduleId, initialModuleTitle]);
+  }, [lesson.id, title, lessonType, videoUrl, duration, status, isRequired, blocks, bgId, moduleName, moduleId, initialModuleTitle, courseId, assignmentInstructions, assignmentSubmissionType]);
 
   return (
     <div className="flex-1 flex flex-col min-h-0" style={{ fontFamily: "var(--font-sans)" }}>
@@ -2109,6 +2119,22 @@ export default function LessonEditor({
           </label>
         )}
 
+        {lessonType === "assignment" && (
+          <label className="flex items-center gap-2 text-xs" style={{ color: "var(--admin-text-muted)" }}>
+            <span className="font-bold shrink-0">Submission</span>
+            <select
+              value={assignmentSubmissionType}
+              onChange={(e) => { setAssignmentSubmissionType(e.target.value as "text" | "file" | "both"); setSaved(false); }}
+              className="text-xs border rounded-lg px-2 py-1 bg-white focus:outline-none"
+              style={{ borderColor: "var(--admin-border-mid)", color: "var(--admin-text-primary)" }}
+            >
+              <option value="text">Text only</option>
+              <option value="file">File upload</option>
+              <option value="both">Text + file</option>
+            </select>
+          </label>
+        )}
+
         <label className="flex items-center gap-2 text-xs ml-auto" style={{ color: "var(--admin-text-muted)" }}>
           <input
             type="checkbox"
@@ -2119,6 +2145,33 @@ export default function LessonEditor({
           <span className="font-medium">Required</span>
         </label>
       </div>
+
+      {/* ── Assignment instructions panel ── */}
+      {lessonType === "assignment" && (
+        <div
+          className="px-6 py-4 shrink-0"
+          style={{ background: "var(--admin-card-bg)", borderBottom: "1.5px solid var(--admin-border)" }}
+        >
+          <div className="max-w-2xl">
+            <label className="block text-xs font-bold mb-1.5" style={{ color: "var(--admin-text-muted)" }}>
+              Assignment Instructions <span style={{ color: "var(--admin-text-dim)" }}>(shown to learner)</span>
+            </label>
+            <textarea
+              value={assignmentInstructions}
+              onChange={(e) => { setAssignmentInstructions(e.target.value); setSaved(false); }}
+              rows={4}
+              placeholder="Describe what learners need to do, what to submit, and any requirements…"
+              className="w-full px-3.5 py-3 text-sm rounded-xl outline-none resize-y transition-colors"
+              style={{
+                border: "1.5px solid var(--admin-border-mid)",
+                background: "var(--admin-table-head-bg)",
+                color: "var(--admin-text-primary)",
+                minHeight: 80,
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* ── Main content area ── */}
       <div className="flex flex-1 min-h-0 overflow-hidden">

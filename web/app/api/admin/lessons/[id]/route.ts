@@ -48,6 +48,34 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   const db = createAdminClient();
   const { error } = await db.from("lessons").update(patch).eq("id", id);
   if (error) return NextResponse.json({ error: "Failed to update lesson." }, { status: 500 });
+
+  // Sync assignment record when the lesson editor sends assignment-specific fields
+  const assignmentInstructions = typeof b.assignment_instructions === "string" ? b.assignment_instructions.trim() : null;
+  const courseId = typeof b.course_id === "string" ? b.course_id : null;
+
+  if (assignmentInstructions !== null && courseId) {
+    const submissionType = ["text", "file", "both"].includes(String(b.assignment_submission_type))
+      ? (b.assignment_submission_type as string)
+      : "text";
+    const lessonTitle = typeof patch.title === "string" ? patch.title : null;
+    let finalTitle = lessonTitle;
+    if (!finalTitle) {
+      const { data: existing } = await db.from("lessons").select("title").eq("id", id).single();
+      finalTitle = existing?.title ?? "Assignment";
+    }
+    await db.from("assignments").upsert(
+      {
+        lesson_id: id,
+        course_id: courseId,
+        title: finalTitle,
+        instructions: assignmentInstructions || "Complete the assignment.",
+        submission_type: submissionType,
+        status: typeof patch.status === "string" ? patch.status : "draft",
+      },
+      { onConflict: "lesson_id" }
+    );
+  }
+
   return NextResponse.json({ ok: true });
 }
 
