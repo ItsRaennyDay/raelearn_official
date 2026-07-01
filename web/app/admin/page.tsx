@@ -4,315 +4,266 @@ import { createAdminClient } from "@/lib/supabase/admin";
 export default async function AdminOverviewPage() {
   const db = createAdminClient();
 
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
   const [
-    { count: courseCount },
-    { count: enrollmentCount },
-    { count: userCount },
-    { data: recentCourses },
+    { data: openTickets,    count: openTicketCount },
+    { data: recentEnrolls },
+    { data: recentUsers },
+    { count: draftCount },
+    { count: activeEnrollCount },
   ] = await Promise.all([
-    db.from("courses").select("*", { count: "exact", head: true }),
-    db.from("enrollments").select("*", { count: "exact", head: true }),
-    db.from("profiles").select("*", { count: "exact", head: true }),
-    db.from("courses")
-      .select("id, title, slug, status, level, price_type, created_at")
+    db.from("support_tickets")
+      .select("id, ticket_id, subject, submitter_name, priority, created_at", { count: "exact" })
+      .eq("status", "open")
+      .order("created_at", { ascending: false })
+      .limit(4),
+    db.from("enrollments")
+      .select("id, enrolled_at, source, profiles:user_id(full_name, email), courses:course_id(title)")
+      .order("enrolled_at", { ascending: false })
+      .limit(6),
+    db.from("profiles")
+      .select("id, full_name, email, created_at")
+      .gte("created_at", sevenDaysAgo)
       .order("created_at", { ascending: false })
       .limit(5),
+    db.from("courses").select("*", { count: "exact", head: true }).eq("status", "draft"),
+    db.from("enrollments").select("*", { count: "exact", head: true }).eq("status", "active"),
   ]);
 
-  const stats = [
-    {
-      label: "Total Courses",
-      value: courseCount ?? 0,
-      href: "/admin/courses",
-      accent: "#2A5230",
-      bg: "#EEF5EE",
-      icon: (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-          <path d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      ),
-      description: "Published & draft",
-      trend: "+0 this week",
-    },
-    {
-      label: "Enrollments",
-      value: enrollmentCount ?? 0,
-      href: "/admin/enrollments",
-      accent: "#6B4FBB",
-      bg: "#F0ECFF",
-      icon: (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
-        </svg>
-      ),
-      description: "Active learners enrolled",
-      trend: "+0 this week",
-    },
-    {
-      label: "Total Learners",
-      value: userCount ?? 0,
-      href: "/admin/users",
-      accent: "#B86B4A",
-      bg: "#FFF3EE",
-      icon: (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
-        </svg>
-      ),
-      description: "Registered accounts",
-      trend: "+0 this week",
-    },
+  const PRIORITY_COLOR: Record<string, { bg: string; text: string }> = {
+    urgent: { bg: "#FFF0F0", text: "#AA2222" },
+    high:   { bg: "#FFF3DC", text: "#8A6020" },
+    normal: { bg: "#EEF5EE", text: "#2A5230" },
+    low:    { bg: "#F3F3F3", text: "#666"    },
+  };
+
+  const quickActions = [
+    { label: "New Course",      href: "/admin/courses/new",    icon: "M12 4.5v15m7.5-7.5h-15", color: "#2A5230", bg: "#EEF5EE" },
+    { label: "Enroll Learner",  href: "/admin/enrollments",    icon: "M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z", color: "#6B4FBB", bg: "#F0ECFF" },
+    { label: "View Support",    href: "/admin/support",        icon: "M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75", color: "#B86B4A", bg: "#FFF3EE" },
+    { label: "Manage Users",    href: "/admin/users",          icon: "M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z", color: "#1A6B6B", bg: "#E8F5F5" },
+    { label: "View Reports",    href: "/admin/reports",        icon: "M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z", color: "#4A6650", bg: "#F0F5F1" },
+    { label: "Quiz Builder",    href: "/admin/quizzes",        icon: "M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z", color: "#8A6020", bg: "#FFF8E8" },
   ];
 
-  const statusColor: Record<string, { bg: string; text: string; dot: string }> = {
-    published: { bg: "#EEF5EE", text: "#2A5230", dot: "#4A8A52" },
-    draft:     { bg: "#FFF8E8", text: "#8A6020", dot: "#C48A3A" },
-    archived:  { bg: "#F3F3F3", text: "#666", dot: "#999" },
-  };
-
-  const levelLabel: Record<string, string> = {
-    beginner: "Beginner",
-    intermediate: "Intermediate",
-    advanced: "Advanced",
-  };
+  const now = new Date();
+  const greeting = now.getHours() < 12 ? "Good morning" : now.getHours() < 17 ? "Good afternoon" : "Good evening";
+  const dateStr = now.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 
   return (
-    <div className="p-4 md:p-8 max-w-5xl">
-      {/* Page header */}
-      <div className="mb-8 flex items-start justify-between">
+    <div className="p-4 md:p-8 max-w-6xl space-y-6">
+
+      {/* Header */}
+      <div className="flex items-start justify-between">
         <div>
-          <div
-            className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full mb-3"
-            style={{ background: "#EEF5EE", color: "#2A5230" }}
-          >
-            <span
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: "#4A8A52" }}
-            />
-            Live
-          </div>
-          <h1
-            className="font-extrabold text-3xl leading-tight"
-            style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}
-          >
-            Dashboard
+          <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "#9AB89E" }}>{dateStr}</p>
+          <h1 className="font-extrabold text-2xl leading-tight" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>
+            {greeting}, Rae
           </h1>
-          <p className="text-sm mt-1.5" style={{ color: "#7A9878" }}>
-            Here&apos;s a snapshot of your learning platform today.
-          </p>
+          <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>Here&apos;s what needs your attention today.</p>
         </div>
-
+        <Link href="/admin/courses/new"
+          className="hidden sm:flex items-center gap-2 px-4 py-2.5 text-sm font-bold rounded-xl"
+          style={{ background: "#2A5230", color: "#fff" }}>
+          <svg viewBox="0 0 12 12" width="11" height="11" fill="currentColor"><path d="M6 1v10M1 6h10" strokeWidth="2" stroke="currentColor" strokeLinecap="round" /></svg>
+          New Course
+        </Link>
       </div>
 
-      {/* Stats row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        {stats.map(({ label, value, href, accent, bg, icon, description }) => (
-          <Link
-            key={label}
-            href={href}
-            className="group relative rounded-2xl p-5 transition-all hover:-translate-y-0.5"
-            style={{
-              background: "#fff",
-              border: "1.5px solid #E8EDE6",
-              boxShadow: "0 2px 12px rgba(42,82,48,0.06)",
-            }}
-          >
-            {/* Top accent bar */}
-            <div
-              className="absolute top-0 left-6 right-6 h-0.5 rounded-b-full transition-all group-hover:left-3 group-hover:right-3"
-              style={{ background: accent }}
-            />
+      {/* At-a-glance tiles */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <Link href="/admin/support?status=open"
+          className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:-translate-y-0.5"
+          style={{ background: (openTicketCount ?? 0) > 0 ? "#FFF0F0" : "#fff", border: `1.5px solid ${(openTicketCount ?? 0) > 0 ? "#FFCCCC" : "#E8EDE6"}` }}>
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wide" style={{ color: (openTicketCount ?? 0) > 0 ? "#AA2222" : "#9AB89E" }}>Open Tickets</span>
+            {(openTicketCount ?? 0) > 0 && (
+              <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: "#AA2222" }} />
+            )}
+          </div>
+          <div className="text-3xl font-extrabold" style={{ fontFamily: "var(--font-head)", color: (openTicketCount ?? 0) > 0 ? "#AA2222" : "#1A2E1C" }}>
+            {openTicketCount ?? 0}
+          </div>
+          <div className="text-xs" style={{ color: "#9AB89E" }}>needs reply →</div>
+        </Link>
 
-            <div className="flex items-start justify-between mb-4">
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center"
-                style={{ background: bg, color: accent }}
-              >
-                {icon}
-              </div>
-              <svg
-                viewBox="0 0 16 16"
-                width="14"
-                height="14"
-                fill="currentColor"
-                className="opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ color: accent }}
-              >
-                <path fillRule="evenodd" d="M8.914 6.025a.75.75 0 0 1 1.06 0 3.5 3.5 0 0 1 0 4.95l-2 2a3.5 3.5 0 0 1-5.396-4.43l.carbón--.2.1m3.048-3.048a.75.75 0 0 1 0 1.06A3.5 3.5 0 0 0 7 12a3.5 3.5 0 0 0 5-4.95l2-2a3.5 3.5 0 0 1-5.396 4.43l-.1-.1" clipRule="evenodd" />
-              </svg>
-            </div>
+        <Link href="/admin/courses?status=draft"
+          className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:-translate-y-0.5"
+          style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
+          <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#9AB89E" }}>Draft Courses</span>
+          <div className="text-3xl font-extrabold" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>
+            {draftCount ?? 0}
+          </div>
+          <div className="text-xs" style={{ color: "#9AB89E" }}>ready to publish →</div>
+        </Link>
 
-            <div
-              className="text-4xl font-extrabold mb-1 leading-none"
-              style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}
-            >
-              {value}
-            </div>
-            <div className="text-sm font-semibold mb-0.5" style={{ color: "#2A5230" }}>
-              {label}
-            </div>
-            <div className="text-xs" style={{ color: "#9AB89E" }}>
-              {description}
-            </div>
-          </Link>
-        ))}
+        <Link href="/admin/enrollments"
+          className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:-translate-y-0.5"
+          style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
+          <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#9AB89E" }}>Active Learners</span>
+          <div className="text-3xl font-extrabold" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>
+            {activeEnrollCount ?? 0}
+          </div>
+          <div className="text-xs" style={{ color: "#9AB89E" }}>enrolled & active →</div>
+        </Link>
+
+        <Link href="/admin/users"
+          className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:-translate-y-0.5"
+          style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
+          <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#9AB89E" }}>New This Week</span>
+          <div className="text-3xl font-extrabold" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>
+            {recentUsers?.length ?? 0}
+          </div>
+          <div className="text-xs" style={{ color: "#9AB89E" }}>new signups →</div>
+        </Link>
       </div>
 
-      {/* Two-col: recent courses + quick actions */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-5">
-        {/* Recent courses */}
-        <div
-          className="md:col-span-3 rounded-2xl overflow-hidden"
-          style={{ background: "#fff", border: "1.5px solid #E8EDE6", boxShadow: "0 2px 12px rgba(42,82,48,0.06)" }}
-        >
-          <div
-            className="flex items-center justify-between px-5 py-4"
-            style={{ borderBottom: "1px solid #F0F7F0" }}
-          >
-            <h2
-              className="font-bold text-sm"
-              style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}
-            >
-              Recent Courses
-            </h2>
-            <Link
-              href="/admin/courses"
-              className="text-xs font-bold transition-colors"
-              style={{ color: "#2A5230" }}
-            >
-              View all →
-            </Link>
+      {/* Main 3-col grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+        {/* Recent Enrollments — 2 cols wide */}
+        <div className="lg:col-span-2 rounded-2xl overflow-hidden" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
+          <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid #F0F7F0" }}>
+            <h2 className="font-bold text-sm" style={{ color: "#1A2E1C" }}>Recent Enrollments</h2>
+            <Link href="/admin/enrollments" className="text-xs font-bold" style={{ color: "#2A5230" }}>View all →</Link>
           </div>
 
-          {!recentCourses || recentCourses.length === 0 ? (
-            <div className="px-5 py-12 text-center">
-              <div
-                className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3"
-                style={{ background: "#EEF5EE" }}
-              >
-                <svg viewBox="0 0 20 20" width="20" height="20" fill="currentColor" style={{ color: "#2A5230" }}>
-                  <path d="M9 4.804A7.968 7.968 0 0 0 5.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 0 1 5.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0 1 14.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0 0 14.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 1 1-2 0V4.804Z" />
-                </svg>
-              </div>
-              <p className="text-sm font-medium mb-1" style={{ color: "#2A5230" }}>No courses yet</p>
-              <p className="text-xs mb-4" style={{ color: "#9AB89E" }}>Create your first course to get started</p>
-              <Link
-                href="/admin/courses/new"
-                className="inline-flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl transition-colors"
-                style={{ background: "#2A5230", color: "#fff" }}
-              >
-                Create First Course →
-              </Link>
-            </div>
+          {!recentEnrolls?.length ? (
+            <div className="px-5 py-12 text-center text-sm" style={{ color: "#9AB89E" }}>No enrollments yet.</div>
           ) : (
             <div className="divide-y" style={{ borderColor: "#F5FAF5" }}>
-              {recentCourses.map((c) => {
-                const s = statusColor[c.status] ?? statusColor.draft;
+              {recentEnrolls.map((e) => {
+                const profile = e.profiles as { full_name?: string; email?: string } | null;
+                const course  = e.courses  as { title?: string } | null;
+                const initials = profile?.full_name?.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase() ?? "?";
+                const timeAgo  = e.enrolled_at ? timeAgoStr(e.enrolled_at) : "—";
                 return (
-                  <Link
-                    key={c.id}
-                    href={`/admin/courses/${c.id}`}
-                    className="flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-[#FAFCFA] group"
-                  >
-                    {/* Initials avatar */}
-                    <div
-                      className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-extrabold shrink-0"
-                      style={{ background: "#EEF5EE", color: "#2A5230", fontFamily: "var(--font-head)" }}
-                    >
-                      {String(c.title)[0]?.toUpperCase() ?? "C"}
+                  <div key={e.id} className="flex items-center gap-3 px-5 py-3 hover:bg-[#FAFCFA] transition-colors">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-extrabold shrink-0"
+                      style={{ background: "#EEF5EE", color: "#2A5230" }}>
+                      {initials}
                     </div>
-
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-semibold truncate" style={{ color: "#1A2E1C" }}>
-                        {c.title}
+                        {profile?.full_name ?? profile?.email ?? "Unknown"}
                       </div>
-                      <div className="text-xs mt-0.5" style={{ color: "#9AB89E" }}>
-                        {levelLabel[c.level] ?? c.level} · {c.price_type}
+                      <div className="text-xs truncate" style={{ color: "#9AB89E" }}>
+                        enrolled in <span style={{ color: "#4A6650" }}>{course?.title ?? "—"}</span>
                       </div>
                     </div>
-
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span
-                        className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full capitalize"
-                        style={{ background: s.bg, color: s.text }}
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full" style={{ background: s.dot }} />
-                        {c.status}
-                      </span>
-                      <span
-                        className="text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-                        style={{ color: "#7A9878" }}
-                      >
-                        Edit →
-                      </span>
+                    <div className="shrink-0 text-right">
+                      <div className="text-[11px]" style={{ color: "#B8D4B5" }}>{timeAgo}</div>
+                      {e.source && (
+                        <div className="text-[10px] capitalize mt-0.5" style={{ color: "#C8DEC8" }}>{e.source.replace("_", " ")}</div>
+                      )}
                     </div>
-                  </Link>
+                  </div>
                 );
               })}
             </div>
           )}
         </div>
 
-        {/* Quick actions */}
-        <div className="md:col-span-2 flex flex-col gap-4">
-          {/* Create course card */}
-          <Link
-            href="/admin/courses/new"
-            className="group rounded-2xl p-5 flex flex-col justify-between transition-all hover:-translate-y-0.5"
-            style={{
-              background: "linear-gradient(135deg, #2A5230 0%, #1A3820 100%)",
-              boxShadow: "0 4px 20px rgba(42,82,48,0.25)",
-              minHeight: "140px",
-            }}
-          >
-            <div>
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center mb-3"
-                style={{ background: "rgba(255,255,255,0.12)" }}
-              >
-                <svg viewBox="0 0 18 18" width="18" height="18" fill="currentColor" style={{ color: "#A8D4AC" }}>
-                  <path d="M9 1a8 8 0 1 0 0 16A8 8 0 0 0 9 1Zm1 7V5.5H8V8H5.5v2H8v2.5h2V10h2.5V8H10Z" />
-                </svg>
-              </div>
-              <div className="text-sm font-bold text-white mb-1">Create New Course</div>
-              <div className="text-xs" style={{ color: "#7DAA82" }}>
-                Build a course with modules, lessons, and rich content blocks
-              </div>
-            </div>
-            <div className="text-xs font-bold mt-3" style={{ color: "#5A9E62" }}>
-              Start building →
-            </div>
-          </Link>
+        {/* Right column */}
+        <div className="flex flex-col gap-5">
 
-          {/* Manage courses card */}
-          <Link
-            href="/admin/courses"
-            className="group rounded-2xl p-5 transition-all hover:-translate-y-0.5"
-            style={{
-              background: "#fff",
-              border: "1.5px solid #E8EDE6",
-              boxShadow: "0 2px 12px rgba(42,82,48,0.06)",
-            }}
-          >
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center mb-3"
-              style={{ background: "#F5F0E8" }}
-            >
-              <svg viewBox="0 0 18 18" width="18" height="18" fill="none" stroke="#2A5230" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3.75 12h10.5M3.75 9h10.5M3.75 6h10.5" />
-              </svg>
+          {/* Open tickets */}
+          <div className="rounded-2xl overflow-hidden" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
+            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid #F0F7F0" }}>
+              <h2 className="font-bold text-sm" style={{ color: "#1A2E1C" }}>Open Tickets</h2>
+              <Link href="/admin/support" className="text-xs font-bold" style={{ color: "#2A5230" }}>View all →</Link>
             </div>
-            <div className="text-sm font-bold mb-1" style={{ color: "#1A2E1C" }}>Manage Courses</div>
-            <div className="text-xs" style={{ color: "#9AB89E" }}>
-              Edit, publish, reorder, or archive existing courses
+
+            {!openTickets?.length ? (
+              <div className="px-5 py-6 text-center text-xs" style={{ color: "#9AB89E" }}>
+                All caught up! No open tickets.
+              </div>
+            ) : (
+              <div className="divide-y" style={{ borderColor: "#F5FAF5" }}>
+                {openTickets.map((t) => {
+                  const p = PRIORITY_COLOR[t.priority ?? "normal"] ?? PRIORITY_COLOR.normal;
+                  return (
+                    <Link key={t.id} href={`/admin/support/${t.id}`}
+                      className="flex items-start gap-3 px-5 py-3 hover:bg-[#FAFCFA] transition-colors">
+                      <span className="mt-1 w-1.5 h-1.5 rounded-full shrink-0" style={{ background: p.text }} />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-semibold truncate" style={{ color: "#1A2E1C" }}>{t.subject}</div>
+                        <div className="text-[10px] mt-0.5" style={{ color: "#9AB89E" }}>
+                          {t.ticket_id} · {t.submitter_name ?? "Anonymous"}
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 capitalize" style={{ background: p.bg, color: p.text }}>
+                        {t.priority ?? "normal"}
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Quick actions */}
+          <div className="rounded-2xl p-5" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
+            <h2 className="font-bold text-sm mb-3" style={{ color: "#1A2E1C" }}>Quick Actions</h2>
+            <div className="grid grid-cols-3 gap-2">
+              {quickActions.map(({ label, href, icon, color, bg }) => (
+                <Link key={label} href={href}
+                  className="flex flex-col items-center gap-2 p-3 rounded-xl text-center transition-all hover:-translate-y-0.5"
+                  style={{ background: bg, textDecoration: "none" }}>
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(255,255,255,0.7)" }}>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d={icon} />
+                    </svg>
+                  </div>
+                  <span className="text-[10px] font-bold leading-tight" style={{ color }}>{label}</span>
+                </Link>
+              ))}
             </div>
-            <div className="text-xs font-bold mt-3" style={{ color: "#2A5230" }}>
-              View all courses →
-            </div>
-          </Link>
+          </div>
 
         </div>
       </div>
+
+      {/* New signups strip */}
+      {(recentUsers?.length ?? 0) > 0 && (
+        <div className="rounded-2xl p-5" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold text-sm" style={{ color: "#1A2E1C" }}>New Signups This Week</h2>
+            <Link href="/admin/users" className="text-xs font-bold" style={{ color: "#2A5230" }}>View all →</Link>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {recentUsers!.map((u) => {
+              const initials = u.full_name?.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase() ?? u.email?.[0]?.toUpperCase() ?? "?";
+              return (
+                <div key={u.id} className="flex items-center gap-2.5 px-3 py-2 rounded-xl" style={{ background: "#FAFCFA", border: "1px solid #EEF5EE" }}>
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-extrabold shrink-0"
+                    style={{ background: "#EEF5EE", color: "#2A5230" }}>
+                    {initials}
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold" style={{ color: "#1A2E1C" }}>{u.full_name ?? "—"}</div>
+                    <div className="text-[10px]" style={{ color: "#9AB89E" }}>{u.email}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
     </div>
   );
+}
+
+function timeAgoStr(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins  = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days  = Math.floor(diff / 86400000);
+  if (mins  < 1)  return "just now";
+  if (mins  < 60) return `${mins}m ago`;
+  if (hours < 24) return `${hours}h ago`;
+  if (days  < 7)  return `${days}d ago`;
+  return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
