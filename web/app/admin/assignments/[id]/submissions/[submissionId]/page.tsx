@@ -2,6 +2,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GradeForm } from "./GradeForm";
+import { BlocksDisplay } from "./BlocksDisplay";
 
 const STATUS_META: Record<string, { label: string; bg: string; text: string; dot: string }> = {
   submitted:    { label: "Submitted",    bg: "#E8F2FF", text: "#1A4A8A", dot: "#3A7ABB" },
@@ -95,8 +96,8 @@ export default async function SubmissionReviewPage({
                 <path fillRule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" />
               </svg>
             </summary>
-            <div className="px-5 py-4 text-sm leading-relaxed whitespace-pre-wrap" style={{ background: "var(--admin-card-bg)", color: "var(--admin-text-primary)" }}>
-              {assignment?.instructions ?? "No instructions."}
+            <div className="px-5 py-4" style={{ background: "var(--admin-card-bg)" }}>
+              <BlocksDisplay blocksJson={assignment?.instructions ?? null} />
             </div>
           </details>
 
