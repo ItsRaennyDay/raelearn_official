@@ -102,13 +102,13 @@ export default async function CouponsPage({
   return (
     <div className="p-8 max-w-6xl">
       <div className="mb-6">
-        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>Coupons</h1>
-        <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>{count ?? 0} discount codes</p>
+        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>Coupons</h1>
+        <p className="text-sm mt-0.5" style={{ color: "var(--admin-text-muted)" }}>{count ?? 0} discount codes</p>
       </div>
 
       {/* Feedback banners */}
       {created && (
-        <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium" style={{ background: "#EEF5EE", color: "#2A5230", border: "1px solid #C8DEC8" }}>
+        <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium" style={{ background: "var(--admin-card-bg-alt)", color: "var(--admin-text-muted)", border: "1px solid var(--admin-border)" }}>
           Coupon created successfully.
         </div>
       )}
@@ -119,12 +119,12 @@ export default async function CouponsPage({
       )}
 
       {/* Create coupon panel */}
-      <div className="mb-6 rounded-2xl p-5" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
-        <h2 className="font-bold text-sm mb-4" style={{ color: "#2A5230" }}>Create New Coupon</h2>
+      <div className="mb-6 rounded-2xl p-5" style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}>
+        <h2 className="font-bold text-sm mb-4" style={{ color: "var(--admin-accent)" }}>Create New Coupon</h2>
         <form action={createCoupon}>
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold" style={{ color: "#7A9878" }}>
+              <label className="text-xs font-semibold" style={{ color: "var(--admin-text-muted)" }}>
                 Coupon Code <span style={{ color: "#AA2222" }}>*</span>
               </label>
               <input
@@ -134,17 +134,17 @@ export default async function CouponsPage({
                 placeholder="SUMMER25"
                 maxLength={32}
                 className="px-4 py-2 text-sm rounded-xl border outline-none font-mono uppercase"
-                style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
               />
-              <span className="text-xs" style={{ color: "#9AB89E" }}>Letters, numbers, dashes. Auto-uppercased.</span>
+              <span className="text-xs" style={{ color: "var(--admin-text-dim)" }}>Letters, numbers, dashes. Auto-uppercased.</span>
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold" style={{ color: "#7A9878" }}>Applies To</label>
+              <label className="text-xs font-semibold" style={{ color: "var(--admin-text-muted)" }}>Applies To</label>
               <select
                 name="applies_to"
                 className="px-3 py-2 text-sm rounded-xl border outline-none"
-                style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
               >
                 <option value="all">All courses</option>
                 <option value="course">Specific course</option>
@@ -153,14 +153,14 @@ export default async function CouponsPage({
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold" style={{ color: "#7A9878" }}>
+              <label className="text-xs font-semibold" style={{ color: "var(--admin-text-muted)" }}>
                 Discount Type <span style={{ color: "#AA2222" }}>*</span>
               </label>
               <select
                 name="discount_type"
                 required
                 className="px-3 py-2 text-sm rounded-xl border outline-none"
-                style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
               >
                 <option value="percent">Percent (%)</option>
                 <option value="fixed">Fixed amount (₱)</option>
@@ -168,7 +168,7 @@ export default async function CouponsPage({
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold" style={{ color: "#7A9878" }}>
+              <label className="text-xs font-semibold" style={{ color: "var(--admin-text-muted)" }}>
                 Discount Value <span style={{ color: "#AA2222" }}>*</span>
               </label>
               <input
@@ -180,43 +180,43 @@ export default async function CouponsPage({
                 step="0.01"
                 placeholder="20"
                 className="px-4 py-2 text-sm rounded-xl border outline-none"
-                style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
               />
-              <span className="text-xs" style={{ color: "#9AB89E" }}>For percent: 1–100. For fixed: amount in ₱.</span>
+              <span className="text-xs" style={{ color: "var(--admin-text-dim)" }}>For percent: 1–100. For fixed: amount in ₱.</span>
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold" style={{ color: "#7A9878" }}>Max Uses</label>
+              <label className="text-xs font-semibold" style={{ color: "var(--admin-text-muted)" }}>Max Uses</label>
               <input
                 name="max_uses"
                 type="number"
                 min="1"
                 placeholder="Unlimited"
                 className="px-4 py-2 text-sm rounded-xl border outline-none"
-                style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
               />
-              <span className="text-xs" style={{ color: "#9AB89E" }}>Leave blank for unlimited uses.</span>
+              <span className="text-xs" style={{ color: "var(--admin-text-dim)" }}>Leave blank for unlimited uses.</span>
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold" style={{ color: "#7A9878" }}>Valid From</label>
+              <label className="text-xs font-semibold" style={{ color: "var(--admin-text-muted)" }}>Valid From</label>
               <input
                 name="valid_from"
                 type="date"
                 className="px-4 py-2 text-sm rounded-xl border outline-none"
-                style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
               />
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold" style={{ color: "#7A9878" }}>Expiration Date</label>
+              <label className="text-xs font-semibold" style={{ color: "var(--admin-text-muted)" }}>Expiration Date</label>
               <input
                 name="valid_until"
                 type="date"
                 className="px-4 py-2 text-sm rounded-xl border outline-none"
-                style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
               />
-              <span className="text-xs" style={{ color: "#9AB89E" }}>Leave blank for no expiry.</span>
+              <span className="text-xs" style={{ color: "var(--admin-text-dim)" }}>Leave blank for no expiry.</span>
             </div>
           </div>
 
@@ -239,29 +239,29 @@ export default async function CouponsPage({
           defaultValue={q}
           placeholder="Search coupon code…"
           className="flex-1 max-w-sm px-4 py-2 text-sm rounded-xl border outline-none"
-          style={{ borderColor: "#DDE8DA", background: "#fff", color: "#1A2E1C" }}
+          style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-card-bg)", color: "var(--admin-text-primary)" }}
         />
         <button type="submit" className="px-4 py-2 text-sm font-bold rounded-xl" style={{ background: "#2A5230", color: "#fff" }}>Search</button>
-        {q && <Link href="/admin/coupons" className="px-4 py-2 text-sm rounded-xl" style={{ background: "#F5F0E8", color: "#7A9878" }}>Clear</Link>}
+        {q && <Link href="/admin/coupons" className="px-4 py-2 text-sm rounded-xl" style={{ background: "#F5F0E8", color: "var(--admin-text-muted)" }}>Clear</Link>}
       </form>
 
-      <div className="rounded-2xl overflow-hidden" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
+      <div className="rounded-2xl overflow-hidden" style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}>
         <table className="w-full text-sm">
           <thead>
-            <tr style={{ borderBottom: "1px solid #F0F7F0", background: "#FAFCFA" }}>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Code</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Discount</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Uses</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Applies To</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Valid</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Status</th>
+            <tr style={{ borderBottom: "1px solid var(--admin-border)", background: "var(--admin-table-head-bg)" }}>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Code</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Discount</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Uses</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Applies To</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Valid</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Status</th>
               <th className="px-5 py-3" />
             </tr>
           </thead>
           <tbody>
             {!coupons || coupons.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-5 py-12 text-center text-sm" style={{ color: "#9AB89E" }}>
+                <td colSpan={7} className="px-5 py-12 text-center text-sm" style={{ color: "var(--admin-text-dim)" }}>
                   No coupons yet. Create one above.
                 </td>
               </tr>
@@ -272,21 +272,21 @@ export default async function CouponsPage({
                 const isActive = !isExpired && !isMaxed;
 
                 return (
-                  <tr key={c.id} className="transition-colors hover:bg-[#FAFCFA]" style={{ borderBottom: "1px solid #F5FAF5" }}>
+                  <tr key={c.id} className="transition-colors hover:bg-[#FAFCFA]" style={{ borderBottom: "1px solid var(--admin-table-row-border)" }}>
                     <td className="px-5 py-3">
-                      <span className="font-mono text-sm font-bold" style={{ color: "#2A5230" }}>{c.code}</span>
+                      <span className="font-mono text-sm font-bold" style={{ color: "var(--admin-accent)" }}>{c.code}</span>
                     </td>
-                    <td className="px-5 py-3 font-semibold" style={{ color: "#1A2E1C" }}>
+                    <td className="px-5 py-3 font-semibold" style={{ color: "var(--admin-text-primary)" }}>
                       {c.discount_type === "percent"
                         ? `${c.discount_value}%`
                         : `₱${((c.discount_value ?? 0) / 100).toLocaleString()}`}
                     </td>
                     <td className="px-5 py-3">
-                      <span style={{ color: "#4A6650" }}>{c.uses_count ?? 0}</span>
-                      {c.max_uses != null && <span style={{ color: "#9AB89E" }}> / {c.max_uses}</span>}
+                      <span style={{ color: "var(--admin-text-muted)" }}>{c.uses_count ?? 0}</span>
+                      {c.max_uses != null && <span style={{ color: "var(--admin-text-dim)" }}> / {c.max_uses}</span>}
                     </td>
-                    <td className="px-5 py-3 capitalize text-xs" style={{ color: "#7A9878" }}>{c.applies_to ?? "all"}</td>
-                    <td className="px-5 py-3 text-xs" style={{ color: "#9AB89E" }}>
+                    <td className="px-5 py-3 capitalize text-xs" style={{ color: "var(--admin-text-muted)" }}>{c.applies_to ?? "all"}</td>
+                    <td className="px-5 py-3 text-xs" style={{ color: "var(--admin-text-dim)" }}>
                       {c.valid_from && <span>{new Date(c.valid_from).toLocaleDateString()} – </span>}
                       {c.valid_until ? new Date(c.valid_until).toLocaleDateString() : "No expiry"}
                     </td>
@@ -323,13 +323,13 @@ export default async function CouponsPage({
 
       {totalPages > 1 && (
         <div className="flex items-center justify-between mt-4">
-          <span className="text-xs" style={{ color: "#9AB89E" }}>Page {page} of {totalPages}</span>
+          <span className="text-xs" style={{ color: "var(--admin-text-dim)" }}>Page {page} of {totalPages}</span>
           <div className="flex gap-2">
             {Number(page) > 1 && (
-              <Link href={`/admin/coupons?q=${q}&page=${Number(page) - 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}>← Prev</Link>
+              <Link href={`/admin/coupons?q=${q}&page=${Number(page) - 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}>← Prev</Link>
             )}
             {Number(page) < totalPages && (
-              <Link href={`/admin/coupons?q=${q}&page=${Number(page) + 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}>Next →</Link>
+              <Link href={`/admin/coupons?q=${q}&page=${Number(page) + 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}>Next →</Link>
             )}
           </div>
         </div>

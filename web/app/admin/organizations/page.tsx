@@ -29,10 +29,10 @@ export default async function OrganizationsPage({
     <div className="p-8">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>
+          <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>
             Organizations
           </h1>
-          <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>
+          <p className="text-sm mt-0.5" style={{ color: "var(--admin-text-muted)" }}>
             {count ?? 0} organizations
           </p>
         </div>
@@ -44,33 +44,33 @@ export default async function OrganizationsPage({
           defaultValue={q}
           placeholder="Search organization name…"
           className="flex-1 max-w-sm px-4 py-2 text-sm rounded-xl border outline-none"
-          style={{ borderColor: "#DDE8DA", background: "#fff", color: "#1A2E1C" }}
+          style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-card-bg)", color: "var(--admin-text-primary)" }}
         />
         <button type="submit" className="px-4 py-2 text-sm font-bold rounded-xl" style={{ background: "#2A5230", color: "#fff" }}>
           Search
         </button>
         {q && (
-          <Link href="/admin/organizations" className="px-4 py-2 text-sm rounded-xl" style={{ background: "#F5F0E8", color: "#7A9878" }}>
+          <Link href="/admin/organizations" className="px-4 py-2 text-sm rounded-xl" style={{ background: "#F5F0E8", color: "var(--admin-text-muted)" }}>
             Clear
           </Link>
         )}
       </form>
 
-      <div className="rounded-2xl overflow-hidden" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
+      <div className="rounded-2xl overflow-hidden" style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}>
         <table className="w-full text-sm">
           <thead>
-            <tr style={{ borderBottom: "1px solid #F0F7F0", background: "#FAFCFA" }}>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Organization</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Owner</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Seats</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Subscription</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Created</th>
+            <tr style={{ borderBottom: "1px solid var(--admin-border)", background: "var(--admin-table-head-bg)" }}>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Organization</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Owner</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Seats</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Subscription</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Created</th>
             </tr>
           </thead>
           <tbody>
             {!orgs || orgs.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-5 py-12 text-center text-sm" style={{ color: "#9AB89E" }}>
+                <td colSpan={5} className="px-5 py-12 text-center text-sm" style={{ color: "var(--admin-text-dim)" }}>
                   No organizations found
                 </td>
               </tr>
@@ -83,17 +83,17 @@ export default async function OrganizationsPage({
                 const isExpired = org.subscription_expires_at && new Date(org.subscription_expires_at) < new Date();
 
                 return (
-                  <tr key={org.id} className="transition-colors hover:bg-[#FAFCFA]" style={{ borderBottom: "1px solid #F5FAF5" }}>
+                  <tr key={org.id} className="transition-colors hover:bg-[#FAFCFA]" style={{ borderBottom: "1px solid var(--admin-table-row-border)" }}>
                     <td className="px-5 py-3">
-                      <div className="font-medium" style={{ color: "#1A2E1C" }}>{org.name}</div>
-                      <div className="text-xs mt-0.5" style={{ color: "#9AB89E" }}>{org.slug}</div>
+                      <div className="font-medium" style={{ color: "var(--admin-text-primary)" }}>{org.name}</div>
+                      <div className="text-xs mt-0.5" style={{ color: "var(--admin-text-dim)" }}>{org.slug}</div>
                     </td>
                     <td className="px-5 py-3">
-                      <div style={{ color: "#4A6650" }}>{owner?.full_name ?? "—"}</div>
-                      <div className="text-xs mt-0.5" style={{ color: "#9AB89E" }}>{owner?.email ?? "—"}</div>
+                      <div style={{ color: "var(--admin-text-muted)" }}>{owner?.full_name ?? "—"}</div>
+                      <div className="text-xs mt-0.5" style={{ color: "var(--admin-text-dim)" }}>{owner?.email ?? "—"}</div>
                     </td>
                     <td className="px-5 py-3">
-                      <div className="text-sm font-semibold" style={{ color: "#2A5230" }}>
+                      <div className="text-sm font-semibold" style={{ color: "var(--admin-accent)" }}>
                         {seatsUsed} / {seatCount}
                       </div>
                       <div className="w-24 h-1.5 rounded-full mt-1" style={{ background: "#EEF5EE" }}>
@@ -115,10 +115,10 @@ export default async function OrganizationsPage({
                           {isExpired ? "Expired" : `Exp. ${new Date(org.subscription_expires_at).toLocaleDateString()}`}
                         </span>
                       ) : (
-                        <span className="text-xs" style={{ color: "#9AB89E" }}>—</span>
+                        <span className="text-xs" style={{ color: "var(--admin-text-dim)" }}>—</span>
                       )}
                     </td>
-                    <td className="px-5 py-3 text-xs" style={{ color: "#9AB89E" }}>
+                    <td className="px-5 py-3 text-xs" style={{ color: "var(--admin-text-dim)" }}>
                       {org.created_at ? new Date(org.created_at).toLocaleDateString() : "—"}
                     </td>
                   </tr>
@@ -131,13 +131,13 @@ export default async function OrganizationsPage({
 
       {totalPages > 1 && (
         <div className="flex items-center justify-between mt-4">
-          <span className="text-xs" style={{ color: "#9AB89E" }}>Page {page} of {totalPages}</span>
+          <span className="text-xs" style={{ color: "var(--admin-text-dim)" }}>Page {page} of {totalPages}</span>
           <div className="flex gap-2">
             {Number(page) > 1 && (
-              <Link href={`/admin/organizations?q=${q}&page=${Number(page) - 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}>← Prev</Link>
+              <Link href={`/admin/organizations?q=${q}&page=${Number(page) - 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}>← Prev</Link>
             )}
             {Number(page) < totalPages && (
-              <Link href={`/admin/organizations?q=${q}&page=${Number(page) + 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}>Next →</Link>
+              <Link href={`/admin/organizations?q=${q}&page=${Number(page) + 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}>Next →</Link>
             )}
           </div>
         </div>

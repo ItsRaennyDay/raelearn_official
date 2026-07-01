@@ -120,19 +120,19 @@ export default async function UsersPage({
     <div className="p-4 md:p-8 max-w-6xl">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>Users</h1>
-          <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>{merged.length} accounts shown</p>
+          <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>Users</h1>
+          <p className="text-sm mt-0.5" style={{ color: "var(--admin-text-muted)" }}>{merged.length} accounts shown</p>
         </div>
       </div>
 
       {/* Feedback banners */}
       {invited && (
-        <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium" style={{ background: "#EEF5EE", color: "#2A5230", border: "1px solid #C8DEC8" }}>
+        <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium" style={{ background: "var(--admin-card-bg-alt)", color: "var(--admin-text-muted)", border: "1px solid var(--admin-border)" }}>
           Invitation email sent successfully.
         </div>
       )}
       {deleted && (
-        <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium" style={{ background: "#EEF5EE", color: "#2A5230", border: "1px solid #C8DEC8" }}>
+        <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium" style={{ background: "var(--admin-card-bg-alt)", color: "var(--admin-text-muted)", border: "1px solid var(--admin-border)" }}>
           User deleted successfully.
         </div>
       )}
@@ -143,8 +143,8 @@ export default async function UsersPage({
       )}
 
       {/* Invite user panel */}
-      <div className="mb-6 rounded-2xl p-5" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
-        <h2 className="font-bold text-sm mb-3" style={{ color: "#2A5230" }}>Invite New User</h2>
+      <div className="mb-6 rounded-2xl p-5" style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}>
+        <h2 className="font-bold text-sm mb-3" style={{ color: "var(--admin-accent)" }}>Invite New User</h2>
         <form action={inviteUser} className="flex gap-3">
           <input
             name="email"
@@ -152,7 +152,7 @@ export default async function UsersPage({
             required
             placeholder="user@example.com"
             className="flex-1 max-w-sm px-4 py-2 text-sm rounded-xl border outline-none"
-            style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+            style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
           />
           <button
             type="submit"
@@ -162,7 +162,7 @@ export default async function UsersPage({
             Send Invite
           </button>
         </form>
-        <p className="text-xs mt-2" style={{ color: "#9AB89E" }}>
+        <p className="text-xs mt-2" style={{ color: "var(--admin-text-dim)" }}>
           Sends a magic-link email. User defaults to &quot;Learner&quot; — change role below after they sign up.
         </p>
       </div>
@@ -174,13 +174,13 @@ export default async function UsersPage({
           defaultValue={q}
           placeholder="Search name or email…"
           className="flex-1 max-w-sm px-4 py-2 text-sm rounded-xl border outline-none"
-          style={{ borderColor: "#DDE8DA", background: "#fff", color: "#1A2E1C" }}
+          style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-card-bg)", color: "var(--admin-text-primary)" }}
         />
         <select
           name="role"
           defaultValue={role}
           className="px-3 py-2 text-sm rounded-xl border outline-none"
-          style={{ borderColor: "#DDE8DA", background: "#fff", color: "#1A2E1C" }}
+          style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-card-bg)", color: "var(--admin-text-primary)" }}
         >
           <option value="">All roles</option>
           <option value="learner">Learner</option>
@@ -193,30 +193,30 @@ export default async function UsersPage({
           Search
         </button>
         {(q || role) && (
-          <Link href="/admin/users" className="px-4 py-2 text-sm rounded-xl" style={{ background: "#F5F0E8", color: "#7A9878" }}>
+          <Link href="/admin/users" className="px-4 py-2 text-sm rounded-xl" style={{ background: "#F5F0E8", color: "var(--admin-text-muted)" }}>
             Clear
           </Link>
         )}
       </form>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-2xl" style={{ border: "1.5px solid #E8EDE6" }}>
-      <div style={{ background: "#fff", minWidth: "700px" }}>
+      <div className="overflow-x-auto rounded-2xl" style={{ border: "1.5px solid var(--admin-border)" }}>
+      <div style={{ background: "var(--admin-card-bg)", minWidth: "700px" }}>
         <table className="w-full text-sm">
           <thead>
-            <tr style={{ borderBottom: "1px solid #F0F7F0", background: "#FAFCFA" }}>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>User</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Status</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Role</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Change Role</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Joined</th>
+            <tr style={{ borderBottom: "1px solid var(--admin-border)", background: "var(--admin-table-head-bg)" }}>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>User</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Status</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Role</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Change Role</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Joined</th>
               <th className="px-5 py-3" />
             </tr>
           </thead>
           <tbody>
             {merged.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-5 py-12 text-center text-sm" style={{ color: "#9AB89E" }}>No users found</td>
+                <td colSpan={6} className="px-5 py-12 text-center text-sm" style={{ color: "var(--admin-text-dim)" }}>No users found</td>
               </tr>
             ) : (
               merged.map((u) => {
@@ -230,7 +230,7 @@ export default async function UsersPage({
                     key={u.id}
                     className="transition-colors hover:bg-[#FAFCFA]"
                     style={{
-                      borderBottom: "1px solid #F5FAF5",
+                      borderBottom: "1px solid var(--admin-table-row-border)",
                       background: isMe ? "#FAFFF8" : undefined,
                     }}
                   >
@@ -243,15 +243,15 @@ export default async function UsersPage({
                           {initials}
                         </div>
                         <div>
-                          <div className="font-medium flex items-center gap-1.5" style={{ color: "#1A2E1C" }}>
-                            {u.full_name ?? <span style={{ color: "#9AB89E" }}>No name</span>}
+                          <div className="font-medium flex items-center gap-1.5" style={{ color: "var(--admin-text-primary)" }}>
+                            {u.full_name ?? <span style={{ color: "var(--admin-text-dim)" }}>No name</span>}
                             {isMe && (
                               <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ background: "#2A5230", color: "#A8D4AC" }}>
                                 You
                               </span>
                             )}
                           </div>
-                          <div className="text-xs mt-0.5" style={{ color: "#9AB89E" }}>{u.email}</div>
+                          <div className="text-xs mt-0.5" style={{ color: "var(--admin-text-dim)" }}>{u.email}</div>
                         </div>
                       </div>
                     </td>
@@ -279,7 +279,7 @@ export default async function UsersPage({
                           name="role"
                           defaultValue={u.role}
                           className="px-2.5 py-1.5 text-xs rounded-lg border outline-none"
-                          style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                          style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
                         >
                           <option value="learner">Learner</option>
                           <option value="group_learner">Group Learner</option>
@@ -296,7 +296,7 @@ export default async function UsersPage({
                         </button>
                       </form>
                     </td>
-                    <td className="px-5 py-3 text-xs" style={{ color: "#9AB89E" }}>
+                    <td className="px-5 py-3 text-xs" style={{ color: "var(--admin-text-dim)" }}>
                       <div>{u.created_at ? new Date(u.created_at).toLocaleDateString() : "—"}</div>
                       {u.last_sign_in && (
                         <div className="mt-0.5" style={{ color: "#C8DEC8" }}>
@@ -324,15 +324,15 @@ export default async function UsersPage({
 
       {/* Pagination — auth.admin.listUsers is paginated server-side */}
       <div className="flex items-center justify-between mt-4">
-        <span className="text-xs" style={{ color: "#9AB89E" }}>
+        <span className="text-xs" style={{ color: "var(--admin-text-dim)" }}>
           Showing page {page} · {merged.length} users
         </span>
         <div className="flex gap-2">
           {Number(page) > 1 && (
-            <Link href={`/admin/users?q=${q}&role=${role}&page=${Number(page) - 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}>← Prev</Link>
+            <Link href={`/admin/users?q=${q}&role=${role}&page=${Number(page) - 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}>← Prev</Link>
           )}
           {(authUsers ?? []).length === 50 && (
-            <Link href={`/admin/users?q=${q}&role=${role}&page=${Number(page) + 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}>Next →</Link>
+            <Link href={`/admin/users?q=${q}&role=${role}&page=${Number(page) + 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}>Next →</Link>
           )}
         </div>
       </div>

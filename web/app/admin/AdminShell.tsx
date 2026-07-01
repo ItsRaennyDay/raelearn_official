@@ -418,7 +418,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
               className="md:hidden p-1.5 rounded-lg shrink-0"
               onClick={() => setMobileNavOpen(true)}
               aria-label="Open menu"
-              style={{ color: "#2A5230" }}
+              style={{ color: "var(--admin-accent)" }}
             >
               <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
                 <path d="M3 6h14M3 10h14M3 14h14" />

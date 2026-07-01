@@ -27,24 +27,24 @@ export default function SettingsPage() {
   return (
     <div className="p-8 max-w-2xl">
       <div className="mb-6">
-        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>Settings</h1>
-        <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>Platform-wide configuration</p>
+        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>Settings</h1>
+        <p className="text-sm mt-0.5" style={{ color: "var(--admin-text-muted)" }}>Platform-wide configuration</p>
       </div>
 
       <div className="space-y-6">
         {SETTING_GROUPS.map((group) => (
-          <div key={group.label} className="rounded-2xl overflow-hidden" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
-            <div className="px-5 py-3" style={{ borderBottom: "1px solid #F0F7F0", background: "#FAFCFA" }}>
-              <h2 className="font-bold text-sm" style={{ color: "#2A5230" }}>{group.label}</h2>
+          <div key={group.label} className="rounded-2xl overflow-hidden" style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}>
+            <div className="px-5 py-3" style={{ borderBottom: "1px solid var(--admin-border)", background: "var(--admin-table-head-bg)" }}>
+              <h2 className="font-bold text-sm" style={{ color: "var(--admin-accent)" }}>{group.label}</h2>
             </div>
-            <div className="divide-y" style={{ borderColor: "#F5FAF5" }}>
+            <div className="divide-y" style={{ borderColor: "var(--admin-table-row-border)" }}>
               {group.items.map((item) => (
                 <div key={item.key} className="px-5 py-4 flex items-center justify-between gap-4">
                   <div>
-                    <div className="text-sm font-medium" style={{ color: "#1A2E1C" }}>{item.label}</div>
+                    <div className="text-sm font-medium" style={{ color: "var(--admin-text-primary)" }}>{item.label}</div>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
-                    <span className="text-sm" style={{ color: "#7A9878" }}>{item.value}</span>
+                    <span className="text-sm" style={{ color: "var(--admin-text-muted)" }}>{item.value}</span>
                     <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "#F3F3F3", color: "#888" }}>
                       Soon
                     </span>

@@ -67,23 +67,23 @@ export default async function CertificatesPage({
     : allCerts;
 
   const stats = [
-    { label: "Eligible Courses", value: eligibleRes.count ?? 0, color: "#2A5230", bg: "#EEF5EE" },
-    { label: "Issued Certificates", value: certsRes.count ?? 0, color: "#6B4FBB", bg: "#F0EEFF" },
-    { label: "Course Completions", value: completionsRes.count ?? 0, color: "#8A6020", bg: "#FFF3DC" },
-    { label: "Templates", value: templateRes.count ?? 0, color: "#1A4A8A", bg: "#E8F2FF" },
+    { label: "Eligible Courses",    value: eligibleRes.count ?? 0,     color: "var(--admin-accent)" },
+    { label: "Issued Certificates", value: certsRes.count ?? 0,        color: "#6B4FBB" },
+    { label: "Course Completions",  value: completionsRes.count ?? 0,  color: "#8A6020" },
+    { label: "Templates",           value: templateRes.count ?? 0,     color: "#1A4A8A" },
   ];
 
   return (
     <div className="p-4 md:p-8 max-w-6xl">
       <div className="flex items-end justify-between mb-6">
         <div>
-          <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>Certificates</h1>
-          <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>Manage issued certificates and design templates</p>
+          <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>Certificates</h1>
+          <p className="text-sm mt-0.5" style={{ color: "var(--admin-text-muted)" }}>Manage issued certificates and design templates</p>
         </div>
         <div className="flex gap-3">
           <Link href="/admin/certificates/templates"
             className="px-4 py-2.5 text-sm font-bold rounded-xl"
-            style={{ background: "#fff", color: "#2A5230", border: "1.5px solid #C8DEC8" }}>
+            style={{ background: "var(--admin-card-bg)", color: "var(--admin-accent)", border: "1.5px solid var(--admin-border)" }}>
             Template Designer
           </Link>
           <Link href="/admin/certificates/templates/new"
@@ -95,7 +95,7 @@ export default async function CertificatesPage({
       </div>
 
       {issued && (
-        <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium" style={{ background: "#EEF5EE", color: "#2A5230", border: "1px solid #C8DEC8" }}>
+        <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium" style={{ background: "var(--admin-card-bg-alt)", color: "var(--admin-text-muted)", border: "1px solid var(--admin-border)" }}>
           Certificate issued successfully.
         </div>
       )}
@@ -103,23 +103,23 @@ export default async function CertificatesPage({
       {/* Stats row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {stats.map(s => (
-          <div key={s.label} className="rounded-2xl p-5" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
+          <div key={s.label} className="rounded-2xl p-5" style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}>
             <div className="text-3xl font-extrabold mb-1" style={{ fontFamily: "var(--font-head)", color: s.color }}>{s.value}</div>
-            <div className="text-xs font-semibold" style={{ color: "#7A9878" }}>{s.label}</div>
+            <div className="text-xs font-semibold" style={{ color: "var(--admin-text-muted)" }}>{s.label}</div>
           </div>
         ))}
       </div>
 
       {/* Templates quick-access */}
-      <div className="mb-6 rounded-2xl p-5" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
+      <div className="mb-6 rounded-2xl p-5" style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-bold text-sm" style={{ color: "#2A5230" }}>Certificate Templates</h2>
-          <Link href="/admin/certificates/templates" className="text-xs font-semibold hover:underline" style={{ color: "#7A9878" }}>
+          <h2 className="font-bold text-sm" style={{ color: "var(--admin-accent)" }}>Certificate Templates</h2>
+          <Link href="/admin/certificates/templates" className="text-xs font-semibold hover:underline" style={{ color: "var(--admin-text-muted)" }}>
             View all →
           </Link>
         </div>
         {(templateRes.count ?? 0) === 0 ? (
-          <div className="flex items-center gap-4 p-4 rounded-xl" style={{ background: "#FAFCFA", border: "1.5px dashed #DDE8DA" }}>
+          <div className="flex items-center gap-4 p-4 rounded-xl" style={{ background: "var(--admin-table-head-bg)", border: "1.5px dashed #DDE8DA" }}>
             <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "#EEF5EE" }}>
               <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="#2A5230" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="4" width="16" height="12" rx="1.5" />
@@ -128,8 +128,8 @@ export default async function CertificatesPage({
               </svg>
             </div>
             <div className="flex-1">
-              <div className="text-sm font-semibold mb-0.5" style={{ color: "#1A2E1C" }}>Design your first certificate template</div>
-              <div className="text-xs" style={{ color: "#9AB89E" }}>Customize colors, fonts, borders, and branding. Assign templates to courses.</div>
+              <div className="text-sm font-semibold mb-0.5" style={{ color: "var(--admin-text-primary)" }}>Design your first certificate template</div>
+              <div className="text-xs" style={{ color: "var(--admin-text-dim)" }}>Customize colors, fonts, borders, and branding. Assign templates to courses.</div>
             </div>
             <Link href="/admin/certificates/templates/new"
               className="text-sm font-bold px-4 py-2 rounded-xl shrink-0"
@@ -139,8 +139,8 @@ export default async function CertificatesPage({
           </div>
         ) : (
           <div className="flex items-center gap-3">
-            <div className="text-sm" style={{ color: "#4A6650" }}>
-              You have <span className="font-bold" style={{ color: "#2A5230" }}>{templateRes.count}</span> template{templateRes.count !== 1 ? "s" : ""} created.
+            <div className="text-sm" style={{ color: "var(--admin-text-muted)" }}>
+              You have <span className="font-bold" style={{ color: "var(--admin-accent)" }}>{templateRes.count}</span> template{templateRes.count !== 1 ? "s" : ""} created.
             </div>
             <Link href="/admin/certificates/templates"
               className="text-sm font-bold px-4 py-2 rounded-xl"
@@ -154,33 +154,33 @@ export default async function CertificatesPage({
       {/* Issued certificates table */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-bold text-sm" style={{ color: "#1A2E1C" }}>
-            Issued Certificates <span className="font-normal text-xs ml-1" style={{ color: "#9AB89E" }}>({certsRes.count ?? 0})</span>
+          <h2 className="font-bold text-sm" style={{ color: "var(--admin-text-primary)" }}>
+            Issued Certificates <span className="font-normal text-xs ml-1" style={{ color: "var(--admin-text-dim)" }}>({certsRes.count ?? 0})</span>
           </h2>
           <form method="GET" className="flex gap-2">
             <input name="q" defaultValue={q} placeholder="Search learner, course…"
               className="px-3 py-1.5 text-xs rounded-xl border outline-none"
-              style={{ borderColor: "#DDE8DA", background: "#fff", color: "#1A2E1C", width: 220 }} />
+              style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-card-bg)", color: "var(--admin-text-primary)", width: 220 }} />
             <button type="submit" className="px-3 py-1.5 text-xs font-bold rounded-xl"
               style={{ background: "#2A5230", color: "#fff" }}>Search</button>
-            {q && <Link href="/admin/certificates" className="px-3 py-1.5 text-xs rounded-xl" style={{ background: "#F5F0E8", color: "#7A9878" }}>Clear</Link>}
+            {q && <Link href="/admin/certificates" className="px-3 py-1.5 text-xs rounded-xl" style={{ background: "#F5F0E8", color: "var(--admin-text-muted)" }}>Clear</Link>}
           </form>
         </div>
 
-        <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid #E8EDE6" }}>
-          <div style={{ background: "#fff", minWidth: 680 }}>
+        <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid var(--admin-border)" }}>
+          <div style={{ background: "var(--admin-card-bg)", minWidth: 680 }}>
             <table className="w-full text-sm">
               <thead>
-                <tr style={{ borderBottom: "1px solid #F0F7F0", background: "#FAFCFA" }}>
+                <tr style={{ borderBottom: "1px solid var(--admin-border)", background: "var(--admin-table-head-bg)" }}>
                   {["Learner", "Course", "Cert Number", "Template", "Issued", ""].map(h => (
-                    <th key={h} className="text-left px-4 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>{h}</th>
+                    <th key={h} className="text-left px-4 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {certs.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-5 py-12 text-center text-sm" style={{ color: "#9AB89E" }}>
+                    <td colSpan={6} className="px-5 py-12 text-center text-sm" style={{ color: "var(--admin-text-dim)" }}>
                       {q ? "No certificates match your search." : "No certificates issued yet."}
                     </td>
                   </tr>
@@ -189,29 +189,29 @@ export default async function CertificatesPage({
                   const course = cert.courses as unknown as { title?: string; slug?: string } | null;
                   const tmpl = cert.certificate_templates as unknown as { name?: string } | null;
                   return (
-                    <tr key={cert.id} className="transition-colors hover:bg-[#FAFCFA]" style={{ borderBottom: "1px solid #F5FAF5" }}>
+                    <tr key={cert.id} className="transition-colors hover:bg-[#FAFCFA]" style={{ borderBottom: "1px solid var(--admin-table-row-border)" }}>
                       <td className="px-4 py-3">
-                        <div className="font-medium text-sm" style={{ color: "#1A2E1C" }}>
+                        <div className="font-medium text-sm" style={{ color: "var(--admin-text-primary)" }}>
                           {profile?.full_name || profile?.email?.split("@")[0] || "—"}
                         </div>
-                        <div className="text-xs" style={{ color: "#9AB89E" }}>{profile?.email}</div>
+                        <div className="text-xs" style={{ color: "var(--admin-text-dim)" }}>{profile?.email}</div>
                       </td>
-                      <td className="px-4 py-3 text-sm" style={{ color: "#4A6650" }}>
+                      <td className="px-4 py-3 text-sm" style={{ color: "var(--admin-text-muted)" }}>
                         {course?.slug ? (
                           <Link href={`/courses/${course.slug}`} target="_blank" className="hover:underline">{course.title}</Link>
                         ) : (course?.title ?? "—")}
                       </td>
                       <td className="px-4 py-3">
-                        <span className="text-xs font-mono px-2 py-0.5 rounded" style={{ background: "#F5FAF5", color: "#4A6650" }}>
+                        <span className="text-xs font-mono px-2 py-0.5 rounded" style={{ background: "#F5FAF5", color: "var(--admin-text-muted)" }}>
                           {cert.certificate_number}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-xs" style={{ color: "#7A9878" }}>
+                      <td className="px-4 py-3 text-xs" style={{ color: "var(--admin-text-muted)" }}>
                         {tmpl?.name ? (
                           <span className="px-2 py-0.5 rounded-full font-semibold" style={{ background: "#EEF5EE", color: "#2A5230" }}>{tmpl.name}</span>
                         ) : <span style={{ color: "#C8C8C8" }}>Default</span>}
                       </td>
-                      <td className="px-4 py-3 text-xs" style={{ color: "#9AB89E" }}>
+                      <td className="px-4 py-3 text-xs" style={{ color: "var(--admin-text-dim)" }}>
                         {cert.issued_at ? new Date(cert.issued_at).toLocaleDateString() : "—"}
                       </td>
                       <td className="px-4 py-3">

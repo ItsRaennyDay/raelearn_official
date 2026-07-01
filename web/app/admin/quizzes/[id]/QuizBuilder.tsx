@@ -125,7 +125,7 @@ export default function QuizBuilder({
     <div>
       <div className="flex flex-col gap-3 mb-4">
         {questions.length === 0 && editingId !== "new" && (
-          <div className="rounded-[14px] py-10 text-center text-sm" style={{ color: "#9AB89E", background: "#FAFCFA", border: "1px dashed #DDE8DA" }}>
+          <div className="rounded-[14px] py-10 text-center text-sm" style={{ color: "var(--admin-text-dim)", background: "var(--admin-table-head-bg)", border: "1px dashed #DDE8DA" }}>
             No questions yet — add your first one below.
           </div>
         )}
@@ -200,16 +200,16 @@ function QuestionCard({
     : (options[correctIndex] ?? "—");
 
   return (
-    <div className="rounded-[14px] px-5 py-4 flex items-start gap-4" style={{ background: "#fff", border: "1px solid #DDE8DA" }}>
+    <div className="rounded-[14px] px-5 py-4 flex items-start gap-4" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)" }}>
       {/* Sort controls */}
       <div className="flex flex-col items-center gap-0.5 shrink-0 pt-1">
         <button onClick={() => onMove("up")} disabled={index === 0 || isPending}
-          className="text-[10px] leading-none px-1 py-0.5 rounded disabled:opacity-25 hover:text-[#2A5230] transition-colors" style={{ color: "#9AB89E" }}>
+          className="text-[10px] leading-none px-1 py-0.5 rounded disabled:opacity-25 hover:text-[#2A5230] transition-colors" style={{ color: "var(--admin-text-dim)" }}>
           ▲
         </button>
-        <span className="text-[13px] font-extrabold" style={{ color: "#2A5230" }}>{index + 1}</span>
+        <span className="text-[13px] font-extrabold" style={{ color: "var(--admin-accent)" }}>{index + 1}</span>
         <button onClick={() => onMove("down")} disabled={index === total - 1 || isPending}
-          className="text-[10px] leading-none px-1 py-0.5 rounded disabled:opacity-25 hover:text-[#2A5230] transition-colors" style={{ color: "#9AB89E" }}>
+          className="text-[10px] leading-none px-1 py-0.5 rounded disabled:opacity-25 hover:text-[#2A5230] transition-colors" style={{ color: "var(--admin-text-dim)" }}>
           ▼
         </button>
       </div>
@@ -221,11 +221,11 @@ function QuestionCard({
             {isTF ? "True / False" : "Multiple Choice"}
           </span>
         </div>
-        <p className="text-[14px] font-medium mb-2.5" style={{ color: "#1A2E1C" }}>{question.question_text}</p>
+        <p className="text-[14px] font-medium mb-2.5" style={{ color: "var(--admin-text-primary)" }}>{question.question_text}</p>
 
         {isTF ? (
-          <div className="text-[12.5px]" style={{ color: "#7A9878" }}>
-            Correct: <strong style={{ color: "#2A5230" }}>{correctText}</strong>
+          <div className="text-[12.5px]" style={{ color: "var(--admin-text-muted)" }}>
+            Correct: <strong style={{ color: "var(--admin-accent)" }}>{correctText}</strong>
           </div>
         ) : (
           <div className="flex flex-col gap-1">
@@ -291,7 +291,7 @@ function QuestionForm({
             className="px-3 py-1.5 text-xs font-bold rounded-lg transition-colors"
             style={form.question_type === type
               ? { background: "#2A5230", color: "#fff" }
-              : { background: "#fff", color: "#7A9878", border: "1px solid #DDE8DA" }}
+              : { background: "var(--admin-card-bg)", color: "var(--admin-text-muted)", border: "1px solid var(--admin-border-mid)" }}
           >
             {type === "multiple_choice" ? "Multiple Choice" : "True / False"}
           </button>
@@ -300,22 +300,22 @@ function QuestionForm({
 
       {/* Question text */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-[11px] font-extrabold tracking-[0.08em] uppercase" style={{ color: "#7A9878" }}>Question</label>
+        <label className="text-[11px] font-extrabold tracking-[0.08em] uppercase" style={{ color: "var(--admin-text-muted)" }}>Question</label>
         <textarea
           value={form.question_text}
           onChange={(e) => setForm({ ...form, question_text: e.target.value })}
           rows={2}
           placeholder="Enter your question…"
           className="px-4 py-2.5 text-[13.5px] rounded-xl border outline-none resize-none"
-          style={{ borderColor: "#DDE8DA", background: "#fff", color: "#1A2E1C" }}
+          style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-card-bg)", color: "var(--admin-text-primary)" }}
         />
       </div>
 
       {/* Options */}
       {isMC ? (
         <div className="flex flex-col gap-2">
-          <label className="text-[11px] font-extrabold tracking-[0.08em] uppercase" style={{ color: "#7A9878" }}>
-            Options <span className="normal-case font-normal" style={{ color: "#9AB89E" }}>— select the correct one</span>
+          <label className="text-[11px] font-extrabold tracking-[0.08em] uppercase" style={{ color: "var(--admin-text-muted)" }}>
+            Options <span className="normal-case font-normal" style={{ color: "var(--admin-text-dim)" }}>— select the correct one</span>
           </label>
           {([0, 1, 2, 3] as const).map((i) => (
             <div key={i} className="flex items-center gap-2.5">
@@ -345,14 +345,14 @@ function QuestionForm({
                 }}
                 placeholder={`Option ${LETTER[i]}`}
                 className="flex-1 px-3 py-2 text-[13px] rounded-xl border outline-none"
-                style={{ borderColor: "#DDE8DA", background: "#fff", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-card-bg)", color: "var(--admin-text-primary)" }}
               />
             </div>
           ))}
         </div>
       ) : (
         <div className="flex flex-col gap-2">
-          <label className="text-[11px] font-extrabold tracking-[0.08em] uppercase" style={{ color: "#7A9878" }}>Correct Answer</label>
+          <label className="text-[11px] font-extrabold tracking-[0.08em] uppercase" style={{ color: "var(--admin-text-muted)" }}>Correct Answer</label>
           <div className="flex gap-4">
             {["True", "False"].map((val, i) => (
               <label key={val} className="flex items-center gap-2 cursor-pointer">
@@ -363,7 +363,7 @@ function QuestionForm({
                   onChange={() => setForm({ ...form, correct_index: i })}
                   className="accent-[#2A5230]"
                 />
-                <span className="text-[14px] font-medium" style={{ color: "#1A2E1C" }}>{val}</span>
+                <span className="text-[14px] font-medium" style={{ color: "var(--admin-text-primary)" }}>{val}</span>
               </label>
             ))}
           </div>
@@ -385,7 +385,7 @@ function QuestionForm({
           onClick={onCancel}
           disabled={isPending}
           className="px-4 py-2 text-sm font-bold rounded-xl"
-          style={{ background: "#fff", color: "#7A9878", border: "1px solid #DDE8DA" }}
+          style={{ background: "var(--admin-card-bg)", color: "var(--admin-text-muted)", border: "1px solid var(--admin-border-mid)" }}
         >
           Cancel
         </button>

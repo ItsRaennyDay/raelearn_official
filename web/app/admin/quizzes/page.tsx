@@ -31,8 +31,8 @@ export default async function QuizzesPage() {
     <div className="p-4 md:p-8 max-w-6xl">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>Quizzes</h1>
-          <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>{quizzes?.length ?? 0} quizzes</p>
+          <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>Quizzes</h1>
+          <p className="text-sm mt-0.5" style={{ color: "var(--admin-text-muted)" }}>{quizzes?.length ?? 0} quizzes</p>
         </div>
         <Link
           href="/admin/quizzes/new"
@@ -43,25 +43,25 @@ export default async function QuizzesPage() {
         </Link>
       </div>
 
-      <div className="overflow-x-auto rounded-2xl" style={{ border: "1.5px solid #E8EDE6" }}>
-        <div style={{ background: "#fff", minWidth: "580px" }}>
+      <div className="overflow-x-auto rounded-2xl" style={{ border: "1.5px solid var(--admin-border)" }}>
+        <div style={{ background: "var(--admin-card-bg)", minWidth: "580px" }}>
           <table className="w-full text-sm">
             <thead>
-              <tr style={{ borderBottom: "1px solid #F0F7F0", background: "#FAFCFA" }}>
-                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Quiz</th>
-                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Attached to</th>
-                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Questions</th>
-                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Pass %</th>
-                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Status</th>
+              <tr style={{ borderBottom: "1px solid var(--admin-border)", background: "var(--admin-table-head-bg)" }}>
+                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Quiz</th>
+                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Attached to</th>
+                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Questions</th>
+                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Pass %</th>
+                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Status</th>
                 <th className="px-5 py-3" />
               </tr>
             </thead>
             <tbody>
               {!quizzes?.length ? (
                 <tr>
-                  <td colSpan={6} className="px-5 py-14 text-center text-sm" style={{ color: "#9AB89E" }}>
+                  <td colSpan={6} className="px-5 py-14 text-center text-sm" style={{ color: "var(--admin-text-dim)" }}>
                     No quizzes yet.{" "}
-                    <Link href="/admin/quizzes/new" className="font-bold underline" style={{ color: "#2A5230" }}>Create one</Link>
+                    <Link href="/admin/quizzes/new" className="font-bold underline" style={{ color: "var(--admin-accent)" }}>Create one</Link>
                   </td>
                 </tr>
               ) : (
@@ -71,18 +71,18 @@ export default async function QuizzesPage() {
                   const qCount  = Array.isArray(quiz.quiz_questions) ? quiz.quiz_questions.length : 0;
                   const sm      = STATUS_META[quiz.status] ?? STATUS_META.draft;
                   return (
-                    <tr key={quiz.id} className="hover:bg-[#FAFCFA] transition-colors" style={{ borderBottom: "1px solid #F5FAF5" }}>
+                    <tr key={quiz.id} className="hover:bg-[#FAFCFA] transition-colors" style={{ borderBottom: "1px solid var(--admin-table-row-border)" }}>
                       <td className="px-5 py-3">
-                        <div className="font-medium" style={{ color: "#1A2E1C" }}>{quiz.title}</div>
-                        <div className="text-xs mt-0.5" style={{ color: "#9AB89E" }}>
+                        <div className="font-medium" style={{ color: "var(--admin-text-primary)" }}>{quiz.title}</div>
+                        <div className="text-xs mt-0.5" style={{ color: "var(--admin-text-dim)" }}>
                           {quiz.max_attempts ? `${quiz.max_attempts} attempt${quiz.max_attempts > 1 ? "s" : ""}` : "Unlimited attempts"}
                         </div>
                       </td>
-                      <td className="px-5 py-3 text-[13px]" style={{ color: "#4A6650" }}>
+                      <td className="px-5 py-3 text-[13px]" style={{ color: "var(--admin-text-muted)" }}>
                         {lesson?.title
-                          ? <><span style={{ color: "#9AB89E" }}>Lesson:</span> {lesson.title}</>
+                          ? <><span style={{ color: "var(--admin-text-dim)" }}>Lesson:</span> {lesson.title}</>
                           : course?.title
-                            ? <><span style={{ color: "#9AB89E" }}>Course:</span> {course.title}</>
+                            ? <><span style={{ color: "var(--admin-text-dim)" }}>Course:</span> {course.title}</>
                             : <span style={{ color: "#C8DEC8" }}>—</span>}
                       </td>
                       <td className="px-5 py-3">
@@ -90,7 +90,7 @@ export default async function QuizzesPage() {
                           {qCount}
                         </span>
                       </td>
-                      <td className="px-5 py-3 text-[13px] font-bold" style={{ color: "#4A6650" }}>
+                      <td className="px-5 py-3 text-[13px] font-bold" style={{ color: "var(--admin-text-muted)" }}>
                         {quiz.passing_score}%
                       </td>
                       <td className="px-5 py-3">

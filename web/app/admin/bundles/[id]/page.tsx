@@ -152,7 +152,7 @@ export default async function BundleEditPage({ params }: { params: Promise<{ id:
     <div className="max-w-2xl p-8">
       {/* Back + preview */}
       <div className="flex items-center justify-between mb-6">
-        <Link href="/admin/bundles" className="inline-flex items-center gap-1.5 text-sm" style={{ color: "#7A9878" }}>
+        <Link href="/admin/bundles" className="inline-flex items-center gap-1.5 text-sm" style={{ color: "var(--admin-text-muted)" }}>
           <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
             <path fillRule="evenodd" d="M14 8a.75.75 0 0 1-.75.75H4.56l3.22 3.22a.75.75 0 1 1-1.06 1.06l-4.5-4.5a.75.75 0 0 1 0-1.06l4.5-4.5a.75.75 0 0 1 1.06 1.06L4.56 7.25h8.69A.75.75 0 0 1 14 8Z" clipRule="evenodd" />
           </svg>
@@ -171,42 +171,42 @@ export default async function BundleEditPage({ params }: { params: Promise<{ id:
       </div>
 
       {/* Bundle settings */}
-      <div className="rounded-2xl overflow-hidden mb-6" style={{ border: "1.5px solid #E8EDE6", background: "#fff" }}>
-        <div className="px-6 py-4" style={{ borderBottom: "1px solid #F0F7F0", background: "#FAFCFA" }}>
-          <h1 className="font-extrabold text-lg" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>
+      <div className="rounded-2xl overflow-hidden mb-6" style={{ border: "1.5px solid var(--admin-border)", background: "var(--admin-card-bg)" }}>
+        <div className="px-6 py-4" style={{ borderBottom: "1px solid var(--admin-border)", background: "var(--admin-table-head-bg)" }}>
+          <h1 className="font-extrabold text-lg" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>
             Bundle Settings
           </h1>
         </div>
         <form action={saveBundle} className="px-6 py-5 space-y-4">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wide mb-1.5" style={{ color: "#9AB89E" }}>Title</label>
+            <label className="block text-xs font-bold uppercase tracking-wide mb-1.5" style={{ color: "var(--admin-text-dim)" }}>Title</label>
             <input
               name="title"
               required
               defaultValue={bundle.title}
               className="w-full text-sm px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#2A5230]"
-              style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+              style={{ borderColor: "var(--admin-border-mid)", color: "var(--admin-text-primary)" }}
             />
           </div>
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wide mb-1.5" style={{ color: "#9AB89E" }}>Description</label>
+            <label className="block text-xs font-bold uppercase tracking-wide mb-1.5" style={{ color: "var(--admin-text-dim)" }}>Description</label>
             <textarea
               name="description"
               rows={2}
               defaultValue={bundle.description ?? ""}
               placeholder="Short description shown on audience pages"
               className="w-full text-sm px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#2A5230] resize-none"
-              style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+              style={{ borderColor: "var(--admin-border-mid)", color: "var(--admin-text-primary)" }}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wide mb-1.5" style={{ color: "#9AB89E" }}>Audience</label>
+              <label className="block text-xs font-bold uppercase tracking-wide mb-1.5" style={{ color: "var(--admin-text-dim)" }}>Audience</label>
               <select
                 name="audience"
                 defaultValue={bundle.audience}
                 className="w-full text-sm px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#2A5230] bg-white"
-                style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", color: "var(--admin-text-primary)" }}
               >
                 {AUDIENCE_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -214,12 +214,12 @@ export default async function BundleEditPage({ params }: { params: Promise<{ id:
               </select>
             </div>
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wide mb-1.5" style={{ color: "#9AB89E" }}>Status</label>
+              <label className="block text-xs font-bold uppercase tracking-wide mb-1.5" style={{ color: "var(--admin-text-dim)" }}>Status</label>
               <select
                 name="is_published"
                 defaultValue={bundle.is_published ? "true" : "false"}
                 className="w-full text-sm px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#2A5230] bg-white"
-                style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", color: "var(--admin-text-primary)" }}
               >
                 <option value="false">Draft — not visible publicly</option>
                 <option value="true">Published — visible on site</option>
@@ -237,17 +237,17 @@ export default async function BundleEditPage({ params }: { params: Promise<{ id:
       </div>
 
       {/* Course list */}
-      <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid #E8EDE6", background: "#fff" }}>
-        <div className="px-6 py-4 flex items-center justify-between" style={{ borderBottom: "1px solid #F0F7F0", background: "#FAFCFA" }}>
-          <h2 className="font-bold text-sm" style={{ color: "#1A2E1C" }}>
+      <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid var(--admin-border)", background: "var(--admin-card-bg)" }}>
+        <div className="px-6 py-4 flex items-center justify-between" style={{ borderBottom: "1px solid var(--admin-border)", background: "var(--admin-table-head-bg)" }}>
+          <h2 className="font-bold text-sm" style={{ color: "var(--admin-text-primary)" }}>
             Courses in this bundle
-            <span className="ml-2 text-xs font-normal" style={{ color: "#9AB89E" }}>{bundleCourses.length} course{bundleCourses.length !== 1 ? "s" : ""}</span>
+            <span className="ml-2 text-xs font-normal" style={{ color: "var(--admin-text-dim)" }}>{bundleCourses.length} course{bundleCourses.length !== 1 ? "s" : ""}</span>
           </h2>
-          <span className="text-xs" style={{ color: "#9AB89E" }}>Drag to reorder · first course shows on signup page</span>
+          <span className="text-xs" style={{ color: "var(--admin-text-dim)" }}>Drag to reorder · first course shows on signup page</span>
         </div>
 
         {bundleCourses.length === 0 ? (
-          <div className="px-6 py-8 text-center text-sm" style={{ color: "#9AB89E" }}>
+          <div className="px-6 py-8 text-center text-sm" style={{ color: "var(--admin-text-dim)" }}>
             No courses yet — add one below.
           </div>
         ) : (
@@ -266,7 +266,7 @@ export default async function BundleEditPage({ params }: { params: Promise<{ id:
                   <form action={moveUp}>
                     <input type="hidden" name="course_id" value={course_id} />
                     <input type="hidden" name="sort_order" value={sort_order} />
-                    <button type="submit" disabled={i === 0} className="block p-0.5 disabled:opacity-20" style={{ color: "#7A9878" }}>
+                    <button type="submit" disabled={i === 0} className="block p-0.5 disabled:opacity-20" style={{ color: "var(--admin-text-muted)" }}>
                       <svg viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M2 8l4-4 4 4" />
                       </svg>
@@ -275,7 +275,7 @@ export default async function BundleEditPage({ params }: { params: Promise<{ id:
                   <form action={moveDown}>
                     <input type="hidden" name="course_id" value={course_id} />
                     <input type="hidden" name="sort_order" value={sort_order} />
-                    <button type="submit" disabled={i === bundleCourses.length - 1} className="block p-0.5 disabled:opacity-20" style={{ color: "#7A9878" }}>
+                    <button type="submit" disabled={i === bundleCourses.length - 1} className="block p-0.5 disabled:opacity-20" style={{ color: "var(--admin-text-muted)" }}>
                       <svg viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M2 4l4 4 4-4" />
                       </svg>
@@ -285,7 +285,7 @@ export default async function BundleEditPage({ params }: { params: Promise<{ id:
 
                 {/* Course info */}
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold truncate" style={{ color: "#1A2E1C" }}>{course.title}</div>
+                  <div className="text-sm font-semibold truncate" style={{ color: "var(--admin-text-primary)" }}>{course.title}</div>
                   <div className="text-xs mt-0.5" style={{ color: LEVEL_COLOR[course.level] ?? "#9AB89E" }}>
                     {course.level}
                     {course.certificate_eligible && " · Certificate"}
@@ -311,13 +311,13 @@ export default async function BundleEditPage({ params }: { params: Promise<{ id:
 
         {/* Add course */}
         {available.length > 0 && (
-          <form action={addCourse} className="flex gap-2 px-5 py-4" style={{ borderTop: "1px solid #F0F7F0", background: "#FAFCFA" }}>
+          <form action={addCourse} className="flex gap-2 px-5 py-4" style={{ borderTop: "1px solid #F0F7F0", background: "var(--admin-table-head-bg)" }}>
             <select
               name="course_id"
               required
               defaultValue=""
               className="flex-1 text-sm px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#2A5230] bg-white"
-              style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+              style={{ borderColor: "var(--admin-border-mid)", color: "var(--admin-text-primary)" }}
             >
               <option value="" disabled>Select a course to add…</option>
               {available.map((c) => (
@@ -341,7 +341,7 @@ export default async function BundleEditPage({ params }: { params: Promise<{ id:
         )}
 
         {available.length === 0 && bundleCourses.length > 0 && (
-          <div className="px-6 py-3 text-xs" style={{ borderTop: "1px solid #F0F7F0", color: "#9AB89E" }}>
+          <div className="px-6 py-3 text-xs" style={{ borderTop: "1px solid #F0F7F0", color: "var(--admin-text-dim)" }}>
             All published courses are in this bundle.{" "}
             <Link href="/admin/courses" className="font-bold" style={{ color: "#4A8A52" }}>Add more courses →</Link>
           </div>

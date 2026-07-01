@@ -42,10 +42,10 @@ export default async function OrdersPage({
     <div className="p-8">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>
+          <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>
             Orders
           </h1>
-          <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>
+          <p className="text-sm mt-0.5" style={{ color: "var(--admin-text-muted)" }}>
             {count ?? 0} orders · ₱{(totalRevenue / 100).toLocaleString()} revenue (this page)
           </p>
         </div>
@@ -56,7 +56,7 @@ export default async function OrdersPage({
           name="status"
           defaultValue={status}
           className="px-3 py-2 text-sm rounded-xl border outline-none"
-          style={{ borderColor: "#DDE8DA", background: "#fff", color: "#1A2E1C" }}
+          style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-card-bg)", color: "var(--admin-text-primary)" }}
         >
           <option value="">All statuses</option>
           <option value="pending">Pending</option>
@@ -69,27 +69,27 @@ export default async function OrdersPage({
           Filter
         </button>
         {status && (
-          <Link href="/admin/orders" className="px-4 py-2 text-sm rounded-xl" style={{ background: "#F5F0E8", color: "#7A9878" }}>
+          <Link href="/admin/orders" className="px-4 py-2 text-sm rounded-xl" style={{ background: "#F5F0E8", color: "var(--admin-text-muted)" }}>
             Clear
           </Link>
         )}
       </form>
 
-      <div className="rounded-2xl overflow-hidden" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
+      <div className="rounded-2xl overflow-hidden" style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}>
         <table className="w-full text-sm">
           <thead>
-            <tr style={{ borderBottom: "1px solid #F0F7F0", background: "#FAFCFA" }}>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Order ID</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Customer</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Status</th>
-              <th className="text-right px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Total</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Date</th>
+            <tr style={{ borderBottom: "1px solid var(--admin-border)", background: "var(--admin-table-head-bg)" }}>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Order ID</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Customer</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Status</th>
+              <th className="text-right px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Total</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Date</th>
             </tr>
           </thead>
           <tbody>
             {!orders || orders.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-5 py-12 text-center text-sm" style={{ color: "#9AB89E" }}>
+                <td colSpan={5} className="px-5 py-12 text-center text-sm" style={{ color: "var(--admin-text-dim)" }}>
                   No orders found
                 </td>
               </tr>
@@ -98,13 +98,13 @@ export default async function OrdersPage({
                 const profile = o.profiles as unknown as { full_name?: string; email?: string } | null;
                 const meta = STATUS_META[o.status] ?? STATUS_META.pending;
                 return (
-                  <tr key={o.id} className="transition-colors hover:bg-[#FAFCFA]" style={{ borderBottom: "1px solid #F5FAF5" }}>
-                    <td className="px-5 py-3 font-mono text-xs" style={{ color: "#7A9878" }}>
+                  <tr key={o.id} className="transition-colors hover:bg-[#FAFCFA]" style={{ borderBottom: "1px solid var(--admin-table-row-border)" }}>
+                    <td className="px-5 py-3 font-mono text-xs" style={{ color: "var(--admin-text-muted)" }}>
                       {o.id.slice(0, 8)}…
                     </td>
                     <td className="px-5 py-3">
-                      <div className="font-medium" style={{ color: "#1A2E1C" }}>{profile?.full_name ?? "—"}</div>
-                      <div className="text-xs mt-0.5" style={{ color: "#9AB89E" }}>{profile?.email ?? "—"}</div>
+                      <div className="font-medium" style={{ color: "var(--admin-text-primary)" }}>{profile?.full_name ?? "—"}</div>
+                      <div className="text-xs mt-0.5" style={{ color: "var(--admin-text-dim)" }}>{profile?.email ?? "—"}</div>
                     </td>
                     <td className="px-5 py-3">
                       <span
@@ -115,10 +115,10 @@ export default async function OrdersPage({
                         {o.status}
                       </span>
                     </td>
-                    <td className="px-5 py-3 text-right font-semibold" style={{ color: "#2A5230" }}>
+                    <td className="px-5 py-3 text-right font-semibold" style={{ color: "var(--admin-accent)" }}>
                       ₱{((o.total_cents ?? 0) / 100).toLocaleString()}
                     </td>
-                    <td className="px-5 py-3 text-xs" style={{ color: "#9AB89E" }}>
+                    <td className="px-5 py-3 text-xs" style={{ color: "var(--admin-text-dim)" }}>
                       {o.created_at ? new Date(o.created_at).toLocaleDateString() : "—"}
                     </td>
                   </tr>
@@ -131,13 +131,13 @@ export default async function OrdersPage({
 
       {totalPages > 1 && (
         <div className="flex items-center justify-between mt-4">
-          <span className="text-xs" style={{ color: "#9AB89E" }}>Page {page} of {totalPages}</span>
+          <span className="text-xs" style={{ color: "var(--admin-text-dim)" }}>Page {page} of {totalPages}</span>
           <div className="flex gap-2">
             {Number(page) > 1 && (
-              <Link href={`/admin/orders?status=${status}&page=${Number(page) - 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}>← Prev</Link>
+              <Link href={`/admin/orders?status=${status}&page=${Number(page) - 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}>← Prev</Link>
             )}
             {Number(page) < totalPages && (
-              <Link href={`/admin/orders?status=${status}&page=${Number(page) + 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}>Next →</Link>
+              <Link href={`/admin/orders?status=${status}&page=${Number(page) + 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}>Next →</Link>
             )}
           </div>
         </div>

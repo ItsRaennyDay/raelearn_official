@@ -79,8 +79,8 @@ export default async function BundlesPage() {
   return (
     <div className="max-w-2xl p-8">
       <div className="mb-6">
-        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>Bundles</h1>
-        <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>
+        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>Bundles</h1>
+        <p className="text-sm mt-0.5" style={{ color: "var(--admin-text-muted)" }}>
           Group courses into learning tracks shown on audience pages. Click a bundle to edit it.
         </p>
       </div>
@@ -89,26 +89,26 @@ export default async function BundlesPage() {
       <form
         action={createBundle}
         className="rounded-xl p-5 mb-8 space-y-3"
-        style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}
+        style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}
       >
-        <h2 className="text-sm font-bold" style={{ color: "#1A2E1C" }}>New Bundle</h2>
+        <h2 className="text-sm font-bold" style={{ color: "var(--admin-text-primary)" }}>New Bundle</h2>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: "#9AB89E" }}>Title</label>
+            <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: "var(--admin-text-dim)" }}>Title</label>
             <input
               name="title"
               required
               placeholder="e.g. General VA Foundations"
               className="w-full text-sm px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#2A5230]"
-              style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+              style={{ borderColor: "var(--admin-border-mid)", color: "var(--admin-text-primary)" }}
             />
           </div>
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: "#9AB89E" }}>Audience</label>
+            <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: "var(--admin-text-dim)" }}>Audience</label>
             <select
               name="audience"
               className="w-full text-sm px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#2A5230] bg-white"
-              style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+              style={{ borderColor: "var(--admin-border-mid)", color: "var(--admin-text-primary)" }}
             >
               {AUDIENCE_OPTIONS.map((o) => (
                 <option key={o.value} value={o.value}>{o.label}</option>
@@ -117,12 +117,12 @@ export default async function BundlesPage() {
           </div>
         </div>
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: "#9AB89E" }}>Description</label>
+          <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: "var(--admin-text-dim)" }}>Description</label>
           <input
             name="description"
             placeholder="Short description shown on the page"
             className="w-full text-sm px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#2A5230]"
-            style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+            style={{ borderColor: "var(--admin-border-mid)", color: "var(--admin-text-primary)" }}
           />
         </div>
         <button
@@ -136,17 +136,17 @@ export default async function BundlesPage() {
 
       {/* Bundle list */}
       {(!bundles || bundles.length === 0) ? (
-        <div className="rounded-xl p-10 text-center" style={{ background: "#fff", border: "1.5px dashed #C8DEC8" }}>
-          <p className="text-sm" style={{ color: "#9AB89E" }}>No bundles yet. Create one above.</p>
+        <div className="rounded-xl p-10 text-center" style={{ background: "var(--admin-card-bg)", border: "1.5px dashed #C8DEC8" }}>
+          <p className="text-sm" style={{ color: "var(--admin-text-dim)" }}>No bundles yet. Create one above.</p>
         </div>
       ) : (
         <div className="space-y-6">
           {[...grouped.entries()].map(([audience, audienceBundles]) => (
             <section key={audience}>
-              <h2 className="text-xs font-extrabold uppercase tracking-widest mb-2" style={{ color: "#9AB89E" }}>
+              <h2 className="text-xs font-extrabold uppercase tracking-widest mb-2" style={{ color: "var(--admin-text-dim)" }}>
                 {AUDIENCE_LABELS[audience] ?? audience}
               </h2>
-              <div className="rounded-xl overflow-hidden" style={{ border: "1.5px solid #E8EDE6" }}>
+              <div className="rounded-xl overflow-hidden" style={{ border: "1.5px solid var(--admin-border)" }}>
                 {(audienceBundles ?? []).map((bundle, i) => {
                   const courseCount = countByBundle[bundle.id] ?? 0;
                   return (
@@ -154,7 +154,7 @@ export default async function BundlesPage() {
                       key={bundle.id}
                       className="flex items-center gap-3 px-4 py-3.5"
                       style={{
-                        background: "#fff",
+                        background: "var(--admin-card-bg)",
                         borderTop: i > 0 ? "1px solid #F5FAF5" : undefined,
                       }}
                     >
@@ -164,14 +164,14 @@ export default async function BundlesPage() {
                         className="flex-1 flex items-center gap-3 min-w-0 group"
                       >
                         <div className="min-w-0">
-                          <div className="font-semibold text-sm group-hover:underline truncate" style={{ color: "#1A2E1C" }}>
+                          <div className="font-semibold text-sm group-hover:underline truncate" style={{ color: "var(--admin-text-primary)" }}>
                             {bundle.title}
                           </div>
                           {bundle.description && (
-                            <div className="text-xs truncate mt-0.5" style={{ color: "#9AB89E" }}>{bundle.description}</div>
+                            <div className="text-xs truncate mt-0.5" style={{ color: "var(--admin-text-dim)" }}>{bundle.description}</div>
                           )}
                         </div>
-                        <span className="text-xs shrink-0 ml-auto" style={{ color: "#9AB89E" }}>
+                        <span className="text-xs shrink-0 ml-auto" style={{ color: "var(--admin-text-dim)" }}>
                           {courseCount} course{courseCount !== 1 ? "s" : ""}
                         </span>
                       </Link>

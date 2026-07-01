@@ -130,13 +130,13 @@ export default async function EnrollmentsPage({
   return (
     <div className="p-4 md:p-8 max-w-6xl">
       <div className="mb-6">
-        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>Enrollments</h1>
-        <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>{count ?? 0} total enrollments</p>
+        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>Enrollments</h1>
+        <p className="text-sm mt-0.5" style={{ color: "var(--admin-text-muted)" }}>{count ?? 0} total enrollments</p>
       </div>
 
       {/* Feedback banners */}
       {created && (
-        <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium" style={{ background: "#EEF5EE", color: "#2A5230", border: "1px solid #C8DEC8" }}>
+        <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium" style={{ background: "var(--admin-card-bg-alt)", color: "var(--admin-text-muted)", border: "1px solid var(--admin-border)" }}>
           Enrollment created successfully.
         </div>
       )}
@@ -147,27 +147,27 @@ export default async function EnrollmentsPage({
       )}
 
       {/* Manual enrollment panel */}
-      <div className="mb-6 rounded-2xl p-5" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
-        <h2 className="font-bold text-sm mb-3" style={{ color: "#2A5230" }}>Enroll a User Manually</h2>
+      <div className="mb-6 rounded-2xl p-5" style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}>
+        <h2 className="font-bold text-sm mb-3" style={{ color: "var(--admin-accent)" }}>Enroll a User Manually</h2>
         <form action={createEnrollment} className="flex gap-3 flex-wrap items-end">
           <div className="flex flex-col gap-1 flex-1 min-w-[200px]">
-            <label className="text-xs font-semibold" style={{ color: "#7A9878" }}>Learner email</label>
+            <label className="text-xs font-semibold" style={{ color: "var(--admin-text-muted)" }}>Learner email</label>
             <input
               name="email"
               type="email"
               required
               placeholder="learner@example.com"
               className="w-full px-4 py-2 text-sm rounded-xl border outline-none"
-              style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+              style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
             />
           </div>
           <div className="flex flex-col gap-1 flex-1 min-w-[200px]">
-            <label className="text-xs font-semibold" style={{ color: "#7A9878" }}>Course</label>
+            <label className="text-xs font-semibold" style={{ color: "var(--admin-text-muted)" }}>Course</label>
             <select
               name="courseId"
               required
               className="w-full px-3 py-2 text-sm rounded-xl border outline-none"
-              style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+              style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
             >
               <option value="">Select a course…</option>
               {(courses ?? []).map((c) => (
@@ -183,7 +183,7 @@ export default async function EnrollmentsPage({
             Enroll
           </button>
         </form>
-        <p className="text-xs mt-2" style={{ color: "#9AB89E" }}>
+        <p className="text-xs mt-2" style={{ color: "var(--admin-text-dim)" }}>
           The user must already be registered. Enrollment will be marked as source: admin.
         </p>
       </div>
@@ -195,13 +195,13 @@ export default async function EnrollmentsPage({
           defaultValue={q}
           placeholder="Search learner or course…"
           className="flex-1 max-w-sm px-4 py-2 text-sm rounded-xl border outline-none"
-          style={{ borderColor: "#DDE8DA", background: "#fff", color: "#1A2E1C" }}
+          style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-card-bg)", color: "var(--admin-text-primary)" }}
         />
         <select
           name="status"
           defaultValue={status}
           className="px-3 py-2 text-sm rounded-xl border outline-none"
-          style={{ borderColor: "#DDE8DA", background: "#fff", color: "#1A2E1C" }}
+          style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-card-bg)", color: "var(--admin-text-primary)" }}
         >
           <option value="">All statuses</option>
           <option value="active">Active</option>
@@ -211,27 +211,27 @@ export default async function EnrollmentsPage({
         </select>
         <button type="submit" className="px-4 py-2 text-sm font-bold rounded-xl" style={{ background: "#2A5230", color: "#fff" }}>Filter</button>
         {(q || status) && (
-          <Link href="/admin/enrollments" className="px-4 py-2 text-sm rounded-xl" style={{ background: "#F5F0E8", color: "#7A9878" }}>Clear</Link>
+          <Link href="/admin/enrollments" className="px-4 py-2 text-sm rounded-xl" style={{ background: "#F5F0E8", color: "var(--admin-text-muted)" }}>Clear</Link>
         )}
       </form>
 
-      <div className="overflow-x-auto rounded-2xl" style={{ border: "1.5px solid #E8EDE6" }}>
-      <div style={{ background: "#fff", minWidth: "680px" }}>
+      <div className="overflow-x-auto rounded-2xl" style={{ border: "1.5px solid var(--admin-border)" }}>
+      <div style={{ background: "var(--admin-card-bg)", minWidth: "680px" }}>
         <table className="w-full text-sm">
           <thead>
-            <tr style={{ borderBottom: "1px solid #F0F7F0", background: "#FAFCFA" }}>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Learner</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Course</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Status</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Source</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Enrolled</th>
+            <tr style={{ borderBottom: "1px solid var(--admin-border)", background: "var(--admin-table-head-bg)" }}>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Learner</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Course</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Status</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Source</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Enrolled</th>
               <th className="px-5 py-3" />
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-5 py-12 text-center text-sm" style={{ color: "#9AB89E" }}>No enrollments found</td>
+                <td colSpan={6} className="px-5 py-12 text-center text-sm" style={{ color: "var(--admin-text-dim)" }}>No enrollments found</td>
               </tr>
             ) : (
               filtered.map((e) => {
@@ -239,14 +239,14 @@ export default async function EnrollmentsPage({
                 const course = e.courses as unknown as { title?: string; slug?: string } | null;
                 const meta = STATUS_META[e.status] ?? STATUS_META.active;
                 return (
-                  <tr key={e.id} className="transition-colors hover:bg-[#FAFCFA]" style={{ borderBottom: "1px solid #F5FAF5" }}>
+                  <tr key={e.id} className="transition-colors hover:bg-[#FAFCFA]" style={{ borderBottom: "1px solid var(--admin-table-row-border)" }}>
                     <td className="px-5 py-3">
-                      <div className="font-medium" style={{ color: "#1A2E1C" }}>
+                      <div className="font-medium" style={{ color: "var(--admin-text-primary)" }}>
                         {profile?.full_name || profile?.email?.split("@")[0] || "—"}
                       </div>
-                      <div className="text-xs mt-0.5" style={{ color: "#9AB89E" }}>{profile?.email ?? "—"}</div>
+                      <div className="text-xs mt-0.5" style={{ color: "var(--admin-text-dim)" }}>{profile?.email ?? "—"}</div>
                     </td>
-                    <td className="px-5 py-3" style={{ color: "#4A6650" }}>
+                    <td className="px-5 py-3" style={{ color: "var(--admin-text-muted)" }}>
                       {course?.slug ? (
                         <Link href={`/courses/${course.slug}`} className="hover:underline" target="_blank">{course.title ?? "—"}</Link>
                       ) : (course?.title ?? "—")}
@@ -257,8 +257,8 @@ export default async function EnrollmentsPage({
                         {e.status}
                       </span>
                     </td>
-                    <td className="px-5 py-3 text-xs capitalize" style={{ color: "#7A9878" }}>{e.source ?? "—"}</td>
-                    <td className="px-5 py-3 text-xs" style={{ color: "#9AB89E" }}>
+                    <td className="px-5 py-3 text-xs capitalize" style={{ color: "var(--admin-text-muted)" }}>{e.source ?? "—"}</td>
+                    <td className="px-5 py-3 text-xs" style={{ color: "var(--admin-text-dim)" }}>
                       {e.enrolled_at ? new Date(e.enrolled_at).toLocaleDateString() : "—"}
                     </td>
                     <td className="px-5 py-3">
@@ -286,13 +286,13 @@ export default async function EnrollmentsPage({
 
       {totalPages > 1 && (
         <div className="flex items-center justify-between mt-4">
-          <span className="text-xs" style={{ color: "#9AB89E" }}>Page {page} of {totalPages}</span>
+          <span className="text-xs" style={{ color: "var(--admin-text-dim)" }}>Page {page} of {totalPages}</span>
           <div className="flex gap-2">
             {Number(page) > 1 && (
-              <Link href={`/admin/enrollments?status=${status}&page=${Number(page) - 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}>← Prev</Link>
+              <Link href={`/admin/enrollments?status=${status}&page=${Number(page) - 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}>← Prev</Link>
             )}
             {Number(page) < totalPages && (
-              <Link href={`/admin/enrollments?status=${status}&page=${Number(page) + 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}>Next →</Link>
+              <Link href={`/admin/enrollments?status=${status}&page=${Number(page) + 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}>Next →</Link>
             )}
           </div>
         </div>

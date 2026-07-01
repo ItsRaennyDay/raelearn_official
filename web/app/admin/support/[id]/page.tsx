@@ -62,8 +62,8 @@ const STATUS_META: Record<string, { label: string; bg: string; text: string; dot
 };
 
 const PRIORITY_META: Record<string, { label: string; color: string }> = {
-  low:    { label: "Low",    color: "#9AB89E" },
-  normal: { label: "Normal", color: "#7A9878" },
+  low:    { label: "Low",    color: "var(--admin-text-dim)" },
+  normal: { label: "Normal", color: "var(--admin-text-muted)" },
   high:   { label: "High",   color: "#C48A3A" },
   urgent: { label: "Urgent", color: "#AA2222" },
 };
@@ -103,16 +103,16 @@ export default async function TicketDetailPage({
   return (
     <div className="p-4 md:p-8 max-w-4xl">
       {/* Back + breadcrumb */}
-      <div className="mb-6 flex items-center gap-2 text-sm" style={{ color: "#7A9878" }}>
+      <div className="mb-6 flex items-center gap-2 text-sm" style={{ color: "var(--admin-text-muted)" }}>
         <Link href="/admin/support" className="hover:text-[#2A5230] transition-colors">
           ← Support Inbox
         </Link>
         <span>/</span>
-        <span className="font-bold" style={{ color: "#2A5230" }}>{ticket.ticket_id ?? id.slice(0, 8)}</span>
+        <span className="font-bold" style={{ color: "var(--admin-accent)" }}>{ticket.ticket_id ?? id.slice(0, 8)}</span>
       </div>
 
       {saved && (
-        <div className="mb-5 px-4 py-3 rounded-xl text-sm font-medium" style={{ background: "#EEF5EE", color: "#2A5230", border: "1px solid #C8DEC8" }}>
+        <div className="mb-5 px-4 py-3 rounded-xl text-sm font-medium" style={{ background: "var(--admin-card-bg-alt)", color: "var(--admin-text-muted)", border: "1px solid var(--admin-border)" }}>
           Notes saved.
         </div>
       )}
@@ -121,13 +121,13 @@ export default async function TicketDetailPage({
         {/* Main: ticket content */}
         <div className="flex flex-col gap-5">
           {/* Header */}
-          <div className="rounded-[18px] p-6" style={{ background: "#fff", border: "1px solid #DDE8DA" }}>
+          <div className="rounded-[18px] p-6" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)" }}>
             <div className="flex items-start justify-between gap-3 flex-wrap mb-4">
               <div>
-                <div className="text-[12px] font-extrabold tracking-[0.08em] uppercase mb-1" style={{ color: "#9AB89E" }}>
+                <div className="text-[12px] font-extrabold tracking-[0.08em] uppercase mb-1" style={{ color: "var(--admin-text-dim)" }}>
                   {ticket.ticket_id}
                 </div>
-                <h1 className="font-head font-extrabold text-[20px] leading-tight" style={{ color: "#1A2E1C" }}>
+                <h1 className="font-head font-extrabold text-[20px] leading-tight" style={{ color: "var(--admin-text-primary)" }}>
                   {ticket.subject}
                 </h1>
               </div>
@@ -136,29 +136,29 @@ export default async function TicketDetailPage({
                 {sm.label}
               </span>
             </div>
-            <div className="flex flex-wrap gap-4 text-[12.5px]" style={{ color: "#9AB89E" }}>
-              <span>From: <strong style={{ color: "#4A6650" }}>{ticket.submitter_name ?? "—"}</strong></span>
-              <span>Email: <strong style={{ color: "#4A6650" }}>{ticket.email}</strong></span>
-              <span>Category: <strong style={{ color: "#4A6650" }}>{CATEGORY_LABELS[ticket.category ?? "general"] ?? ticket.category}</strong></span>
+            <div className="flex flex-wrap gap-4 text-[12.5px]" style={{ color: "var(--admin-text-dim)" }}>
+              <span>From: <strong style={{ color: "var(--admin-text-muted)" }}>{ticket.submitter_name ?? "—"}</strong></span>
+              <span>Email: <strong style={{ color: "var(--admin-text-muted)" }}>{ticket.email}</strong></span>
+              <span>Category: <strong style={{ color: "var(--admin-text-muted)" }}>{CATEGORY_LABELS[ticket.category ?? "general"] ?? ticket.category}</strong></span>
               <span>Priority: <strong style={{ color: pm.color }}>{pm.label}</strong></span>
-              <span>Submitted: <strong style={{ color: "#4A6650" }}>{ticket.created_at ? new Date(ticket.created_at).toLocaleString() : "—"}</strong></span>
+              <span>Submitted: <strong style={{ color: "var(--admin-text-muted)" }}>{ticket.created_at ? new Date(ticket.created_at).toLocaleString() : "—"}</strong></span>
               {ticket.resolved_at && (
-                <span>Resolved: <strong style={{ color: "#4A6650" }}>{new Date(ticket.resolved_at).toLocaleString()}</strong></span>
+                <span>Resolved: <strong style={{ color: "var(--admin-text-muted)" }}>{new Date(ticket.resolved_at).toLocaleString()}</strong></span>
               )}
             </div>
           </div>
 
           {/* Message body */}
-          <div className="rounded-[18px] p-6" style={{ background: "#fff", border: "1px solid #DDE8DA" }}>
-            <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase mb-3" style={{ color: "#7A9878" }}>Message</div>
-            <p className="text-[14px] leading-relaxed whitespace-pre-wrap" style={{ color: "#1A2E1C" }}>
+          <div className="rounded-[18px] p-6" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)" }}>
+            <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase mb-3" style={{ color: "var(--admin-text-muted)" }}>Message</div>
+            <p className="text-[14px] leading-relaxed whitespace-pre-wrap" style={{ color: "var(--admin-text-primary)" }}>
               {ticket.body}
             </p>
           </div>
 
           {/* Admin notes */}
-          <div className="rounded-[18px] p-6" style={{ background: "#fff", border: "1px solid #DDE8DA" }}>
-            <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase mb-3" style={{ color: "#7A9878" }}>Internal Notes</div>
+          <div className="rounded-[18px] p-6" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)" }}>
+            <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase mb-3" style={{ color: "var(--admin-text-muted)" }}>Internal Notes</div>
             <form action={saveNotes} className="flex flex-col gap-3">
               <input type="hidden" name="id" value={ticket.id} />
               <textarea
@@ -167,7 +167,7 @@ export default async function TicketDetailPage({
                 defaultValue={ticket.admin_notes ?? ""}
                 placeholder="Notes visible only to admins…"
                 className="w-full px-4 py-3 text-[13.5px] rounded-xl border outline-none resize-none"
-                style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
               />
               <button
                 type="submit"
@@ -183,15 +183,15 @@ export default async function TicketDetailPage({
         {/* Sidebar: actions */}
         <div className="flex flex-col gap-4">
           {/* Status */}
-          <div className="rounded-[16px] p-5" style={{ background: "#fff", border: "1px solid #DDE8DA" }}>
-            <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase mb-3" style={{ color: "#7A9878" }}>Status</div>
+          <div className="rounded-[16px] p-5" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)" }}>
+            <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase mb-3" style={{ color: "var(--admin-text-muted)" }}>Status</div>
             <form action={updateStatus} className="flex flex-col gap-2">
               <input type="hidden" name="id" value={ticket.id} />
               <select
                 name="status"
                 defaultValue={ticket.status}
                 className="w-full px-3 py-2 text-sm rounded-xl border outline-none"
-                style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
               >
                 <option value="open">Open</option>
                 <option value="in_progress">In Progress</option>
@@ -205,15 +205,15 @@ export default async function TicketDetailPage({
           </div>
 
           {/* Priority */}
-          <div className="rounded-[16px] p-5" style={{ background: "#fff", border: "1px solid #DDE8DA" }}>
-            <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase mb-3" style={{ color: "#7A9878" }}>Priority</div>
+          <div className="rounded-[16px] p-5" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)" }}>
+            <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase mb-3" style={{ color: "var(--admin-text-muted)" }}>Priority</div>
             <form action={updatePriority} className="flex flex-col gap-2">
               <input type="hidden" name="id" value={ticket.id} />
               <select
                 name="priority"
                 defaultValue={ticket.priority ?? "normal"}
                 className="w-full px-3 py-2 text-sm rounded-xl border outline-none"
-                style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
               >
                 <option value="low">Low</option>
                 <option value="normal">Normal</option>
@@ -245,12 +245,12 @@ export default async function TicketDetailPage({
           <a
             href={`mailto:${ticket.email}?subject=Re: [${ticket.ticket_id}] ${ticket.subject}`}
             className="w-full px-3 py-2.5 text-sm font-bold rounded-xl text-center block"
-            style={{ background: "#F0F5F1", color: "#2A5230", border: "1px solid #DDE8DA" }}
+            style={{ background: "#F0F5F1", color: "#2A5230", border: "1px solid var(--admin-border-mid)" }}
           >
             Reply via Email
           </a>
 
-          <div className="text-[11.5px] leading-relaxed" style={{ color: "#9AB89E" }}>
+          <div className="text-[11.5px] leading-relaxed" style={{ color: "var(--admin-text-dim)" }}>
             Clicking &ldquo;Reply via Email&rdquo; opens your mail client pre-filled with the ticket subject and ID so replies stay threaded.
           </div>
         </div>

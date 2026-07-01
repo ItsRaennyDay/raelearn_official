@@ -13,8 +13,8 @@ export default function EmailTemplatesPage() {
   return (
     <div className="p-8">
       <div className="mb-6">
-        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>Email Templates</h1>
-        <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>Transactional email templates for platform events</p>
+        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>Email Templates</h1>
+        <p className="text-sm mt-0.5" style={{ color: "var(--admin-text-muted)" }}>Transactional email templates for platform events</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-8">
@@ -22,7 +22,7 @@ export default function EmailTemplatesPage() {
           <div
             key={t.key}
             className="rounded-xl p-4 flex items-start gap-4"
-            style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}
+            style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}
           >
             <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: "#EEF5EE" }}>
               <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="#2A5230" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
@@ -31,8 +31,8 @@ export default function EmailTemplatesPage() {
               </svg>
             </div>
             <div className="flex-1 min-w-0">
-              <div className="font-semibold text-sm" style={{ color: "#1A2E1C" }}>{t.label}</div>
-              <div className="text-xs mt-0.5" style={{ color: "#9AB89E" }}>{t.description}</div>
+              <div className="font-semibold text-sm" style={{ color: "var(--admin-text-primary)" }}>{t.label}</div>
+              <div className="text-xs mt-0.5" style={{ color: "var(--admin-text-dim)" }}>{t.description}</div>
             </div>
             <span className="text-xs px-2 py-0.5 rounded-full shrink-0" style={{ background: "#F3F3F3", color: "#888" }}>
               Soon
@@ -41,8 +41,8 @@ export default function EmailTemplatesPage() {
         ))}
       </div>
 
-      <div className="rounded-2xl p-8 text-center" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
-        <p className="text-sm" style={{ color: "#7A9878" }}>
+      <div className="rounded-2xl p-8 text-center" style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}>
+        <p className="text-sm" style={{ color: "var(--admin-text-muted)" }}>
           Visual email template editor with preview, variable insertion, and send-test is coming soon.
         </p>
       </div>

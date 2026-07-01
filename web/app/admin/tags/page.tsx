@@ -65,8 +65,8 @@ export default async function TagsPage() {
   return (
     <div className="p-4 md:p-8 max-w-2xl">
       <div className="mb-6">
-        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>Tags</h1>
-        <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>
+        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>Tags</h1>
+        <p className="text-sm mt-0.5" style={{ color: "var(--admin-text-muted)" }}>
           Filter chips on the course catalog — tag courses by audience, topic, or any group you create.
         </p>
       </div>
@@ -75,27 +75,27 @@ export default async function TagsPage() {
       <form
         action={createTag}
         className="rounded-xl p-5 mb-8 flex gap-3 flex-wrap items-end"
-        style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}
+        style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}
       >
         <div className="flex-1 min-w-[140px]">
-          <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: "#9AB89E" }}>Tag name</label>
+          <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: "var(--admin-text-dim)" }}>Tag name</label>
           <input
             name="name"
             required
             placeholder="e.g. Virtual Assistant"
             className="w-full text-sm px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-2"
-            style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+            style={{ borderColor: "var(--admin-border-mid)", color: "var(--admin-text-primary)" }}
           />
         </div>
         <div className="flex-1 min-w-[120px]">
-          <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: "#9AB89E" }}>Group</label>
+          <label className="block text-xs font-bold uppercase tracking-wide mb-1" style={{ color: "var(--admin-text-dim)" }}>Group</label>
           <input
             name="group"
             required
             list="group-suggestions"
             placeholder="audience or topic"
             className="w-full text-sm px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-2"
-            style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+            style={{ borderColor: "var(--admin-border-mid)", color: "var(--admin-text-primary)" }}
           />
           <datalist id="group-suggestions">
             <option value="audience" />
@@ -116,29 +116,29 @@ export default async function TagsPage() {
 
       {/* Tags by group */}
       {grouped.size === 0 ? (
-        <div className="rounded-xl p-10 text-center" style={{ background: "#fff", border: "1.5px dashed #C8DEC8" }}>
-          <p className="text-sm" style={{ color: "#9AB89E" }}>No tags yet. Add your first tag above.</p>
+        <div className="rounded-xl p-10 text-center" style={{ background: "var(--admin-card-bg)", border: "1.5px dashed #C8DEC8" }}>
+          <p className="text-sm" style={{ color: "var(--admin-text-dim)" }}>No tags yet. Add your first tag above.</p>
         </div>
       ) : (
         <div className="space-y-6">
           {[...grouped.entries()].map(([group, groupTags]) => (
             <div key={group}>
-              <h2 className="text-xs font-extrabold uppercase tracking-widest mb-3" style={{ color: "#9AB89E" }}>
+              <h2 className="text-xs font-extrabold uppercase tracking-widest mb-3" style={{ color: "var(--admin-text-dim)" }}>
                 {GROUP_LABELS[group] ?? group}
               </h2>
-              <div className="rounded-xl overflow-hidden" style={{ border: "1.5px solid #E8EDE6" }}>
+              <div className="rounded-xl overflow-hidden" style={{ border: "1.5px solid var(--admin-border)" }}>
                 {(groupTags ?? []).map((tag, i) => (
                   <div
                     key={tag.id}
                     className="flex items-center justify-between px-5 py-3"
                     style={{
                       borderTop: i > 0 ? "1px solid #F5FAF5" : undefined,
-                      background: "#fff",
+                      background: "var(--admin-card-bg)",
                     }}
                   >
                     <div>
-                      <span className="text-sm font-semibold" style={{ color: "#1A2E1C" }}>{tag.name}</span>
-                      <span className="ml-2 text-xs font-mono" style={{ color: "#9AB89E" }}>{tag.slug}</span>
+                      <span className="text-sm font-semibold" style={{ color: "var(--admin-text-primary)" }}>{tag.name}</span>
+                      <span className="ml-2 text-xs font-mono" style={{ color: "var(--admin-text-dim)" }}>{tag.slug}</span>
                     </div>
                     <form action={deleteTag}>
                       <input type="hidden" name="id" value={tag.id} />

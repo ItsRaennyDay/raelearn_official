@@ -464,7 +464,7 @@ function HeadingEditor({ block, onChange }: { block: HeadingBlock; onChange: (b:
         <div className={label}>Text</div>
         <input
           className={`${input} ${sizes[block.level]}`}
-          style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}
+          style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}
           value={block.text}
           onChange={(e) => onChange({ ...block, text: e.target.value })}
           placeholder={`Heading ${block.level} text…`}
@@ -800,7 +800,7 @@ function BulletListEditor({ block, onChange }: { block: BulletListBlock; onChang
         <div className={label}>Items</div>
         {block.items.map((item, i) => (
           <div key={i} className="flex items-start gap-2">
-            <span className="w-6 text-center shrink-0 font-bold mt-2" style={{ color: "#9AB89E", fontFamily: "monospace" }}>
+            <span className="w-6 text-center shrink-0 font-bold mt-2" style={{ color: "var(--admin-text-dim)", fontFamily: "monospace" }}>
               {block.style === "number" ? `${i + 1}.` : BULLET_STYLES.find((b) => b.id === block.style)?.char ?? "•"}
             </span>
             <RichInput className={input} value={item} onChange={(v) => setItem(i, v)} placeholder={`Item ${i + 1}`} />
@@ -848,7 +848,7 @@ function TableEditor({ block, onChange }: { block: TableBlock; onChange: (b: Tab
             <tr style={{ background: "#EEF5EE" }}>
               {block.headers.map((h, c) => (
                 <th key={c} className="p-0 border-b border-[#DDE8DA]" style={{ borderRight: c < cols - 1 ? "1px solid #DDE8DA" : undefined }}>
-                  <input className="w-full px-3 py-2 text-xs font-bold bg-transparent focus:outline-none" style={{ color: "#2A5230" }} value={h} onChange={(e) => setHeader(c, e.target.value)} placeholder={`Col ${c + 1}`} />
+                  <input className="w-full px-3 py-2 text-xs font-bold bg-transparent focus:outline-none" style={{ color: "var(--admin-accent)" }} value={h} onChange={(e) => setHeader(c, e.target.value)} placeholder={`Col ${c + 1}`} />
                 </th>
               ))}
               <th className="w-8" />
@@ -942,7 +942,7 @@ function FlashcardEditor({ block, onChange }: { block: FlashcardBlock; onChange:
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div className="rounded-lg p-3" style={{ background: "#EEF5EE", border: "1.5px solid #B8D4B5" }}>
-                <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: "#7A9878" }}>Front</div>
+                <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: "var(--admin-text-muted)" }}>Front</div>
                 <AutoTextarea
                   value={card.front}
                   onChange={(v) => setCard(i, { ...card, front: v })}
@@ -1126,7 +1126,7 @@ function QuizHeader({ graded }: { graded?: boolean }) {
     <div className="px-5 py-3.5 flex items-center justify-between" style={{ background: "#EEF5EE", borderBottom: "1px solid #DDE8DA" }}>
       <div className="flex items-center gap-2">
         <span className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-extrabold" style={{ background: "#2A5230", color: "#fff" }}>Q</span>
-        <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#2A5230" }}>Knowledge Check</span>
+        <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "var(--admin-accent)" }}>Knowledge Check</span>
       </div>
       {graded && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: "#FEF3C7", color: "#92400E" }}>Graded</span>}
     </div>
@@ -1160,20 +1160,20 @@ function QuizPreview({ block }: { block: QuizBlock }) {
   if (qtype === "match") {
     const shuffledB = [...pairs.map((_, i) => i)];
     return (
-      <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid #DDE8DA", background: "#FAFCFA" }}>
+      <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid #DDE8DA", background: "var(--admin-table-head-bg)" }}>
         <QuizHeader graded={block.graded} />
         <div className="px-5 py-4">
-          <p className="font-semibold text-[15px] mb-4 leading-snug" style={{ color: "#1A2E1C" }}>{block.question || "Match the pairs"}</p>
+          <p className="font-semibold text-[15px] mb-4 leading-snug" style={{ color: "var(--admin-text-primary)" }}>{block.question || "Match the pairs"}</p>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
-              <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: "#7A9878" }}>Column A</div>
+              <div className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: "var(--admin-text-muted)" }}>Column A</div>
               {pairs.map((p, i) => {
                 const isMatched = i in matched;
                 const isSelected = matchSel?.side === "a" && matchSel.idx === i;
                 return (
                   <button key={i} onClick={() => handleMatchClick("a", i)}
                     className="w-full text-left px-3 py-2 rounded-xl text-sm border-2 transition-all"
-                    style={{ borderColor: isSelected ? "#2A5230" : isMatched ? "#86EFAC" : "#DDE8DA", background: isSelected ? "#EEF5EE" : isMatched ? "#F0FDF4" : "#fff", color: "#1A2E1C" }}
+                    style={{ borderColor: isSelected ? "#2A5230" : isMatched ? "#86EFAC" : "#DDE8DA", background: isSelected ? "#EEF5EE" : isMatched ? "#F0FDF4" : "#fff", color: "var(--admin-text-primary)" }}
                   >{p.a || `A ${i + 1}`}</button>
                 );
               })}
@@ -1186,7 +1186,7 @@ function QuizPreview({ block }: { block: QuizBlock }) {
                 return (
                   <button key={bi} onClick={() => handleMatchClick("b", bi)}
                     className="w-full text-left px-3 py-2 rounded-xl text-sm border-2 transition-all"
-                    style={{ borderColor: isSelected ? "#C48A3A" : isMatched ? "#86EFAC" : "#DDE8DA", background: isSelected ? "#FFF8E8" : isMatched ? "#F0FDF4" : "#fff", color: "#1A2E1C" }}
+                    style={{ borderColor: isSelected ? "#C48A3A" : isMatched ? "#86EFAC" : "#DDE8DA", background: isSelected ? "#FFF8E8" : isMatched ? "#F0FDF4" : "#fff", color: "var(--admin-text-primary)" }}
                   >{pairs[bi]?.b || `B ${bi + 1}`}</button>
                 );
               })}
@@ -1201,10 +1201,10 @@ function QuizPreview({ block }: { block: QuizBlock }) {
 
   if (qtype === "pickacard") {
     return (
-      <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid #DDE8DA", background: "#FAFCFA" }}>
+      <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid #DDE8DA", background: "var(--admin-table-head-bg)" }}>
         <QuizHeader graded={block.graded} />
         <div className="px-5 py-4">
-          <p className="font-semibold text-[15px] mb-4 leading-snug" style={{ color: "#1A2E1C" }}>{block.question || "Pick the correct card"}</p>
+          <p className="font-semibold text-[15px] mb-4 leading-snug" style={{ color: "var(--admin-text-primary)" }}>{block.question || "Pick the correct card"}</p>
           <div className="grid grid-cols-2 gap-3">
             {cards.map((card, i) => {
               const isPicked = pickedCard === i;
@@ -1251,10 +1251,10 @@ function QuizPreview({ block }: { block: QuizBlock }) {
   const canSubmit = isCheckboxes ? selectedMulti.length > 0 : selectedSingle !== null;
 
   return (
-    <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid #DDE8DA", background: "#FAFCFA" }}>
+    <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid #DDE8DA", background: "var(--admin-table-head-bg)" }}>
       <QuizHeader graded={block.graded} />
       <div className="px-5 py-4">
-        <p className="font-semibold text-[15px] mb-4 leading-snug" style={{ color: "#1A2E1C" }}>{block.question || "Question goes here"}</p>
+        <p className="font-semibold text-[15px] mb-4 leading-snug" style={{ color: "var(--admin-text-primary)" }}>{block.question || "Question goes here"}</p>
         <div className="space-y-2.5">
           {block.options.map((opt, i) => {
             const isSel = isCheckboxes ? selectedMulti.includes(i) : selectedSingle === i;
@@ -1375,9 +1375,9 @@ function FlipCard({ front, back, hint }: { front: string; back: string; hint?: s
               border: "2px solid #B8D4B5",
             }}
           >
-            <div className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: "#7A9878" }}>Question</div>
-            <p className="font-semibold text-sm leading-snug" style={{ color: "#1A2E1C" }}>{front || "Front of card"}</p>
-            {hint && <p className="mt-2 text-xs italic" style={{ color: "#9AB89E" }}>Hint: {hint}</p>}
+            <div className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: "var(--admin-text-muted)" }}>Question</div>
+            <p className="font-semibold text-sm leading-snug" style={{ color: "var(--admin-text-primary)" }}>{front || "Front of card"}</p>
+            {hint && <p className="mt-2 text-xs italic" style={{ color: "var(--admin-text-dim)" }}>Hint: {hint}</p>}
             <div className="mt-3 text-[10px]" style={{ color: "#B8D4B5" }}>Click to flip →</div>
           </div>
           <div
@@ -1391,7 +1391,7 @@ function FlipCard({ front, back, hint }: { front: string; back: string; hint?: s
             }}
           >
             <div className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: "#B8965A" }}>Answer</div>
-            <p className="text-sm leading-relaxed" style={{ color: "#1A2E1C" }}>{back || "Back of card"}</p>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--admin-text-primary)" }}>{back || "Back of card"}</p>
             <div className="mt-3 text-[10px]" style={{ color: "#E8D8B0" }}>← Flip back</div>
           </div>
         </div>
@@ -1549,11 +1549,11 @@ function BlockPreview({ block, isDark }: { block: Block; isDark?: boolean }) {
           </div>
         ) : (
           <div className="rounded-2xl flex items-center justify-center p-12 text-sm"
-            style={{ background: isDark ? "rgba(42,82,48,0.2)" : "#F0F7F0", border: "2px dashed #B8D4B5", color: "#9AB89E" }}>
+            style={{ background: isDark ? "rgba(42,82,48,0.2)" : "#F0F7F0", border: "2px dashed #B8D4B5", color: "var(--admin-text-dim)" }}>
             {block.url ? "Invalid video URL" : "Paste a YouTube or Vimeo URL to preview"}
           </div>
         )}
-        {block.caption && <p className="text-xs text-center mt-2" style={{ color: "#9AB89E" }}>{block.caption}</p>}
+        {block.caption && <p className="text-xs text-center mt-2" style={{ color: "var(--admin-text-dim)" }}>{block.caption}</p>}
       </div>
     );
   }
@@ -1608,7 +1608,7 @@ function BlockPreview({ block, isDark }: { block: Block; isDark?: boolean }) {
         rel="noopener noreferrer"
         className="flex items-center gap-4 p-4 rounded-2xl transition-all hover:-translate-y-0.5"
         style={{
-          background: "#fff",
+          background: "var(--admin-card-bg)",
           border: "2px solid #E5E7EB",
           boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
           textDecoration: "none",
@@ -1621,7 +1621,7 @@ function BlockPreview({ block, isDark }: { block: Block; isDark?: boolean }) {
           {m.icon}
         </div>
         <div className="flex-1 min-w-0">
-          <div className="font-semibold text-sm truncate" style={{ color: "#1A2E1C" }}>
+          <div className="font-semibold text-sm truncate" style={{ color: "var(--admin-text-primary)" }}>
             {block.title || "Untitled resource"}
           </div>
           {block.description && (
@@ -1748,7 +1748,7 @@ function BlockItem({
     <div
       className="rounded-2xl overflow-hidden transition-all"
       style={{
-        background: "#fff",
+        background: "var(--admin-card-bg)",
         border: "1.5px solid #DDE8DA",
         boxShadow: "0 1px 4px rgba(42,82,48,0.04)",
       }}
@@ -1756,7 +1756,7 @@ function BlockItem({
       {/* Header bar */}
       <div
         className="flex items-center justify-between px-4 py-2.5"
-        style={{ background: "#FAFCFA", borderBottom: "1px solid #F0F7F0" }}
+        style={{ background: "var(--admin-table-head-bg)", borderBottom: "1px solid var(--admin-border)" }}
       >
         <div className="flex items-center gap-2.5">
           <span
@@ -1765,7 +1765,7 @@ function BlockItem({
           >
             {meta.icon}
           </span>
-          <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "#7A9878" }}>
+          <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>
             {meta.label}
             {block.type === "heading" && ` H${(block as HeadingBlock).level}`}
           </span>
@@ -1775,7 +1775,7 @@ function BlockItem({
             onClick={() => onMove(-1)}
             disabled={index === 0}
             className="w-6 h-6 flex items-center justify-center rounded transition-colors disabled:opacity-25 hover:bg-[#F0F7F0]"
-            style={{ color: "#9AB89E" }}
+            style={{ color: "var(--admin-text-dim)" }}
           >
             <Ico.ArrowUp />
           </button>
@@ -1783,14 +1783,14 @@ function BlockItem({
             onClick={() => onMove(1)}
             disabled={index === total - 1}
             className="w-6 h-6 flex items-center justify-center rounded transition-colors disabled:opacity-25 hover:bg-[#F0F7F0]"
-            style={{ color: "#9AB89E" }}
+            style={{ color: "var(--admin-text-dim)" }}
           >
             <Ico.ArrowDown />
           </button>
           <button
             onClick={() => setCollapsed((c) => !c)}
             className="w-6 h-6 flex items-center justify-center rounded transition-colors hover:bg-[#F0F7F0]"
-            style={{ color: "#9AB89E" }}
+            style={{ color: "var(--admin-text-dim)" }}
           >
             {collapsed ? <Ico.ChevronDown /> : <Ico.ChevronUp />}
           </button>
@@ -1843,7 +1843,7 @@ function BlockPalette({ onSelect, onClose }: { onSelect: (t: BlockType) => void;
           width: "520px",
           maxHeight: "72vh",
           overflowY: "auto",
-          background: "#fff",
+          background: "var(--admin-card-bg)",
           border: "1.5px solid #DDE8DA",
           boxShadow: "0 16px 48px rgba(0,0,0,0.16)",
         }}
@@ -1851,15 +1851,15 @@ function BlockPalette({ onSelect, onClose }: { onSelect: (t: BlockType) => void;
         {/* Modal header */}
         <div
           className="flex items-center justify-between px-5 py-3 sticky top-0 z-10"
-          style={{ background: "#FAFCFA", borderBottom: "1px solid #EEF5EE" }}
+          style={{ background: "var(--admin-table-head-bg)", borderBottom: "1px solid var(--admin-border)" }}
         >
-          <span className="text-xs font-extrabold uppercase tracking-widest" style={{ color: "#7A9878" }}>
+          <span className="text-xs font-extrabold uppercase tracking-widest" style={{ color: "var(--admin-text-muted)" }}>
             Add a Block
           </span>
           <button
             onClick={onClose}
             className="w-6 h-6 flex items-center justify-center rounded-lg transition-colors hover:bg-[#F0F7F0]"
-            style={{ color: "#9AB89E" }}
+            style={{ color: "var(--admin-text-dim)" }}
           >
             <Ico.Close />
           </button>
@@ -1867,7 +1867,7 @@ function BlockPalette({ onSelect, onClose }: { onSelect: (t: BlockType) => void;
 
         {/* Groups */}
         {PALETTE_GROUPS.map((group) => (
-          <div key={group.label} style={{ borderBottom: "1px solid #F0F7F0" }}>
+          <div key={group.label} style={{ borderBottom: "1px solid var(--admin-border)" }}>
             <div
               className="px-4 pt-3 pb-1.5 text-[10px] font-extrabold uppercase tracking-widest"
               style={{ color: "#B8D4B5" }}
@@ -1885,8 +1885,8 @@ function BlockPalette({ onSelect, onClose }: { onSelect: (t: BlockType) => void;
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
                 >
                   <span className="text-lg leading-none">{icon}</span>
-                  <span className="text-xs font-bold" style={{ color: "#1A2E1C" }}>{label}</span>
-                  <span className="text-[10px] leading-tight" style={{ color: "#9AB89E" }}>{desc}</span>
+                  <span className="text-xs font-bold" style={{ color: "var(--admin-text-primary)" }}>{label}</span>
+                  <span className="text-[10px] leading-tight" style={{ color: "var(--admin-text-dim)" }}>{desc}</span>
                 </button>
               ))}
             </div>
@@ -1991,13 +1991,13 @@ export default function LessonEditor({
       {/* ── Top bar ── */}
       <div
         className="flex items-center justify-between px-6 py-3 shrink-0"
-        style={{ background: "#fff", borderBottom: "1.5px solid #E8EDE6", boxShadow: "0 1px 4px rgba(42,82,48,0.04)" }}
+        style={{ background: "var(--admin-card-bg)", borderBottom: "1.5px solid #E8EDE6", boxShadow: "0 1px 4px rgba(42,82,48,0.04)" }}
       >
         <div className="flex items-center gap-2 min-w-0">
           <Link
             href={`/admin/courses/${courseId}?tab=curriculum`}
             className="flex items-center gap-1.5 text-sm font-medium shrink-0 transition-colors"
-            style={{ color: "#9AB89E" }}
+            style={{ color: "var(--admin-text-dim)" }}
           >
             <svg viewBox="0 0 14 14" width="13" height="13" fill="currentColor">
               <path fillRule="evenodd" d="M12 7a.5.5 0 0 1-.5.5H3.207l2.647 2.646a.5.5 0 1 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 1 1 .708.708L3.207 6.5H11.5A.5.5 0 0 1 12 7Z" clipRule="evenodd" />
@@ -2007,7 +2007,7 @@ export default function LessonEditor({
           <span style={{ color: "#DDE8DA" }}>/</span>
           <input
             className="text-sm bg-transparent focus:outline-none border-b-2 border-transparent focus:border-[#4A8A52] transition-colors min-w-0 w-32"
-            style={{ color: "#7A9878", fontFamily: "var(--font-head)" }}
+            style={{ color: "var(--admin-text-muted)", fontFamily: "var(--font-head)" }}
             value={moduleName}
             onChange={(e) => { setModuleName(e.target.value); setSaved(false); }}
             placeholder="Module name"
@@ -2016,7 +2016,7 @@ export default function LessonEditor({
           <span style={{ color: "#DDE8DA" }}>/</span>
           <input
             className="font-bold text-sm bg-transparent focus:outline-none border-b-2 border-transparent focus:border-[#2A5230] transition-colors min-w-0 w-48"
-            style={{ color: "#1A2E1C", fontFamily: "var(--font-head)" }}
+            style={{ color: "var(--admin-text-primary)", fontFamily: "var(--font-head)" }}
             value={title}
             onChange={(e) => { setTitle(e.target.value); setSaved(false); }}
             placeholder="Lesson title"
@@ -2039,7 +2039,7 @@ export default function LessonEditor({
             className="text-xs font-bold px-3 py-1.5 rounded-lg border-2 transition-all"
             style={preview
               ? { background: "#EEF5EE", color: "#2A5230", borderColor: "#2A5230" }
-              : { background: "#fff", color: "#7A9878", borderColor: "#DDE8DA" }
+              : { background: "var(--admin-card-bg)", color: "var(--admin-text-muted)", borderColor: "var(--admin-border-mid)" }
             }
           >
             {preview ? "Edit" : "Preview"}
@@ -2049,7 +2049,7 @@ export default function LessonEditor({
             value={status}
             onChange={(e) => { setStatus(e.target.value as typeof STATUSES[number]); setSaved(false); }}
             className="text-xs border-2 rounded-lg px-2.5 py-1.5 focus:outline-none capitalize transition-colors"
-            style={{ borderColor: status === "published" ? "#86EFAC" : "#DDE8DA", color: "#1A2E1C", background: status === "published" ? "#F0FDF4" : "#fff" }}
+            style={{ borderColor: status === "published" ? "#86EFAC" : "#DDE8DA", color: "var(--admin-text-primary)", background: status === "published" ? "#F0FDF4" : "#fff" }}
           >
             {STATUSES.map((s) => (
               <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
@@ -2070,46 +2070,46 @@ export default function LessonEditor({
       {/* ── Lesson meta strip ── */}
       <div
         className="flex items-center gap-5 px-6 py-2.5 shrink-0 flex-wrap"
-        style={{ background: "#FAFCFA", borderBottom: "1px solid #F0F7F0" }}
+        style={{ background: "var(--admin-table-head-bg)", borderBottom: "1px solid var(--admin-border)" }}
       >
-        <label className="flex items-center gap-2 text-xs" style={{ color: "#7A9878" }}>
+        <label className="flex items-center gap-2 text-xs" style={{ color: "var(--admin-text-muted)" }}>
           <span className="font-bold">Type</span>
           <select
             value={lessonType}
             onChange={(e) => { setLessonType(e.target.value as typeof LESSON_TYPES[number]); setSaved(false); }}
             className="text-xs border rounded-lg px-2 py-1 bg-white focus:outline-none capitalize"
-            style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+            style={{ borderColor: "var(--admin-border-mid)", color: "var(--admin-text-primary)" }}
           >
             {LESSON_TYPES.map((t) => <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
           </select>
         </label>
 
-        <label className="flex items-center gap-2 text-xs" style={{ color: "#7A9878" }}>
+        <label className="flex items-center gap-2 text-xs" style={{ color: "var(--admin-text-muted)" }}>
           <span className="font-bold">Duration</span>
           <input
             type="number" min={0} max={999}
             value={duration || ""}
             onChange={(e) => { setDuration(Number(e.target.value)); setSaved(false); }}
             className="w-16 text-xs border rounded-lg px-2 py-1 bg-white focus:outline-none"
-            style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+            style={{ borderColor: "var(--admin-border-mid)", color: "var(--admin-text-primary)" }}
             placeholder="mins"
           />
         </label>
 
         {lessonType === "video" && (
-          <label className="flex items-center gap-2 text-xs flex-1" style={{ color: "#7A9878" }}>
+          <label className="flex items-center gap-2 text-xs flex-1" style={{ color: "var(--admin-text-muted)" }}>
             <span className="font-bold shrink-0">Video URL</span>
             <input
               value={videoUrl}
               onChange={(e) => { setVideoUrl(e.target.value); setSaved(false); }}
               className="flex-1 text-xs border rounded-lg px-2 py-1 bg-white focus:outline-none"
-              style={{ borderColor: "#DDE8DA", color: "#1A2E1C" }}
+              style={{ borderColor: "var(--admin-border-mid)", color: "var(--admin-text-primary)" }}
               placeholder="https://youtube.com/watch?v=…"
             />
           </label>
         )}
 
-        <label className="flex items-center gap-2 text-xs ml-auto" style={{ color: "#7A9878" }}>
+        <label className="flex items-center gap-2 text-xs ml-auto" style={{ color: "var(--admin-text-muted)" }}>
           <input
             type="checkbox"
             checked={isRequired}
@@ -2131,7 +2131,7 @@ export default function LessonEditor({
             {blocks.length === 0 ? (
               <div
                 className="rounded-2xl flex flex-col items-center justify-center p-16 text-center"
-                style={{ border: "2px dashed #C8DEC8", background: "#FAFCFA" }}
+                style={{ border: "2px dashed #C8DEC8", background: "var(--admin-table-head-bg)" }}
               >
                 <div
                   className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
@@ -2141,8 +2141,8 @@ export default function LessonEditor({
                     <path d="M12 4.5v15m7.5-7.5h-15" />
                   </svg>
                 </div>
-                <p className="font-semibold mb-1" style={{ color: "#2A5230" }}>No content yet</p>
-                <p className="text-sm mb-5" style={{ color: "#9AB89E" }}>Start building your lesson with content blocks</p>
+                <p className="font-semibold mb-1" style={{ color: "var(--admin-accent)" }}>No content yet</p>
+                <p className="text-sm mb-5" style={{ color: "var(--admin-text-dim)" }}>Start building your lesson with content blocks</p>
                 <div className="relative">
                   <button
                     onClick={() => setShowPalette(true)}
@@ -2213,7 +2213,7 @@ export default function LessonEditor({
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full shrink-0" style={{ background: "#4A8A52" }} />
-                  <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#7A9878" }}>
+                  <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--admin-text-muted)" }}>
                     Learner Preview
                   </span>
                 </div>

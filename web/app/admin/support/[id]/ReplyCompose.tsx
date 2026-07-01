@@ -28,19 +28,19 @@ export default function ReplyCompose({
   };
 
   return (
-    <div className="rounded-[18px] p-6" style={{ background: "#fff", border: "1px solid #DDE8DA" }}>
+    <div className="rounded-[18px] p-6" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)" }}>
       <div className="flex items-center justify-between mb-3">
-        <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase" style={{ color: "#7A9878" }}>
+        <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase" style={{ color: "var(--admin-text-muted)" }}>
           Reply
         </div>
-        <div className="text-[11.5px]" style={{ color: "#9AB89E" }}>
-          To: <span style={{ color: "#4A6650" }}>{email}</span>
+        <div className="text-[11.5px]" style={{ color: "var(--admin-text-dim)" }}>
+          To: <span style={{ color: "var(--admin-text-muted)" }}>{email}</span>
         </div>
       </div>
 
       <div
         className="text-[11.5px] px-3 py-2 rounded-lg mb-3 font-mono truncate"
-        style={{ background: "#F0F5F1", color: "#7A9878" }}
+        style={{ background: "#F0F5F1", color: "var(--admin-text-muted)" }}
       >
         Subject: Re: [{ticketId}] {subject}
       </div>
@@ -50,7 +50,7 @@ export default function ReplyCompose({
         onChange={(e) => setBody(e.target.value)}
         rows={8}
         className="w-full px-4 py-3 text-[13.5px] rounded-xl border outline-none resize-none mb-3"
-        style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C", fontFamily: "inherit" }}
+        style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)", fontFamily: "inherit" }}
         placeholder="Type your reply…"
       />
 

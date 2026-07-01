@@ -72,10 +72,10 @@ export default async function AuditLogsPage({
   return (
     <div className="p-4 md:p-8 max-w-6xl">
       <div className="mb-6">
-        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>
+        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>
           Audit Logs
         </h1>
-        <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>
+        <p className="text-sm mt-0.5" style={{ color: "var(--admin-text-muted)" }}>
           Platform activity and security event trail
         </p>
       </div>
@@ -87,13 +87,13 @@ export default async function AuditLogsPage({
           defaultValue={action}
           placeholder="Filter by action…"
           className="flex-1 min-w-[160px] px-4 py-2 text-sm rounded-xl border outline-none"
-          style={{ borderColor: "#DDE8DA", background: "#fff", color: "#1A2E1C" }}
+          style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-card-bg)", color: "var(--admin-text-primary)" }}
         />
         <select
           name="table"
           defaultValue={table}
           className="px-3 py-2 text-sm rounded-xl border outline-none"
-          style={{ borderColor: "#DDE8DA", background: "#fff", color: "#1A2E1C" }}
+          style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-card-bg)", color: "var(--admin-text-primary)" }}
         >
           <option value="">All tables</option>
           {tableNames.map((t) => (
@@ -111,7 +111,7 @@ export default async function AuditLogsPage({
           <Link
             href="/admin/audit-logs"
             className="px-4 py-2 text-sm rounded-xl"
-            style={{ background: "#F5F0E8", color: "#7A9878" }}
+            style={{ background: "#F5F0E8", color: "var(--admin-text-muted)" }}
           >
             Clear
           </Link>
@@ -119,7 +119,7 @@ export default async function AuditLogsPage({
       </form>
 
       {/* Stats */}
-      <div className="text-xs mb-4" style={{ color: "#9AB89E" }}>
+      <div className="text-xs mb-4" style={{ color: "var(--admin-text-dim)" }}>
         {count ?? 0} total events{" "}
         {(action || table) && <span>· filtered</span>}
       </div>
@@ -127,7 +127,7 @@ export default async function AuditLogsPage({
       {!logs || logs.length === 0 ? (
         <div
           className="rounded-2xl p-12 text-center"
-          style={{ background: "#fff", border: "1.5px dashed #C8DEC8" }}
+          style={{ background: "var(--admin-card-bg)", border: "1.5px dashed #C8DEC8" }}
         >
           <div
             className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4"
@@ -139,24 +139,24 @@ export default async function AuditLogsPage({
               <path d="M9 12h6M9 16h4" />
             </svg>
           </div>
-          <h2 className="font-bold text-base mb-1" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>
+          <h2 className="font-bold text-base mb-1" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>
             No events yet
           </h2>
-          <p className="text-sm" style={{ color: "#9AB89E" }}>
+          <p className="text-sm" style={{ color: "var(--admin-text-dim)" }}>
             Admin actions like enrollments, role changes, and content edits will appear here.
           </p>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-2xl" style={{ border: "1.5px solid #E8EDE6" }}>
-          <div style={{ background: "#fff", minWidth: "680px" }}>
+        <div className="overflow-x-auto rounded-2xl" style={{ border: "1.5px solid var(--admin-border)" }}>
+          <div style={{ background: "var(--admin-card-bg)", minWidth: "680px" }}>
             <table className="w-full text-sm">
               <thead>
-                <tr style={{ borderBottom: "1px solid #F0F7F0", background: "#FAFCFA" }}>
-                  <th className="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wide" style={{ color: "#7A9878" }}>Time</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wide" style={{ color: "#7A9878" }}>Actor</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wide" style={{ color: "#7A9878" }}>Action</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wide" style={{ color: "#7A9878" }}>Table</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wide" style={{ color: "#7A9878" }}>Record</th>
+                <tr style={{ borderBottom: "1px solid var(--admin-border)", background: "var(--admin-table-head-bg)" }}>
+                  <th className="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Time</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Actor</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Action</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Table</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Record</th>
                 </tr>
               </thead>
               <tbody>
@@ -167,23 +167,23 @@ export default async function AuditLogsPage({
                     <tr
                       key={log.id}
                       className="hover:bg-[#FAFCFA] transition-colors"
-                      style={{ borderBottom: "1px solid #F5FAF5" }}
+                      style={{ borderBottom: "1px solid var(--admin-table-row-border)" }}
                     >
-                      <td className="px-5 py-3 text-xs whitespace-nowrap" style={{ color: "#9AB89E" }}>
+                      <td className="px-5 py-3 text-xs whitespace-nowrap" style={{ color: "var(--admin-text-dim)" }}>
                         {formatDate(log.created_at)}
                       </td>
                       <td className="px-5 py-3">
                         {profile ? (
                           <div>
-                            <div className="text-xs font-medium" style={{ color: "#1A2E1C" }}>
+                            <div className="text-xs font-medium" style={{ color: "var(--admin-text-primary)" }}>
                               {profile.full_name ?? profile.email ?? "—"}
                             </div>
                             {profile.full_name && (
-                              <div className="text-[11px]" style={{ color: "#9AB89E" }}>{profile.email}</div>
+                              <div className="text-[11px]" style={{ color: "var(--admin-text-dim)" }}>{profile.email}</div>
                             )}
                           </div>
                         ) : (
-                          <span className="text-xs" style={{ color: "#9AB89E" }}>System</span>
+                          <span className="text-xs" style={{ color: "var(--admin-text-dim)" }}>System</span>
                         )}
                       </td>
                       <td className="px-5 py-3">
@@ -195,11 +195,11 @@ export default async function AuditLogsPage({
                         </span>
                       </td>
                       <td className="px-5 py-3">
-                        <span className="text-xs font-mono" style={{ color: "#4A6650" }}>
+                        <span className="text-xs font-mono" style={{ color: "var(--admin-text-muted)" }}>
                           {log.table_name}
                         </span>
                       </td>
-                      <td className="px-5 py-3 text-xs font-mono" style={{ color: "#9AB89E" }}>
+                      <td className="px-5 py-3 text-xs font-mono" style={{ color: "var(--admin-text-dim)" }}>
                         {log.record_id ? log.record_id.slice(0, 8) + "…" : "—"}
                       </td>
                     </tr>
@@ -214,7 +214,7 @@ export default async function AuditLogsPage({
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between mt-4">
-          <span className="text-xs" style={{ color: "#9AB89E" }}>
+          <span className="text-xs" style={{ color: "var(--admin-text-dim)" }}>
             Page {page} of {totalPages}
           </span>
           <div className="flex gap-2">
@@ -222,7 +222,7 @@ export default async function AuditLogsPage({
               <Link
                 href={`/admin/audit-logs?action=${action}&table=${table}&page=${Number(page) - 1}`}
                 className="px-3 py-1.5 text-xs rounded-lg"
-                style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}
+                style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}
               >
                 ← Prev
               </Link>
@@ -231,7 +231,7 @@ export default async function AuditLogsPage({
               <Link
                 href={`/admin/audit-logs?action=${action}&table=${table}&page=${Number(page) + 1}`}
                 className="px-3 py-1.5 text-xs rounded-lg"
-                style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}
+                style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}
               >
                 Next →
               </Link>

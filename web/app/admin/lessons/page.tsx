@@ -38,13 +38,13 @@ export default async function LessonsPage({
   return (
     <div className="p-8">
       <div className="mb-6">
-        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>Lessons</h1>
-        <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>{count ?? 0} lessons total</p>
+        <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>Lessons</h1>
+        <p className="text-sm mt-0.5" style={{ color: "var(--admin-text-muted)" }}>{count ?? 0} lessons total</p>
       </div>
 
       <form method="GET" className="flex gap-3 mb-6">
-        <input name="q" defaultValue={q} placeholder="Search lesson title…" className="flex-1 max-w-sm px-4 py-2 text-sm rounded-xl border outline-none" style={{ borderColor: "#DDE8DA", background: "#fff", color: "#1A2E1C" }} />
-        <select name="type" defaultValue={type} className="px-3 py-2 text-sm rounded-xl border outline-none" style={{ borderColor: "#DDE8DA", background: "#fff", color: "#1A2E1C" }}>
+        <input name="q" defaultValue={q} placeholder="Search lesson title…" className="flex-1 max-w-sm px-4 py-2 text-sm rounded-xl border outline-none" style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-card-bg)", color: "var(--admin-text-primary)" }} />
+        <select name="type" defaultValue={type} className="px-3 py-2 text-sm rounded-xl border outline-none" style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-card-bg)", color: "var(--admin-text-primary)" }}>
           <option value="">All types</option>
           <option value="video">Video</option>
           <option value="text">Text</option>
@@ -53,40 +53,40 @@ export default async function LessonsPage({
           <option value="download">Download</option>
         </select>
         <button type="submit" className="px-4 py-2 text-sm font-bold rounded-xl" style={{ background: "#2A5230", color: "#fff" }}>Filter</button>
-        {(q || type) && <Link href="/admin/lessons" className="px-4 py-2 text-sm rounded-xl" style={{ background: "#F5F0E8", color: "#7A9878" }}>Clear</Link>}
+        {(q || type) && <Link href="/admin/lessons" className="px-4 py-2 text-sm rounded-xl" style={{ background: "#F5F0E8", color: "var(--admin-text-muted)" }}>Clear</Link>}
       </form>
 
-      <div className="rounded-2xl overflow-hidden" style={{ background: "#fff", border: "1.5px solid #E8EDE6" }}>
+      <div className="rounded-2xl overflow-hidden" style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}>
         <table className="w-full text-sm">
           <thead>
-            <tr style={{ borderBottom: "1px solid #F0F7F0", background: "#FAFCFA" }}>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Lesson</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Type</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Module / Course</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Duration</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Status</th>
-              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Edit</th>
+            <tr style={{ borderBottom: "1px solid var(--admin-border)", background: "var(--admin-table-head-bg)" }}>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Lesson</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Type</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Module / Course</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Duration</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Status</th>
+              <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Edit</th>
             </tr>
           </thead>
           <tbody>
             {!lessons || lessons.length === 0 ? (
-              <tr><td colSpan={6} className="px-5 py-12 text-center text-sm" style={{ color: "#9AB89E" }}>No lessons found</td></tr>
+              <tr><td colSpan={6} className="px-5 py-12 text-center text-sm" style={{ color: "var(--admin-text-dim)" }}>No lessons found</td></tr>
             ) : (
               lessons.map((l) => {
                 const mod = l.modules as unknown as { id?: string; title?: string; courses?: { id?: string; title?: string } | null } | null;
                 const course = mod?.courses ?? null;
                 const typeMeta = TYPE_META[l.lesson_type] ?? { label: l.lesson_type, bg: "#F3F3F3", text: "#555" };
                 return (
-                  <tr key={l.id} className="transition-colors hover:bg-[#FAFCFA]" style={{ borderBottom: "1px solid #F5FAF5" }}>
-                    <td className="px-5 py-3 font-medium" style={{ color: "#1A2E1C" }}>{l.title}</td>
+                  <tr key={l.id} className="transition-colors hover:bg-[#FAFCFA]" style={{ borderBottom: "1px solid var(--admin-table-row-border)" }}>
+                    <td className="px-5 py-3 font-medium" style={{ color: "var(--admin-text-primary)" }}>{l.title}</td>
                     <td className="px-5 py-3">
                       <span className="text-xs font-bold px-2.5 py-0.5 rounded-full" style={{ background: typeMeta.bg, color: typeMeta.text }}>{typeMeta.label}</span>
                     </td>
-                    <td className="px-5 py-3 text-xs" style={{ color: "#7A9878" }}>
+                    <td className="px-5 py-3 text-xs" style={{ color: "var(--admin-text-muted)" }}>
                       <div>{mod?.title ?? "—"}</div>
-                      <div style={{ color: "#9AB89E" }}>{course?.title ?? ""}</div>
+                      <div style={{ color: "var(--admin-text-dim)" }}>{course?.title ?? ""}</div>
                     </td>
-                    <td className="px-5 py-3 text-xs" style={{ color: "#9AB89E" }}>
+                    <td className="px-5 py-3 text-xs" style={{ color: "var(--admin-text-dim)" }}>
                       {l.duration_mins ? `${l.duration_mins}m` : "—"}
                     </td>
                     <td className="px-5 py-3">
@@ -96,7 +96,7 @@ export default async function LessonsPage({
                     </td>
                     <td className="px-5 py-3">
                       {course?.id && mod?.id ? (
-                        <Link href={`/admin/courses/${course.id}/lessons/${l.id}`} className="text-xs font-bold" style={{ color: "#2A5230" }}>
+                        <Link href={`/admin/courses/${course.id}/lessons/${l.id}`} className="text-xs font-bold" style={{ color: "var(--admin-accent)" }}>
                           Edit →
                         </Link>
                       ) : "—"}
@@ -111,10 +111,10 @@ export default async function LessonsPage({
 
       {totalPages > 1 && (
         <div className="flex items-center justify-between mt-4">
-          <span className="text-xs" style={{ color: "#9AB89E" }}>Page {page} of {totalPages}</span>
+          <span className="text-xs" style={{ color: "var(--admin-text-dim)" }}>Page {page} of {totalPages}</span>
           <div className="flex gap-2">
-            {Number(page) > 1 && <Link href={`/admin/lessons?q=${q}&type=${type}&page=${Number(page) - 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}>← Prev</Link>}
-            {Number(page) < totalPages && <Link href={`/admin/lessons?q=${q}&type=${type}&page=${Number(page) + 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}>Next →</Link>}
+            {Number(page) > 1 && <Link href={`/admin/lessons?q=${q}&type=${type}&page=${Number(page) - 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}>← Prev</Link>}
+            {Number(page) < totalPages && <Link href={`/admin/lessons?q=${q}&type=${type}&page=${Number(page) + 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}>Next →</Link>}
           </div>
         </div>
       )}

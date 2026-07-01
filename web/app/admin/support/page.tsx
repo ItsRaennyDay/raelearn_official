@@ -19,8 +19,8 @@ const STATUS_META: Record<string, { label: string; bg: string; text: string; dot
 };
 
 const PRIORITY_META: Record<string, { label: string; color: string }> = {
-  low:    { label: "Low",    color: "#9AB89E" },
-  normal: { label: "Normal", color: "#7A9878" },
+  low:    { label: "Low",    color: "var(--admin-text-dim)" },
+  normal: { label: "Normal", color: "var(--admin-text-muted)" },
   high:   { label: "High",   color: "#C48A3A" },
   urgent: { label: "Urgent", color: "#AA2222" },
 };
@@ -75,8 +75,8 @@ export default async function SupportPage({
     <div className="p-4 md:p-8 max-w-6xl">
       <div className="mb-6 flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>Support Inbox</h1>
-          <p className="text-sm mt-0.5" style={{ color: "#7A9878" }}>{openCount} tickets total</p>
+          <h1 className="font-extrabold text-2xl" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>Support Inbox</h1>
+          <p className="text-sm mt-0.5" style={{ color: "var(--admin-text-muted)" }}>{openCount} tickets total</p>
         </div>
         <div className="flex gap-2 flex-wrap">
           {(["open","in_progress","resolved","closed"] as const).map((s) => {
@@ -88,7 +88,7 @@ export default async function SupportPage({
                 className="text-xs font-bold px-3 py-1.5 rounded-full border transition-colors"
                 style={status === s
                   ? { background: m.bg, color: m.text, borderColor: "transparent" }
-                  : { background: "#fff", color: "#7A9878", borderColor: "#DDE8DA" }
+                  : { background: "var(--admin-card-bg)", color: "var(--admin-text-muted)", borderColor: "var(--admin-border-mid)" }
                 }
               >
                 {m.label}
@@ -96,7 +96,7 @@ export default async function SupportPage({
             );
           })}
           {status && (
-            <Link href="/admin/support" className="text-xs px-3 py-1.5 rounded-full border" style={{ background: "#F5F0E8", color: "#7A9878", borderColor: "transparent" }}>
+            <Link href="/admin/support" className="text-xs px-3 py-1.5 rounded-full border" style={{ background: "#F5F0E8", color: "var(--admin-text-muted)", borderColor: "transparent" }}>
               Clear
             </Link>
           )}
@@ -110,38 +110,38 @@ export default async function SupportPage({
           defaultValue={q}
           placeholder="Search ticket ID, email, or subject…"
           className="flex-1 max-w-sm px-4 py-2 text-sm rounded-xl border outline-none"
-          style={{ borderColor: "#DDE8DA", background: "#fff", color: "#1A2E1C" }}
+          style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-card-bg)", color: "var(--admin-text-primary)" }}
         />
         {status && <input type="hidden" name="status" value={status} />}
         <button type="submit" className="px-4 py-2 text-sm font-bold rounded-xl" style={{ background: "#2A5230", color: "#fff" }}>
           Search
         </button>
         {q && (
-          <Link href={`/admin/support?status=${status}`} className="px-4 py-2 text-sm rounded-xl" style={{ background: "#F5F0E8", color: "#7A9878" }}>
+          <Link href={`/admin/support?status=${status}`} className="px-4 py-2 text-sm rounded-xl" style={{ background: "#F5F0E8", color: "var(--admin-text-muted)" }}>
             Clear
           </Link>
         )}
       </form>
 
       {/* Ticket list */}
-      <div className="overflow-x-auto rounded-2xl" style={{ border: "1.5px solid #E8EDE6" }}>
-        <div style={{ background: "#fff", minWidth: "640px" }}>
+      <div className="overflow-x-auto rounded-2xl" style={{ border: "1.5px solid var(--admin-border)" }}>
+        <div style={{ background: "var(--admin-card-bg)", minWidth: "640px" }}>
           <table className="w-full text-sm">
             <thead>
-              <tr style={{ borderBottom: "1px solid #F0F7F0", background: "#FAFCFA" }}>
-                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Ticket</th>
-                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>From</th>
-                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Category</th>
-                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Status</th>
-                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Priority</th>
-                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "#7A9878" }}>Date</th>
+              <tr style={{ borderBottom: "1px solid var(--admin-border)", background: "var(--admin-table-head-bg)" }}>
+                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Ticket</th>
+                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>From</th>
+                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Category</th>
+                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Status</th>
+                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Priority</th>
+                <th className="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>Date</th>
                 <th className="px-5 py-3" />
               </tr>
             </thead>
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-5 py-14 text-center text-sm" style={{ color: "#9AB89E" }}>
+                  <td colSpan={7} className="px-5 py-14 text-center text-sm" style={{ color: "var(--admin-text-dim)" }}>
                     No tickets found
                   </td>
                 </tr>
@@ -150,16 +150,16 @@ export default async function SupportPage({
                   const sm = STATUS_META[t.status]   ?? STATUS_META.open;
                   const pm = PRIORITY_META[t.priority ?? "normal"] ?? PRIORITY_META.normal;
                   return (
-                    <tr key={t.id} className="hover:bg-[#FAFCFA] transition-colors" style={{ borderBottom: "1px solid #F5FAF5" }}>
+                    <tr key={t.id} className="hover:bg-[#FAFCFA] transition-colors" style={{ borderBottom: "1px solid var(--admin-table-row-border)" }}>
                       <td className="px-5 py-3">
-                        <div className="font-bold text-xs" style={{ color: "#2A5230" }}>{t.ticket_id ?? "—"}</div>
-                        <div className="text-[11px] mt-0.5 max-w-[200px] truncate" style={{ color: "#4A6650" }}>{t.subject}</div>
+                        <div className="font-bold text-xs" style={{ color: "var(--admin-accent)" }}>{t.ticket_id ?? "—"}</div>
+                        <div className="text-[11px] mt-0.5 max-w-[200px] truncate" style={{ color: "var(--admin-text-muted)" }}>{t.subject}</div>
                       </td>
                       <td className="px-5 py-3">
-                        <div className="font-medium text-[13px]" style={{ color: "#1A2E1C" }}>{t.submitter_name ?? "—"}</div>
-                        <div className="text-xs mt-0.5" style={{ color: "#9AB89E" }}>{t.email}</div>
+                        <div className="font-medium text-[13px]" style={{ color: "var(--admin-text-primary)" }}>{t.submitter_name ?? "—"}</div>
+                        <div className="text-xs mt-0.5" style={{ color: "var(--admin-text-dim)" }}>{t.email}</div>
                       </td>
-                      <td className="px-5 py-3 text-xs capitalize" style={{ color: "#7A9878" }}>
+                      <td className="px-5 py-3 text-xs capitalize" style={{ color: "var(--admin-text-muted)" }}>
                         {CATEGORY_LABELS[t.category ?? "general"] ?? t.category}
                       </td>
                       <td className="px-5 py-3">
@@ -171,7 +171,7 @@ export default async function SupportPage({
                       <td className="px-5 py-3 text-xs font-bold" style={{ color: pm.color }}>
                         {pm.label}
                       </td>
-                      <td className="px-5 py-3 text-xs" style={{ color: "#9AB89E" }}>
+                      <td className="px-5 py-3 text-xs" style={{ color: "var(--admin-text-dim)" }}>
                         {t.created_at ? new Date(t.created_at).toLocaleDateString() : "—"}
                       </td>
                       <td className="px-5 py-3">
@@ -194,13 +194,13 @@ export default async function SupportPage({
 
       {totalPages > 1 && (
         <div className="flex items-center justify-between mt-4">
-          <span className="text-xs" style={{ color: "#9AB89E" }}>Page {page} of {totalPages}</span>
+          <span className="text-xs" style={{ color: "var(--admin-text-dim)" }}>Page {page} of {totalPages}</span>
           <div className="flex gap-2">
             {Number(page) > 1 && (
-              <Link href={`/admin/support?status=${status}&page=${Number(page) - 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}>← Prev</Link>
+              <Link href={`/admin/support?status=${status}&page=${Number(page) - 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}>← Prev</Link>
             )}
             {Number(page) < totalPages && (
-              <Link href={`/admin/support?status=${status}&page=${Number(page) + 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "#fff", border: "1px solid #DDE8DA", color: "#2A5230" }}>Next →</Link>
+              <Link href={`/admin/support?status=${status}&page=${Number(page) + 1}`} className="px-3 py-1.5 text-xs rounded-lg" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)", color: "#2A5230" }}>Next →</Link>
             )}
           </div>
         </div>

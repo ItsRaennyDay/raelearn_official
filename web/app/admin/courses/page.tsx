@@ -36,12 +36,12 @@ export default async function AdminCoursesPage() {
         <div>
           <h1
             className="font-extrabold text-2xl leading-tight mb-1"
-            style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}
+            style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}
           >
             Courses
           </h1>
           <div className="flex items-center gap-3">
-            <span className="text-sm" style={{ color: "#7A9878" }}>
+            <span className="text-sm" style={{ color: "var(--admin-text-muted)" }}>
               {total} total
             </span>
             {publishedCount > 0 && (
@@ -86,7 +86,7 @@ export default async function AdminCoursesPage() {
         <div
           className="rounded-2xl p-16 text-center"
           style={{
-            background: "#fff",
+            background: "var(--admin-card-bg)",
             border: "1.5px dashed #C8DEC8",
             boxShadow: "0 2px 12px rgba(42,82,48,0.04)",
           }}
@@ -95,17 +95,17 @@ export default async function AdminCoursesPage() {
             className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
             style={{ background: "#EEF5EE" }}
           >
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" style={{ color: "#2A5230" }}>
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" style={{ color: "var(--admin-accent)" }}>
               <path d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
           <h2
             className="font-bold text-lg mb-2"
-            style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}
+            style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}
           >
             No courses yet
           </h2>
-          <p className="text-sm mb-6" style={{ color: "#7A9878" }}>
+          <p className="text-sm mb-6" style={{ color: "var(--admin-text-muted)" }}>
             Create your first course and start building your curriculum.
           </p>
           <Link
@@ -125,8 +125,8 @@ export default async function AdminCoursesPage() {
         <div
           className="min-w-[580px] rounded-2xl overflow-hidden"
           style={{
-            background: "#fff",
-            border: "1.5px solid #E8EDE6",
+            background: "var(--admin-card-bg)",
+            border: "1.5px solid var(--admin-border)",
           }}
         >
           {/* Table header */}
@@ -134,9 +134,9 @@ export default async function AdminCoursesPage() {
             className="grid items-center px-5 py-3.5 text-[11px] font-bold tracking-[0.1em] uppercase"
             style={{
               gridTemplateColumns: "1fr 100px 80px 90px 80px 60px",
-              background: "#FAFCFA",
-              borderBottom: "1px solid #EEF5EE",
-              color: "#9AB89E",
+              background: "var(--admin-table-head-bg)",
+              borderBottom: "1px solid var(--admin-border)",
+              color: "var(--admin-text-dim)",
             }}
           >
             <span>Course</span>
@@ -148,7 +148,7 @@ export default async function AdminCoursesPage() {
           </div>
 
           {/* Course rows */}
-          <div className="divide-y" style={{ borderColor: "#F5FAF5" }}>
+          <div className="divide-y" style={{ borderColor: "var(--admin-table-row-border)" }}>
             {courses.map((c) => {
               const s = statusStyle[c.status] ?? statusStyle.draft;
               const l = levelStyle[c.level] ?? { bg: "#F5F5F5", text: "#666" };
@@ -172,7 +172,7 @@ export default async function AdminCoursesPage() {
                     <div className="min-w-0">
                       <div
                         className="text-sm font-semibold truncate"
-                        style={{ color: "#1A2E1C" }}
+                        style={{ color: "var(--admin-text-primary)" }}
                       >
                         {c.title}
                       </div>

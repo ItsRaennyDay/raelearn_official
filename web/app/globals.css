@@ -99,6 +99,7 @@
   --admin-text-primary:   #1A2E1C;
   --admin-text-muted:     #7A9878;
   --admin-text-dim:       #9AB89E;
+  --admin-accent:         #2A5230;
   --admin-table-head-bg:  #FAFCFA;
   --admin-table-row-border:#F5FAF5;
 }
@@ -114,8 +115,9 @@
   --admin-border:         #1E3020;
   --admin-border-mid:     #264228;
   --admin-text-primary:   #D8EDD8;
-  --admin-text-muted:     #7AAA7A;
-  --admin-text-dim:       #507850;
+  --admin-text-muted:     #8AB88A;
+  --admin-text-dim:       #6A9A6A;
+  --admin-accent:         #5AB85A;
   --admin-table-head-bg:  #172018;
   --admin-table-row-border:#1A2A1C;
 }
@@ -139,7 +141,7 @@
   --admin-pattern-dot: rgba(42, 82, 48, 0.045);
 }
 .dark {
-  --admin-pattern-dot: rgba(74, 138, 82, 0.065);
+  --admin-pattern-dot: rgba(74, 138, 82, 0.035);
 }
 
 /* ── Theme-switch: thin line running around screen edge ── */
@@ -206,3 +208,40 @@
 .dark [data-admin-table] tbody tr:hover {
   background: var(--admin-card-bg-alt) !important;
 }
+
+/* ── Dark mode global safety-net for admin ── */
+
+/* Heading safety-net: catches any h1/h2/h3 still using hardcoded dark colors */
+.dark .admin-main h1,
+.dark .admin-main h2,
+.dark .admin-main h3 {
+  color: var(--admin-text-primary) !important;
+}
+
+/* Table row hover: override tailwind [#FAFCFA] hover bg */
+.dark .admin-main tr:hover {
+  background: var(--admin-card-bg-alt) !important;
+}
+
+/* Text links without an inline background stay readable */
+.dark .admin-main a:not([style*="background"]) {
+  color: var(--admin-accent) !important;
+}
+/* Pagination-style links that carry a card-bg + border-mid combo */
+.dark .admin-main a[style*="admin-border-mid"] {
+  color: var(--admin-text-muted) !important;
+}
+
+/* Inputs, selects, textareas */
+.dark .admin-main input,
+.dark .admin-main select,
+.dark .admin-main textarea {
+  background: var(--admin-card-bg) !important;
+  border-color: var(--admin-border-mid) !important;
+  color: var(--admin-text-primary) !important;
+}
+.dark .admin-main input::placeholder,
+.dark .admin-main textarea::placeholder {
+  color: var(--admin-text-dim) !important;
+}
+

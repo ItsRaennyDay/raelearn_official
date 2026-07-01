@@ -27,13 +27,13 @@ export default async function NewQuizPage({
 
   return (
     <div className="p-4 md:p-8 max-w-2xl">
-      <div className="mb-6 flex items-center gap-2 text-sm" style={{ color: "#7A9878" }}>
+      <div className="mb-6 flex items-center gap-2 text-sm" style={{ color: "var(--admin-text-muted)" }}>
         <Link href="/admin/quizzes" className="hover:text-[#2A5230] transition-colors">← Quizzes</Link>
         <span>/</span>
-        <span style={{ color: "#2A5230" }}>New Quiz</span>
+        <span style={{ color: "var(--admin-accent)" }}>New Quiz</span>
       </div>
 
-      <h1 className="font-extrabold text-2xl mb-6" style={{ fontFamily: "var(--font-head)", color: "#1A2E1C" }}>New Quiz</h1>
+      <h1 className="font-extrabold text-2xl mb-6" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>New Quiz</h1>
 
       {error === "missing-title" && (
         <div className="mb-5 px-4 py-3 rounded-xl text-sm font-medium" style={{ background: "#FFF0F0", color: "#AA2222", border: "1px solid #FFCCCC" }}>
@@ -41,10 +41,10 @@ export default async function NewQuizPage({
         </div>
       )}
 
-      <div className="rounded-[18px] p-6" style={{ background: "#fff", border: "1px solid #DDE8DA" }}>
+      <div className="rounded-[18px] p-6" style={{ background: "var(--admin-card-bg)", border: "1px solid var(--admin-border-mid)" }}>
         <form action={createQuiz} className="flex flex-col gap-5">
           <div className="flex flex-col gap-1.5">
-            <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "#7A9878" }}>
+            <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "var(--admin-text-muted)" }}>
               Quiz Title <span style={{ color: "#AA2222" }}>*</span>
             </label>
             <input
@@ -53,17 +53,17 @@ export default async function NewQuizPage({
               required
               placeholder="e.g. Module 1 Knowledge Check"
               className="px-4 py-2.5 text-[14px] rounded-xl border outline-none"
-              style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+              style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "#7A9878" }}>Course (optional)</label>
+              <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "var(--admin-text-muted)" }}>Course (optional)</label>
               <select
                 name="course_id"
                 className="px-4 py-2.5 text-[14px] rounded-xl border outline-none"
-                style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
               >
                 <option value="">None</option>
                 {(courses ?? []).map((c) => (
@@ -73,11 +73,11 @@ export default async function NewQuizPage({
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "#7A9878" }}>Lesson (optional)</label>
+              <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "var(--admin-text-muted)" }}>Lesson (optional)</label>
               <select
                 name="lesson_id"
                 className="px-4 py-2.5 text-[14px] rounded-xl border outline-none"
-                style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
               >
                 <option value="">None</option>
                 {(lessons ?? []).map((l) => {
@@ -95,7 +95,7 @@ export default async function NewQuizPage({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "#7A9878" }}>Passing Score (%)</label>
+              <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "var(--admin-text-muted)" }}>Passing Score (%)</label>
               <input
                 name="passing_score"
                 type="number"
@@ -103,19 +103,19 @@ export default async function NewQuizPage({
                 max="100"
                 defaultValue="70"
                 className="px-4 py-2.5 text-[14px] rounded-xl border outline-none"
-                style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "#7A9878" }}>Max Attempts</label>
+              <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "var(--admin-text-muted)" }}>Max Attempts</label>
               <input
                 name="max_attempts"
                 type="number"
                 min="1"
                 placeholder="Unlimited"
                 className="px-4 py-2.5 text-[14px] rounded-xl border outline-none"
-                style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
+                style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
               />
             </div>
           </div>
@@ -124,7 +124,7 @@ export default async function NewQuizPage({
             <button type="submit" className="px-6 py-2.5 text-[14px] font-bold rounded-xl" style={{ background: "#2A5230", color: "#fff" }}>
               Create Quiz
             </button>
-            <Link href="/admin/quizzes" className="px-6 py-2.5 text-[14px] font-bold rounded-xl" style={{ background: "#F5F0E8", color: "#7A9878" }}>
+            <Link href="/admin/quizzes" className="px-6 py-2.5 text-[14px] font-bold rounded-xl" style={{ background: "#F5F0E8", color: "var(--admin-text-muted)" }}>
               Cancel
             </Link>
           </div>
