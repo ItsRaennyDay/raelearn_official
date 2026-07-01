@@ -51,12 +51,9 @@ export function DarkModeToggle() {
         />
       </div>
 
-      {/* Sweep overlay — portal so it covers everything */}
+      {/* Running-edge overlay — portal so it sits above everything */}
       {sweeping && typeof document !== "undefined" && createPortal(
-        <>
-          <div className="admin-theme-edge" />
-          <div className="admin-theme-sweep" />
-        </>,
+        <div className="admin-theme-sweep" />,
         document.body
       )}
     </>
