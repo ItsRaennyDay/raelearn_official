@@ -474,10 +474,10 @@ export default function CourseEditor({ course, modules: initModules, categories,
           const adminCount = enrollments.filter((e) => e.source === "admin").length;
 
           return (
-            <div className="flex gap-6 items-start">
+            <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
 
               {/* ── Left: form + table ── */}
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 order-2 lg:order-1">
                 {/* Invite form */}
                 <div className="bg-white border border-[#DDE8DA] rounded-2xl p-5 mb-5">
                   <p className="text-xs font-bold uppercase tracking-wide text-[#7A9878] mb-3">Enroll a Learner</p>
@@ -504,7 +504,7 @@ export default function CourseEditor({ course, modules: initModules, categories,
                 </div>
 
                 {/* Enrollment table */}
-                <div className="bg-white border border-[#DDE8DA] rounded-2xl overflow-hidden">
+                <div className="bg-white border border-[#DDE8DA] rounded-2xl overflow-x-auto">
                   <div className="flex items-center justify-between px-5 py-3 bg-[#FAFCFA] border-b border-[#F0F7F0]">
                     <span className="text-xs font-bold uppercase tracking-wide text-[#7A9878]">
                       {enrollStatus === "loaded"
@@ -598,16 +598,16 @@ export default function CourseEditor({ course, modules: initModules, categories,
               </div>
 
               {/* ── Right: Insights panel ── */}
-              <div className="w-64 shrink-0 space-y-4">
+              <div className="w-full lg:w-64 lg:shrink-0 space-y-4 order-1 lg:order-2">
                 <div className="bg-white border border-[#DDE8DA] rounded-2xl p-5">
                   <p className="text-xs font-bold uppercase tracking-wide text-[#7A9878] mb-4">Enrollment Insights</p>
                   <div className="space-y-4">
-                    <div>
+                    <div className="flex items-center justify-between lg:block">
                       <div className="text-3xl font-head font-bold text-[#2A5230]">{enrollments.length}</div>
-                      <div className="text-xs text-[#9AB89E] mt-0.5">Total enrolled</div>
+                      <div className="text-xs text-[#9AB89E] lg:mt-0.5">Total enrolled</div>
                     </div>
                     <div className="h-px bg-[#F0F7F0]" />
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-4 lg:grid-cols-2 gap-3">
                       <div>
                         <div className="text-xl font-bold text-[#2A5230]">{active.length}</div>
                         <div className="text-[10px] text-[#9AB89E] mt-0.5 uppercase tracking-wide">Active</div>
