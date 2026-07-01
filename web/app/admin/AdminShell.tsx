@@ -297,22 +297,22 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           mobileNavOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         ].join(" ")}
         style={{
-          background: "linear-gradient(180deg, #1A2E1C 0%, #0F1F10 100%)",
-          boxShadow: "2px 0 20px rgba(0,0,0,0.15)",
+          background: "linear-gradient(180deg, #4E6B46 0%, #3D5537 100%)",
+          boxShadow: "2px 0 16px rgba(0,0,0,0.10)",
         }}
       >
         {/* Brand header */}
-        <div className="px-5 pt-5 pb-4 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+        <div className="px-5 pt-5 pb-4 flex items-center justify-between" style={{ borderBottom: "1px solid rgba(255,255,255,0.12)" }}>
           <Link href="/" className="block group">
             <div
               className="font-extrabold text-[17px] leading-none"
               style={{ fontFamily: "var(--font-head)", color: "#fff" }}
             >
-              Rae<span style={{ color: "#7DAA82" }}>Learn</span>
+              Rae<span style={{ color: "#B8D8A8" }}>Learn</span>
             </div>
             <div
               className="text-[9px] font-bold tracking-[0.22em] uppercase mt-1.5"
-              style={{ color: "#4A7A4E" }}
+              style={{ color: "#90B880" }}
             >
               Creator Studio
             </div>
@@ -321,7 +321,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
             className="md:hidden w-7 h-7 flex items-center justify-center rounded-lg"
             onClick={() => setMobileNavOpen(false)}
             aria-label="Close menu"
-            style={{ color: "#4A6A4E" }}
+            style={{ color: "#90B880" }}
           >
             <svg viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
               <path d="M2 2l10 10M12 2L2 12" />
@@ -335,7 +335,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
             <div key={section.label} className="mb-4">
               <div
                 className="text-[9px] font-bold tracking-[0.2em] uppercase px-2.5 mb-1.5"
-                style={{ color: "#3A5C3E" }}
+                style={{ color: "#90B480" }}
               >
                 {section.label}
               </div>
@@ -348,14 +348,14 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
                     href={href}
                     className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px] font-medium mb-0.5 transition-all"
                     style={{
-                      background: active ? "rgba(122,168,130,0.18)" : "transparent",
-                      color: active ? "#A8D4AC" : "#6A9870",
-                      borderLeft: active ? "2px solid #5A9E62" : "2px solid transparent",
+                      background: active ? "rgba(255,255,255,0.16)" : "transparent",
+                      color: active ? "#fff" : "#C0D8B4",
+                      borderLeft: active ? "2px solid #B8D8A8" : "2px solid transparent",
                     }}
                   >
                     <span
                       className="shrink-0"
-                      style={{ color: active ? "#7DAA82" : "#4A6A4E" }}
+                      style={{ color: active ? "#B8D8A8" : "#90B480" }}
                     >
                       {icon}
                     </span>
@@ -368,27 +368,27 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
         </nav>
 
         {/* Admin tag + back link */}
-        <div className="px-3 py-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="px-3 py-3" style={{ borderTop: "1px solid rgba(255,255,255,0.10)" }}>
           <div
             className="flex items-center gap-2 px-2.5 py-2 rounded-xl mb-1.5"
-            style={{ background: "rgba(255,255,255,0.04)" }}
+            style={{ background: "rgba(0,0,0,0.12)" }}
           >
             <div
               className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-extrabold shrink-0"
-              style={{ background: "#2A5230", color: "#A8D4AC" }}
+              style={{ background: "rgba(255,255,255,0.18)", color: "#fff" }}
             >
               R
             </div>
             <div className="min-w-0">
-              <div className="text-xs font-bold truncate" style={{ color: "#C8E6CA" }}>Rae</div>
-              <div className="text-[10px]" style={{ color: "#4A6A4E" }}>Platform Admin</div>
+              <div className="text-xs font-bold truncate" style={{ color: "#E8F5E2" }}>Rae</div>
+              <div className="text-[10px]" style={{ color: "#90B480" }}>Platform Admin</div>
             </div>
           </div>
 
           <Link
             href="/dashboard"
             className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs transition-colors"
-            style={{ color: "#4A6A4E" }}
+            style={{ color: "#90B480" }}
           >
             <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor">
               <path fillRule="evenodd" d="M14 8a.75.75 0 0 1-.75.75H4.56l3.22 3.22a.75.75 0 1 1-1.06 1.06l-4.5-4.5a.75.75 0 0 1 0-1.06l4.5-4.5a.75.75 0 0 1 1.06 1.06L4.56 7.25h8.69A.75.75 0 0 1 14 8Z" clipRule="evenodd" />
