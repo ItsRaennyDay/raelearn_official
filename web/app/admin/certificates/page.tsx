@@ -51,7 +51,7 @@ export default async function CertificatesPage({
   const { q = "", issued } = await searchParams;
   const db = createAdminClient();
 
-  const [eligibleRes, completionsRes, templateRes, certsRes] = await Promise.all([
+  const [eligibleRes, completionsRes, templateRes, certsRes, pendingRes] = await Promise.all([
     db.from("courses").select("*", { count: "exact", head: true }).eq("certificate_eligible", true),
     db.from("enrollments").select("*", { count: "exact", head: true }).not("completed_at", "is", null),
     db.from("certificate_templates").select("*", { count: "exact", head: true }),
@@ -62,9 +62,25 @@ export default async function CertificatesPage({
         certificate_templates:template_id (name)`, { count: "exact" })
       .order("issued_at", { ascending: false })
       .limit(100),
+    // Completed enrollments in certificate-eligible courses, used to build the "ready to issue" list below.
+    db.from("enrollments")
+      .select(`user_id, course_id, completed_at,
+        profiles:user_id (full_name, email),
+        courses:course_id!inner (title, certificate_eligible)`)
+      .not("completed_at", "is", null)
+      .eq("courses.certificate_eligible", true)
+      .order("completed_at", { ascending: false })
+      .limit(200),
   ]);
 
   const allCerts = certsRes.data ?? [];
+
+  const { data: issuedPairs } = await db.from("certificates").select("user_id, course_id");
+  const issuedSet = new Set((issuedPairs ?? []).map((p) => `${p.user_id}_${p.course_id}`));
+
+  const pendingCerts = (pendingRes.data ?? []).filter(
+    (e) => !issuedSet.has(`${e.user_id}_${e.course_id}`)
+  );
 
   const certs = q
     ? allCerts.filter((c) => {
@@ -161,6 +177,65 @@ export default async function CertificatesPage({
               style={{ background: "#EEF5EE", color: "#2A5230" }}>
               Manage Templates →
             </Link>
+          </div>
+        )}
+      </div>
+
+      {/* Ready-to-issue: completed enrollments in certificate-eligible courses without a cert yet */}
+      <div className="mb-8">
+        <h2 className="font-bold text-sm mb-3" style={{ color: "var(--admin-text-primary)" }}>
+          Ready to Issue <span className="font-normal text-xs ml-1" style={{ color: "var(--admin-text-dim)" }}>({pendingCerts.length})</span>
+        </h2>
+        {pendingCerts.length === 0 ? (
+          <div className="rounded-2xl p-6 text-center text-sm" style={{ background: "var(--admin-card-bg)", border: "1.5px dashed var(--admin-border-mid)", color: "var(--admin-text-dim)" }}>
+            No completions are waiting on a certificate.
+          </div>
+        ) : (
+          <div className="rounded-2xl overflow-hidden" style={{ border: "1.5px solid var(--admin-border)" }}>
+            <div style={{ background: "var(--admin-card-bg)", minWidth: 680 }}>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr style={{ borderBottom: "1px solid var(--admin-border)", background: "var(--admin-table-head-bg)" }}>
+                    {["Learner", "Course", "Completed", ""].map(h => (
+                      <th key={h} className="text-left px-4 py-3 font-semibold text-xs uppercase tracking-wide" style={{ color: "var(--admin-text-muted)" }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {pendingCerts.map((e) => {
+                    const profile = e.profiles as unknown as { full_name?: string; email?: string } | null;
+                    const course = e.courses as unknown as { title?: string } | null;
+                    return (
+                      <tr key={`${e.user_id}_${e.course_id}`} className="transition-colors hover:bg-[#FAFCFA]" style={{ borderBottom: "1px solid var(--admin-table-row-border)" }}>
+                        <td className="px-4 py-3">
+                          <div className="font-medium text-sm" style={{ color: "var(--admin-text-primary)" }}>
+                            {profile?.full_name || profile?.email?.split("@")[0] || "—"}
+                          </div>
+                          <div className="text-xs" style={{ color: "var(--admin-text-dim)" }}>{profile?.email}</div>
+                        </td>
+                        <td className="px-4 py-3 text-sm" style={{ color: "var(--admin-text-muted)" }}>{course?.title ?? "—"}</td>
+                        <td className="px-4 py-3 text-xs" style={{ color: "var(--admin-text-dim)" }}>
+                          {e.completed_at ? new Date(e.completed_at).toLocaleDateString() : "—"}
+                        </td>
+                        <td className="px-4 py-3">
+                          <form action={issueCertificate}>
+                            <input type="hidden" name="userId" value={e.user_id} />
+                            <input type="hidden" name="courseId" value={e.course_id} />
+                            <button
+                              type="submit"
+                              className="text-xs font-bold px-3 py-1 rounded-lg"
+                              style={{ background: "#2A5230", color: "#fff" }}
+                            >
+                              Issue Certificate
+                            </button>
+                          </form>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>
