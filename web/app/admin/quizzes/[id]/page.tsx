@@ -6,6 +6,7 @@ import QuizBuilder, { type Question } from "./QuizBuilder";
 import CompletionTab from "./CompletionTab";
 import InsightsTab from "./InsightsTab";
 import DeleteQuizButton from "./DeleteQuizButton";
+import AttachmentFields from "./AttachmentFields";
 import { updateQuizMeta } from "../actions";
 
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
@@ -39,7 +40,7 @@ export default async function QuizEditorPage({
       .order("sort_order", { ascending: true }),
     db.from("courses").select("id, title").order("title"),
     db.from("lessons")
-      .select("id, title, modules:module_id(courses:course_id(title))")
+      .select("id, title, modules:module_id(courses:course_id(id, title))")
       .order("title"),
   ]);
 
@@ -215,42 +216,20 @@ export default async function QuizEditorPage({
                   />
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold tracking-[0.04em] uppercase" style={{ color: "var(--admin-text-muted)" }}>Attached Lesson</label>
-                  <select
-                    name="lesson_id"
-                    defaultValue={quiz.lesson_id ?? ""}
-                    className="px-3 py-2 text-[13px] rounded-xl border outline-none"
-                    style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
-                  >
-                    <option value="">None</option>
-                    {(lessons ?? []).map((l) => {
-                      const mod = l.modules as { courses?: { title?: string } } | null;
-                      const courseTitle = mod?.courses?.title;
-                      return (
-                        <option key={l.id} value={l.id}>
-                          {courseTitle ? `${courseTitle} — ` : ""}{l.title}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold tracking-[0.04em] uppercase" style={{ color: "var(--admin-text-muted)" }}>Attached Course</label>
-                  <select
-                    name="course_id"
-                    defaultValue={quiz.course_id ?? ""}
-                    className="px-3 py-2 text-[13px] rounded-xl border outline-none"
-                    style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
-                  >
-                    <option value="">None</option>
-                    {(courses ?? []).map((c) => (
-                      <option key={c.id} value={c.id}>{c.title}</option>
-                    ))}
-                  </select>
-                  <p className="text-[11px]" style={{ color: "var(--admin-text-dim)" }}>Only used when no lesson is attached.</p>
-                </div>
+                <AttachmentFields
+                  courses={(courses ?? []).map((c) => ({ id: c.id, title: c.title }))}
+                  lessons={(lessons ?? []).map((l) => {
+                    const mod = l.modules as { courses?: { id?: string; title?: string } } | null;
+                    return {
+                      id: l.id,
+                      title: l.title,
+                      courseId: mod?.courses?.id ?? null,
+                      courseTitle: mod?.courses?.title ?? null,
+                    };
+                  })}
+                  initialCourseId={quiz.course_id ?? ""}
+                  initialLessonId={quiz.lesson_id ?? ""}
+                />
 
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold tracking-[0.04em] uppercase" style={{ color: "var(--admin-text-muted)" }}>Passing Score (%)</label>
