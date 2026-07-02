@@ -971,7 +971,8 @@ function RequiredQuizPlayer({ quiz, onPassed }: { quiz: QuizData; onPassed: () =
         showConfetti: res.show_confetti ?? true,
       });
       setShowCompletionModal(true);
-      onPassed();
+      // Don't call onPassed() yet — that swaps this component out for the parent's
+      // "already passed" summary card, which would unmount the modal before it paints.
     } else {
       setCompletion({
         variant: "fail",
@@ -1108,6 +1109,7 @@ function RequiredQuizPlayer({ quiz, onPassed }: { quiz: QuizData; onPassed: () =
           onClose={() => {
             setShowCompletionModal(false);
             if (completion.variant === "fail") handleRetry();
+            else onPassed();
           }}
         />
       )}
