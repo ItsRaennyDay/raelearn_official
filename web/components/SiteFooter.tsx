@@ -115,16 +115,22 @@ export default function SiteFooter() {
             ))}
           </div>
         </div>
+      </div>
 
-        {/* Newsletter col */}
-        <div>
-          <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase text-[#7DAA82] mb-4">
-            Stay in the loop
+      {/* Newsletter row — its own full-width band so the form has room to breathe */}
+      <div className="border-t border-white/[0.08]">
+        <div className="max-w-[1240px] mx-auto px-7 py-9">
+          <div className="mx-[15%] flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase text-[#7DAA82] mb-1">
+                Stay in the loop
+              </div>
+              <p className="text-sm text-[#8AAE8E]">
+                New courses and updates, straight to your inbox.
+              </p>
+            </div>
+            <NewsletterFooterForm />
           </div>
-          <p className="text-sm text-[#8AAE8E] mb-3 max-w-[260px]">
-            New courses and updates, straight to your inbox.
-          </p>
-          <NewsletterFooterForm />
         </div>
       </div>
 
