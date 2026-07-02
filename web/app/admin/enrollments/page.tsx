@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { logAction } from "@/lib/audit";
+import { sendEmail } from "@/lib/email/resend";
+import { enrollmentEmail } from "@/lib/email/templates";
 
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
@@ -26,7 +28,7 @@ async function createEnrollment(formData: FormData) {
   // Find user by email in profiles
   const { data: profile } = await db
     .from("profiles")
-    .select("id")
+    .select("id, full_name")
     .eq("email", email)
     .single();
 
@@ -52,6 +54,13 @@ async function createEnrollment(formData: FormData) {
   }).select("id").single();
 
   await logAction({ actorId: actor.id, action: "enroll", tableName: "enrollments", recordId: enrollment?.id, newValues: { user_id: profile.id, course_id: courseId, source: "admin" } });
+
+  const { data: course } = await db.from("courses").select("title").eq("id", courseId).single();
+  if (course?.title) {
+    const mail = enrollmentEmail(profile.full_name || email, course.title);
+    await sendEmail({ to: email, subject: mail.subject, html: mail.html, template: "enrollment", recipientId: profile.id });
+  }
+
   revalidatePath("/admin/enrollments");
   redirect("/admin/enrollments?created=1");
 }

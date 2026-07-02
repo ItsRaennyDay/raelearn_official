@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 
 interface Props {
   courseId: string;
@@ -59,26 +58,19 @@ export default function EnrollButton({
     }
     setLoading(true);
     setError(null);
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    const res = await fetch("/api/enrollments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ courseId }),
+    });
+    setLoading(false);
+    if (res.status === 401) {
       router.push("/signin");
       return;
     }
-    const { error: err } = await supabase.from("enrollments").insert({
-      user_id: user.id,
-      course_id: courseId,
-      source: "free",
-      status: "active",
-    });
-    setLoading(false);
-    if (err) {
-      if (err.code === "23505") {
-        // Already enrolled — just go to dashboard
-        router.push("/dashboard");
-        return;
-      }
-      setError("Enrollment failed. Please try again.");
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      setError(data.error || "Enrollment failed. Please try again.");
       return;
     }
     router.push("/dashboard");

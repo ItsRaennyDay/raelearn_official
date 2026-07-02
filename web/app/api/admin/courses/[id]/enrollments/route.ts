@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { sendEmail } from "@/lib/email/resend";
+import { enrollmentEmail } from "@/lib/email/templates";
 
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
@@ -108,10 +110,12 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
   // Look up user by email — check profiles first, then auth
   let userId: string | null = null;
+  let fullName: string | null = null;
 
-  const { data: profileByEmail } = await db.from("profiles").select("id").eq("email", email).single();
+  const { data: profileByEmail } = await db.from("profiles").select("id, full_name").eq("email", email).single();
   if (profileByEmail) {
     userId = profileByEmail.id;
+    fullName = profileByEmail.full_name;
   } else {
     // Fall back to auth.admin.listUsers and search by email
     const listResult = await db.auth.admin.listUsers({ page: 1, perPage: 1000 });
@@ -120,6 +124,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
     const authUser = (listResult.data?.users ?? []).find((u) => u.email?.toLowerCase() === email);
     userId = authUser?.id ?? null;
+    fullName = authUser?.user_metadata?.full_name ?? authUser?.user_metadata?.name ?? null;
   }
 
   if (!userId) return NextResponse.json({ error: `No registered user found with email: ${email}` }, { status: 404 });
@@ -137,5 +142,12 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   });
 
   if (insertError) return NextResponse.json({ error: insertError.message }, { status: 500 });
+
+  const { data: course } = await db.from("courses").select("title").eq("id", id).single();
+  if (course?.title) {
+    const mail = enrollmentEmail(fullName || email, course.title);
+    await sendEmail({ to: email, subject: mail.subject, html: mail.html, template: "enrollment", recipientId: userId });
+  }
+
   return NextResponse.json({ ok: true });
 }

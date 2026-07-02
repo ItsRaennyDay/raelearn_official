@@ -3,6 +3,8 @@ import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { sendEmail } from "@/lib/email/resend";
+import { certificateEmail } from "@/lib/email/templates";
 
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
@@ -18,12 +20,24 @@ async function issueCertificate(formData: FormData) {
 
   const db = createAdminClient();
   const certNum = "RL-" + new Date().getFullYear() + "-" + Math.random().toString(36).slice(2, 10).toUpperCase();
-  await db.from("certificates").upsert({
+  const { data: cert } = await db.from("certificates").upsert({
     user_id: userId,
     course_id: courseId,
     certificate_number: certNum,
     issued_at: new Date().toISOString(),
-  }, { onConflict: "user_id,course_id" });
+  }, { onConflict: "user_id,course_id" }).select("id").single();
+
+  const { data: learner } = await db
+    .from("profiles")
+    .select("full_name, email")
+    .eq("id", userId)
+    .single();
+  const { data: course } = await db.from("courses").select("title").eq("id", courseId).single();
+
+  if (cert?.id && learner?.email && course?.title) {
+    const mail = certificateEmail(learner.full_name || learner.email, course.title, cert.id);
+    await sendEmail({ to: learner.email, subject: mail.subject, html: mail.html, template: "certificate", recipientId: userId });
+  }
 
   revalidatePath("/admin/certificates");
   redirect("/admin/certificates?issued=1");

@@ -1,12 +1,12 @@
 const TEMPLATES = [
-  { key: "welcome",           label: "Welcome Email",             description: "Sent when a new user registers" },
-  { key: "enrollment",        label: "Enrollment Confirmation",   description: "Sent after successful enrollment" },
-  { key: "course_complete",   label: "Course Completion",         description: "Sent when a learner completes a course" },
-  { key: "certificate",       label: "Certificate Issued",        description: "Sent with certificate download link" },
-  { key: "payment_receipt",   label: "Payment Receipt",           description: "Sent after successful Xendit payment" },
-  { key: "payment_failed",    label: "Payment Failed",            description: "Sent when a payment fails" },
-  { key: "org_invite",        label: "Organization Invite",       description: "Sent to users invited to an organization" },
-  { key: "password_reset",    label: "Password Reset",            description: "Password reset link email" },
+  { key: "welcome",           label: "Welcome Email",             description: "Sent when a new user registers",             live: true },
+  { key: "enrollment",        label: "Enrollment Confirmation",   description: "Sent after successful enrollment",            live: true },
+  { key: "course_complete",   label: "Course Completion",         description: "Sent when a learner completes a course",      live: false },
+  { key: "certificate",       label: "Certificate Issued",        description: "Sent with certificate download link",         live: true },
+  { key: "payment_receipt",   label: "Payment Receipt",           description: "Sent after successful Xendit payment",        live: false },
+  { key: "payment_failed",    label: "Payment Failed",            description: "Sent when a payment fails",                   live: false },
+  { key: "org_invite",        label: "Organization Invite",       description: "Sent to users invited to an organization",    live: false },
+  { key: "password_reset",    label: "Password Reset",            description: "Password reset link email",                  live: false },
 ];
 
 export default function EmailTemplatesPage() {
@@ -34,8 +34,11 @@ export default function EmailTemplatesPage() {
               <div className="font-semibold text-sm" style={{ color: "var(--admin-text-primary)" }}>{t.label}</div>
               <div className="text-xs mt-0.5" style={{ color: "var(--admin-text-dim)" }}>{t.description}</div>
             </div>
-            <span className="text-xs px-2 py-0.5 rounded-full shrink-0" style={{ background: "#F3F3F3", color: "#888" }}>
-              Soon
+            <span
+              className="text-xs px-2 py-0.5 rounded-full shrink-0 font-semibold"
+              style={t.live ? { background: "#EEF5EE", color: "#2A5230" } : { background: "#F3F3F3", color: "#888" }}
+            >
+              {t.live ? "Live" : "Soon"}
             </span>
           </div>
         ))}
