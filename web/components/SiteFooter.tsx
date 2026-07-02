@@ -1,5 +1,6 @@
 import Link from "next/link";
 import NewsletterFooterForm from "./newsletter/NewsletterFooterForm";
+import GroupAccountCTA from "./GroupAccountCTA";
 
 const LEARN_LINKS = [
   { href: "/",                      label: "Home" },
@@ -12,7 +13,6 @@ const FOR_YOU_LINKS = [
   { href: "/for-vas",               label: "For VAs" },
   { href: "/courses?aud=nonprofit", label: "Nonprofit Courses" },
   { href: "/courses?aud=business",  label: "Business Courses" },
-  { href: "/signup?type=group",     label: "Group Account Signup" },
 ];
 
 const LEGAL_LINKS = [
@@ -99,6 +99,9 @@ export default function SiteFooter() {
                 {label}
               </Link>
             ))}
+            <GroupAccountCTA className="text-left text-[#9AB89E] hover:text-white transition-colors">
+              Group Account Signup
+            </GroupAccountCTA>
           </div>
         </div>
 

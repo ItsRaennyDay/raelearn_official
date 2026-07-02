@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
-const ALLOWED_SOURCES = new Set(["footer", "exit_intent"]);
+const ALLOWED_SOURCES = new Set(["footer", "exit_intent", "group_waitlist"]);
 
 // Rate limit: 5 subscribe attempts per IP per hour
 const attempts = new Map<string, { count: number; resetAt: number }>();

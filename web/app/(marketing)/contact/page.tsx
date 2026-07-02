@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
+import GroupAccountCTA from "@/components/GroupAccountCTA";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -73,9 +74,10 @@ const CATEGORIES = [
 export default async function ContactPage({
   searchParams,
 }: {
-  searchParams: Promise<{ submitted?: string; error?: string }>;
+  searchParams: Promise<{ submitted?: string; error?: string; category?: string }>;
 }) {
-  const { submitted, error } = await searchParams;
+  const { submitted, error, category } = await searchParams;
+  const defaultCategory = CATEGORIES.some((c) => c.value === category) ? category : "general";
 
   return (
     <div className="bg-rl-bg" style={{ fontFamily: "var(--font-sans)" }}>
@@ -167,6 +169,7 @@ export default async function ContactPage({
                     <label className="text-[12px] font-bold tracking-[0.04em] uppercase" style={{ color: "#7A9878" }}>Category</label>
                     <select
                       name="category"
+                      defaultValue={defaultCategory}
                       className="px-4 py-2.5 text-[14px] rounded-xl border outline-none"
                       style={{ borderColor: "#DDE8DA", background: "#FAFCFA", color: "#1A2E1C" }}
                     >
@@ -258,7 +261,6 @@ export default async function ContactPage({
                 { href: "/pricing",        label: "View Pricing" },
                 { href: "/courses",        label: "Browse Courses" },
                 { href: "/legal/refund",   label: "Refund Policy" },
-                { href: "/signup?type=group", label: "Group Account Signup" },
               ].map(({ href, label }) => (
                 <Link
                   key={href}
@@ -269,6 +271,9 @@ export default async function ContactPage({
                   {label} →
                 </Link>
               ))}
+              <GroupAccountCTA className="text-left text-[13px] font-medium hover:underline" style={{ color: "#7A9878" }}>
+                Group Account Signup →
+              </GroupAccountCTA>
             </div>
           </div>
         </div>

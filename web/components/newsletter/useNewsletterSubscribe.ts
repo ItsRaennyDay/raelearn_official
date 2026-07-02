@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export function useNewsletterSubscribe(source: "footer" | "exit_intent") {
+export function useNewsletterSubscribe(source: "footer" | "exit_intent" | "group_waitlist") {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 

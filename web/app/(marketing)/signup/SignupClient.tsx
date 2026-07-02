@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import GroupAccountCTA from "@/components/GroupAccountCTA";
 
 const TYPES = [
   ["va",          "VA"],
@@ -326,9 +327,9 @@ export default function SignupClient({ bundles }: { bundles: BundleForSignup[] }
             </div>
             <div className="flex items-center gap-2.5 mt-[18px] px-1.5">
               <span className="text-[13px] text-rl-dim">Leading a team instead?</span>
-              <Link href="/signup?type=group" className="text-[13px] font-bold text-rl-forest hover:underline">
+              <GroupAccountCTA className="text-[13px] font-bold text-rl-forest hover:underline">
                 Create a group account →
-              </Link>
+              </GroupAccountCTA>
             </div>
           </div>
         </div>

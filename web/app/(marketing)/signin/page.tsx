@@ -5,6 +5,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { BASE_URL } from "@/lib/email/render";
+import GroupAccountCTA from "@/components/GroupAccountCTA";
 
 function safeNext(raw: string | null): string {
   if (!raw) return "/dashboard";
@@ -179,12 +180,9 @@ function SignInForm() {
         {/* Below card */}
         <p className="mt-6 text-center text-xs text-[var(--color-rl-dim)]">
           Need a group account?{" "}
-          <Link
-            href="/signup?type=group"
-            className="underline underline-offset-2 hover:text-[var(--color-rl-muted)] transition"
-          >
+          <GroupAccountCTA className="underline underline-offset-2 hover:text-[var(--color-rl-muted)] transition">
             Create one for your team
-          </Link>
+          </GroupAccountCTA>
         </p>
       </div>
     </main>

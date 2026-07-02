@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GroupAccountCTA from "@/components/GroupAccountCTA";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -83,7 +84,7 @@ const PLANS = [
       "Implementation guidance",
     ],
     ctaLabel: "Request Custom Quote",
-    ctaHref: "/signup",
+    ctaHref: "/contact?category=custom_training",
   },
 ];
 
@@ -164,17 +165,26 @@ export default function PricingPage() {
                 ))}
               </div>
 
-              <Link
-                href={plan.ctaHref}
-                className="text-center text-[14.5px] font-bold px-3 py-3 rounded-[10px] block"
-                style={
-                  plan.dark
-                    ? { background: "#C8DEC8", color: "#2A5230" }
-                    : { color: "#2A5230", border: "1.6px solid #2A5230", background: "transparent" }
-                }
-              >
-                {plan.ctaLabel}
-              </Link>
+              {plan.name === "Group Account" ? (
+                <GroupAccountCTA
+                  className="text-center text-[14.5px] font-bold px-3 py-3 rounded-[10px] block w-full"
+                  style={{ background: "#C8DEC8", color: "#2A5230" }}
+                >
+                  {plan.ctaLabel}
+                </GroupAccountCTA>
+              ) : (
+                <Link
+                  href={plan.ctaHref}
+                  className="text-center text-[14.5px] font-bold px-3 py-3 rounded-[10px] block"
+                  style={
+                    plan.dark
+                      ? { background: "#C8DEC8", color: "#2A5230" }
+                      : { color: "#2A5230", border: "1.6px solid #2A5230", background: "transparent" }
+                  }
+                >
+                  {plan.ctaLabel}
+                </Link>
+              )}
             </div>
           ))}
         </div>
@@ -266,7 +276,7 @@ export default function PricingPage() {
             Browse Courses
           </Link>
           <Link
-            href="/signup"
+            href="/contact?category=custom_training"
             className="text-[15px] font-bold text-rl-forest border-[1.5px] border-rl-forest px-[22px] py-3.5 rounded-[11px] whitespace-nowrap hover:bg-rl-forest hover:text-white transition-colors"
           >
             Request Custom Quote
