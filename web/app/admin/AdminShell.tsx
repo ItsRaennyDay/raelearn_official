@@ -215,6 +215,16 @@ const NAV_SECTIONS = [
         ),
       },
       {
+        label: "Newsletter",
+        href: "/admin/newsletter",
+        icon: (
+          <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 6.5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7Z" />
+            <path d="M3.5 5l6.5 5 6.5-5" />
+          </svg>
+        ),
+      },
+      {
         label: "Audit Logs",
         href: "/admin/audit-logs",
         icon: (
@@ -258,6 +268,7 @@ const BREADCRUMB: Record<string, string> = {
   "/admin/reports": "Reports",
   "/admin/support": "Support",
   "/admin/email-templates": "Email Templates",
+  "/admin/newsletter": "Newsletter",
   "/admin/audit-logs": "Audit Logs",
   "/admin/settings": "Settings",
 };

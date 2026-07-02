@@ -1,5 +1,6 @@
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
+import NewsletterExitModal from "@/components/newsletter/NewsletterExitModal";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function MarketingLayout({
@@ -29,6 +30,7 @@ export default async function MarketingLayout({
       <SiteNav user={navUser} />
       <main className="flex-1">{children}</main>
       <SiteFooter />
+      <NewsletterExitModal isLoggedIn={!!user} />
     </>
   );
 }

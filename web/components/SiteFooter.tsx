@@ -1,4 +1,5 @@
 import Link from "next/link";
+import NewsletterFooterForm from "./newsletter/NewsletterFooterForm";
 
 const LEARN_LINKS = [
   { href: "/",                      label: "Home" },
@@ -113,6 +114,17 @@ export default function SiteFooter() {
               </Link>
             ))}
           </div>
+        </div>
+
+        {/* Newsletter col */}
+        <div>
+          <div className="text-[11px] font-extrabold tracking-[0.1em] uppercase text-[#7DAA82] mb-4">
+            Stay in the loop
+          </div>
+          <p className="text-sm text-[#8AAE8E] mb-3 max-w-[260px]">
+            New courses and updates, straight to your inbox.
+          </p>
+          <NewsletterFooterForm />
         </div>
       </div>
 
