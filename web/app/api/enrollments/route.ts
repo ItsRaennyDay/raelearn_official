@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendEmail } from "@/lib/email/resend";
-import { enrollmentEmail } from "@/lib/email/templates";
+import { renderEmail, BASE_URL } from "@/lib/email/templates";
 
 // Self-service free enrollment. Paid courses must go through checkout, not this route.
 export async function POST(request: NextRequest) {
@@ -54,7 +54,11 @@ export async function POST(request: NextRequest) {
 
   const recipientEmail = profile?.email || user.email;
   if (recipientEmail) {
-    const email = enrollmentEmail(profile?.full_name || recipientEmail, course.title);
+    const email = await renderEmail("enrollment", {
+      firstName: (profile?.full_name || recipientEmail).split(" ")[0],
+      courseTitle: course.title,
+      ctaUrl: `${BASE_URL}/dashboard`,
+    });
     await sendEmail({
       to: recipientEmail,
       subject: email.subject,

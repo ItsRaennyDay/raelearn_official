@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendEmail } from "@/lib/email/resend";
-import { enrollmentEmail } from "@/lib/email/templates";
+import { renderEmail, BASE_URL } from "@/lib/email/templates";
 
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
@@ -145,7 +145,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
   const { data: course } = await db.from("courses").select("title").eq("id", id).single();
   if (course?.title) {
-    const mail = enrollmentEmail(fullName || email, course.title);
+    const mail = await renderEmail("enrollment", {
+      firstName: (fullName || email).split(" ")[0],
+      courseTitle: course.title,
+      ctaUrl: `${BASE_URL}/dashboard`,
+    });
     await sendEmail({ to: email, subject: mail.subject, html: mail.html, template: "enrollment", recipientId: userId });
   }
 

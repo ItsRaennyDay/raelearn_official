@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { sendEmail } from "@/lib/email/resend";
-import { certificateEmail } from "@/lib/email/templates";
+import { renderEmail, BASE_URL } from "@/lib/email/templates";
 
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
@@ -35,7 +35,11 @@ async function issueCertificate(formData: FormData) {
   const { data: course } = await db.from("courses").select("title").eq("id", courseId).single();
 
   if (cert?.id && learner?.email && course?.title) {
-    const mail = certificateEmail(learner.full_name || learner.email, course.title, cert.id);
+    const mail = await renderEmail("certificate", {
+      firstName: (learner.full_name || learner.email).split(" ")[0],
+      courseTitle: course.title,
+      ctaUrl: `${BASE_URL}/dashboard/certificates/${cert.id}`,
+    });
     await sendEmail({ to: learner.email, subject: mail.subject, html: mail.html, template: "certificate", recipientId: userId });
   }
 

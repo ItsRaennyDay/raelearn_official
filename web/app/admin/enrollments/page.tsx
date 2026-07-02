@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { logAction } from "@/lib/audit";
 import { sendEmail } from "@/lib/email/resend";
-import { enrollmentEmail } from "@/lib/email/templates";
+import { renderEmail, BASE_URL } from "@/lib/email/templates";
 
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? "rae2xyz@gmail.com").toLowerCase();
 
@@ -57,7 +57,11 @@ async function createEnrollment(formData: FormData) {
 
   const { data: course } = await db.from("courses").select("title").eq("id", courseId).single();
   if (course?.title) {
-    const mail = enrollmentEmail(profile.full_name || email, course.title);
+    const mail = await renderEmail("enrollment", {
+      firstName: (profile.full_name || email).split(" ")[0],
+      courseTitle: course.title,
+      ctaUrl: `${BASE_URL}/dashboard`,
+    });
     await sendEmail({ to: email, subject: mail.subject, html: mail.html, template: "enrollment", recipientId: profile.id });
   }
 

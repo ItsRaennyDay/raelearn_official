@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { sendEmail } from "@/lib/email/resend";
-import { welcomeEmail } from "@/lib/email/templates";
+import { renderEmail, BASE_URL } from "@/lib/email/templates";
 
 const ALLOWED_USER_TYPES = new Set([
   "va", "freelancer", "founder", "np_founder",
@@ -113,7 +113,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: safeMsg }, { status: 400 });
   }
 
-  const welcome = welcomeEmail(cleanName);
+  const welcome = await renderEmail("welcome", {
+    firstName: cleanName.split(" ")[0] || cleanName,
+    ctaUrl: `${BASE_URL}/courses`,
+  });
   await sendEmail({
     to: cleanEmail,
     subject: welcome.subject,
