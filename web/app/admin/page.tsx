@@ -11,7 +11,8 @@ export default async function AdminOverviewPage() {
     { data: recentEnrolls },
     { data: recentUsers },
     { count: draftCount },
-    { count: activeEnrollCount },
+    { data: activeEnrollUserIds },
+    { count: subscriberCount },
   ] = await Promise.all([
     db.from("support_tickets")
       .select("id, ticket_id, subject, submitter_name, priority, created_at", { count: "exact" })
@@ -28,8 +29,13 @@ export default async function AdminOverviewPage() {
       .order("created_at", { ascending: false })
       .limit(5),
     db.from("courses").select("*", { count: "exact", head: true }).eq("status", "draft"),
-    db.from("enrollments").select("*", { count: "exact", head: true }).eq("status", "active"),
+    // Fetched (not head:true) so we can dedupe by user — "Active Learners" counts
+    // people, not enrollment rows, so someone enrolled in 3 courses counts once.
+    db.from("enrollments").select("user_id").eq("status", "active"),
+    db.from("newsletter_subscribers").select("*", { count: "exact", head: true }).eq("status", "subscribed"),
   ]);
+
+  const activeLearnerCount = new Set((activeEnrollUserIds ?? []).map((e) => e.user_id)).size;
 
   const PRIORITY_COLOR: Record<string, { bg: string; text: string }> = {
     urgent: { bg: "#FFF0F0", text: "#AA2222" },
@@ -64,7 +70,7 @@ export default async function AdminOverviewPage() {
       </div>
 
       {/* At-a-glance tiles */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
         <Link href="/admin/support?status=open"
           className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:-translate-y-0.5"
           style={{ background: (openTicketCount ?? 0) > 0 ? "#FFF0F0" : "#fff", border: `1.5px solid ${(openTicketCount ?? 0) > 0 ? "#FFCCCC" : "#E8EDE6"}` }}>
@@ -95,7 +101,7 @@ export default async function AdminOverviewPage() {
           style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}>
           <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "var(--admin-text-dim)" }}>Active Learners</span>
           <div className="text-3xl font-extrabold" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>
-            {activeEnrollCount ?? 0}
+            {activeLearnerCount}
           </div>
           <div className="text-xs" style={{ color: "var(--admin-text-dim)" }}>enrolled & active →</div>
         </Link>
@@ -108,6 +114,16 @@ export default async function AdminOverviewPage() {
             {recentUsers?.length ?? 0}
           </div>
           <div className="text-xs" style={{ color: "var(--admin-text-dim)" }}>new signups →</div>
+        </Link>
+
+        <Link href="/admin/newsletter"
+          className="rounded-2xl p-4 flex flex-col gap-2 transition-all hover:-translate-y-0.5"
+          style={{ background: "var(--admin-card-bg)", border: "1.5px solid var(--admin-border)" }}>
+          <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "var(--admin-text-dim)" }}>Subscribers</span>
+          <div className="text-3xl font-extrabold" style={{ fontFamily: "var(--font-head)", color: "var(--admin-text-primary)" }}>
+            {subscriberCount ?? 0}
+          </div>
+          <div className="text-xs" style={{ color: "var(--admin-text-dim)" }}>newsletter list →</div>
         </Link>
       </div>
 
