@@ -235,7 +235,7 @@ export default async function UsersPage({
                     }}
                   >
                     <td className="px-5 py-3">
-                      <div className="flex items-center gap-3">
+                      <Link href={`/admin/users/${u.id}`} className="flex items-center gap-3 group">
                         <div
                           className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
                           style={{ background: isMe ? "#2A5230" : "#EEF5EE", color: isMe ? "#A8D4AC" : "#2A5230" }}
@@ -243,7 +243,7 @@ export default async function UsersPage({
                           {initials}
                         </div>
                         <div>
-                          <div className="font-medium flex items-center gap-1.5" style={{ color: "var(--admin-text-primary)" }}>
+                          <div className="font-medium flex items-center gap-1.5 group-hover:underline" style={{ color: "var(--admin-text-primary)" }}>
                             {u.full_name ?? <span style={{ color: "var(--admin-text-dim)" }}>No name</span>}
                             {isMe && (
                               <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ background: "#2A5230", color: "#A8D4AC" }}>
@@ -253,7 +253,7 @@ export default async function UsersPage({
                           </div>
                           <div className="text-xs mt-0.5" style={{ color: "var(--admin-text-dim)" }}>{u.email}</div>
                         </div>
-                      </div>
+                      </Link>
                     </td>
                     <td className="px-5 py-3">
                       <span
