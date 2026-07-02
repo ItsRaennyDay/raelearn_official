@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { sendEmail } from "@/lib/email/resend";
-import { renderEmail, BASE_URL } from "@/lib/email/templates";
+import { BASE_URL } from "@/lib/email/templates";
 
 const ALLOWED_USER_TYPES = new Set([
   "va", "freelancer", "founder", "np_founder",
@@ -116,16 +115,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: safeMsg }, { status: 400 });
   }
 
-  const welcome = await renderEmail("welcome", {
-    firstName: cleanName.split(" ")[0] || cleanName,
-    ctaUrl: `${BASE_URL}/courses`,
-  });
-  await sendEmail({
-    to: cleanEmail,
-    subject: welcome.subject,
-    html: welcome.html,
-    template: "welcome",
-  });
-
+  // Welcome email is sent from /api/auth/callback once the user actually
+  // confirms their email address, not here at raw signup.
   return NextResponse.json({ ok: true });
 }
