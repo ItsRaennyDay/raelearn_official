@@ -241,6 +241,25 @@ export default function CourseEditor({ course, modules: initModules, categories,
     }
   }
 
+  const [duplicatingLesson, setDuplicatingLesson] = useState<string | null>(null);
+
+  async function duplicateLesson(modId: string, lessonId: string) {
+    setDuplicatingLesson(lessonId);
+    const mod = modules.find((m) => m.id === modId)!;
+    const res = await fetch(`/api/admin/modules/${modId}/lessons`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ duplicate_from: lessonId, sort_order: mod.lessons.length }),
+    });
+    setDuplicatingLesson(null);
+    if (res.ok) {
+      const data = await res.json();
+      setModules((mods) =>
+        mods.map((m) => m.id === modId ? { ...m, lessons: [...m.lessons, data] } : m)
+      );
+    }
+  }
+
   async function deleteLesson(modId: string, lessonId: string) {
     if (!confirm("Delete this lesson?")) return;
     await fetch(`/api/admin/lessons/${lessonId}`, { method: "DELETE" });
@@ -690,6 +709,17 @@ export default function CourseEditor({ course, modules: initModules, categories,
                       >
                         Edit →
                       </Link>
+                      <button
+                        onClick={() => duplicateLesson(mod.id, lesson.id)}
+                        disabled={duplicatingLesson === lesson.id}
+                        title="Duplicate lesson"
+                        className="text-[#7A9878] hover:text-[#2A5230] opacity-0 group-hover:opacity-100 transition-all shrink-0 disabled:opacity-50"
+                      >
+                        <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" />
+                          <path d="M10.5 5.5V4a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5" />
+                        </svg>
+                      </button>
                       <button
                         onClick={() => deleteLesson(mod.id, lesson.id)}
                         className="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-all shrink-0"

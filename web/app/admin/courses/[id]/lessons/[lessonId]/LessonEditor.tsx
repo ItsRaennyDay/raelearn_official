@@ -184,6 +184,12 @@ const Ico = {
       <path d="M3 3l10 10M13 3L3 13" />
     </svg>
   ),
+  Duplicate: () => (
+    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" />
+      <path d="M10.5 5.5V4a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5" />
+    </svg>
+  ),
   CheckMark: ({ size = 10 }: { size?: number }) => (
     <svg viewBox="0 0 16 16" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M2.5 8l4 4 7-7" />
@@ -1734,18 +1740,21 @@ const blockMeta: Record<BlockType, { label: string; icon: React.ReactNode; color
 
 /* ─────────────────────────── Block wrapper ─────────────────────────── */
 function BlockItem({
-  block, index, total, onChange, onDelete, onMove,
+  block, index, total, onChange, onDelete, onMove, onDuplicate, blockRef,
 }: {
   block: Block; index: number; total: number;
   onChange: (b: Block) => void;
   onDelete: () => void;
   onMove: (dir: -1 | 1) => void;
+  onDuplicate: () => void;
+  blockRef?: (el: HTMLDivElement | null) => void;
 }) {
   const [collapsed, setCollapsed] = useState(false);
   const meta = blockMeta[block.type];
 
   return (
     <div
+      ref={blockRef}
       className="rounded-2xl overflow-hidden transition-all"
       style={{
         background: "var(--admin-card-bg)",
@@ -1793,6 +1802,14 @@ function BlockItem({
             style={{ color: "var(--admin-text-dim)" }}
           >
             {collapsed ? <Ico.ChevronDown /> : <Ico.ChevronUp />}
+          </button>
+          <button
+            onClick={onDuplicate}
+            title="Duplicate block"
+            className="w-6 h-6 flex items-center justify-center rounded transition-colors hover:bg-[#F0F7F0] ml-1"
+            style={{ color: "var(--admin-text-dim)" }}
+          >
+            <Ico.Duplicate />
           </button>
           <button
             onClick={onDelete}
@@ -1936,13 +1953,33 @@ export default function LessonEditor({
   const [preview, setPreview]       = useState(false);
   const [bgId, setBgId]             = useState<string>(initContent?.background ?? "warm");
   const paletteRef                  = useRef<HTMLDivElement>(null);
+  const blockRefs                   = useRef<Record<string, HTMLDivElement | null>>({});
+  const pendingScrollKey            = useRef<string | null>(null);
 
   const activeBg = BG_OPTIONS.find((b) => b.id === bgId) ?? BG_OPTIONS[0];
 
+  useEffect(() => {
+    if (!pendingScrollKey.current) return;
+    const el = blockRefs.current[pendingScrollKey.current];
+    pendingScrollKey.current = null;
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [blockKeys]);
+
   function addBlock(type: BlockType) {
+    const key = uid();
     setBlocks((bs) => [...bs, makeBlock[type]()]);
-    setBlockKeys((ks) => [...ks, uid()]);
+    setBlockKeys((ks) => [...ks, key]);
     setShowPalette(false);
+    pendingScrollKey.current = key;
+  }
+
+  function duplicateBlock(i: number) {
+    const clone = JSON.parse(JSON.stringify(blocks[i])) as Block;
+    const key = uid();
+    setBlocks((bs) => [...bs.slice(0, i + 1), clone, ...bs.slice(i + 1)]);
+    setBlockKeys((ks) => [...ks.slice(0, i + 1), key, ...ks.slice(i + 1)]);
+    setSaved(false);
+    pendingScrollKey.current = key;
   }
 
   function updateBlock(i: number, b: Block) {
@@ -2152,7 +2189,7 @@ export default function LessonEditor({
           className="flex flex-col overflow-y-auto"
           style={{ width: preview ? "50%" : "100%", borderRight: preview ? "1.5px solid #DDE8DA" : "none", flex: "1 1 0" }}
         >
-          <div className="p-6 space-y-3 min-h-full pb-10">
+          <div className="p-6 space-y-3 min-h-full pb-48">
             {blocks.length === 0 ? (
               <div
                 className="rounded-2xl flex flex-col items-center justify-center p-16 text-center"
@@ -2195,14 +2232,16 @@ export default function LessonEditor({
                     onChange={(b) => updateBlock(i, b)}
                     onDelete={() => deleteBlock(i)}
                     onMove={(dir) => moveBlock(i, dir)}
+                    onDuplicate={() => duplicateBlock(i)}
+                    blockRef={(el) => { blockRefs.current[blockKeys[i]] = el; }}
                   />
                 ))}
 
                 {/* Add block button */}
-                <div className="relative" ref={paletteRef}>
+                <div className="relative mt-5" ref={paletteRef}>
                   <button
                     onClick={() => setShowPalette((s) => !s)}
-                    className="w-full py-2.5 rounded-xl text-xs font-bold transition-all border-2 border-dashed"
+                    className="w-full py-3.5 rounded-xl text-xs font-bold transition-all border-2 border-dashed"
                     style={{
                       borderColor: showPalette ? "#2A5230" : "#C8DEC8",
                       color: showPalette ? "#2A5230" : "#9AB89E",
