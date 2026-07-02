@@ -9,9 +9,26 @@ interface Props {
   score?: number;
   onClose: () => void;
   closeLabel?: string;
+  variant?: "pass" | "fail";
 }
 
-export default function CompletionModal({ title, message, showConfetti, score, onClose, closeLabel = "Continue" }: Props) {
+const VARIANTS = {
+  pass: {
+    iconBg: "linear-gradient(135deg,#2A5230,#1A3820)",
+    scoreColor: "#4A8A52",
+    buttonBg: "linear-gradient(135deg,#2A5230,#1A3820)",
+    icon: <path d="M20 6L9 17l-5-5" />,
+  },
+  fail: {
+    iconBg: "linear-gradient(135deg,#CC4444,#AA2222)",
+    scoreColor: "#AA2222",
+    buttonBg: "linear-gradient(135deg,#CC4444,#AA2222)",
+    icon: <path d="M6 6l12 12M18 6L6 18" />,
+  },
+};
+
+export default function CompletionModal({ title, message, showConfetti, score, onClose, closeLabel = "Continue", variant = "pass" }: Props) {
+  const v = VARIANTS[variant];
   return (
     <div className="fixed inset-0 z-[190] flex items-center justify-center p-4" style={{ background: "rgba(10,20,12,0.55)" }}>
       {showConfetti && <Confetti />}
@@ -21,10 +38,10 @@ export default function CompletionModal({ title, message, showConfetti, score, o
       >
         <div
           className="w-16 h-16 mx-auto mb-5 rounded-full flex items-center justify-center"
-          style={{ background: "linear-gradient(135deg,#2A5230,#1A3820)" }}
+          style={{ background: v.iconBg }}
         >
           <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M20 6L9 17l-5-5" />
+            {v.icon}
           </svg>
         </div>
 
@@ -33,7 +50,7 @@ export default function CompletionModal({ title, message, showConfetti, score, o
         </h2>
 
         {typeof score === "number" && (
-          <div className="text-sm font-bold mb-2" style={{ color: "#4A8A52" }}>
+          <div className="text-sm font-bold mb-2" style={{ color: v.scoreColor }}>
             Score: {score}%
           </div>
         )}
@@ -45,7 +62,7 @@ export default function CompletionModal({ title, message, showConfetti, score, o
         <button
           onClick={onClose}
           className="px-6 py-2.5 text-sm font-bold rounded-xl"
-          style={{ background: "linear-gradient(135deg,#2A5230,#1A3820)", color: "#fff" }}
+          style={{ background: v.buttonBg, color: "#fff" }}
         >
           {closeLabel}
         </button>

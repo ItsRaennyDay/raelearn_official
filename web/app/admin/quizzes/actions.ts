@@ -61,10 +61,12 @@ export async function updateQuizCompletion(formData: FormData) {
   const completion_title    = (formData.get("completion_title") as string ?? "").trim().slice(0, 120) || null;
   const completion_message  = (formData.get("completion_message") as string ?? "").trim().slice(0, 1000) || null;
   const show_confetti       = formData.get("show_confetti") === "on";
+  const fail_title          = (formData.get("fail_title") as string ?? "").trim().slice(0, 120) || null;
+  const fail_message        = (formData.get("fail_message") as string ?? "").trim().slice(0, 1000) || null;
 
   if (!id) return;
   const db = createAdminClient();
-  await db.from("quizzes").update({ completion_title, completion_message, show_confetti }).eq("id", id);
+  await db.from("quizzes").update({ completion_title, completion_message, show_confetti, fail_title, fail_message }).eq("id", id);
   revalidatePath(`/admin/quizzes/${id}`);
   redirect(`/admin/quizzes/${id}?tab=completion&saved=1`);
 }

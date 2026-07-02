@@ -190,6 +190,8 @@ export default async function QuizEditorPage({
                 initialTitle={quiz.completion_title ?? ""}
                 initialMessage={quiz.completion_message ?? ""}
                 initialShowConfetti={quiz.show_confetti ?? true}
+                initialFailTitle={quiz.fail_title ?? ""}
+                initialFailMessage={quiz.fail_message ?? ""}
               />
             )}
           </div>

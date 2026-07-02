@@ -48,7 +48,7 @@ export async function submitQuizAttempt(
   // without a matching policy), so this can't silently 404 a valid quiz.
   const db = createAdminClient();
   const [{ data: quiz }, { data: questions }, { count: attemptCount }] = await Promise.all([
-    db.from("quizzes").select("id, passing_score, max_attempts, completion_title, completion_message, show_confetti").eq("id", quizId).single(),
+    db.from("quizzes").select("id, passing_score, max_attempts, completion_title, completion_message, show_confetti, fail_title, fail_message").eq("id", quizId).single(),
     db.from("quiz_questions").select("id, correct_answer").eq("quiz_id", quizId),
     db.from("quiz_attempts").select("*", { count: "exact", head: true }).eq("quiz_id", quizId).eq("user_id", user.id),
   ]);
@@ -82,6 +82,8 @@ export async function submitQuizAttempt(
     completion_title: quiz.completion_title,
     completion_message: quiz.completion_message,
     show_confetti: quiz.show_confetti,
+    fail_title: quiz.fail_title,
+    fail_message: quiz.fail_message,
   };
 }
 

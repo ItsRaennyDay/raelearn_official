@@ -949,7 +949,7 @@ function RequiredQuizPlayer({ quiz, onPassed }: { quiz: QuizData; onPassed: () =
   const [result, setResult] = useState<{ score: number; passed: boolean; passing_score: number } | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
-  const [completion, setCompletion] = useState<{ title: string; message: string; showConfetti: boolean } | null>(null);
+  const [completion, setCompletion] = useState<{ title: string; message: string; showConfetti: boolean; variant: "pass" | "fail" } | null>(null);
 
   const answeredCount = Object.keys(answers).length;
   const total = quiz.questions.length;
@@ -965,12 +965,21 @@ function RequiredQuizPlayer({ quiz, onPassed }: { quiz: QuizData; onPassed: () =
     setResult(res);
     if (res.passed) {
       setCompletion({
+        variant: "pass",
         title: res.completion_title || "Quiz Passed!",
         message: res.completion_message || "Nice work — you've completed this quiz and can move on to the next lesson.",
         showConfetti: res.show_confetti ?? true,
       });
       setShowCompletionModal(true);
       onPassed();
+    } else {
+      setCompletion({
+        variant: "fail",
+        title: res.fail_title || "Not quite — try again",
+        message: res.fail_message || "Review the lesson material and give it another shot when you're ready.",
+        showConfetti: false,
+      });
+      setShowCompletionModal(true);
     }
   }
 
@@ -1090,11 +1099,16 @@ function RequiredQuizPlayer({ quiz, onPassed }: { quiz: QuizData; onPassed: () =
 
       {showCompletionModal && completion && (
         <CompletionModal
+          variant={completion.variant}
           title={completion.title}
           message={completion.message}
           showConfetti={completion.showConfetti}
           score={result?.score}
-          onClose={() => setShowCompletionModal(false)}
+          closeLabel={completion.variant === "fail" ? "Try Again" : "Continue"}
+          onClose={() => {
+            setShowCompletionModal(false);
+            if (completion.variant === "fail") handleRetry();
+          }}
         />
       )}
     </div>
