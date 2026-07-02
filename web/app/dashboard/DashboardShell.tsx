@@ -149,6 +149,17 @@ const NAV_SECTIONS = [
           </svg>
         ),
       },
+      {
+        label: "Support",
+        href: "/dashboard/support",
+        icon: (
+          <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="10" cy="10" r="8" />
+            <path d="M7.5 8a2.5 2.5 0 0 1 4.33 1.25c0 1.25-2.5 2.5-2.5 2.5" />
+            <circle cx="9.75" cy="14" r=".75" fill="currentColor" stroke="none" />
+          </svg>
+        ),
+      },
     ],
   },
 ];

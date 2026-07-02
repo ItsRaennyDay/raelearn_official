@@ -359,6 +359,7 @@ export default async function DashboardPage() {
                 { label: "My certificates", href: "/dashboard/certificates", color: "#8A6020" },
                 { label: "Learning paths", href: "/dashboard/learning-paths", color: "#1A4A8A" },
                 { label: "Notifications", href: "/dashboard/notifications", color: "#5A20A0", badge: unreadCount > 0 ? unreadCount : null },
+                { label: "Support", href: "/dashboard/support", color: "#1A6B6B" },
               ].map((l) => (
                 <Link
                   key={l.href}
