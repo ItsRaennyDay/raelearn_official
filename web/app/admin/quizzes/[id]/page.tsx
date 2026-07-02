@@ -28,7 +28,7 @@ export default async function QuizEditorPage({
   const tab: Tab       = tabParam === "completion" ? "completion" : tabParam === "insights" ? "insights" : "questions";
   const db             = createAdminClient();
 
-  const [{ data: quiz }, { data: rawQuestions }] = await Promise.all([
+  const [{ data: quiz }, { data: rawQuestions }, { data: courses }, { data: lessons }] = await Promise.all([
     db.from("quizzes")
       .select("*, courses:course_id(title), lessons:lesson_id(title)")
       .eq("id", id)
@@ -37,6 +37,10 @@ export default async function QuizEditorPage({
       .select("id, question_text, question_type, options, correct_answer, sort_order")
       .eq("quiz_id", id)
       .order("sort_order", { ascending: true }),
+    db.from("courses").select("id, title").order("title"),
+    db.from("lessons")
+      .select("id, title, modules:module_id(courses:course_id(title))")
+      .order("title"),
   ]);
 
   if (!quiz) notFound();
@@ -209,6 +213,43 @@ export default async function QuizEditorPage({
                     className="px-3 py-2 text-[13px] rounded-xl border outline-none"
                     style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
                   />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-bold tracking-[0.04em] uppercase" style={{ color: "var(--admin-text-muted)" }}>Attached Lesson</label>
+                  <select
+                    name="lesson_id"
+                    defaultValue={quiz.lesson_id ?? ""}
+                    className="px-3 py-2 text-[13px] rounded-xl border outline-none"
+                    style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
+                  >
+                    <option value="">None</option>
+                    {(lessons ?? []).map((l) => {
+                      const mod = l.modules as { courses?: { title?: string } } | null;
+                      const courseTitle = mod?.courses?.title;
+                      return (
+                        <option key={l.id} value={l.id}>
+                          {courseTitle ? `${courseTitle} — ` : ""}{l.title}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-bold tracking-[0.04em] uppercase" style={{ color: "var(--admin-text-muted)" }}>Attached Course</label>
+                  <select
+                    name="course_id"
+                    defaultValue={quiz.course_id ?? ""}
+                    className="px-3 py-2 text-[13px] rounded-xl border outline-none"
+                    style={{ borderColor: "var(--admin-border-mid)", background: "var(--admin-table-head-bg)", color: "var(--admin-text-primary)" }}
+                  >
+                    <option value="">None</option>
+                    {(courses ?? []).map((c) => (
+                      <option key={c.id} value={c.id}>{c.title}</option>
+                    ))}
+                  </select>
+                  <p className="text-[11px]" style={{ color: "var(--admin-text-dim)" }}>Only used when no lesson is attached.</p>
                 </div>
 
                 <div className="flex flex-col gap-1.5">

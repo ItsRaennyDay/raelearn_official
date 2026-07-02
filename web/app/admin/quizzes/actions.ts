@@ -39,6 +39,8 @@ export async function updateQuizMeta(formData: FormData) {
   await verifyAdmin();
   const id            = formData.get("id") as string;
   const title         = (formData.get("title") as string ?? "").trim();
+  const course_id     = (formData.get("course_id") as string) || null;
+  const lesson_id     = (formData.get("lesson_id") as string) || null;
   const passing_score = Math.min(100, Math.max(0, parseInt(formData.get("passing_score") as string) || 70));
   const max_raw       = formData.get("max_attempts") as string;
   const max_attempts  = max_raw ? parseInt(max_raw) : null;
@@ -47,8 +49,9 @@ export async function updateQuizMeta(formData: FormData) {
 
   if (!id || !title) return;
   const db = createAdminClient();
-  await db.from("quizzes").update({ title, passing_score, max_attempts, status }).eq("id", id);
+  await db.from("quizzes").update({ title, course_id, lesson_id, passing_score, max_attempts, status }).eq("id", id);
   revalidatePath(`/admin/quizzes/${id}`);
+  revalidatePath("/admin/quizzes");
   redirect(`/admin/quizzes/${id}?tab=${tab}&saved=1`);
 }
 
