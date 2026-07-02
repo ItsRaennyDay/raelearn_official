@@ -43,12 +43,37 @@ export async function updateQuizMeta(formData: FormData) {
   const max_raw       = formData.get("max_attempts") as string;
   const max_attempts  = max_raw ? parseInt(max_raw) : null;
   const status        = formData.get("status") as string;
+  const tab           = (formData.get("tab") as string) || "questions";
 
   if (!id || !title) return;
   const db = createAdminClient();
   await db.from("quizzes").update({ title, passing_score, max_attempts, status }).eq("id", id);
   revalidatePath(`/admin/quizzes/${id}`);
-  redirect(`/admin/quizzes/${id}?saved=1`);
+  redirect(`/admin/quizzes/${id}?tab=${tab}&saved=1`);
+}
+
+export async function updateQuizCompletion(formData: FormData) {
+  await verifyAdmin();
+  const id                  = formData.get("id") as string;
+  const completion_title    = (formData.get("completion_title") as string ?? "").trim().slice(0, 120) || null;
+  const completion_message  = (formData.get("completion_message") as string ?? "").trim().slice(0, 1000) || null;
+  const show_confetti       = formData.get("show_confetti") === "on";
+
+  if (!id) return;
+  const db = createAdminClient();
+  await db.from("quizzes").update({ completion_title, completion_message, show_confetti }).eq("id", id);
+  revalidatePath(`/admin/quizzes/${id}`);
+  redirect(`/admin/quizzes/${id}?tab=completion&saved=1`);
+}
+
+export async function deleteQuiz(quizId: string) {
+  await verifyAdmin();
+  const db = createAdminClient();
+  await db.from("quiz_questions").delete().eq("quiz_id", quizId);
+  await db.from("quiz_attempts").delete().eq("quiz_id", quizId);
+  await db.from("quizzes").delete().eq("id", quizId);
+  revalidatePath("/admin/quizzes");
+  redirect("/admin/quizzes");
 }
 
 export async function upsertQuestion(q: {

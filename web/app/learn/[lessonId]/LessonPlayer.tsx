@@ -4,6 +4,7 @@ import React, { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { markLessonComplete, saveVideoProgress, submitQuizAttempt } from "./actions";
+import CompletionModal from "@/components/CompletionModal";
 
 /* ─── Quiz types ─── */
 type QuizQuestion = {
@@ -947,6 +948,8 @@ function RequiredQuizPlayer({ quiz, onPassed }: { quiz: QuizData; onPassed: () =
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<{ score: number; passed: boolean; passing_score: number } | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
+  const [completion, setCompletion] = useState<{ title: string; message: string; showConfetti: boolean } | null>(null);
 
   const answeredCount = Object.keys(answers).length;
   const total = quiz.questions.length;
@@ -960,7 +963,15 @@ function RequiredQuizPlayer({ quiz, onPassed }: { quiz: QuizData; onPassed: () =
     setSubmitting(false);
     if ("error" in res) { setSubmitError(res.error ?? null); return; }
     setResult(res);
-    if (res.passed) onPassed();
+    if (res.passed) {
+      setCompletion({
+        title: res.completion_title || "Quiz Passed!",
+        message: res.completion_message || "Nice work — you've completed this quiz and can move on to the next lesson.",
+        showConfetti: res.show_confetti ?? true,
+      });
+      setShowCompletionModal(true);
+      onPassed();
+    }
   }
 
   function handleRetry() {
@@ -1076,6 +1087,16 @@ function RequiredQuizPlayer({ quiz, onPassed }: { quiz: QuizData; onPassed: () =
           </div>
         )}
       </div>
+
+      {showCompletionModal && completion && (
+        <CompletionModal
+          title={completion.title}
+          message={completion.message}
+          showConfetti={completion.showConfetti}
+          score={result?.score}
+          onClose={() => setShowCompletionModal(false)}
+        />
+      )}
     </div>
   );
 }

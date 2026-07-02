@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function markLessonComplete(lessonId: string, courseId: string) {
   const supabase = await createClient();
@@ -42,10 +43,14 @@ export async function submitQuizAttempt(
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "Not authenticated" } as const;
 
+  // Reads go through the admin client — the learner's RLS-bound client isn't
+  // guaranteed to see quizzes/quiz_questions (e.g. if RLS is later toggled on
+  // without a matching policy), so this can't silently 404 a valid quiz.
+  const db = createAdminClient();
   const [{ data: quiz }, { data: questions }, { count: attemptCount }] = await Promise.all([
-    supabase.from("quizzes").select("id, passing_score, max_attempts").eq("id", quizId).single(),
-    supabase.from("quiz_questions").select("id, correct_answer").eq("quiz_id", quizId),
-    supabase.from("quiz_attempts").select("*", { count: "exact", head: true }).eq("quiz_id", quizId).eq("user_id", user.id),
+    db.from("quizzes").select("id, passing_score, max_attempts, completion_title, completion_message, show_confetti").eq("id", quizId).single(),
+    db.from("quiz_questions").select("id, correct_answer").eq("quiz_id", quizId),
+    db.from("quiz_attempts").select("*", { count: "exact", head: true }).eq("quiz_id", quizId).eq("user_id", user.id),
   ]);
 
   if (!quiz) return { error: "Quiz not found" } as const;
@@ -70,7 +75,14 @@ export async function submitQuizAttempt(
     status: passed ? "passed" : "failed",
   });
 
-  return { score, passed, passing_score: quiz.passing_score };
+  return {
+    score,
+    passed,
+    passing_score: quiz.passing_score,
+    completion_title: quiz.completion_title,
+    completion_message: quiz.completion_message,
+    show_confetti: quiz.show_confetti,
+  };
 }
 
 export async function saveVideoProgress(
