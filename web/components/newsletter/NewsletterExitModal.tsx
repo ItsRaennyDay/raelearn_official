@@ -48,14 +48,8 @@ export default function NewsletterExitModal({ isLoggedIn }: { isLoggedIn: boolea
   if (!open) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4"
-      onClick={() => setOpen(false)}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-md rounded-2xl bg-[#F5F0E8] p-8 shadow-2xl"
-      >
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
+      <div className="relative w-full max-w-md rounded-2xl bg-[#F5F0E8] p-8 shadow-2xl">
         <button
           onClick={() => setOpen(false)}
           aria-label="Close"
