@@ -23,6 +23,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: bundle.title,
     description: bundle.description ?? `${bundle.title} — a course bundle on RaeLearn by RAEFORM.`,
+    alternates: {
+      canonical: `/bundles/${slug}`,
+    },
     openGraph: {
       title: `${bundle.title} · RaeLearn by RAEFORM`,
       description: bundle.description ?? `${bundle.title} course bundle on RaeLearn.`,

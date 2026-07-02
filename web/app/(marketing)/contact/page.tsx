@@ -6,6 +6,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
 export const metadata: Metadata = {
   title: "Contact",
   description: "Get in touch with the RaeLearn team. Questions about courses, group accounts, or custom training — we'd love to hear from you.",
+  alternates: {
+    canonical: "/contact",
+  },
   openGraph: {
     title: "Contact · RaeLearn by RAEFORM",
     description: "Get in touch with the RaeLearn team.",

@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "Pricing",
   description:
     "RaeLearn pricing — start free or purchase individual courses. No subscription required. Pay once, keep access forever.",
+  alternates: {
+    canonical: "/pricing",
+  },
   openGraph: {
     title: "Pricing · RaeLearn by RAEFORM",
     description:

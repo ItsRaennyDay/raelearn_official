@@ -40,6 +40,9 @@ export const metadata: Metadata = {
   },
   description:
     "RaeLearn by RAEFORM offers practical online courses for virtual assistants, nonprofit leaders, founders, and small teams — covering operations, admin systems, websites, compliance, and more.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     siteName: "RaeLearn by RAEFORM",
@@ -61,6 +64,22 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  name: "RaeLearn",
+  alternateName: "RaeLearn by RAEFORM",
+  url: "https://raelearn.byraeform.com",
+  logo: "https://raelearn.byraeform.com/opengraph-image.png",
+  description:
+    "Practical online courses for virtual assistants, nonprofit leaders, founders, and small teams — covering operations, admin systems, websites, compliance, and more.",
+  parentOrganization: {
+    "@type": "Organization",
+    name: "RAEFORM",
+    url: "https://byraeform.com",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -75,6 +94,12 @@ export default function RootLayout({
       ].join(" ")}
     >
       <body className="min-h-screen flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

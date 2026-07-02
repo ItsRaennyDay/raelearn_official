@@ -1,6 +1,9 @@
 export const metadata = {
   title: "Privacy Policy",
   description: "RaeLearn Privacy Policy — how we collect, use, and protect your personal information.",
+  alternates: {
+    canonical: "/legal/privacy",
+  },
 };
 
 export default function PrivacyPage() {

@@ -1,6 +1,9 @@
 export const metadata = {
   title: "Refund Policy",
   description: "RaeLearn Refund Policy — all sales are final. Courses are sold as-is with no refunds.",
+  alternates: {
+    canonical: "/legal/refund",
+  },
 };
 
 export default function RefundPage() {

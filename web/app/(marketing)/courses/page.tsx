@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "Courses",
   description:
     "Browse all RaeLearn courses — practical training on operations, admin systems, nonprofit compliance, websites, donor support, and more for VAs, founders, and small teams.",
+  alternates: {
+    canonical: "/courses",
+  },
   openGraph: {
     title: "Courses · RaeLearn by RAEFORM",
     description:

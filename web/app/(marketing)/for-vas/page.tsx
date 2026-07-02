@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "For Virtual Assistants",
   description:
     "RaeLearn courses built specifically for virtual assistants — learn nonprofit VA support, business admin, website maintenance, operations systems, and more.",
+  alternates: {
+    canonical: "/for-vas",
+  },
   openGraph: {
     title: "For Virtual Assistants · RaeLearn by RAEFORM",
     description:

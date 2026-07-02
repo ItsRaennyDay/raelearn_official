@@ -22,6 +22,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: course.title,
     description: course.description ?? `Learn ${course.title} on RaeLearn by RAEFORM.`,
+    alternates: {
+      canonical: `/courses/${slug}`,
+    },
     openGraph: {
       title: `${course.title} · RaeLearn by RAEFORM`,
       description: course.description ?? `Learn ${course.title} on RaeLearn.`,
@@ -94,8 +97,48 @@ export default async function CourseDetailPage({ params }: Props) {
   const isFree = course.price_type === "free";
   const price = isFree ? "Free" : `$${(course.price_cents / 100).toFixed(0)}`;
 
+  const instructor = course.profiles as { full_name?: string } | null;
+  const category = course.categories as { name?: string } | null;
+
+  const courseJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: course.title,
+    description: course.description ?? `Learn ${course.title} on RaeLearn by RAEFORM.`,
+    url: `https://raelearn.byraeform.com/courses/${slug}`,
+    ...(course.thumbnail_url ? { image: course.thumbnail_url } : {}),
+    provider: {
+      "@type": "EducationalOrganization",
+      name: "RaeLearn",
+      sameAs: "https://raelearn.byraeform.com",
+    },
+    ...(instructor?.full_name
+      ? { instructor: { "@type": "Person", name: instructor.full_name } }
+      : {}),
+    ...(category?.name ? { about: category.name } : {}),
+    educationalLevel: course.level,
+    offers: {
+      "@type": "Offer",
+      price: isFree ? "0" : (course.price_cents / 100).toFixed(2),
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+      url: `https://raelearn.byraeform.com/courses/${slug}`,
+    },
+    hasCourseInstance: {
+      "@type": "CourseInstance",
+      courseMode: "online",
+    },
+  };
+
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(courseJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+
       {/* Hero */}
       <section className="bg-[#1A2E1C] text-white px-7 py-14">
         <div className="max-w-[960px] mx-auto">
