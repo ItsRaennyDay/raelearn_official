@@ -165,12 +165,15 @@ export default function SiteNav({ user }: { user?: NavUser | null }) {
         <nav className="max-w-[1240px] mx-auto px-5 md:px-7 py-3.5 flex items-center gap-4">
 
           {/* Logo */}
-          <Link href="/" className="flex flex-col leading-none shrink-0" onClick={() => setMenuOpen(false)}>
-            <span className="font-head font-extrabold text-[23px] tracking-tight text-[#2A5230]">
-              RaeLearn
-            </span>
-            <span className="text-[9px] font-bold tracking-[0.22em] uppercase text-[#8AA080] mt-1">
-              by RAEFORM
+          <Link href="/" className="flex items-center gap-2.5 shrink-0" onClick={() => setMenuOpen(false)}>
+            <img src="/raelearn-mark.png" alt="" width={36} height={36} className="w-9 h-9 shrink-0" />
+            <span className="flex flex-col leading-none">
+              <span className="font-head font-extrabold text-[23px] tracking-tight text-[#2A5230]">
+                RaeLearn
+              </span>
+              <span className="text-[9px] font-bold tracking-[0.22em] uppercase text-[#8AA080] mt-1">
+                by RAEFORM
+              </span>
             </span>
           </Link>
 

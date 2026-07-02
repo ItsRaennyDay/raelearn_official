@@ -53,11 +53,14 @@ export default function SiteFooter() {
       <div className="max-w-[1240px] mx-auto px-7 pt-14 pb-8 grid grid-cols-[repeat(auto-fit,minmax(190px,1fr))] gap-9">
         {/* Brand col */}
         <div className="min-w-[220px]">
-          <div className="flex flex-col leading-none mb-4">
-            <span className="font-head font-extrabold text-2xl text-[#F5F0E8]">RaeLearn</span>
-            <span className="text-[9.5px] font-bold tracking-[0.22em] uppercase text-[#6A8A6E] mt-1.5">
-              by RAEFORM
-            </span>
+          <div className="flex items-center gap-2.5 mb-4">
+            <img src="/raelearn-mark.png" alt="" width={38} height={38} className="w-[38px] h-[38px] shrink-0" />
+            <div className="flex flex-col leading-none">
+              <span className="font-head font-extrabold text-2xl text-[#F5F0E8]">RaeLearn</span>
+              <span className="text-[9.5px] font-bold tracking-[0.22em] uppercase text-[#6A8A6E] mt-1.5">
+                by RAEFORM
+              </span>
+            </div>
           </div>
           <p className="text-sm leading-relaxed text-[#8AAE8E] max-w-[300px] mb-5">
             Practical training on the systems behind better businesses, nonprofits, and support teams.
