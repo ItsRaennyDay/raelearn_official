@@ -4,6 +4,7 @@ import { useState, Suspense } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
+import { BASE_URL } from "@/lib/email/render";
 
 function safeNext(raw: string | null): string {
   if (!raw) return "/dashboard";
@@ -54,8 +55,11 @@ function SignInForm() {
     setLoading(true);
     setError(null);
     const supabase = createClient();
+    // Always point at the real production domain, not window.location.origin —
+    // if this runs from a Vercel preview URL, that origin is behind Vercel's own
+    // login wall and the reset link would dead-end there instead of the app.
     await supabase.auth.resetPasswordForEmail(email.trim(), {
-      redirectTo: `${window.location.origin}/api/auth/callback?next=/reset-password`,
+      redirectTo: `${BASE_URL}/api/auth/callback?next=/reset-password`,
     });
     setLoading(false);
     setError("✓ Password reset email sent — check your inbox.");

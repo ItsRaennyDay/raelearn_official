@@ -100,7 +100,10 @@ export async function POST(request: NextRequest) {
     password,
     options: {
       data: { full_name: cleanName, user_type: safeUserType, interests: safeInterests },
-      emailRedirectTo: `${request.nextUrl.origin}/api/auth/callback`,
+      // Always point at the real production domain, never request.nextUrl.origin —
+      // if someone signs up from a Vercel preview URL, that origin is protected by
+      // Vercel's own login wall and the confirmation link would dead-end there.
+      emailRedirectTo: `${BASE_URL}/api/auth/callback`,
     },
   });
 
